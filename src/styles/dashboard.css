@@ -1,0 +1,64 @@
+/* =========================================================
+   DASHBOARD PRINCIPAL — rediseño brutalista, monocromático,
+   sin curvas, estilo "Papers, Please" / terminal de fósforo.
+   Esta sección va al final a propósito: debe ganar sobre el
+   bloque "RESKIN" anterior en la cascada.
+   ========================================================= */
+
+/* 1) Sin curvas en absolutamente nada del dashboard */
+.stat, .stat-badge, .rel-chip, .status-pill, .crt-screen, .crt-btn,
+.evaluar-turno-btn, .oficina-ambiente-btn, .calendar, .cal-bucket,
+.log-toggle, .chart-box{
+  border-radius:0 !important;
+}
+
+/* 2) Tarjetas de KPI — wireframe, negro puro, contenido centrado */
+.stat{
+  background:#000 !important;
+  border:1px solid #444 !important;
+  box-shadow:none !important;
+  display:flex; flex-direction:column; align-items:center; text-align:center;
+  position:relative;
+}
+.stat-icon-row{ justify-content:center !important; margin-bottom:6px; }
+.stat-badge{ background:transparent !important; border-width:1.5px !important; }
+.stat-label{ font-family:'IBM Plex Mono',monospace; text-align:center; width:100%; }
+.stat-value{
+  font-family:'IBM Plex Mono',monospace; justify-content:center; width:100%;
+  text-shadow:0 0 6px currentColor, 0 0 2px currentColor;
+}
+.stat-info-icon{
+  position:absolute; top:8px; right:9px; z-index:2;
+}
+
+/* 3) Píldoras de estado — etiquetas de consola, sin forma de botón */
+.rel-chip{
+  background:#000 !important;
+  border:1px solid #444 !important;
+  justify-content:center; text-align:center;
+  font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
+}
+.rel-chip.tier-optimo{ border-color:var(--teal) !important; }
+.rel-chip.tier-estable{ border-color:#5C8DBE !important; }
+.rel-chip.tier-riesgo{ border-color:#E0A93A !important; }
+.rel-chip.tier-critico{ border-color:var(--danger) !important; }
+.status-pill{
+  background:transparent !important;
+  border:1px solid currentColor;
+  padding:2px 8px;
+}
+
+/* 5) Gráficas — borde simple, sin marco grueso redondeado */
+.crt-screen{
+  border:1px solid #444 !important;
+  box-shadow:none !important;
+}
+
+/* Centrado general del dashboard */
+.ticker{ justify-items:center; }
+.stat{ width:100%; max-width:230px; }
+.relations{ justify-content:center; }
+.crt-row{ justify-content:center; }
+.evaluar-turno-wrap{ display:flex; flex-direction:column; align-items:center; }
+.calendar{ text-align:center; }
+.cal-row{ justify-content:center; }

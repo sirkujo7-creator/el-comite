@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El Comité — Simulador de Alta Gerencia Financiera</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600;700&family=Press+Start+2P&family=VT323&family=Silkscreen&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+<!-- @include styles/base.css -->
+<!-- @include styles/efectos.css -->
+<!-- @include styles/panel-analisis.css -->
+<!-- @include styles/minijuegos.css -->
+<!-- @include styles/inicio.css -->
+<!-- @include styles/caso-y-resultado.css -->
+<!-- @include styles/seleccion-sector.css -->
+<!-- @include styles/tablero.css -->
+<!-- @include styles/modal-turno.css -->
+<!-- @include styles/transicion.css -->
+<!-- @include styles/impresion.css -->
+<!-- @include styles/cinematica.css -->
+<!-- @include styles/dashboard.css -->
+<!-- @include styles/ajustes.css -->
+</style>
+</head>
+<body>
+<div id="introOverlay">
+  <div id="introTextContainer"></div>
+  <div id="introHint">[ ESPACIO ] CONTINUAR</div>
+  <button id="skipIntroBtn">[ ESC ] OMITIR</button>
+</div>
+<div class="curtain" id="curtainOverlay"></div>
+<div class="stress-vignette" id="stressVignette"></div>
+<div class="kpi-tooltip-shared" id="sharedTooltip"></div>
+<div class="wrap">
+  <header>
+    <div class="header-text">
+      <div class="eyebrow">Simulador · Alta Gerencia Financiera</div>
+      <h1>El Comité</h1>
+      <p class="subtitle" id="subtitleText">Vas a dirigir las finanzas de una empresa real, con información incompleta, plazos que se vencen cuando menos lo esperas y un mercado que no te va a decir si una jugada es prudente o temeraria.</p>
+      <div class="xp-line" id="xpLine"></div>
+      <div class="meta-junta-line" id="metaJuntaLine"></div>
+    </div>
+    <div class="portrait" id="portraitBtn" role="button" tabindex="0" title="Ajustes" aria-label="Abrir ajustes">
+      <div class="portrait-ring" id="portraitRing">
+        <img class="portrait-img" src="@asset(retrato-ajustes.png)" alt="El Comité" />
+      </div>
+      <div class="portrait-label" id="portraitLabel">Comité</div>
+    </div>
+  </header>
+
+  <div class="settings-modal-backdrop" id="settingsModalBackdrop">
+    <div class="settings-modal-content brutal-screen" id="settingsModalContent">
+      <button class="settings-close-btn" id="settingsCloseBtn" aria-label="Cerrar">✕</button>
+      <h2 class="brutal-title settings-title">&gt; AJUSTES_</h2>
+
+      <div class="settings-section">
+        <div class="settings-label">VOLUMEN GENERAL</div>
+        <div class="settings-slider-wrap">
+          <input type="range" min="0" max="150" value="100" class="settings-slider" id="volumeSlider">
+          <div class="settings-slider-value" id="volumeValue">100%</div>
+        </div>
+      </div>
+
+      <div class="settings-section settings-buttons" id="settingsButtonsRow">
+        <button class="brutal-confirm-btn settings-action-btn" id="settingsFullscreenBtn">PANTALLA COMPLETA</button>
+        <button class="brutal-confirm-btn settings-action-btn" id="settingsCarreraBtn">VER MI CARRERA</button>
+        <button class="brutal-confirm-btn settings-action-btn" id="settingsRestartBtn">REINICIAR PARTIDA</button>
+        <button class="brutal-confirm-btn settings-action-btn settings-danger-btn" id="settingsHomeBtn">VOLVER AL INICIO</button>
+      </div>
+
+      <div class="settings-section settings-confirm-box" id="settingsHomeConfirm" style="display:none">
+        <div class="settings-confirm-text">¿Volver al inicio? Perderás el progreso de la partida actual.</div>
+        <div class="settings-buttons">
+          <button class="brutal-confirm-btn settings-action-btn settings-danger-btn" id="settingsHomeConfirmYes">SÍ, VOLVER AL INICIO</button>
+          <button class="brutal-confirm-btn settings-action-btn" id="settingsHomeConfirmNo">CANCELAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="relations" id="relations" style="display:none"></div>
+  <div class="dashboard-grid">
+    <div class="ticker" id="tickerLeft" style="display:none"></div>
+    <div class="dashboard-main">
+      <div class="crt-row" id="crtRow" style="display:none">
+        <div class="crt-screen">
+          <div class="crt-scanlines"></div>
+          <div class="crt-header">
+            <span class="crt-title">Flujo de Caja Histórico</span>
+            <div class="crt-controls">
+              <button class="crt-btn" id="cajaZoomBtn">Zoom: Todo</button>
+              <button class="crt-btn" id="cajaPeriodoBtn">Periodo: Todo</button>
+            </div>
+          </div>
+          <div class="crt-canvas-wrap" id="chartCajaWrap"><canvas id="chartCajaCanvas"></canvas></div>
+        </div>
+        <div class="crt-screen">
+          <div class="crt-scanlines"></div>
+          <div class="crt-header">
+            <span class="crt-title">EBITDA vs. Endeudamiento</span>
+            <div class="crt-controls">
+              <button class="crt-btn" id="edZoomBtn">Zoom: Todo</button>
+              <button class="crt-btn" id="edPeriodoBtn">Periodo: Todo</button>
+            </div>
+          </div>
+          <div class="crt-canvas-wrap" id="chartEdWrap"><canvas id="chartEdCanvas"></canvas></div>
+        </div>
+      </div>
+      <div class="evaluar-turno-wrap" id="evaluarTurnoWrap" style="display:none">
+        <button class="evaluar-turno-btn" id="evaluarTurnoBtn">EVALUAR SIGUIENTE TURNO</button>
+        <div class="evaluar-turno-hint">Abre el siguiente caso, evento o decisión en una ventana centrada</div>
+        <button class="oficina-ambiente-btn" id="oficinaAmbienteBtn">🏢 Situación en la oficina</button>
+      </div>
+      <div class="calendar" id="calendario" style="display:none"></div>
+      <button class="log-toggle" id="logToggle" style="display:none">Ver bitácora de decisiones (0)</button>
+      <div class="log" id="log"></div>
+    </div>
+    <div class="ticker" id="tickerRight" style="display:none"></div>
+  </div>
+
+  <div id="game"></div>
+</div>
+
+<div class="turn-modal-backdrop" id="turnModalBackdrop">
+  <div id="turnModalContent"></div>
+</div>
+<div class="turn-fade-overlay" id="turnFadeOverlay">
+  <div class="turn-fade-text" id="turnFadeText">CALCULANDO IMPACTO — TURNO 1...</div>
+</div>
+
+<script>
+<!-- @include engine/estado-global.js -->
+<!-- @include audio/audio.js -->
+<!-- @include engine/constantes-partida.js -->
+<!-- @include systems/persistencia.js -->
+<!-- @include engine/dificultad-e-inicio.js -->
+<!-- @include engine/impacto.js -->
+<!-- @include engine/motor-operativo.js -->
+<!-- @include ui/formato.js -->
+<!-- @include systems/priorizacion.js -->
+<!-- @include systems/metas-e-imagenes.js -->
+<!-- @include systems/mandato-inicial.js -->
+<!-- @include systems/logros.js -->
+<!-- @include ui/feedback-visual.js -->
+<!-- @include ui/tooltip.js -->
+<!-- @include systems/glosario.js -->
+<!-- @include ui/iconos-kpi.js -->
+<!-- @include ui/render-paneles.js -->
+<!-- @include ui/tension.js -->
+<!-- @include engine/finales.js -->
+<!-- @include systems/arquetipos.js -->
+<!-- @include engine/resolucion-turno.js -->
+<!-- @include engine/junta-trimestral.js -->
+<!-- @include content/universal/eventos-ramificados.js -->
+<!-- @include content/universal/escandalo-diferido.js -->
+<!-- @include content/universal/tono-salcedo.js -->
+<!-- @include content/universal/elenco.js -->
+<!-- @include content/universal/dilemas.js -->
+<!-- @include content/universal/dilemas-por-sector.js -->
+<!-- @include minigames/auditoria-relampago.js -->
+<!-- @include minigames/mercado-volatil.js -->
+<!-- @include minigames/bandeja-entrada.js -->
+<!-- @include minigames/fuga-capital.js -->
+<!-- @include minigames/oficina.js -->
+<!-- @include minigames/oficina-ambiente.js -->
+<!-- @include content/universal/cadenas-profundas.js -->
+<!-- @include content/universal/carta-meta.js -->
+<!-- @include content/universal/cadena-reestructuracion.js -->
+<!-- @include content/universal/elenco-indicadores.js -->
+<!-- @include content/universal/karma.js -->
+<!-- @include content/universal/cisne-negro.js -->
+<!-- @include engine/flujo-turno.js -->
+<!-- @include ui/render-caso.js -->
+<!-- @include ui/bitacora.js -->
+<!-- @include ui/post-mortem.js -->
+<!-- @include ui/panel-analisis.js -->
+<!-- @include systems/mayor-error.js -->
+<!-- @include systems/titulo-gerencial.js -->
+<!-- @include systems/legado.js -->
+<!-- @include systems/estadisticas-carrera.js -->
+<!-- @include content/sectores/macro.js -->
+<!-- @include content/sectores/vitafit.js -->
+<!-- @include content/sectores/technova.js -->
+<!-- @include content/sectores/agroverde.js -->
+<!-- @include content/sectores/ganadera.js -->
+<!-- @include content/sectores/construyeya.js -->
+<!-- @include content/sectores/modaurbana.js -->
+<!-- @include content/perfiles.js -->
+<!-- @include content/sectores/sectores.js -->
+<!-- @include ui/pantallas-inicio.js -->
+<!-- @include ui/iconos-sector.js -->
+<!-- @include engine/inicio.js -->
+<!-- @include ui/cinematica.js -->
+<!-- @include ui/pantalla-completa.js -->
+</script>
+</body>
+</html>

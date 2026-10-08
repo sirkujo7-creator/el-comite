@@ -1,0 +1,29 @@
+  /* ---------- Cortina de transición financiera ---------- */
+  .curtain{position:fixed; inset:0; background:linear-gradient(90deg, transparent, var(--gold) 45%, var(--gold) 55%, transparent); z-index:200; opacity:0; pointer-events:none;}
+  .curtain.sweep{animation: curtainSweep 0.55s ease-in-out;}
+  @keyframes curtainSweep{
+    0%{opacity:0; transform:translateX(-100%);}
+    50%{opacity:0.9;}
+    100%{opacity:0; transform:translateX(100%);}
+  }
+  @keyframes fadeInScreen{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+  .screen-fade-in{animation: fadeInScreen 0.4s ease;}
+
+  /* ---------- Gráfico interactivo (Chart.js) ---------- */
+  .chart-canvas-wrap{position:relative; height:170px;}
+
+  /* ---------- Titular de prensa / Bloomberg para eventos macro ---------- */
+  .case-card.transicion-macro{
+    background:#05070c; border:2px solid var(--gold); text-align:center; padding:34px 22px 30px; position:relative; overflow:hidden;
+  }
+  .case-card.transicion-macro::before, .case-card.transicion-macro::after{
+    content:''; position:absolute; left:20px; right:20px; height:2px; background:linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+  .case-card.transicion-macro::before{top:16px;}
+  .case-card.transicion-macro::after{bottom:16px;}
+  .masthead-kicker{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--danger); margin:8px 0 16px; font-weight:700;}
+  .masthead-headline{font-family:'Fraunces',serif; font-weight:700; font-style:italic; font-size:clamp(23px,5.6vw,32px); line-height:1.18; color:var(--ink); margin:0 0 16px; letter-spacing:-0.01em; text-shadow:0 2px 24px rgba(201,169,97,0.18);}
+  .masthead-rule{border:none; border-top:1px solid var(--line-strong); width:56%; margin:16px auto;}
+  .masthead-sub{font-family:'IBM Plex Sans',sans-serif; font-size:13px; color:var(--ink-muted); line-height:1.65; max-width:54ch; margin:0 auto 20px; text-align:left;}
+  .masthead-dateline{font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--ink-muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px;}
+

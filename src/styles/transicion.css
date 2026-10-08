@@ -1,0 +1,25 @@
+  /* =========================================================
+     TRANSICIÓN "CALCULANDO IMPACTO" — pantalla completa
+     ========================================================= */
+  .turn-fade-overlay{
+    position:fixed; inset:0; z-index:300; background:#000;
+    opacity:0; pointer-events:none;
+    display:flex; align-items:center; justify-content:center;
+    transition:opacity 0.4s ease;
+  }
+  .turn-fade-overlay.show{ opacity:1; pointer-events:all; }
+  .turn-fade-text{
+    font-family:'Press Start 2P','IBM Plex Mono',monospace;
+    color:#fff; font-size:13px; text-align:center; letter-spacing:.04em; line-height:2;
+    padding:0 20px; opacity:0; transition:opacity 0.4s ease 0.1s;
+  }
+  .turn-fade-overlay.show .turn-fade-text{ opacity:1; animation: glitchText 0.15s infinite steps(1); }
+  @keyframes glitchText{
+    0%{ text-shadow: 2px 0 rgba(255,40,60,0.85), -2px 0 rgba(40,160,255,0.85); }
+    20%{ text-shadow: -3px 1px rgba(255,40,60,0.85), 3px -1px rgba(40,160,255,0.85); }
+    40%{ text-shadow: 1px -1px rgba(255,40,60,0.85), -1px 1px rgba(40,160,255,0.85); }
+    60%{ text-shadow: -2px 0 rgba(255,40,60,0.85), 2px 0 rgba(40,160,255,0.85); }
+    80%{ text-shadow: 3px 1px rgba(255,40,60,0.85), -3px -1px rgba(40,160,255,0.85); }
+    100%{ text-shadow: 2px 0 rgba(255,40,60,0.85), -2px 0 rgba(40,160,255,0.85); }
+  }
+

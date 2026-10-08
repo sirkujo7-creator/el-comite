@@ -1,0 +1,14 @@
+  /* =========================================================
+     IMPRESIÓN — reporte limpio para junta directiva
+     ========================================================= */
+  @media print{
+    body *{ visibility:hidden; }
+    .ending-card, .ending-card *{ visibility:visible; }
+    .ending-card{ position:absolute; left:0; top:0; width:100%; background:#fff !important; border:1px solid #000 !important; box-shadow:none !important; padding:20px; }
+    .curtain, .turn-fade-overlay, .turn-modal-backdrop, .kpi-tooltip-shared, .analitica-toggle,
+    .portrait, #printBtn, .ending-btns, .log-toggle, .log, .xp-line{ display:none !important; }
+    body{ background:#fff !important; }
+    .ending-desc, .committee-box, .titulo-gerencial-parrafo, .case-eyebrow, .val-label{ color:#000 !important; }
+    .committee-box, .committee-box.error, .titulo-gerencial{ border-left-color:#000 !important; background:#f4f4f4 !important; }
+  }
+

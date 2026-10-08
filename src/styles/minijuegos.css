@@ -1,0 +1,211 @@
+  /* ---------- Auditoría Relámpago (minijuego de tiempo) ---------- */
+  .auditoria-card{ border-color:var(--danger) !important; }
+  .timer-bar-wrap{ width:100%; height:12px; background:rgba(255,255,255,0.08); border:1px solid var(--line-strong); border-radius:6px; margin:10px 0 4px; overflow:hidden; }
+  .timer-bar-fill{ height:100%; width:100%; background:var(--teal); transition:width 0.1s linear, background 0.3s ease; }
+  .timer-label{ text-align:right; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-muted); margin-bottom:14px; }
+  .documento-financiero{
+    background:#EDE6D6 repeating-linear-gradient(0deg, rgba(0,0,0,0.02) 0px, rgba(0,0,0,0.02) 1px, transparent 1px, transparent 3px);
+    color:#20180a; border:2px solid rgba(0,0,0,0.25); border-radius:2px;
+    padding:18px 20px; margin:10px 0 16px; font-family:'IBM Plex Mono',monospace;
+    box-shadow:0 10px 24px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.35) inset;
+    position:relative; transform:rotate(-0.4deg);
+  }
+  .documento-financiero::before{
+    content:''; position:absolute; top:0; right:0; width:0; height:0;
+    border-style:solid; border-width:0 18px 18px 0; border-color:transparent rgba(0,0,0,0.14) transparent transparent;
+  }
+  .doc-header{ font-weight:700; font-size:12.5px; text-transform:uppercase; letter-spacing:.04em; border-bottom:2px dashed rgba(0,0,0,0.25); padding-bottom:9px; margin-bottom:10px; }
+  .doc-row{ display:flex; justify-content:space-between; gap:10px; padding:5px 2px; font-size:12.5px; border-bottom:1px dotted rgba(0,0,0,0.18); transition:background .2s ease; }
+  .doc-row:last-child{ border-bottom:none; }
+  .doc-label{ color:#5a5142; font-weight:600; }
+  .doc-value{ font-weight:700; text-align:right; }
+  .doc-row-error{ background:rgba(193,69,45,0.22); outline:2px solid var(--danger); border-radius:4px; }
+  .auditoria-buttons{ display:flex; gap:14px; margin-bottom:16px; }
+  .audit-btn{
+    flex:1; font-family:'Press Start 2P','IBM Plex Mono',monospace; font-size:12px; line-height:1.7;
+    padding:20px 10px; border:none; cursor:pointer; border-radius:10px;
+    box-shadow:0 4px 14px rgba(0,0,0,0.35); transition:transform .15s ease, filter .15s ease;
+  }
+  .audit-btn.approve{ background:var(--teal); color:#08201a; }
+  .audit-btn.reject{ background:var(--danger); color:#fff; }
+  .audit-btn:hover{ filter:brightness(1.12); transform:translateY(-2px); }
+  .audit-btn:disabled{ opacity:0.45; cursor:not-allowed; transform:none; filter:none; }
+  .auditoria-result{ display:none; }
+  .auditoria-result.show{ display:block; animation:fadein .3s ease; }
+
+  /* ---------- Mercado Volátil (minijuego de compra bajo presión) ---------- */
+  .mercado-volatil-card{ border-color:var(--danger) !important; background:#050706 !important; }
+  .mv-price-display{
+    font-family:'Press Start 2P','IBM Plex Mono',monospace;
+    font-size:clamp(24px,7vw,36px); color:#39ff6a; text-align:center;
+    text-shadow:0 0 12px rgba(57,255,106,0.7); margin:14px 0 10px; letter-spacing:.02em;
+  }
+  .mv-price-display.flash-bg-good{ animation: flashBgGood 0.8s ease-out; }
+  .mv-price-display.flash-bg-bad{ animation: flashBgBad 0.8s ease-out; }
+  .mv-chart-wrap{
+    position:relative; height:150px; background:#001a08; border:2px solid #1f6b3a;
+    border-radius:4px; overflow:hidden; margin-bottom:8px;
+  }
+  .mv-chart-wrap::after{
+    content:''; position:absolute; inset:0; pointer-events:none;
+    background:repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 1px, transparent 3px);
+  }
+  #mvCanvas{ width:100%; height:100%; display:block; }
+  .mv-timer-label{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:#39ff6a; text-align:right; margin-bottom:12px; opacity:0.85; }
+  .mv-buy-btn{
+    width:100%; font-family:'Press Start 2P','IBM Plex Mono',monospace; font-size:14px; letter-spacing:.05em;
+    padding:20px; background:#001a08; color:#39ff6a; border:3px solid #39ff6a; cursor:pointer; border-radius:4px;
+    text-shadow:0 0 6px rgba(57,255,106,0.6); box-shadow:0 0 14px rgba(57,255,106,0.25);
+    transition:background .1s ease, transform .1s ease;
+  }
+  .mv-buy-btn:hover{ background:#012b0f; }
+  .mv-buy-btn:active{ transform:scale(0.97); }
+  .mv-buy-btn:disabled{ opacity:0.4; cursor:not-allowed; border-color:var(--ink-muted); color:var(--ink-muted); text-shadow:none; box-shadow:none; }
+  .mv-result{ display:none; margin-top:14px; }
+  .mv-result.show{ display:block; animation:fadein .3s ease; }
+
+  /* ---------- Bandeja de Entrada (swipe estilo Tinder/Reigns) ---------- */
+  .bandeja-timer-wrap{ width:100%; height:8px; background:rgba(255,255,255,0.08); border:1px solid var(--line-strong); border-radius:6px; margin:10px 0 6px; overflow:hidden; }
+  .bandeja-timer-fill{ height:100%; width:100%; background:var(--teal); transition:width 0.1s linear, background 0.3s ease; }
+  .bandeja-progreso{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-muted); text-align:center; margin-bottom:10px; }
+  .bandeja-stack{ position:relative; height:170px; margin-bottom:14px; }
+  .bandeja-tarjeta{
+    position:absolute; inset:0; background:var(--bg-raised); border:2px solid var(--line-strong); border-radius:14px;
+    padding:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center;
+    transition:transform 0.2s ease; box-shadow:0 8px 20px rgba(0,0,0,0.4);
+  }
+  .bandeja-tarjeta.activa{ border-color:var(--gold); }
+  .bandeja-icono{ font-size:30px; margin-bottom:8px; }
+  .bandeja-texto{ font-size:13.5px; line-height:1.45; margin-bottom:8px; }
+  .bandeja-costo{ font-family:'IBM Plex Mono',monospace; font-weight:700; color:var(--gold); font-size:13px; }
+  @keyframes swipeRight{ to{ transform:translateX(140%) rotate(20deg); opacity:0; } }
+  @keyframes swipeLeft{ to{ transform:translateX(-140%) rotate(-20deg); opacity:0; } }
+  .bandeja-tarjeta.swipe-right{ animation:swipeRight 0.28s ease-in forwards; }
+  .bandeja-tarjeta.swipe-left{ animation:swipeLeft 0.28s ease-in forwards; }
+  .bandeja-controles{ display:flex; gap:12px; margin-bottom:8px; }
+  .bandeja-btn{
+    flex:1; font-family:'IBM Plex Mono',monospace; font-weight:700; font-size:13px; letter-spacing:.03em;
+    padding:14px 10px; border-radius:10px; border:2px solid; cursor:pointer; transition:transform .1s ease, filter .1s ease;
+  }
+  .bandeja-btn.reject{ background:rgba(193,69,45,0.1); border-color:var(--danger); color:var(--danger); }
+  .bandeja-btn.accept{ background:rgba(79,157,141,0.1); border-color:var(--teal); color:var(--teal); }
+  .bandeja-btn:hover{ filter:brightness(1.2); transform:translateY(-2px); }
+  .bandeja-hint{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-muted); margin-bottom:6px; }
+  .bandeja-result{ display:none; margin-top:12px; }
+  .bandeja-result.show{ display:block; animation:fadein .3s ease; }
+
+  /* ---------- Fuga de Capital (deducción lógica) ---------- */
+  .fuga-capital-card{ border-color:var(--danger) !important; }
+  .fuga-pistas{ display:flex; flex-direction:column; gap:8px; margin:12px 0 16px; }
+  .fuga-pista{ background:rgba(193,69,45,0.08); border-left:2px solid var(--danger); padding:9px 12px; font-size:13px; line-height:1.5; border-radius:0 6px 6px 0; }
+  .fuga-depts{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-bottom:14px; }
+  .fuga-dept-btn{
+    display:flex; flex-direction:column; align-items:center; gap:6px; padding:18px 10px;
+    background:var(--bg-raised); border:2px solid var(--line-strong); border-radius:10px; cursor:pointer;
+    font-family:'IBM Plex Sans',sans-serif; font-size:13px; color:var(--ink); transition:border-color .15s, transform .1s;
+  }
+  .fuga-dept-btn:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .fuga-dept-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+  .fuga-dept-emoji{ font-size:26px; }
+  .fuga-result{ display:none; margin-top:14px; }
+  .fuga-result.show{ display:block; animation:fadein .3s ease; }
+
+  /* ---------- Motor de Cultura de Oficina ---------- */
+  .oficina-card{ border-color:var(--gold) !important; }
+  .oficina-botones{ display:flex; gap:12px; margin:14px 0; }
+  .oficina-choice-btn{
+    flex:1; padding:14px 12px; background:var(--bg-raised); border:2px solid var(--line-strong); border-radius:10px;
+    color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:13.5px; cursor:pointer; text-align:center;
+    transition:border-color .15s, transform .1s;
+  }
+  .oficina-choice-btn:hover{ border-color:var(--gold); transform:translateY(-2px); }
+  .oficina-choice-btn:disabled{ opacity:0.5; cursor:not-allowed; transform:none; }
+  .oficina-result{ display:none; margin-top:14px; }
+  .oficina-result.show{ display:block; animation:fadein .3s ease; }
+
+  /* Slider retro — La Climatización del Caos */
+  .clima-dial-wrap{ text-align:center; margin:16px 0; }
+  .clima-valor{ font-family:'Press Start 2P','IBM Plex Mono',monospace; font-size:28px; color:var(--gold); margin-bottom:10px; }
+  .clima-slider{
+    -webkit-appearance:none; appearance:none; width:100%; height:10px; border-radius:6px;
+    background:linear-gradient(90deg, #4FA3D1, var(--gold), var(--danger)); outline:none; margin-bottom:8px; cursor:pointer;
+  }
+  .clima-slider::-webkit-slider-thumb{
+    -webkit-appearance:none; width:26px; height:26px; border-radius:4px; background:var(--ink);
+    border:3px solid #000; cursor:pointer; box-shadow:0 0 8px rgba(0,0,0,0.5);
+  }
+  .clima-slider::-moz-range-thumb{ width:26px; height:26px; border-radius:4px; background:var(--ink); border:3px solid #000; cursor:pointer; }
+  .clima-labels{ display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--ink-muted); }
+
+  /* Clicker — El Dilema del Café */
+  .cafe-clicker-box{ display:flex; flex-direction:column; gap:10px; margin:14px 0; }
+  .impresora-intro{ display:flex; flex-direction:column; gap:10px; margin:14px 0; }
+  .impresora-juego{ margin:16px 0; text-align:center; }
+  .impresora-instruccion{
+    font-family:'IBM Plex Mono',monospace; font-size:13px; color:var(--gold); margin-bottom:14px; min-height:18px;
+  }
+  .impresora-grid{
+    display:grid; grid-template-columns:repeat(3,56px); grid-template-rows:repeat(2,56px);
+    gap:8px; justify-content:center;
+    grid-template-areas: ". up ." "left down right";
+  }
+  .impresora-flecha{
+    font-size:22px; border:1px solid #444; background:#0a0a0a; color:var(--ink);
+    border-radius:8px; cursor:pointer; transition:background .1s ease, transform .1s ease;
+  }
+  .impresora-flecha[data-dir="up"]{ grid-area:up; }
+  .impresora-flecha[data-dir="left"]{ grid-area:left; }
+  .impresora-flecha[data-dir="down"]{ grid-area:down; }
+  .impresora-flecha[data-dir="right"]{ grid-area:right; }
+  .impresora-flecha:disabled{ opacity:0.45; cursor:not-allowed; }
+  .impresora-flecha.flash{ background:var(--gold); color:#181614; transform:scale(1.08); }
+  .impresora-flecha.press{ background:var(--teal); color:#0a0a0a; transform:scale(0.92); }
+  .pantalla-tecla-grid{ display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+  .pantalla-tecla{
+    font-family:'IBM Plex Mono',monospace; font-size:12px; padding:12px 10px; min-width:88px;
+    border:1px solid #444; background:#0a0a0a; color:var(--ink); border-radius:8px; cursor:pointer;
+    transition:background .1s ease, transform .1s ease;
+  }
+  .pantalla-tecla:disabled{ opacity:0.45; cursor:not-allowed; }
+  .pantalla-tecla.flash{ background:var(--gold); color:#181614; transform:scale(1.06); }
+  .pantalla-tecla.press{ background:var(--teal); color:#0a0a0a; transform:scale(0.94); }
+  .encuesta-pregunta{ margin:16px 0; }
+  .encuesta-texto{ font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--ink); margin-bottom:8px; }
+  .apagon-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin:14px 0; }
+  .apagon-opcion.press{ border-color:var(--teal) !important; opacity:0.6; }
+  .cafe-clicker-hint{ display:block; font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-muted); margin-top:4px; }
+  .cafe-progreso-wrap{ height:8px; background:rgba(255,255,255,0.08); border:1px solid var(--line-strong); border-radius:6px; overflow:hidden; }
+  .cafe-progreso-fill{ height:100%; width:0%; background:var(--teal); transition:width 0.1s ease; }
+
+  /* Progress bar — El Cumpleaños Inoportuno */
+  .cumple-progress{ width:100%; height:14px; margin:14px 0; border-radius:8px; overflow:hidden; -webkit-appearance:none; appearance:none; border:none; }
+  .cumple-progress::-webkit-progress-bar{ background:rgba(255,255,255,0.08); border-radius:8px; }
+  .cumple-progress::-webkit-progress-value{ background:linear-gradient(90deg, var(--teal), var(--gold), var(--danger)); border-radius:8px; transition:width 0.08s linear; }
+  .cumple-progress::-moz-progress-bar{ background:linear-gradient(90deg, var(--teal), var(--gold), var(--danger)); border-radius:8px; }
+
+  /* Hover reveal — Guerra de la Nevera */
+  .nevera-camara{
+    position:relative; height:130px; background:#000; border:2px solid #333; border-radius:6px;
+    display:flex; align-items:center; justify-content:center; overflow:hidden; margin:12px 0 6px; cursor:pointer;
+    filter:brightness(0.15) contrast(1.5); transition:filter 0.3s ease;
+  }
+  .nevera-camara:hover{ filter:brightness(1) contrast(1.1); }
+  .nevera-silueta{ font-size:48px; filter:grayscale(1); image-rendering:pixelated; }
+  .nevera-static{
+    position:absolute; inset:0; pointer-events:none; opacity:0.15;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,0.08) 0px, rgba(255,255,255,0.08) 1px, transparent 1px, transparent 3px);
+  }
+  .nevera-hint{ text-align:center; font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--ink-muted); margin-bottom:10px; }
+  .stat-label-wrap{position:relative; display:inline-flex; align-items:center; gap:3px; cursor:help;}
+  .stat-info-icon{font-size:9px; color:var(--ink-muted); opacity:0.75; cursor:pointer;}
+  .kpi-tooltip-shared{
+    position:fixed; left:0; top:0;
+    width:215px; max-width:calc(100vw - 24px); background:#0B0F16; border:2px solid var(--gold); border-radius:8px;
+    padding:10px 11px; font-family:'IBM Plex Sans',sans-serif; font-size:11.5px; line-height:1.5;
+    color:var(--ink); opacity:0; visibility:hidden; transition:opacity .15s;
+    z-index:400; pointer-events:none; text-align:left; font-weight:400;
+    box-shadow:0 8px 24px rgba(0,0,0,0.7);
+  }
+  .kpi-tooltip-shared.show{opacity:1; visibility:visible;}
+  .kpi-tooltip-shared b{color:var(--gold); display:block; margin-bottom:4px; font-family:'IBM Plex Mono',monospace; font-size:10px; text-transform:uppercase; letter-spacing:.05em;}
+  .kpi-tooltip-shared .rango{margin-top:6px; padding-top:6px; border-top:1px dashed var(--line-strong); color:var(--teal); font-size:11px;}

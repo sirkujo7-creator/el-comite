@@ -1,0 +1,42 @@
+/* =========================================================
+   CINEMÁTICA DE INTRODUCCIÓN — terminal analógica, tipeo letra por letra
+   ========================================================= */
+#introOverlay{
+  position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:99999;
+  background-color:#050505; display:flex; align-items:center; justify-content:center;
+  transition:opacity 0.8s ease; overflow:hidden;
+}
+#introOverlay::after{
+  content:''; position:absolute; inset:0; pointer-events:none;
+  background-image:repeating-linear-gradient(0deg, rgba(255,255,255,0.6) 0px, rgba(255,255,255,0.6) 1px, transparent 1px, transparent 3px);
+  opacity:0.03;
+}
+#introOverlay.intro-hide{ opacity:0; pointer-events:none; }
+#introTextContainer{
+  font-family:'VT323','Silkscreen',monospace; font-size:1.4rem; color:#d4d4d4;
+  text-shadow:0 0 5px rgba(255,255,255,0.2); line-height:1.6;
+  max-width:680px; padding:0 28px; text-align:center; position:relative; z-index:1;
+}
+.nombre-juego{
+  color:var(--gold); font-weight:700;
+  text-shadow:0 0 10px rgba(201,169,97,0.85), 0 0 3px rgba(201,169,97,0.9);
+}
+.cursor-blink::after{
+  content:'█'; margin-left:2px; animation:blink 0.5s infinite;
+}
+@keyframes blink{
+  0%, 49%{ opacity:1; }
+  50%, 100%{ opacity:0; }
+}
+#skipIntroBtn{
+  position:absolute; bottom:24px; right:28px; z-index:2;
+  color:#555; background:none; border:none; font-size:0.8rem; cursor:pointer;
+  font-family:'IBM Plex Mono',monospace; letter-spacing:.05em; transition:color 0.2s ease;
+}
+#skipIntroBtn:hover{ color:#39ff6a; }
+#introHint{
+  position:absolute; bottom:24px; left:28px; z-index:2;
+  color:#555; font-size:0.8rem; font-family:'IBM Plex Mono',monospace; letter-spacing:.05em;
+  opacity:0; transition:opacity 0.3s ease;
+}
+#introHint.show{ opacity:1; }
