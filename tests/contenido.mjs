@@ -3,6 +3,11 @@
 // las funciones constructoras con el estado real de esa partida.
 import { crearJuego } from './harness.mjs';
 
+const VARIANTES = [
+  { caja: 3 }, { caja: 90 }, { diasInventario: 95 }, { diasInventario: 8 }, { valorInventario: 50 },
+  { deuda: 60, wacc: 22 }, { razonCorriente: 0.85 }, { reputacion: 18 }, { reputacion: 90 },
+  { moralEquipo: 18 }, { moralEquipo: 90 }, { confianzaBanco: 15 }, { confianzaProveedores: 15 }, { ebitda: -2 },
+];
 const RAICES = ['SECTORS', 'ETHICAL_DILEMMA_POOL', 'KARMA_CASES', 'BLACK_SWAN_POOL', 'CADENAS_PROFUNDAS',
   'ELENCO_INDICADORES', 'CARTA_META_COMITE'];
 // Constructoras globales de casos: build*, cadena*, evento*.
@@ -26,11 +31,20 @@ export async function recolectarCasos(html) {
   const vistos = new Map();
   for (const sector of SECTORES) {
     const j = await iniciarEnSector(html, sector);
-    const state = j.ev('state'), flags = j.ev('flags');
+    const base = j.ev('state'), flags = j.ev('flags');
+    // Estados extremos para ejercitar las ramas condicionales (p. ej. inventarioSano ? … : …).
+    const estados = [base, ...VARIANTES.map((v) => Object.assign({}, base, v))];
     const visitados = new Set();
     const caminar = (v, origen, prof) => {
       if (prof > 8 || v == null) return;
       if (typeof v === 'function') {
+        for (const state of estados) construir(v, state, origen, prof);
+        return;
+      }
+      caminarObjeto(v, origen, prof);
+    };
+    const construir = (v, state, origen, prof) => {
+      {
         let r;
         try { r = v(state, flags); } catch { return; }
         // Opciones con resultado al azar (p. ej. caja:pick([-5,4])): se construye el caso
@@ -44,13 +58,17 @@ export async function recolectarCasos(html) {
             });
           }
         }
-        if (r && typeof r === 'object') caminar(r, origen + '()', prof + 1);
-        return;
+        if (r && typeof r === 'object') caminarObjeto(r, origen + '()', prof + 1);
       }
+    };
+    const caminarObjeto = (v, origen, prof) => {
+      if (prof > 8 || v == null) return;
+      if (typeof v === 'function') return caminar(v, origen, prof);
       if (typeof v !== 'object' || visitados.has(v)) return;
       visitados.add(v);
       if (Array.isArray(v.choices)) {
-        const clave = (v.titulo || '') + '|' + v.choices.map((c) => c.texto).join('|');
+        // La clave incluye los efectos: dos ramas condicionales del mismo caso cuentan aparte.
+        const clave = (v.titulo || '') + '|' + v.choices.map((c) => c.texto + JSON.stringify(c.efectos)).join('|');
         if (!vistos.has(clave)) vistos.set(clave, { origen, caso: v, sector });
       }
       for (const [k, x] of Object.entries(v)) {
@@ -66,4 +84,22 @@ export async function recolectarCasos(html) {
     }
   }
   return [...vistos.values()];
+}
+
+export const KPIS = ['caja', 'capitalTrabajo', 'razonCorriente', 'deuda', 'ebitda', 'wacc', 'diasInventario',
+  'diasCartera', 'valorInventario', 'confianzaProveedores', 'confianzaBanco', 'reputacion', 'moralEquipo'];
+
+/** Por sector: cuántos casos de la bolsa aleatoria (sector + universales) tocan cada indicador. */
+export async function coberturaPorSector(html) {
+  const out = {};
+  for (const sector of SECTORES) {
+    const j = await iniciarEnSector(html, sector);
+    out[sector] = j.ev(`(() => {
+      const bolsa = sectorActual.random.concat(poolUniversalParaCategoria(sectorActual.categoria));
+      const r = { tieneInventario: !!sectorActual.tieneInventario, moral: state.moralEquipo != null, n: bolsa.length, por: {} };
+      for (const k of ${JSON.stringify(KPIS)}) r.por[k] = bolsa.filter((b) => caseTocaIndicador(b, k)).length;
+      return r;
+    })()`);
+  }
+  return out;
 }

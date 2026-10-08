@@ -1,4 +1,5 @@
-// Reglas de calidad de CLAUDE.md §3 sobre el contenido del juego (reglas 1–7).
+// Reglas de calidad de CLAUDE.md §3 sobre el contenido del juego (reglas 1–7), más el esquema
+// de los casos y la cobertura mínima por indicador y sector (Fase 2).
 // La regla 9 (anti-repetición) depende de partidas reales: está en simulacion.test.mjs.
 
 import { test } from 'node:test';
@@ -6,7 +7,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { recolectarCasos, iniciarEnSector, SECTORES } from './contenido.mjs';
+import { recolectarCasos, iniciarEnSector, coberturaPorSector, SECTORES, KPIS } from './contenido.mjs';
 import { extraerPartes } from './harness.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -103,4 +104,52 @@ test('regla 6 — el último <script> compila', () => {
 test('regla 7 — CSS con llaves balanceadas', () => {
   const css = html.slice(html.indexOf('<style>'), html.indexOf('</style>'));
   assert.equal((css.match(/\{/g) || []).length, (css.match(/\}/g) || []).length);
+});
+
+// ---------------------------------------------------------------- Esquema de casos
+const TIPOS = ['caso', 'karma', 'calendario', 'macro', 'random', 'meta_comite', 'junta', 'vencimiento'];
+// Magnitud máxima razonable de un efecto en una sola decisión (por encima, casi seguro es un error).
+const LIMITES = { caja: 25, capitalTrabajo: 20, razonCorriente: 0.5, deuda: 20, ebitda: 8, wacc: 5,
+  diasInventario: 35, diasCartera: 90, valorInventario: 15, confianzaProveedores: 20, confianzaBanco: 40,
+  reputacion: 20, moralEquipo: 20 };
+const CLAVES_OPCION = ['texto', 'efectos', 'consecuencia', 'diferir', 'setFlags', 'disparar', 'capex', 'informado', '__aleatorio'];
+const textoValido = (t) => typeof t === 'string' && t.trim().length >= 8;
+
+test('esquema — campos obligatorios, tipos y rangos de efectos', () => {
+  const fallas = [];
+  for (const c of casos) {
+    const k = c.caso, n = nombre(c);
+    if (!TIPOS.includes(k.tipo)) fallas.push(`${n}: tipo desconocido "${k.tipo}"`);
+    if (!textoValido(k.titulo)) fallas.push(`${n}: título vacío o muy corto`);
+    if (!textoValido(k.contexto)) fallas.push(`${n}: contexto vacío o muy corto`);
+    if (k.choices.length < 2 || k.choices.length > 5) fallas.push(`${n}: ${k.choices.length} opciones (se esperan 2 a 5)`);
+    for (const op of opcionesDe(k)) {
+      const o = `${n} → "${(op.texto || '').slice(0, 50)}"`;
+      if (!textoValido(op.texto)) fallas.push(`${o}: texto vacío`);
+      if (!textoValido(op.consecuencia)) fallas.push(`${o}: consecuencia vacía`);
+      for (const clave of Object.keys(op)) if (!CLAVES_OPCION.includes(clave)) fallas.push(`${o}: campo desconocido "${clave}" (¿error de tipeo?)`);
+      for (const [ind, v] of Object.entries(op.efectos || {})) {
+        if (!KPIS.includes(ind)) fallas.push(`${o}: indicador desconocido "${ind}"`);
+        else if (typeof v !== 'number' || !Number.isFinite(v)) fallas.push(`${o}: ${ind} no es un número`);
+        else if (Math.abs(v) > LIMITES[ind]) fallas.push(`${o}: ${ind} ${v} supera el límite ±${LIMITES[ind]}`);
+      }
+    }
+  }
+  assert.deepEqual(fallas, [], listar(fallas));
+});
+
+// ---------------------------------------------------------------- Cobertura
+// Mínimo de casos (en la bolsa aleatoria del sector) que deben tocar cada indicador aplicable,
+// para que la decisión extra por indicador crítico tenga de dónde elegir sin repetir.
+const MINIMO_POR_INDICADOR = 4;
+
+test(`cobertura — cada indicador aplicable tiene al menos ${MINIMO_POR_INDICADOR} casos por sector`, async (t) => {
+  const cob = await coberturaPorSector(html);
+  const fallas = [];
+  for (const [sector, r] of Object.entries(cob)) {
+    const aplicables = KPIS.filter((k) => (r.tieneInventario || !['diasInventario', 'valorInventario'].includes(k)) && (r.moral || k !== 'moralEquipo'));
+    t.diagnostic(`${sector.padEnd(12)} (${r.n} casos) ` + aplicables.map((k) => `${k} ${r.por[k]}`).join(' · '));
+    for (const k of aplicables) if (r.por[k] < MINIMO_POR_INDICADOR) fallas.push(`${sector}: ${k} solo tiene ${r.por[k]} casos`);
+  }
+  assert.deepEqual(fallas, [], listar(fallas));
 });
