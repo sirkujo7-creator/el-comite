@@ -9,11 +9,11 @@ const AGROVERDE_CASES = [
   choices:[
     {texto:"Firmar el contrato a precio fijo por toda la cosecha.", efectos:{caja:3, wacc:-0.3, ebitda:-1}, consecuencia:"Te proteges de la volatilidad, aunque renuncias a cualquier alza del precio spot durante el año."},
     {texto:"Rechazar y vender en el mercado spot mes a mes.", efectos:{ebitda:1, wacc:0.2}, consecuencia:"Capturas el precio del momento, con toda la volatilidad que eso implica para tu flujo de caja."},
-    {texto:"Firmar solo el 50% de la cosecha a precio fijo y dejar el resto libre.", efectos:{caja:1, ebitda:0.5}, consecuencia:"Reduces el riesgo sin comprometer toda tu producción a un solo precio."},
+    {texto:"Firmar solo el 50% de la cosecha a precio fijo y dejar el resto libre.", efectos:{caja:1, ebitda:0.5, wacc:0.1}, consecuencia:"Reduces el riesgo sin comprometer toda tu producción a un solo precio. Eso sí, la mitad libre sigue expuesta a la volatilidad del precio."},
     {texto:"Buscar un segundo comprador para negociar mejores condiciones antes de decidir.", efectos:{caja:-1, ebitda:0.5}, consecuencia:"Ganas poder de negociación, aunque el proceso comercial adicional consume tiempo y algo de caja."}
   ],
-  choiceInformado:{texto:"Con la proyección bajista confirmada, firmar el contrato fijo por el 100% de la cosecha.", efectos:{caja:4, wacc:-0.4, ebitda:0.5},
-    consecuencia:"Si los futuros anticipan una caída del 8%, asegurar el precio actual completo es la jugada matemáticamente superior."}
+  choiceInformado:{texto:"Con la proyección bajista confirmada, firmar el contrato fijo por el 100% de la cosecha.", efectos:{caja:4, wacc:-0.4, ebitda:0.5, diasCartera:5},
+    consecuencia:"Si los futuros anticipan una caída del 8%, asegurar el precio actual completo es la jugada matemáticamente superior. A cambio, aceptas el plazo de pago más largo que exige el comprador."}
 },
 { tipo:'caso', titulo:"Financiamiento para el ciclo de cosecha",
   contexto:"Necesitas $15.000.000 de capital de trabajo estacional para cubrir la recolección y el procesamiento antes de exportar.",
@@ -23,7 +23,7 @@ const AGROVERDE_CASES = [
     {texto:"Tomar crédito bancario a tasa fija por $15M.", efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15}, consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
     {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República."},
-    {texto:"Ceder 20% de participación a un fondo de inversión agrícola.", efectos:{caja:15, capitalTrabajo:15}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras de la finca."},
+    {texto:"Ceder 20% de participación a un fondo de inversión agrícola.", efectos:{caja:15, capitalTrabajo:15, wacc:1}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras de la finca. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
     {texto:"Tramitar una línea de crédito agropecuario subsidiado, con tasa preferencial pero más garantías exigidas.", efectos:{caja:13, deuda:13, wacc:-0.6, capitalTrabajo:13, confianzaBanco:3},
      consecuencia:"La tasa es mucho mejor, pero el trámite tomó tiempo y quedaste con menos del monto que esperabas por las garantías exigidas."}
   ],
@@ -57,8 +57,8 @@ const AGROVERDE_CASES = [
      consecuencia:"El banco aprueba el crédito con mejores condiciones de las que merecías con tus cifras reales."},
     {texto:"Rechazarlo y presentar los estados financieros reales, ajustando la solicitud.", efectos:{caja:-3, confianzaBanco:5, razonCorriente:0.05, reputacion:5},
      consecuencia:"El monto aprobado es menor, pero tu información financiera sigue siendo confiable."},
-    {texto:"Mejorar los indicadores reales primero, cobrando anticipos pendientes de compradores internacionales.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, ebitda:1, reputacion:2},
-     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel."},
+    {texto:"Mejorar los indicadores reales primero, cobrando anticipos pendientes de compradores internacionales.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, diasCartera:-8, ebitda:-1},
+     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel. Mientras tanto, el crecimiento que pensabas financiar con el crédito queda en pausa."},
     {texto:"Buscar financiamiento con un fondo de inversión de impacto agrícola, sin tocar la contabilidad.", efectos:{caja:4, wacc:0.8, deuda:4},
      consecuencia:"Consigues capital sin mentir en tus estados financieros, a un costo algo mayor que el crédito bancario tradicional."}
   ]
@@ -71,7 +71,7 @@ const AGROVERDE_CASES = [
     {texto:"Invertir en el upgrade completo de certificación.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Accedes a mercados premium con mejores precios, asumiendo un costo de proceso y auditoría permanente más alto."},
     {texto:"Mantener la certificación actual, sin subir de nivel por ahora.", efectos:{ebitda:-0.3}, consecuencia:"Evitas la inversión y el compromiso adicional, aunque renuncias al sobreprecio de los mercados más exigentes mientras la competencia sí avanza hacia allá."},
     {texto:"Certificar solo una porción de la producción bajo el nuevo estándar, como prueba piloto.", efectos:{caja:-2, ebitda:0.5}, consecuencia:"Accedes parcialmente al mercado premium, sin comprometer toda tu operación al nuevo estándar de una vez."},
-    {texto:"Buscar un comprador dispuesto a financiar parte del proceso de certificación a cambio de exclusividad.", efectos:{caja:-1, ebitda:1}, consecuencia:"Reduces tu inversión propia, a cambio de atarte comercialmente a un solo comprador durante la transición."}
+    {texto:"Buscar un comprador dispuesto a financiar parte del proceso de certificación a cambio de exclusividad.", efectos:{caja:-1, ebitda:1, diasCartera:10}, consecuencia:"Reduces tu inversión propia, a cambio de atarte comercialmente a un solo comprador durante la transición. Ese comprador, además, te impone sus plazos de pago."}
   ],
   choiceInformado:{texto:"Con el sobreprecio del 18% confirmado, invertir en el upgrade completo sin reservas.", efectos:{caja:-4, ebitda:2.5},
     consecuencia:"Un sobreprecio de esa magnitud, sostenido en el tiempo, hace que el costo del upgrade se recupere mucho más rápido de lo que parecía al principio."}
@@ -89,10 +89,10 @@ function AGROVERDE_COSECHA(s,f){ return {tipo:'calendario', titulo:"Pago a recol
 function AGROVERDE_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y aranceles de exportación",
   contexto:"Llega la fecha de declarar renta, junto con los trámites y aranceles asociados al siguiente embarque de exportación.",
   choices:[
-    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7}, consecuencia:"Cumples sin generar ninguna obligación adicional."},
+    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
     {texto:"Contratar un asesor en comercio exterior para optimizar la carga arancelaria.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica beneficios arancelarios legítimos del tratado vigente."},
-    {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{razonCorriente:-0.08, caja:-7}, consecuencia:"Cumples igual, pero sacrificas el colchón construido para otro tipo de imprevistos."}
+    {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const AGROVERDE_RANDOM = [
   (s,f)=>({tipo:'macro', titulo:"El dólar sube y tus exportaciones valen más en pesos", titular:"El Dólar se Dispara: Ganadores y Perdedores en la Economía Real", impactoAutomatico:{caja:3},
@@ -131,7 +131,7 @@ const AGROVERDE_RANDOM = [
        consecuencia:"Proteges tu certificación y el ecosistema del cultivo, a cambio de una respuesta más lenta ante la plaga."},
       {texto:"Sacrificar la zona afectada para proteger el resto del cultivo sin tratamiento químico.", efectos:{ebitda:-5},
        consecuencia:"Pierdes esa porción de cosecha por completo, pero evitas cualquier riesgo de que la plaga o el tratamiento afecten al resto."},
-      {texto:"Esperar a ver si la plaga se controla sola antes de invertir en tratamiento.", efectos:{ebitda:-2},
+      {texto:"Esperar a ver si la plaga se controla sola antes de invertir en tratamiento.", efectos:{ebitda:-3, valorInventario:-2},
        consecuencia:"A veces la naturaleza se encarga sola. Esta vez, la plaga avanza más de lo que hubieras querido antes de decidir actuar."}
     ]
   }),
@@ -139,14 +139,14 @@ const AGROVERDE_RANDOM = [
     tipo:'random', titulo:"Paro portuario retrasa el barco de exportación",
     contexto:"Un paro de trabajadores portuarios retrasa por tiempo indefinido la salida de tu contenedor de exportación, con producto perecedero a bordo.",
     choices:[
-      {texto:"Pagar una tarifa de almacenamiento refrigerado de emergencia en el puerto mientras se resuelve el paro.", efectos:{caja:-4},
-       consecuencia:"Proteges la calidad del producto mientras esperas, a un costo logístico adicional no presupuestado."},
-      {texto:"Redirigir el envío a un puerto alterno, aunque implique costos logísticos extra.", efectos:{caja:-5, ebitda:-1},
-       consecuencia:"Consigues sacar el producto a tiempo, a un costo logístico considerablemente mayor al plan original."},
+      {texto:"Pagar una tarifa de almacenamiento refrigerado de emergencia en el puerto mientras se resuelve el paro.", efectos:{caja:-4, diasInventario:5},
+       consecuencia:"Proteges la calidad del producto mientras esperas, a un costo logístico adicional no presupuestado. Mientras tanto, el lote sigue sin venderse."},
+      {texto:"Redirigir el envío a un puerto alterno, aunque implique costos logísticos extra.", efectos:{caja:-5, ebitda:-1, reputacion:2},
+       consecuencia:"Consigues sacar el producto a tiempo, a un costo logístico considerablemente mayor al plan original. Tu comprador internacional toma nota de que cumpliste pese al paro."},
       {texto:"Esperar sin costo adicional a que el paro se resuelva por sí solo.", efectos:{ebitda:-4, diasCartera:10},
        consecuencia:"Ahorras el gasto logístico extra, pero una parte del producto perecedero no sobrevive la espera en las condiciones del puerto."},
-      {texto:"Vender el lote afectado a un comprador local a precio reducido antes de que se dañe.", efectos:{caja:3, ebitda:-3},
-       consecuencia:"Recuperas algo de valor rápidamente, muy por debajo del precio de exportación que tenías pactado originalmente."}
+      {texto:"Vender el lote afectado a un comprador local a precio reducido antes de que se dañe.", efectos:{caja:3, ebitda:-3, reputacion:-2},
+       consecuencia:"Recuperas algo de valor rápidamente, muy por debajo del precio de exportación que tenías pactado originalmente. Y quedas mal con el comprador internacional que esperaba ese lote."}
     ]
   }),
   (s,f)=>({
@@ -155,7 +155,7 @@ const AGROVERDE_RANDOM = [
     choices:[
       {texto:"Iniciar el proceso de certificación adicional de inmediato, aunque sea costoso.", efectos:{caja:-6, diasCartera:-10},
        consecuencia:"Proteges la relación con tu comprador más importante, a cambio de una inversión considerable en un proceso que toma tiempo."},
-      {texto:"Negociar un plazo de transición mientras obtienes la certificación.", efectos:{diasCartera:15},
+      {texto:"Negociar un plazo de transición mientras obtienes la certificación.", efectos:{diasCartera:15, reputacion:-1},
        consecuencia:"Ganas tiempo sin gastar de inmediato, aunque la relación queda en una zona de incertidumbre mientras se resuelve."},
       {texto:"Buscar un comprador alternativo que no exija esa certificación específica.", efectos:{ebitda:-2, diasCartera:20},
        consecuencia:"Evitas el gasto de la certificación, a cambio de negociar de cero con un comprador nuevo, probablemente en condiciones menos favorables."},
@@ -173,7 +173,7 @@ const AGROVERDE_RANDOM = [
        consecuencia:"No gastas de más, pero el impacto de la sequía se refleja completo en tu cosecha de este periodo."},
       {texto:"Contratar un seguro agrícola retroactivo si tu póliza actual lo permite.", efectos:{caja:-2, wacc:-0.1},
        consecuencia:"Dependiendo de los términos de tu póliza, esto puede cubrir parte de la pérdida — o no, si la sequía ya estaba en curso cuando la contrataste."},
-      {texto:"Redistribuir el agua disponible priorizando los cultivos de mayor margen.", efectos:{ebitda:-3, capitalTrabajo:1},
+      {texto:"Redistribuir el agua disponible priorizando los cultivos de mayor margen.", efectos:{ebitda:-3, capitalTrabajo:1, valorInventario:-2},
        consecuencia:"Proteges lo más rentable de tu producción a costa de sacrificar más severamente el resto."}
     ]
   }),
@@ -185,7 +185,7 @@ const AGROVERDE_RANDOM = [
        consecuencia:"Mantienes tu posición competitiva en ese mercado, a costa directa de tu margen de exportación."},
       {texto:"Trasladar el arancel completo al precio final para tu comprador.", efectos:{ebitda:1, diasCartera:10},
        consecuencia:"Proteges tu margen, aunque tu producto ahora es menos competitivo frente a otros orígenes sin el mismo arancel."},
-      {texto:"Buscar mercados de exportación alternativos sin ese arancel.", efectos:{caja:-3, ebitda:-1},
+      {texto:"Buscar mercados de exportación alternativos sin ese arancel.", efectos:{caja:-3, ebitda:-1, wacc:-0.2},
        consecuencia:"Diversificas tu riesgo de dependencia de un solo mercado, aunque abrir mercados nuevos toma tiempo y esfuerzo comercial."},
       {texto:"Explorar un esquema de comercio justo o denominación de origen que reduzca el impacto arancelario.", efectos:{caja:-2, reputacion:3},
        consecuencia:"Una alternativa que, si califica, puede mitigar el arancel y sumar valor a tu marca — aunque no todos los productos aplican."}

@@ -22,9 +22,9 @@ function eventoMarcelaReaparece(s,f){
       contexto:"Desde que ignoraste sus reparos, Marcela Duarte empezó a exigir el doble de documentación para cualquier trámite que pase por tu escritorio — hasta para lo más simple. No es venganza, dice; es 'debido proceso'.",
       choices:[
         {texto:"Hablar con ella directamente y reconstruir la confianza perdida.", efectos:{moralEquipo:3, caja:-0.3}, consecuencia:"La conversación incómoda ayuda, aunque Marcela sigue siendo más cautelosa que antes contigo — y el tiempo que le dedicaste a esto no lo dedicaste a otra cosa."},
-        {texto:"Pedirle a Recursos Humanos que intervenga en el conflicto.", efectos:{moralEquipo:-2, caja:-0.5}, consecuencia:"La intervención formal resuelve el papeleo, pero la relación se vuelve todavía más fría."},
+        {texto:"Pedirle a Recursos Humanos que intervenga en el conflicto.", efectos:{moralEquipo:-2, caja:-0.5, ebitda:0.5}, consecuencia:"La intervención formal resuelve el papeleo, pero la relación se vuelve todavía más fría. Al menos, los trámites vuelven a fluir."},
         {texto:"Aceptar el nuevo nivel de burocracia sin cuestionarlo.", efectos:{ebitda:-1}, consecuencia:"Los trámites se ralentizan de forma permanente, un costo silencioso pero real."},
-        {texto:"Reemplazarla por alguien más flexible.", efectos:{caja:-2, moralEquipo:-3}, consecuencia:"Resuelves la fricción inmediata, aunque pierdes a alguien que, con todo, conocía tus números mejor que nadie."}
+        {texto:"Reemplazarla por alguien más flexible.", efectos:{caja:-2, moralEquipo:-3, ebitda:1}, consecuencia:"Resuelves la fricción inmediata, aunque pierdes a alguien que, con todo, conocía tus números mejor que nadie. Con el reemplazo, los procesos se agilizan de inmediato."}
       ]};
   }
 }
@@ -44,10 +44,10 @@ function eventoRigoReaparece(s,f){
     return { tipo:'karma', titulo:"Don Rigo deja de ser flexible contigo", retrato: RETRATO_DON_RIGO, presentacion:"Don Rigo Salazar vuelve a buscarte — pero la relación ya no se siente igual.",
       contexto:"Desde que lo trataste como 'un proveedor más', Don Rigo Salazar empezó a exigir condiciones exactas de contrato, sin ninguna de las flexibilidades que solía dar por la relación de años. 'Los negocios son los negocios', te dice, citándote a ti mismo.",
       choices:[
-        {texto:"Aceptar las nuevas condiciones más estrictas sin quejarte.", efectos:{caja:-2}, consecuencia:"Pagas el costo de haber tratado una relación de años como una transacción cualquiera."},
+        {texto:"Aceptar las nuevas condiciones más estrictas sin quejarte.", efectos:{caja:-2, confianzaProveedores:1}, consecuencia:"Pagas el costo de haber tratado una relación de años como una transacción cualquiera."},
         {texto:"Buscar un proveedor alterno más flexible, aunque menos confiable.", efectos:{caja:1, confianzaProveedores:-4}, consecuencia:"Ahorras en el papel, pero cambias certeza probada por una relación todavía sin construir."},
-        {texto:"Intentar reconstruir la relación con un gesto genuino.", efectos:{caja:-1, confianzaProveedores:3}, consecuencia:"Don Rigo se ablanda un poco, aunque deja claro que la confianza rota tarda en repararse."},
-        {texto:"Aceptar las condiciones y buscar diversificar proveedores a futuro.", efectos:{caja:-1.5}, consecuencia:"Una decisión prudente a mediano plazo, aunque no resuelve la tensión inmediata."}
+        {texto:"Intentar reconstruir la relación con un gesto genuino.", efectos:{caja:-1, confianzaProveedores:3, ebitda:-0.5}, consecuencia:"Don Rigo se ablanda un poco, aunque deja claro que la confianza rota tarda en repararse. El gesto incluye respetarle por un tiempo los precios de antes."},
+        {texto:"Aceptar las condiciones y buscar diversificar proveedores a futuro.", efectos:{caja:-1.5, wacc:-0.1}, consecuencia:"Una decisión prudente a mediano plazo, aunque no resuelve la tensión inmediata."}
       ]};
   }
 }
@@ -69,8 +69,8 @@ function eventoValentinaReaparece(s,f){
       choices:[
         {texto:"Responder públicamente con una aclaración detallada.", efectos:{reputacion:2, caja:-1}, consecuencia:"La respuesta calma parte del ruido, aunque no borra la impresión inicial que dejó el artículo."},
         {texto:"No responder y dejar que el tema se diluya con el tiempo.", efectos:{reputacion:-3}, consecuencia:"Sin una versión propia circulando, la narrativa crítica de Valentina queda como la única disponible."},
-        {texto:"Contactarla directamente para entender qué generó ese tono tan duro.", efectos:{reputacion:1}, consecuencia:"La conversación no cambia lo ya publicado, pero abre la puerta a una relación menos hostil a futuro."},
-        {texto:"Considerar acciones legales por las afirmaciones del artículo.", efectos:{reputacion:-2, caja:-2}, consecuencia:"La amenaza legal contra una periodista genera más atención negativa de la que buscabas evitar."}
+        {texto:"Contactarla directamente para entender qué generó ese tono tan duro.", efectos:{reputacion:1, caja:-0.3}, consecuencia:"La conversación no cambia lo ya publicado, pero abre la puerta a una relación menos hostil a futuro."},
+        {texto:"Considerar acciones legales por las afirmaciones del artículo.", efectos:{reputacion:-2, caja:-2, moralEquipo:1}, consecuencia:"La amenaza legal contra una periodista genera más atención negativa de la que buscabas evitar. Puertas adentro, el equipo siente que la empresa lo defiende."}
       ]};
   }
 }
@@ -90,10 +90,10 @@ function eventoTetoReaparece(s,f){
     return { tipo:'karma', titulo:"Teto presenta resultados de la inversión que hiciste con él", retrato: RETRATO_TETO, presentacion:"Esteban \"Teto\" Vargas vuelve a buscarte, esta vez con resultados en la mano.",
       contexto:"Esteban 'Teto' Vargas te invita a almorzar para mostrarte, con genuino entusiasmo, cómo le fue al fondo con la participación que le diste. Los números son buenos — y te propone ampliar la relación.",
       choices:[
-        {texto:"Ampliar la relación con una segunda ronda de inversión.", efectos:{caja:6, ebitda:1}, consecuencia:"La relación de confianza construida rinde frutos concretos en una segunda ronda."},
-        {texto:"Agradecer los resultados, pero mantener la relación como está por ahora.", efectos:{reputacion:1}, consecuencia:"Consolidas la relación sin comprometer más participación de la que ya tenías."},
-        {texto:"Pedirle que te ayude a conectar con otros inversionistas de su red.", efectos:{caja:2, reputacion:2}, consecuencia:"Teto abre puertas adicionales, contento de que la relación se sienta genuinamente mutua."},
-        {texto:"Empezar a evaluar recomprar la participación que le diste.", efectos:{caja:-4}, consecuencia:"Recuperas control total sobre esa porción del negocio, a un costo real hoy."}
+        {texto:"Ampliar la relación con una segunda ronda de inversión.", efectos:{caja:6, ebitda:1, wacc:0.5}, consecuencia:"La relación de confianza construida rinde frutos concretos en una segunda ronda. Esa segunda ronda, eso sí, diluye un poco más tu participación: el capital de Teto espera su retorno."},
+        {texto:"Agradecer los resultados, pero mantener la relación como está por ahora.", efectos:{reputacion:1, caja:-0.3}, consecuencia:"Consolidas la relación sin comprometer más participación de la que ya tenías."},
+        {texto:"Pedirle que te ayude a conectar con otros inversionistas de su red.", efectos:{caja:2, reputacion:2, wacc:0.2}, consecuencia:"Teto abre puertas adicionales, contento de que la relación se sienta genuinamente mutua. Más socios, eso sí, también significa más expectativas de retorno."},
+        {texto:"Empezar a evaluar recomprar la participación que le diste.", efectos:{caja:-4, wacc:-0.5}, consecuencia:"Recuperas control total sobre esa porción del negocio, a un costo real hoy. Y con menos socios esperando retorno, tu costo de capital baja."}
       ]};
   }
 }
@@ -113,10 +113,10 @@ function eventoElviraReaparece(s,f){
     return { tipo:'karma', titulo:"El riesgo que la Dra. Bonilla advirtió se materializa", retrato: RETRATO_ELVIRA, presentacion:"La advertencia que la Dra. Elvira Bonilla te dio hace un tiempo ya no es hipotética.",
       contexto:"La cláusula que la Dra. Elvira Bonilla te recomendó revisar, y que decidiste dejar pasar, ahora te está costando: un cliente la está usando en su favor en una disputa contractual. Ella no dice 'te lo dije', pero tampoco hacía falta.",
       choices:[
-        {texto:"Contratarla de urgencia para resolver la disputa ahora mismo.", efectos:{caja:-4}, consecuencia:"El costo de resolverlo ahora es más alto del que hubiera sido prevenirlo, pero al menos se resuelve."},
+        {texto:"Contratarla de urgencia para resolver la disputa ahora mismo.", efectos:{caja:-4, reputacion:1}, consecuencia:"El costo de resolverlo ahora es más alto del que hubiera sido prevenirlo, pero al menos se resuelve."},
         {texto:"Intentar resolver la disputa internamente, sin asesoría legal externa.", efectos:{caja:-2, reputacion:-2}, consecuencia:"Ahorras en honorarios legales, pero el resultado de la disputa es peor de lo que hubiera sido con ayuda experta."},
-        {texto:"Negociar directamente con el cliente para llegar a un acuerdo rápido.", efectos:{caja:-3}, consecuencia:"Resuelves el conflicto sin escalarlo más, a un costo directo pero contenido."},
-        {texto:"Comprometerte a que, de ahora en adelante, sus recomendaciones se sigan sin excepción.", efectos:{caja:-3, reputacion:-1}, consecuencia:"El costo de esta vez es real, pero al menos queda una lección aprendida de verdad."}
+        {texto:"Negociar directamente con el cliente para llegar a un acuerdo rápido.", efectos:{caja:-3, ebitda:-0.5}, consecuencia:"Resuelves el conflicto sin escalarlo más, a un costo directo pero contenido. El acuerdo incluye algunas concesiones comerciales."},
+        {texto:"Comprometerte a que, de ahora en adelante, sus recomendaciones se sigan sin excepción.", efectos:{caja:-3, reputacion:-1, wacc:-0.2}, consecuencia:"El costo de esta vez es real, pero al menos queda una lección aprendida de verdad."}
       ]};
   }
 }

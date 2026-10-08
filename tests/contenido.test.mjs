@@ -1,10 +1,6 @@
 // Reglas de calidad de CLAUDE.md §3 sobre el contenido del juego (reglas 1–7).
 // La regla 9 (anti-repetición) depende de partidas reales: está en simulacion.test.mjs.
-//
-// Reglas 2 y 3: el contenido actual (heredado del HTML original) aún las incumple en muchos
-// casos. Quedan como `todo`: se ejecutan y listan los casos, pero no hacen fallar `npm test`.
-// Corregirlas es contenido de la Fase 2; al llegar a cero, quitar el `todo`.
-const PENDIENTE_FASE_2 = 'pendiente Fase 2 (contenido heredado)';
+
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -21,8 +17,8 @@ const casos = await recolectarCasos(html);
 // Campos donde menos es mejor (CAMPOS_INVERTIDOS del juego).
 const INVERTIDOS = ['deuda', 'wacc', 'diasInventario', 'diasCartera'];
 const normalizado = (k, v) => (INVERTIDOS.includes(k) ? -v : v);
-// Consecuencias no numéricas: deuda diferida, eventos disparados, banderas narrativas.
-const tieneRiesgo = (op) => !!(op.diferir || op.disparar || op.setFlags);
+// Consecuencias no numéricas: deuda diferida, eventos disparados, banderas narrativas, azar.
+const tieneRiesgo = (op) => !!(op.diferir || op.disparar || op.setFlags || op.__aleatorio);
 const nombre = ({ caso, origen }) => `"${caso.titulo}" (${origen})`;
 const opcionesDe = (caso) => caso.choices.concat(caso.choiceInformado ? [caso.choiceInformado] : []);
 
@@ -43,12 +39,13 @@ test('regla 1 — cero opciones vacías', () => {
   assert.deepEqual(fallas, [], `Opciones sin ningún efecto:\n  ${listar(fallas)}`);
 });
 
-test('regla 2 — ninguna opción domina a otra del mismo caso', { todo: PENDIENTE_FASE_2 }, () => {
+test('regla 2 — ninguna opción domina a otra del mismo caso', () => {
   const fallas = [];
   for (const c of casos) {
     const ops = c.caso.choices; // la opción informada se paga con la investigación: queda fuera
     for (let a = 0; a < ops.length; a++) for (let b = 0; b < ops.length; b++) {
       if (a === b || tieneRiesgo(ops[a]) || tieneRiesgo(ops[b])) continue;
+      if (ops[b].capex && !ops[a].capex) continue; // invertir en equipos (capex) es un beneficio no numérico
       const claves = new Set([...Object.keys(ops[a].efectos || {}), ...Object.keys(ops[b].efectos || {})]);
       let todasMayorIgual = true;
       for (const k of claves) {
@@ -63,7 +60,7 @@ test('regla 2 — ninguna opción domina a otra del mismo caso', { todo: PENDIEN
   assert.deepEqual(fallas, [], `${fallas.length} pares de opciones dominantes:\n  ${listar(fallas)}`);
 });
 
-test('regla 3 — toda opción tiene un costo o un riesgo', { todo: PENDIENTE_FASE_2 }, () => {
+test('regla 3 — toda opción tiene un costo o un riesgo', () => {
   const fallas = [];
   for (const c of casos) for (const op of opcionesDe(c.caso)) {
     const costo = Object.entries(op.efectos || {}).some(([k, v]) => typeof v === 'number' && normalizado(k, v) < 0);

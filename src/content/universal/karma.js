@@ -24,9 +24,9 @@ const KARMA_CASES = [
          consecuencia:"Recuperas la relación, pero tu ciclo de caja se vuelve más exigente: ya no financias tu operación con plazo de proveedor."},
         {texto:"Tramitar una carta de crédito con el banco como garantía.", efectos:{caja:-2, deuda:4, wacc:0.3, confianzaProveedores:12},
          consecuencia:"El banco respalda la operación, pero eso también es deuda nueva con su propio costo."},
-        {texto:"Buscar proveedores nuevos dispuestos a dar plazo, aunque cobren más caro.", efectos:{ebitda:-2, confianzaProveedores:5},
+        {texto:"Buscar proveedores nuevos dispuestos a dar plazo, aunque cobren más caro.", efectos:{ebitda:-2, confianzaProveedores:5, wacc:-0.1},
          consecuencia:"Diversificas la dependencia, pero pagas un sobrecosto permanente por conseguir condiciones más flexibles."},
-        {texto:"Ofrecer a los proveedores actuales una alianza de exclusividad a cambio de recuperar el plazo.", efectos:{confianzaProveedores:18, ebitda:-1},
+        {texto:"Ofrecer a los proveedores actuales una alianza de exclusividad a cambio de recuperar el plazo.", efectos:{confianzaProveedores:18, ebitda:-1, wacc:0.2},
          consecuencia:"Recuperas la confianza sin tocar tu caja ni tu deuda, aunque quedas comprometido a no comprarle a nadie más mientras dure el acuerdo."}
       ]
     })
@@ -38,7 +38,7 @@ const KARMA_CASES = [
       choices:[
         {texto:"Proponer un recorte generalizado de gastos en toda la operación.", efectos:{ebitda:4, confianzaProveedores:-5, confianzaBanco:3},
          consecuencia:"El ajuste es duro y transversal, pero manda una señal clara de disciplina hacia adentro y hacia afuera."},
-        {texto:"Pedir a los socios una capitalización de emergencia.", efectos:{caja:8},
+        {texto:"Pedir a los socios una capitalización de emergencia.", efectos:{caja:8, wacc:0.5},
          consecuencia:"Los socios inyectan capital fresco sin que la empresa tenga que endeudarse, aunque a costa de diluir el retorno esperado de cada uno."},
         {texto:"Vender activos no estratégicos para generar caja rápida.", efectos:{caja:6, capitalTrabajo:-2, ebitda:1},
          consecuencia:"Consigues liquidez inmediata sin pedir nada a nadie, aunque te desprendes de algo que en otro momento hubiera sido útil conservar."},

@@ -28,12 +28,12 @@ function eventoTonoReaparece(s,f){
       choices:[
         {texto:"Contratar de urgencia un reemplazo externo, sin mirar atrás.", efectos:{caja:-1.5, moralEquipo:-2},
          consecuencia:"Cubres el puesto, pero la curva de aprendizaje y el mensaje que quedó flotando en el equipo cuestan más de lo que se ve en la caja."},
-        {texto:"Reunir al equipo para explicar la decisión y escuchar cómo lo vivieron.", efectos:{moralEquipo:2},
-         consecuencia:"No trae a Toño de vuelta, pero al menos el equipo siente que su salida no pasó desapercibida."},
-        {texto:"Llamarlo para ofrecerle regresar, ahora sí con el adelanto que pidió.", efectos:{caja:-1, moralEquipo:4},
+        {texto:"Reunir al equipo para explicar la decisión y escuchar cómo lo vivieron.", efectos:{moralEquipo:2, ebitda:-1.5},
+         consecuencia:"No trae a Toño de vuelta, pero al menos el equipo siente que su salida no pasó desapercibida. Mientras tanto, el puesto sigue vacío y su trabajo se reparte como se puede."},
+        {texto:"Llamarlo para ofrecerle regresar, ahora sí con el adelanto que pidió.", efectos:{caja:-2, moralEquipo:4},
          consecuencia:"Toño valora el gesto tardío, aunque ambos saben que la confianza rota tarda más en repararse que en romperse."},
-        {texto:"No hacer nada especial: la rotación de personal es parte normal del negocio.", efectos:{moralEquipo:-3},
-         consecuencia:"El resto del equipo saca sus propias conclusiones sobre qué tan lejos llega tu lealtad hacia ellos."}
+        {texto:"No hacer nada especial: la rotación de personal es parte normal del negocio.", efectos:{moralEquipo:-3, ebitda:-1},
+         consecuencia:"El resto del equipo saca sus propias conclusiones sobre qué tan lejos llega tu lealtad hacia ellos. El trabajo de Toño, mientras tanto, se reparte entre los demás."}
       ]
     };
   }

@@ -26,9 +26,9 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Fuga de cerebros", contexto:"La moral del equipo técnico tocó fondo. Dos desarrolladores senior presentan su renuncia la misma semana, alegando 'falta de reconocimiento y estabilidad'.",
         choices:[
           {texto:"Contraofertar de inmediato con mejoras salariales y de beneficios para todo el equipo técnico.", efectos:{caja:-7, moralEquipo:20}, consecuencia:"Frenas la sangría a un costo alto, pero recuperas parte de la confianza perdida en el equipo que se queda."},
-          {texto:"Dejarlos ir y contratar reemplazos de forma acelerada.", efectos:{caja:-4, ebitda:-4, moralEquipo:-5}, consecuencia:"El proceso de reemplazo y curva de aprendizaje golpea la velocidad de desarrollo por varios meses."},
+          {texto:"Dejarlos ir y contratar reemplazos de forma acelerada.", efectos:{caja:-4, ebitda:-4, moralEquipo:-5, capitalTrabajo:3}, consecuencia:"El proceso de reemplazo y curva de aprendizaje golpea la velocidad de desarrollo por varios meses. A cambio, la nómina de los reemplazos es más liviana que la de los seniors que se fueron."},
           {texto:"Convocar una reunión abierta para escuchar al equipo y ajustar la cultura interna sin subir salarios todavía.", efectos:{moralEquipo:10, ebitda:-1}, consecuencia:"El gesto de escuchar sin prometer dinero calma parcialmente al equipo, aunque no resuelve la causa económica de fondo."},
-          {texto:"Ofrecer participación accionaria (equity) al equipo técnico clave que se queda.", efectos:{moralEquipo:15, ebitda:-1}, consecuencia:"Alineas el incentivo de largo plazo del equipo con el de la empresa, sin un desembolso de caja inmediato tan alto."}
+          {texto:"Ofrecer participación accionaria (equity) al equipo técnico clave que se queda.", efectos:{moralEquipo:15, ebitda:-1, wacc:0.5}, consecuencia:"Alineas el incentivo de largo plazo del equipo con el de la empresa, sin un desembolso de caja inmediato tan alto. Eso sí, diluyes a los socios actuales, que ahora exigen más retorno: tu costo de capital sube."}
         ]})
     }] },
   { id:'agroverde', emoji:'🌱', nombre:'AgroVerde', rubro:'Exportación de café y aguacate', categoria:'primario',
@@ -43,7 +43,7 @@ const SECTORS = [
           {texto:"Aceptar ambas peticiones de inmediato.", efectos:{caja:-3, moralEquipo:15}, consecuencia:"El costo es real, pero la respuesta inmediata a una petición razonable reconstruye confianza rápido."},
           {texto:"Rechazar las peticiones, argumentando que el margen no lo permite.", efectos:{moralEquipo:-8}, consecuencia:"El rechazo confirma exactamente lo que los recolectores ya sospechaban — la relación se enfría todavía más."},
           {texto:"Aceptar solo el almuerzo, posponiendo la discusión de turnos.", efectos:{caja:-1, moralEquipo:7}, consecuencia:"Un gesto parcial calma la situación por ahora, aunque el tema de fondo sigue sin resolverse."},
-          {texto:"Proponer turnos más cortos a cambio de una meta de recolección diaria.", efectos:{moralEquipo:10, ebitda:1}, consecuencia:"Un acuerdo que beneficia a ambos lados — mejor condición a cambio de un compromiso de productividad claro."}
+          {texto:"Proponer turnos más cortos a cambio de una meta de recolección diaria.", efectos:{moralEquipo:8, ebitda:1, caja:-1.5}, consecuencia:"Un acuerdo que beneficia a ambos lados — mejor condición a cambio de un compromiso de productividad claro. Cubrir los turnos más cortos exige contratar un par de recolectores adicionales."}
         ]})
     }] },
   { id:'ganadera', emoji:'🐄', nombre:'Ganadera Los Llanos', rubro:'Ganadería lechera y cría de bovinos', categoria:'primario',
@@ -88,7 +88,7 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Una marca de fast fashion copia tu diseño estrella",
         contexto:"Tu prenda más vendida de la temporada aparece, casi idéntica, en el catálogo de una cadena internacional de fast fashion — a una fracción de tu precio. Tus clientes empiezan a preguntarte qué vas a hacer al respecto.",
         choices:[
-          {texto:"Iniciar un proceso legal formal contra la marca.", efectos:{caja:-5, reputacion:4}, consecuencia:"El proceso es costoso y lento, pero defender tu diseño públicamente refuerza tu credibilidad como marca original."},
+          {texto:"Iniciar un proceso legal formal contra la marca.", efectos:{caja:-5, reputacion:4, ebitda:1}, consecuencia:"El proceso es costoso y lento, pero defender tu diseño públicamente refuerza tu credibilidad como marca original. Y la demanda frena la venta de la copia en los canales formales."},
           {texto:"Ignorarlo y seguir enfocado en tu propio trabajo.", efectos:{reputacion:-2}, consecuencia:"Sin ninguna respuesta visible, algunos clientes interpretan el silencio como resignación."},
           {texto:"Denunciarlo públicamente en redes sociales, sin acción legal.", efectos:{reputacion:5, caja:-1}, consecuencia:"La denuncia pública resuena con tu comunidad — no resuelve el problema legal, pero sí gana simpatía inmediata."},
           {texto:"Lanzar rápido una versión mejorada del diseño original para diferenciarte.", efectos:{caja:-3, ebitda:2, reputacion:2}, consecuencia:"Responder con innovación, no solo con indignación, es la jugada que mejor conecta con quienes ya te seguían."}

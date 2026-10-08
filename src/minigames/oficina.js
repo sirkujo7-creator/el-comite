@@ -750,8 +750,8 @@ function eventoClimaDestapado(s,f){
     tipo:'karma', titulo:"El equipo se entera de la encuesta maquillada",
     contexto:"Alguien de RRHH comenta, sin mala intención, que tus respuestas a la última encuesta de clima laboral fueron 'las más positivas de toda la gerencia'. El comentario llega al equipo, que sabe perfectamente que la realidad no es esa.",
     choices:[
-      {texto:"Reconocerlo abiertamente en la próxima reunión de equipo, sin excusas.", efectos:{moralEquipo:6, reputacion:2}, consecuencia:"El gesto de reconocerlo sin rodeos recupera más confianza de la que perdiste al maquillar la encuesta."},
-      {texto:"Minimizarlo, diciendo que la encuesta 'no capturaba bien el contexto completo'.", efectos:{moralEquipo:-5}, consecuencia:"La excusa no convence a nadie, y confirma exactamente lo que el equipo ya sospechaba."},
+      {texto:"Reconocerlo abiertamente en la próxima reunión de equipo, sin excusas.", efectos:{moralEquipo:6, reputacion:-1}, consecuencia:"El gesto de reconocerlo sin rodeos recupera más confianza de la que perdiste al maquillar la encuesta. Eso sí, el episodio trasciende la oficina y algunos clientes se enteran."},
+      {texto:"Minimizarlo, diciendo que la encuesta 'no capturaba bien el contexto completo'.", efectos:{moralEquipo:-5, reputacion:1}, consecuencia:"La excusa no convence a nadie, y confirma exactamente lo que el equipo ya sospechaba. Hacia afuera, al menos, el tema no trasciende."},
       {texto:"No decir nada y esperar a que el comentario se olvide con el tiempo.", efectos:{moralEquipo:-2}, consecuencia:"El tema se diluye solo, pero deja una pequeña grieta de confianza que no se cierra del todo."},
       {texto:"Compensarlo con una mejora concreta y visible en algo que el equipo sí pidió en la encuesta.", efectos:{caja:-2, moralEquipo:8}, consecuencia:"Una acción concreta pesa más que cualquier explicación — el equipo lo nota y lo agradece."}
     ]

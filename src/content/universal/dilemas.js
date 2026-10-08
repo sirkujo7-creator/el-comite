@@ -24,8 +24,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"El estudio te cuesta caro y no puedes controlar lo que encuentre, pero la transparencia desarma buena parte de la desconfianza — incluso si el resultado no es perfecto."},
       {texto:"Emitir un comunicado negando cualquier impacto, sin estudio de por medio, para cerrar el tema rápido.", efectos:{ebitda:2, reputacion:-6}, disparar:{turnos:4, evento:eventoEscandaloAmbiental},
        consecuencia:"El comunicado calma la conversación esta semana. Pero negar algo que no investigaste es una apuesta — y las apuestas de este tipo tienden a cobrarse cuando menos las esperas."},
-      {texto:"Invertir en una mejora real del proceso, aunque tome meses en dar resultados visibles.", efectos:{caja:-8, ebitda:-1, reputacion:6},
-       consecuencia:"Es la respuesta más costosa y la más lenta en notarse, pero es la única que ataca la causa en vez del síntoma."},
+      {texto:"Invertir en una mejora real del proceso, aunque tome meses en dar resultados visibles.", efectos:{caja:-8, reputacion:6, wacc:-0.2},
+       consecuencia:"Es la respuesta más costosa y la más lenta en notarse, pero es la única que ataca la causa en vez del síntoma. Y con el riesgo ambiental resuelto de raíz, bancos e inversionistas te perciben como una empresa menos riesgosa."},
       {texto:"Financiar un proyecto comunitario visible (parque, campaña de reciclaje) sin tocar el proceso productivo.", efectos:{caja:-3, reputacion:3},
        consecuencia:"El gesto suaviza el ambiente público, aunque cualquiera que lea entre líneas nota que no responde a la denuncia original."}
     ]
@@ -56,7 +56,7 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Pierdes el ahorro, pero tampoco te expones a un riesgo que ni siquiera te tomaste el trabajo de entender del todo."},
       {texto:"Exigirle al proveedor un plan de formalización como condición para firmar el contrato.", efectos:{caja:-2, ebitda:1, reputacion:4},
        consecuencia:"Consigues buena parte del ahorro sin cerrar los ojos ante la señal de alerta — aunque no tienes forma de garantizar que el plan se cumpla de verdad."},
-      {texto:"Diversificar: comprarle una porción pequeña mientras decides qué hacer con el resto.", efectos:{ebitda:1},
+      {texto:"Diversificar: comprarle una porción pequeña mientras decides qué hacer con el resto.", efectos:{ebitda:1, reputacion:-1},
        consecuencia:"Una decisión a medias: ni aprovechas todo el ahorro, ni resuelves la duda ética que quedó sobre la mesa."}
     ],
     choiceInformado:{texto:"Con la auditoría confirmando las condiciones laborales irregulares, rechazar el contrato de plano.", efectos:{ebitda:-1, reputacion:6},
@@ -68,8 +68,8 @@ const ETHICAL_DILEMMA_POOL = [
     investigacion:{costo:1, boton:"Pedir el extracto detallado y las facturas asociadas al banco ($1M)",
       reporte:"El extracto muestra que el cargo corresponde a una cena y regalos personales del responsable, disfrazados como 'atención a clientes'."},
     choices:[
-      {texto:"Confrontar al responsable y exigir el reembolso inmediato, sin escándalo público.", efectos:{caja:2, reputacion:2},
-       consecuencia:"Recuperas el dinero y evitas el drama, aunque el mensaje interno de que 'esto se resuelve en privado' puede envalentonar a otros."},
+      {texto:"Confrontar al responsable y exigir el reembolso inmediato, sin escándalo público.", efectos:{caja:2, reputacion:2, moralEquipo:-2},
+       consecuencia:"Recuperas el dinero y evitas el drama, aunque el mensaje interno de que 'esto se resuelve en privado' puede envalentonar a otros. Y en el equipo hay quien lo percibe como un trato preferencial."},
       {texto:"Despedir de inmediato al responsable y comunicarlo como política de tolerancia cero.", efectos:{caja:1, moralEquipo:-6, reputacion:5},
        consecuencia:"El mensaje es contundente y protege tu reputación de control interno, pero el ambiente se tensiona: varios sienten que la reacción fue desproporcionada para un solo cargo."},
       {texto:"Dejarlo pasar como 'gasto de representación' para no generar conflicto.", efectos:{ebitda:-3, confianzaBanco:-3},
@@ -77,8 +77,8 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Suspender todas las tarjetas corporativas hasta implementar un nuevo protocolo de aprobación.", efectos:{caja:-1, moralEquipo:-4, confianzaBanco:2},
        consecuencia:"La medida es pareja y defendible ante cualquier auditoría, aunque castiga a todo el equipo por el error de una sola persona."}
     ],
-    choiceInformado:{texto:"Con las facturas en mano confirmando el uso personal, despedir con causa justa y exigir el reembolso legal.", efectos:{caja:3, reputacion:4},
-      consecuencia:"Con evidencia documental, la salida es limpia, defendible, y recuperas el dinero sin margen de negociación."}
+    choiceInformado:{texto:"Con las facturas en mano confirmando el uso personal, despedir con causa justa y exigir el reembolso legal.", efectos:{caja:3, reputacion:4, moralEquipo:-2},
+      consecuencia:"Con evidencia documental, la salida es limpia, defendible, y recuperas el dinero sin margen de negociación. Aun así, un despido siempre deja tensión en el equipo."}
   }),
   (s,f)=>({
     tipo:'random', titulo:"Un cliente grande entra en mora generalizada",
@@ -88,8 +88,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Proteges tu cartera, aunque el cliente se queja de que lo tratas como moroso antes de darle explicaciones."},
       {texto:"Seguir despachando bajo la misma condición de crédito, confiando en que es un problema temporal.", efectos:{diasCartera:20, razonCorriente:-0.05},
        consecuencia:"Mantienes la relación comercial intacta por ahora, pero acabas de aumentar tu exposición justo con el cliente que ya no te está pagando."},
-      {texto:"Ofrecer un plan de pago escalonado a cambio de una garantía (pagaré o aval).", efectos:{diasCartera:-5, confianzaBanco:1},
-       consecuencia:"Encuentras un punto intermedio: no cortas la relación, pero tampoco sigues expuesto sin ningún respaldo."},
+      {texto:"Ofrecer un plan de pago escalonado a cambio de una garantía (pagaré o aval).", efectos:{diasCartera:-5, confianzaBanco:1, caja:-1},
+       consecuencia:"Encuentras un punto intermedio: no cortas la relación, pero tampoco sigues expuesto sin ningún respaldo. Mientras se cumplen las cuotas, entra menos caja de la que esperabas este mes."},
       {texto:"Vender la cartera vencida a una firma de cobranza con descuento.", efectos:{caja:4, ebitda:-2, diasCartera:-25},
        consecuencia:"Recuperas liquidez de inmediato y sacas el problema de tus libros, a cambio de ceder buena parte del valor de la deuda."}
     ]
@@ -102,8 +102,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Recuperas el acceso, pero acabas de confirmarle a ese grupo criminal (y a otros) que tu empresa paga cuando la presionan."},
       {texto:"Negarte a pagar y restaurar todo desde los últimos respaldos disponibles.", efectos:{ebitda:-4, reputacion:2},
        consecuencia:"Pierdes días de operación y algo de información reciente, pero no financias el modelo de negocio de tus atacantes."},
-      {texto:"Contratar de emergencia una firma de ciberseguridad forense antes de decidir cualquier cosa.", efectos:{caja:-5, confianzaBanco:2},
-       consecuencia:"Gastas más de lo que esperabas, pero por fin entiendes el alcance real del incidente antes de tomar una decisión a ciegas."},
+      {texto:"Contratar de emergencia una firma de ciberseguridad forense antes de decidir cualquier cosa.", efectos:{caja:-5, confianzaBanco:2, ebitda:-2},
+       consecuencia:"Gastas más de lo que esperabas, pero por fin entiendes el alcance real del incidente antes de tomar una decisión a ciegas. Mientras la firma trabaja, la operación administrativa sigue detenida."},
       {texto:"Minimizar el incidente públicamente y resolverlo puertas adentro sin avisar a clientes ni banco.", efectos:{ebitda:-2, confianzaBanco:-4, reputacion:-3},
        consecuencia:"Evitas el ruido inmediato, pero si algún dato de terceros se vio comprometido, el silencio puede costarte mucho más caro después."}
     ]
@@ -118,8 +118,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Alineas su incentivo con el negocio sin comprometer tanto el costo fijo, aunque él esperaba algo más inmediato."},
       {texto:"No igualar la oferta y empezar a preparar un plan de transición por si se va.", efectos:{moralEquipo:-5},
        consecuencia:"Ahorras el costo hoy, pero te expones a perder de golpe la relación con tus clientes más importantes si decide aceptar."},
-      {texto:"Pedirle que se quede por lealtad, sin ofrecerle ningún cambio en sus condiciones.", efectos:{moralEquipo:-10},
-       consecuencia:"La conversación no sale como esperabas: la lealtad no paga arriendo, y él lo sabe."}
+      {texto:"Ofrecerle un ascenso con más responsabilidades, pero sin aumento salarial inmediato.", efectos:{moralEquipo:2, ebitda:-0.5},
+       consecuencia:"Le das un camino de crecimiento sin subir hoy el costo fijo, aunque reorganizar el área tiene su costo y más responsabilidad sin más sueldo puede sentirse como más carga que premio."}
     ]
   }),
   (s,f)=>({
@@ -160,10 +160,10 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Corregir de inmediato y pedirle al auditor que documente la corrección en su informe.", efectos:{confianzaBanco:3, reputacion:2, caja:-0.3},
        consecuencia:"Un informe con una corrección documentada se ve mejor ante cualquier banco que uno con hallazgos sin resolver, aunque corregirlo formalmente en plena revisión tiene su propio costo administrativo."},
-      {texto:"Pedirle al auditor que simplemente no lo mencione, ya que no es un error material.", efectos:{confianzaBanco:-3, reputacion:-2},
-       consecuencia:"El auditor accede, pero ahora sabe que estás dispuesto a pedir ese tipo de favores — y eso puede pesar la próxima vez que necesites su buena fe."},
-      {texto:"Invertir en un sistema de control interno más robusto para evitar que se repita.", efectos:{caja:-3, confianzaBanco:2},
-       consecuencia:"Es la respuesta más costosa hoy, pero la única que realmente ataca la causa del hallazgo."},
+      {texto:"Pedirle al auditor que simplemente no lo mencione, ya que no es un error material.", efectos:{confianzaBanco:1, reputacion:-3},
+       consecuencia:"El auditor accede, pero ahora sabe que estás dispuesto a pedir ese tipo de favores — y eso puede pesar la próxima vez que necesites su buena fe. Por ahora, el banco recibe un informe limpio."},
+      {texto:"Invertir en un sistema de control interno más robusto para evitar que se repita.", efectos:{caja:-3, confianzaBanco:2, wacc:-0.2},
+       consecuencia:"Es la respuesta más costosa hoy, pero la única que realmente ataca la causa del hallazgo. Con controles sólidos, tu empresa se percibe menos riesgosa ante financiadores."},
       {texto:"No hacer nada: es un hallazgo menor y probablemente nadie más lo note.", efectos:{confianzaBanco:-1},
        consecuencia:"No pasa nada esta vez. Pero los controles internos débiles rara vez producen solo un hallazgo menor una sola vez, y el auditor deja constancia informal de la actitud."}
     ]
@@ -172,13 +172,13 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Propuesta de alianza estratégica con un competidor",
     contexto:"Un competidor directo te propone una alianza para compartir costos logísticos y de compra de insumos, manteniendo cada uno su marca y clientes por separado.",
     choices:[
-      {texto:"Aceptar la alianza y firmar un acuerdo formal de cooperación.", efectos:{ebitda:3, capitalTrabajo:2, reputacion:-1},
+      {texto:"Aceptar la alianza y firmar un acuerdo formal de cooperación.", efectos:{ebitda:3, capitalTrabajo:2, reputacion:-1, wacc:0.2},
        consecuencia:"Ambos reducen costos operativos, aunque ahora dependes en parte de la buena fe de alguien que hasta ayer era tu competencia — y algunos clientes fieles cuestionan que te alíes con quien antes evitabas."},
       {texto:"Rechazar la propuesta: prefieres mantener el control total de tu operación.", efectos:{ebitda:-0.5},
        consecuencia:"Conservas independencia total, a cambio de renunciar a un ahorro de costos real que tu competencia sí va a aprovechar con alguien más."},
-      {texto:"Proponer una alianza más limitada, solo para un insumo puntual.", efectos:{ebitda:1},
-       consecuencia:"Un paso prudente: obtienes parte del beneficio sin exponer toda tu operación a la relación."},
-      {texto:"Usar la negociación para obtener información sobre su operación, sin intención real de firmar.", efectos:{reputacion:-4},
+      {texto:"Proponer una alianza más limitada, solo para un insumo puntual.", efectos:{ebitda:1, reputacion:-0.5},
+       consecuencia:"Un paso prudente: obtienes parte del beneficio sin exponer toda tu operación a la relación. Aun así, algunos clientes fieles no ven con buenos ojos que cooperes con la competencia."},
+      {texto:"Usar la negociación para obtener información sobre su operación, sin intención real de firmar.", efectos:{reputacion:-4, ebitda:1.5},
        consecuencia:"Consigues algo de información valiosa, pero si se entera que negociaste de mala fe, esa puerta se cierra para siempre — y probablemente hable con otros del gremio."}
     ]
   }),
@@ -188,8 +188,8 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Contratar una investigación forense digital para identificar la fuente de la filtración.", efectos:{caja:-4, reputacion:1},
        consecuencia:"Gastas en encontrar respuestas, aunque no siempre se llega a una conclusión definitiva — y mientras tanto, la desconfianza interna ya se instaló."},
-      {texto:"Emitir un comunicado restando importancia a la información publicada.", efectos:{reputacion:-3},
-       consecuencia:"El comunicado no convence a nadie que ya vio las cifras — minimizar lo evidente rara vez funciona."},
+      {texto:"Emitir un comunicado restando importancia a la información publicada.", efectos:{reputacion:-3, confianzaBanco:1},
+       consecuencia:"El comunicado no convence a nadie que ya vio las cifras — minimizar lo evidente rara vez funciona. El banco, al menos, recibe una postura oficial."},
       {texto:"Reforzar de inmediato los protocolos de manejo de información sensible, sin buscar culpables.", efectos:{caja:-2, moralEquipo:2},
        consecuencia:"No resuelves el caso puntual, pero reduces el riesgo de que se repita, y evitas una cacería de brujas interna que hubiera dañado la confianza del equipo."},
       {texto:"No hacer nada y esperar a que el ruido mediático se apague solo.", efectos:{reputacion:-2},
@@ -216,11 +216,11 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Rediseñar tu próximo proceso de contratación para aprovechar el beneficio de forma genuina.", efectos:{ebitda:2, reputacion:3, caja:-0.5},
        consecuencia:"El beneficio tributario es real, y además construyes un equipo más diverso, aunque rediseñar el proceso de contratación no es gratis ni inmediato."},
-      {texto:"Contratar al mínimo necesario solo para calificar al beneficio, sin cambiar realmente tu proceso.", efectos:{ebitda:1},
+      {texto:"Contratar al mínimo necesario solo para calificar al beneficio, sin cambiar realmente tu proceso.", efectos:{ebitda:1, moralEquipo:-2},
        consecuencia:"Obtienes parte del beneficio, aunque el gesto se siente más como un trámite que como una convicción — y eso, tarde o temprano, se nota puertas adentro."},
       {texto:"No hacer ningún cambio: tu proceso de contratación funciona bien como está.", efectos:{ebitda:-0.3},
        consecuencia:"Dejas sobre la mesa un ahorro tributario real por simple inercia."},
-      {texto:"Consultar primero con un asesor tributario para entender el alcance exacto del beneficio.", efectos:{caja:-1},
+      {texto:"Consultar primero con un asesor tributario para entender el alcance exacto del beneficio.", efectos:{caja:-0.3},
        consecuencia:"Gastas un poco en asesoría, pero evitas aplicar mal un beneficio que después tendrías que devolver con intereses."}
     ]
   }),
@@ -228,12 +228,12 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Fondo de inversión ofrece comprar una participación minoritaria",
     contexto:"Un fondo de inversión regional te ofrece comprar una participación minoritaria de tu empresa, inyectando capital fresco sin que pierdas el control operativo.",
     choices:[
-      {texto:"Aceptar la oferta y capitalizar la empresa con ese dinero fresco.", efectos:{caja:10, capitalTrabajo:6, deuda:-3, reputacion:-1},
-       consecuencia:"Entra dinero sin intereses ni cuotas, aunque ahora tienes un nuevo socio con derecho a voz sobre decisiones importantes — y algunos lo notan como una pérdida de independencia."},
+      {texto:"Aceptar la oferta y capitalizar la empresa con ese dinero fresco.", efectos:{caja:10, capitalTrabajo:6, deuda:-3, reputacion:-1, wacc:1},
+       consecuencia:"Entra dinero sin intereses ni cuotas, aunque ahora tienes un nuevo socio con derecho a voz sobre decisiones importantes — y algunos lo notan como una pérdida de independencia. Además, el fondo espera un retorno alto por su capital: tu costo de capital sube."},
       {texto:"Rechazar la oferta: prefieres mantener el 100% de la propiedad, aunque eso limite tu crecimiento.", efectos:{capitalTrabajo:-1},
        consecuencia:"Conservas control absoluto, a cambio de renunciar a capital que hubiera podido acelerar varios planes pendientes."},
-      {texto:"Negociar una participación más pequeña de la ofrecida, a cambio de menos dinero.", efectos:{caja:5, capitalTrabajo:3},
-       consecuencia:"Encuentras un punto intermedio: menos capital, pero también menos injerencia externa en tus decisiones."},
+      {texto:"Negociar una participación más pequeña de la ofrecida, a cambio de menos dinero.", efectos:{caja:5, capitalTrabajo:3, wacc:0.5},
+       consecuencia:"Encuentras un punto intermedio: menos capital, pero también menos injerencia externa en tus decisiones. Aun así, ese capital espera un retorno alto: tu costo de capital sube."},
       {texto:"Pedir tiempo para hacer valorar la empresa por un tercero antes de negociar cualquier cifra.", efectos:{caja:-1},
        consecuencia:"Te tomas el tiempo de saber cuánto vale realmente tu empresa antes de ceder ni un punto porcentual de ella."}
     ]
@@ -270,14 +270,14 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"El banco pide refinanciar anticipadamente por un rumor de crisis",
     contexto:"Corre el rumor de una crisis sectorial y, aunque tú vienes cumpliendo tus pagos al día, tu banco te pide adelantar una revisión de tus condiciones de crédito 'por precaución'.",
     choices:[
-      {texto:"Entregar toda la información financiera solicitada de forma transparente y proactiva.", efectos:{confianzaBanco:4},
-       consecuencia:"La transparencia total ante un banco nervioso rara vez sale mal — y en este caso refuerza la relación en vez de tensionarla."},
+      {texto:"Entregar toda la información financiera solicitada de forma transparente y proactiva.", efectos:{confianzaBanco:4, caja:-0.5},
+       consecuencia:"La transparencia total ante un banco nervioso rara vez sale mal — y en este caso refuerza la relación en vez de tensionarla. Preparar el paquete completo de información, eso sí, consume horas del equipo financiero."},
       {texto:"Negarte a entregar información adicional a la ya pactada contractualmente.", efectos:{confianzaBanco:-6, wacc:0.3},
        consecuencia:"Estás en tu derecho, pero un banco nervioso al que le cierras la puerta tiende a ponerte condiciones más duras la próxima vez que negocies algo."},
-      {texto:"Aprovechar la revisión para negociar mejores condiciones a cambio de mostrar buenos números.", efectos:{confianzaBanco:2, wacc:-0.3},
-       consecuencia:"Conviertes una revisión defensiva en una oportunidad: si tus números están bien, es el momento de pedir algo a cambio."},
-      {texto:"Cambiar de banco antes de que la revisión se complete.", efectos:{caja:-2, confianzaBanco:-10},
-       consecuencia:"Escapas de la presión inmediata, pero migrar de banco a mitad de una relación de crédito rara vez sale barato ni rápido."}
+      {texto:"Aprovechar la revisión para negociar mejores condiciones a cambio de mostrar buenos números.", efectos:{confianzaBanco:1, wacc:-0.3, caja:-0.5},
+       consecuencia:"Conviertes una revisión defensiva en una oportunidad: si tus números están bien, es el momento de pedir algo a cambio. El banco cede, aunque toma nota de que aprovechaste su momento de nerviosismo."},
+      {texto:"Cambiar de banco antes de que la revisión se complete.", efectos:{caja:-2, confianzaBanco:-10, wacc:-0.4},
+       consecuencia:"Escapas de la presión inmediata, pero migrar de banco a mitad de una relación de crédito rara vez sale barato ni rápido. El banco nuevo, eso sí, te recibe con una tasa de bienvenida."}
     ]
   }),
   (s,f)=>({
@@ -288,8 +288,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Tomarte en serio la denuncia, con proceso formal, es exactamente lo que un equipo necesita ver que su empresa hace en estos casos."},
       {texto:"Hablar informalmente con ambas partes para 'resolverlo entre ellos'.", efectos:{moralEquipo:-8},
        consecuencia:"La informalidad envía la señal equivocada: que este tipo de denuncias no se toman con la seriedad que merecen."},
-      {texto:"Ignorar la denuncia por ser anónima y sin pruebas.", efectos:{moralEquipo:-15, reputacion:-5},
-       consecuencia:"El silencio institucional ante una denuncia de este tipo es, para el resto del equipo, una respuesta en sí misma — y no una buena."},
+      {texto:"Remitir el caso al comité de convivencia laboral, como exige la ley, sin intervención adicional de la gerencia.", efectos:{moralEquipo:1, ebitda:-0.5, reputacion:1},
+       consecuencia:"Cumples el procedimiento legal y la denuncia tiene un canal formal, aunque el comité avanza despacio y algunos sienten que la gerencia se lavó las manos."},
       {texto:"Separar preventivamente a ambas personas de proyectos compartidos mientras se investiga.", efectos:{ebitda:-1, moralEquipo:3},
        consecuencia:"Una medida prudente mientras se aclaran los hechos, sin prejuzgar a nadie de antemano."}
     ]
@@ -298,7 +298,7 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Nuevo impuesto municipal sorpresivo",
     contexto:"La alcaldía aprueba un nuevo impuesto municipal a las actividades comerciales, con vigencia inmediata y sin periodo de transición.",
     choices:[
-      {texto:"Absorber el costo del nuevo impuesto sin trasladarlo a tus precios.", efectos:{ebitda:-3},
+      {texto:"Absorber el costo del nuevo impuesto sin trasladarlo a tus precios.", efectos:{ebitda:-3, reputacion:2},
        consecuencia:"Proteges tu relación con clientes sensibles al precio, a costa directa de tu rentabilidad."},
       {texto:"Trasladar el impuesto completo a tus precios de inmediato.", efectos:{ebitda:1, reputacion:-2},
        consecuencia:"Proteges tu margen, aunque algunos clientes sienten el aumento como una decisión tuya, no como lo que realmente es."},
@@ -312,8 +312,8 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Oferta por los datos de tus clientes",
     contexto:"Una empresa de marketing te ofrece una suma considerable por acceso a tu base de datos de clientes, para fines publicitarios de terceros. Tus términos de servicio no cubren explícitamente este uso.",
     choices:[
-      {texto:"Rechazar la oferta: tus clientes no dieron consentimiento explícito para ese uso.", efectos:{reputacion:4},
-       consecuencia:"Dejas dinero sobre la mesa, pero proteges algo que, una vez que se pierde — la confianza de tus clientes con sus datos —, no se recupera fácilmente."},
+      {texto:"Rechazar la oferta: tus clientes no dieron consentimiento explícito para ese uso.", efectos:{reputacion:4, caja:-0.5},
+       consecuencia:"Dejas dinero sobre la mesa, pero proteges algo que, una vez que se pierde — la confianza de tus clientes con sus datos —, no se recupera fácilmente. Responder formalmente, con concepto jurídico de por medio, tiene un pequeño costo."},
       {texto:"Aceptar la oferta sin informar a tus clientes del nuevo uso de sus datos.", efectos:{caja:6, reputacion:-8},
        consecuencia:"El dinero entra rápido. Si algún cliente se entera por su cuenta, la sensación de traición pesa mucho más que la suma que recibiste."},
       {texto:"Aceptar la oferta, pero solo tras actualizar tus términos y pedir consentimiento explícito.", efectos:{caja:3, ebitda:-1},
@@ -332,8 +332,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"No gastas de más hoy, pero la facturación desordenada de estos días te va a perseguir en el cierre de cartera del próximo mes."},
       {texto:"Migrar de emergencia a un sistema alterno más simple mientras se resuelve el problema de fondo.", efectos:{caja:-2, ebitda:-1},
        consecuencia:"Una solución rápida y algo improvisada, pero que evita seguir facturando a mano indefinidamente."},
-      {texto:"Aprovechar el incidente para evaluar cambiar de proveedor de software definitivamente.", efectos:{caja:-1},
-       consecuencia:"No resuelves nada hoy, pero empiezas a mover una decisión de fondo que llevabas tiempo posponiendo."}
+      {texto:"Aprovechar el incidente para evaluar cambiar de proveedor de software definitivamente.", efectos:{caja:-1, diasCartera:12},
+       consecuencia:"No resuelves nada hoy, pero empiezas a mover una decisión de fondo que llevabas tiempo posponiendo. Mientras tanto, la facturación de estos días se acumula."}
     ]
   }),
   (s,f)=>({
@@ -354,14 +354,14 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Beneficio tributario no aprovechado, detectado por un nuevo asesor fiscal",
     contexto:"Cambias de asesor fiscal y el nuevo detecta que llevas más de un año sin aplicar correctamente una deducción a la que tenías derecho.",
     choices:[
-      {texto:"Presentar la corrección ante la autoridad fiscal para reclamar el beneficio retroactivo.", efectos:{caja:5},
-       consecuencia:"El trámite toma tiempo, pero recuperas dinero que legítimamente te correspondía y que llevabas meses dejando sobre la mesa."},
-      {texto:"Aplicar la deducción solo hacia adelante, sin reclamar lo retroactivo por evitar trámites.", efectos:{ebitda:1},
+      {texto:"Presentar la corrección ante la autoridad fiscal para reclamar el beneficio retroactivo.", efectos:{caja:5, ebitda:-0.5},
+       consecuencia:"El trámite toma tiempo, pero recuperas dinero que legítimamente te correspondía y que llevabas meses dejando sobre la mesa. Los honorarios del trámite salen del margen de este periodo."},
+      {texto:"Aplicar la deducción solo hacia adelante, sin reclamar lo retroactivo por evitar trámites.", efectos:{ebitda:1, caja:-0.3},
        consecuencia:"Simplificas el proceso, aunque renuncias a una parte del beneficio que ya tenías ganado."},
-      {texto:"Cambiar definitivamente de asesor fiscal, dado lo que dejó pasar el anterior.", efectos:{caja:-1},
-       consecuencia:"Una decisión razonable a mediano plazo, aunque no resuelve por sí sola el beneficio que ya quedó atrás."},
-      {texto:"Auditar los últimos tres años completos, por si hay más beneficios no aplicados.", efectos:{caja:-2},
-       consecuencia:"Gastas en la revisión, con la posibilidad real de encontrar más dinero del que imaginabas — o de confirmar que no hay más para encontrar."}
+      {texto:"Cambiar definitivamente de asesor fiscal, dado lo que dejó pasar el anterior.", efectos:{caja:-1, confianzaBanco:1},
+       consecuencia:"Una decisión razonable a mediano plazo, aunque no resuelve por sí sola el beneficio que ya quedó atrás. Y el banco nota que tus reportes tributarios ganan solidez."},
+      {texto:"Auditar los últimos tres años completos, por si hay más beneficios no aplicados.", efectos:{caja:2, ebitda:-0.3},
+       consecuencia:"La revisión le quita tiempo al equipo contable, pero aparece otro beneficio olvidado: recuperas más de lo que pagaste por la auditoría."}
     ]
   }),
   (s,f)=>({
@@ -386,7 +386,7 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Aceleras el crecimiento del equipo aprovechando un momento de talento disponible poco común."},
       {texto:"Mantener el plan de contratación original y dejar pasar a los candidatos adicionales.", efectos:{moralEquipo:-3},
        consecuencia:"Te ciñes al presupuesto, aunque el equipo que refirió a esos candidatos siente que el esfuerzo no sirvió de nada."},
-      {texto:"Ofrecerles a los candidatos adicionales un inicio diferido para el próximo trimestre.", efectos:{moralEquipo:2},
+      {texto:"Ofrecerles a los candidatos adicionales un inicio diferido para el próximo trimestre.", efectos:{moralEquipo:2, ebitda:-0.5},
        consecuencia:"Un punto intermedio razonable, aunque corres el riesgo de perder a los mejores candidatos frente a otras ofertas mientras esperan."},
       {texto:"Pagar los bonos de referido igual, aunque no contrates a los candidatos adicionales.", efectos:{caja:-2, moralEquipo:4},
        consecuencia:"El gesto cuesta dinero sin ampliar el equipo, pero mantiene la confianza en que el programa de referidos vale la pena participar."}
@@ -396,10 +396,10 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Un antiguo socio reclama una deuda informal olvidada",
     contexto:"Un antiguo socio o inversionista de los primeros días de la empresa reaparece reclamando el pago de un préstamo informal que, según él, nunca se saldó formalmente por escrito.",
     choices:[
-      {texto:"Pagar el monto reclamado para evitar cualquier conflicto legal o reputacional.", efectos:{caja:-4},
+      {texto:"Pagar el monto reclamado para evitar cualquier conflicto legal o reputacional.", efectos:{caja:-4, reputacion:2},
        consecuencia:"Cierras el tema de raíz, aunque nunca sabrás con certeza si el monto reclamado era exactamente el correcto."},
-      {texto:"Exigir pruebas documentales antes de considerar cualquier pago.", efectos:{reputacion:-1},
-       consecuencia:"Es lo correcto desde el punto de vista formal, aunque la relación personal con esa persona probablemente no sobreviva la exigencia."},
+      {texto:"Exigir pruebas documentales antes de considerar cualquier pago.", efectos:{reputacion:-1, caja:-0.5},
+       consecuencia:"Es lo correcto desde el punto de vista formal, aunque la relación personal con esa persona probablemente no sobreviva la exigencia. Y la consulta con tu abogado tiene su costo."},
       {texto:"Ofrecer una negociación por una fracción del monto reclamado, sin admitir ni negar la deuda.", efectos:{caja:-2},
        consecuencia:"Encuentras un punto medio pragmático que cierra el tema sin comprometerte con el monto completo reclamado."},
       {texto:"Ignorar el reclamo por completo, al no existir ningún documento que lo respalde.", efectos:{reputacion:-3},
@@ -414,8 +414,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Reduces costos fijos de forma notable, aunque el equipo interno que pierde su lugar lo vive como una señal de que nadie está a salvo."},
       {texto:"Mantener el equipo interno actual, sin considerar el outsourcing.", efectos:{ebitda:-0.5},
        consecuencia:"Conservas el conocimiento y la lealtad de tu equipo actual, renunciando a un ahorro de costos considerable."},
-      {texto:"Hacer un outsourcing parcial, solo de las funciones más operativas y repetitivas.", efectos:{caja:1, ebitda:1, moralEquipo:-2},
-       consecuencia:"Reduces algo de costo sin desmantelar por completo tu capacidad contable interna."},
+      {texto:"Hacer un outsourcing parcial, solo de las funciones más operativas y repetitivas.", efectos:{caja:-0.5, ebitda:1, moralEquipo:-2},
+       consecuencia:"Reduces algo de costo sin desmantelar por completo tu capacidad contable interna. La transición, eso sí, tiene un costo inicial."},
       {texto:"Usar la oferta como argumento para renegociar condiciones con tu equipo interno actual.", efectos:{ebitda:1, moralEquipo:-4},
        consecuencia:"Consigues cierto ahorro, aunque usar una amenaza externa como palanca de negociación interna deja un ambiente incómodo detrás."}
     ]
@@ -426,8 +426,8 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Renovar en las mismas condiciones, por lealtad y por lo que representa la relación.", efectos:{ebitda:-2, reputacion:4},
        consecuencia:"Conservas una relación valiosa y tu palabra como socio confiable, a costa directa de tu margen."},
-      {texto:"Explicarle la situación con números claros y proponer un ajuste gradual de precios.", efectos:{reputacion:2},
-       consecuencia:"La conversación es incómoda pero honesta — algunos clientes valoran más la transparencia que el precio congelado."},
+      {texto:"Explicarle la situación con números claros y proponer un ajuste gradual de precios.", efectos:{reputacion:2, ebitda:-0.5},
+       consecuencia:"La conversación es incómoda pero honesta — algunos clientes valoran más la transparencia que el precio congelado. Mientras dura el ajuste gradual, sigues sacrificando algo de margen."},
       {texto:"Aplicar el nuevo precio de lista sin excepciones, como a cualquier cliente nuevo.", efectos:{ebitda:3, reputacion:-5},
        consecuencia:"Proteges tu margen por completo, aunque el cliente lo vive como que el historial compartido no valió nada."},
       {texto:"Dejar que el contrato expire sin renovarlo, liberando esa capacidad para clientes más rentables.", efectos:{ebitda:2, reputacion:-2},
@@ -452,10 +452,10 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Un exempleado amenaza con una demanda laboral",
     contexto:"Un empleado que despediste hace dos meses contrató un abogado y amenaza con demandar por despido injustificado. Tu área legal cree que tienes buenas probabilidades de ganar, pero el proceso sería largo y visible.",
     choices:[
-      {texto:"Ofrecer una liquidación adicional a cambio de que retire la demanda y firme un acuerdo de confidencialidad.", efectos:{caja:-3},
+      {texto:"Ofrecer una liquidación adicional a cambio de que retire la demanda y firme un acuerdo de confidencialidad.", efectos:{caja:-3, reputacion:2},
        consecuencia:"Cierras el tema rápido y sin ruido, aunque sienta un precedente interno de que amenazar con demandar tiene recompensa."},
-      {texto:"Ir hasta el final del proceso legal, confiando en que la razón está de tu lado.", efectos:{caja:-1, reputacion:-2},
-       consecuencia:"El proceso se alarga y consume tiempo y dinero legal, pero evitas ceder ante una amenaza sin fundamento sólido."},
+      {texto:"Ir hasta el final del proceso legal, confiando en que la razón está de tu lado.", efectos:{caja:-1, reputacion:-1, moralEquipo:2},
+       consecuencia:"El proceso se alarga y consume tiempo y dinero legal, pero evitas ceder ante una amenaza sin fundamento sólido. Internamente, el equipo nota que la empresa no cede ante amenazas sin fundamento."},
       {texto:"Buscar una mediación formal para llegar a un punto medio antes de que escale.", efectos:{caja:-1.5, reputacion:1},
        consecuencia:"Encuentras una salida razonable sin llegar a litigio abierto ni sentar precedentes incómodos."},
       {texto:"Ignorar la amenaza hasta que se formalice una demanda real.", efectos:{reputacion:-0.5},
@@ -482,12 +482,12 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Contratar una agencia de manejo de crisis en redes para gestionar la narrativa activamente.", efectos:{caja:-3, reputacion:5},
        consecuencia:"La reputación se recupera más rápido de lo que hubiera pasado sola, aunque el costo no es menor para un incidente puntual."},
-      {texto:"Responder personalmente y de forma transparente al cliente afectado, sin intermediarios.", efectos:{reputacion:3},
-       consecuencia:"El gesto humano se nota y calma buena parte de la conversación, aunque no tiene el alcance de una campaña profesional."},
+      {texto:"Responder personalmente y de forma transparente al cliente afectado, sin intermediarios.", efectos:{reputacion:3, caja:-0.5},
+       consecuencia:"El gesto humano se nota y calma buena parte de la conversación, aunque no tiene el alcance de una campaña profesional. Le ofreces además una compensación al cliente afectado."},
       {texto:"No responder públicamente y dejar que el tema se diluya solo con el tiempo.", efectos:{reputacion:-3},
        consecuencia:"Ahorras el costo de gestión, pero el silencio se interpreta como indiferencia mientras la conversación sigue circulando."},
-      {texto:"Lanzar una promoción agresiva para desviar la atención hacia otra noticia positiva.", efectos:{caja:-2, ebitda:-1},
-       consecuencia:"La cortina de humo funciona a medias — algunos caen en la distracción, otros notan exactamente lo que estás haciendo."}
+      {texto:"Lanzar una promoción agresiva para desviar la atención hacia otra noticia positiva.", efectos:{caja:1, ebitda:-1, reputacion:-1},
+       consecuencia:"La cortina de humo funciona a medias — algunos caen en la distracción, otros notan exactamente lo que estás haciendo. Las ventas suben unos días, a costa del margen."}
     ]
   }),
   (s,f)=>({
@@ -496,8 +496,8 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Fusionar las funciones de inmediato y reasignar al personal sobrante a otras tareas.", efectos:{ebitda:2, moralEquipo:-6},
        consecuencia:"Eliminas el desperdicio de raíz, aunque la reasignación abrupta genera inseguridad sobre quién sigue y quién no."},
-      {texto:"Rediseñar los procesos con calma durante los próximos meses, sin movimientos abruptos de personal.", efectos:{ebitda:1},
-       consecuencia:"Corriges el problema de forma gradual, aceptando que el desperdicio siga un tiempo más mientras se ordena todo."},
+      {texto:"Rediseñar los procesos con calma durante los próximos meses, sin movimientos abruptos de personal.", efectos:{ebitda:1, caja:-1},
+       consecuencia:"Corriges el problema de forma gradual, aceptando que el desperdicio siga un tiempo más mientras se ordena todo. Rediseñar procesos con apoyo externo tiene su costo."},
       {texto:"Dejarlo como está por ahora; dos áreas cubriendo lo mismo también reduce el riesgo de que algo se caiga.", efectos:{ebitda:-1},
        consecuencia:"Evitas el conflicto de reorganizar, pero sigues pagando por una redundancia que ya identificaste y decidiste ignorar."},
       {texto:"Premiar a ambas áreas por su compromiso, sin señalar la duplicidad para no generar tensión.", efectos:{moralEquipo:3, ebitda:-2},
@@ -526,8 +526,8 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Mantienes tu protección intacta ante cualquier eventualidad grave, al precio más alto disponible en el mercado actual."},
       {texto:"Reducir la cobertura a lo esencial para bajar el costo de la prima.", efectos:{caja:-1.5, razonCorriente:-0.05},
        consecuencia:"Ahorras en el corto plazo, aunque quedas más expuesto si ocurre justo el tipo de evento que decidiste dejar de cubrir."},
-      {texto:"Cotizar con otras tres aseguradoras antes de decidir, aunque tome más tiempo.", efectos:{caja:-2.5},
-       consecuencia:"El esfuerzo adicional de cotizar rinde frutos: consigues una prima más razonable sin sacrificar cobertura."},
+      {texto:"Cotizar con otras tres aseguradoras antes de decidir, aunque tome más tiempo.", efectos:{caja:-2.5, ebitda:-0.3},
+       consecuencia:"El esfuerzo adicional de cotizar rinde frutos: consigues una prima más razonable sin sacrificar cobertura. Cotizar, eso sí, consume horas del equipo administrativo."},
       {texto:"No renovar por ahora y operar sin la póliza mientras se resuelve internamente.", efectos:{caja:1, razonCorriente:-0.1},
        consecuencia:"Liberas caja de inmediato, pero cada día sin cobertura es un día en que un solo incidente podría costarte mucho más de lo que ahorraste."}
     ]
@@ -540,10 +540,10 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Conviertes un golpe de suerte en una relación sostenida, con el costo que eso implica pero también con mayor control sobre el mensaje."},
       {texto:"Agradecer el gesto con un obsequio o descuento, sin comprometerte a un contrato formal.", efectos:{caja:-0.5, reputacion:2},
        consecuencia:"Mantienes la relación cálida con una inversión mínima, aunque sin ningún compromiso de continuidad de ninguna de las dos partes."},
-      {texto:"No responder por ahora; la mención orgánica ya cumplió su función sin costarte nada.", efectos:{reputacion:1},
-       consecuencia:"Te quedas con el beneficio gratuito de la mención, aunque dejas pasar la oportunidad de construir algo más duradero."},
-      {texto:"Pedir explícitamente que declare la relación comercial para cumplir con la normativa de publicidad.", efectos:{reputacion:2},
-       consecuencia:"Te cubres legalmente y refuerzas tu imagen de empresa transparente, aunque el mensaje pierda algo de su espontaneidad original."}
+      {texto:"No responder por ahora; la mención orgánica ya cumplió su función sin costarte nada.", efectos:{reputacion:1, ebitda:-0.3},
+       consecuencia:"Te quedas con el beneficio gratuito de la mención, aunque dejas pasar la oportunidad de construir algo más duradero. Días después, un competidor lo contrata para su propia campaña."},
+      {texto:"Pedir explícitamente que declare la relación comercial para cumplir con la normativa de publicidad.", efectos:{reputacion:2.5, caja:-1},
+       consecuencia:"Te cubres legalmente y refuerzas tu imagen de empresa transparente, aunque el mensaje pierda algo de su espontaneidad original. Formalizarlo exige un contrato sencillo y asesoría legal."}
     ]
   }),
   (s,f)=>({
@@ -637,17 +637,17 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Aceptar la reestructuración completa a largo plazo.", efectos:{razonCorriente:0.35, wacc:0.5}, consecuencia:"Tu liquidez inmediata respira de golpe, a cambio de pagar más intereses acumulados durante los próximos años."},
       {texto:"Rechazarla y mantener la deuda en sus plazos originales.", efectos:{razonCorriente:-0.1, wacc:-0.1}, consecuencia:"El costo total de tu deuda se mantiene más bajo, aunque la presión de liquidez de corto plazo sigue exactamente igual."},
       {texto:"Reestructurar solo la mitad, dejando el resto en el plazo original.", efectos:{razonCorriente:0.18, wacc:0.25}, consecuencia:"Un punto medio: alivias parte de la presión inmediata sin comprometerte al costo completo de la reestructuración."},
-      {texto:"Negociar una reestructuración parcial a cambio de una tasa preferencial por tu historial de pago.", efectos:{razonCorriente:0.3, wacc:0.15, confianzaBanco:3}, consecuencia:"Tu buen historial de pagos te consigue mejores condiciones de las que el banco ofrece por defecto."}
+      {texto:"Negociar una reestructuración parcial a cambio de una tasa preferencial por tu historial de pago.", efectos:{razonCorriente:0.3, wacc:0.15, confianzaBanco:3, caja:-0.5}, consecuencia:"Tu buen historial de pagos te consigue mejores condiciones de las que el banco ofrece por defecto. La negociación, eso sí, tiene costos de estudio de crédito."}
     ]
   }),
   (s,f)=>({
     tipo:'random', titulo:"El banco propone consolidar todas tus líneas de crédito",
     contexto:"Tienes varias líneas de crédito abiertas con distintas tasas y plazos, cada una de una necesidad puntual del pasado. El banco te propone consolidarlas todas en un solo crédito, con una tasa promedio y un solo pago mensual — más simple de administrar, aunque no necesariamente más barato.",
     choices:[
-      {texto:"Consolidar todo en un solo crédito, aceptando la tasa promedio ofrecida.", efectos:{wacc:-0.3, deuda:-1}, consecuencia:"Simplificas tu administración financiera y hasta mejoras ligeramente tu costo promedio de capital."},
+      {texto:"Consolidar todo en un solo crédito, aceptando la tasa promedio ofrecida.", efectos:{wacc:-0.3, deuda:-1, caja:-0.5}, consecuencia:"Simplificas tu administración financiera y hasta mejoras ligeramente tu costo promedio de capital. La estructuración del crédito consolidado cobra una comisión."},
       {texto:"Mantener las líneas separadas tal como están.", efectos:{caja:-0.2}, consecuencia:"Conservas el control individual de cada línea, aunque sigues administrando varias tasas y fechas de pago distintas — y ese tiempo administrativo tiene su propio costo."},
-      {texto:"Consolidar solo las líneas con peor tasa, dejando las más baratas como están.", efectos:{wacc:-0.5}, consecuencia:"Una consolidación selectiva que mejora tu costo de capital más de lo que la oferta general hubiera logrado."},
-      {texto:"Pedir asesoría externa antes de decidir si consolidar o no.", efectos:{caja:-0.5, wacc:-0.2}, consecuencia:"El costo de la asesoría se paga solo: identifica cuáles líneas sí conviene consolidar y cuáles no."}
+      {texto:"Consolidar solo las líneas con peor tasa, dejando las más baratas como están.", efectos:{wacc:-0.5, caja:-0.3}, consecuencia:"Una consolidación selectiva que mejora tu costo de capital más de lo que la oferta general hubiera logrado. El banco cobra una comisión por la consolidación."},
+      {texto:"Pedir asesoría externa antes de decidir si consolidar o no.", efectos:{caja:-0.5, wacc:-0.2, confianzaBanco:1}, consecuencia:"El costo de la asesoría se paga solo: identifica cuáles líneas sí conviene consolidar y cuáles no."}
     ]
   }),
   (s,f)=>({
@@ -655,7 +655,7 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Uno de tus clientes más grandes ofrece triplicar su pedido mensual, pero a cambio pide que le extiendas el plazo de pago de 30 a 90 días — una condición que alargaría bastante tus días de cartera y el tiempo que ese dinero tarda en volver a tu caja.",
     choices:[
       {texto:"Aceptar la extensión completa de 90 días a cambio del volumen.", efectos:{diasCartera:25, ebitda:2, caja:-1}, consecuencia:"El volumen adicional se ve bien en el papel, pero ese dinero va a tardar el triple en volver a convertirse en caja disponible."},
-      {texto:"Rechazar la extensión y mantener tus plazos actuales de siempre.", efectos:{diasCartera:-2}, consecuencia:"Renuncias al volumen extra, pero tu cartera se mantiene sana y predecible."},
+      {texto:"Rechazar la extensión y mantener tus plazos actuales de siempre.", efectos:{diasCartera:-2, reputacion:-1}, consecuencia:"Renuncias al volumen extra, pero tu cartera se mantiene sana y predecible. El cliente no recibe bien la negativa."},
       {texto:"Negociar un plazo intermedio de 60 días en vez de los 90 pedidos.", efectos:{diasCartera:12, ebitda:1}, consecuencia:"Consigues parte del volumen sin comprometer tu cartera tanto como el cliente pedía originalmente."},
       {texto:"Aceptar el plazo largo, pero exigir un anticipo parcial al momento del pedido.", efectos:{diasCartera:15, caja:1, ebitda:1}, consecuencia:"El anticipo amortigua el impacto en tu caja inmediata, aunque tu cartera igual crece de forma considerable."}
     ]
@@ -665,9 +665,9 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Una vez al año, tu banco revisa formalmente el estado de la relación: cómo has pagado, qué tan transparente has sido, cómo te has comunicado con ellos. El resultado de esta revisión define tus condiciones de crédito para el próximo año.",
     choices:[
       {texto:"Preparar un dossier financiero completo y proactivo, más allá de lo que piden.", efectos:{confianzaBanco:6, caja:-1}, consecuencia:"El esfuerzo adicional de mostrar transparencia total suele rendir frutos concretos en la revisión."},
-      {texto:"Entregar solo lo que formalmente piden, sin ir más allá.", efectos:{confianzaBanco:1}, consecuencia:"Cumples con lo mínimo, aunque una revisión así de pasiva rara vez mejora la percepción que el banco ya tiene de ti."},
-      {texto:"Aprovechar la revisión para pedir directamente mejores condiciones de tasa.", efectos:{confianzaBanco:3, wacc:-0.3}, consecuencia:"Pedir en el momento correcto, con buenos números de respaldo, consigue mejores condiciones de las que el banco ofrece por defecto."},
-      {texto:"Posponer la reunión de revisión por estar ocupado con otras prioridades.", efectos:{confianzaBanco:-3}, consecuencia:"Postergar una revisión que el banco considera importante rara vez pasa desapercibido para ellos."}
+      {texto:"Entregar solo lo que formalmente piden, sin ir más allá.", efectos:{confianzaBanco:-0.5}, consecuencia:"Cumples con lo mínimo, aunque una revisión así de pasiva rara vez mejora la percepción que el banco ya tiene de ti. Frente a otros clientes más proactivos, quedas un poco atrás."},
+      {texto:"Aprovechar la revisión para pedir directamente mejores condiciones de tasa.", efectos:{confianzaBanco:3, wacc:-0.3, caja:-0.5}, consecuencia:"Pedir en el momento correcto, con buenos números de respaldo, consigue mejores condiciones de las que el banco ofrece por defecto. Sustentar la solicitud exige un estudio financiero que tiene su costo."},
+      {texto:"Posponer la reunión de revisión por estar ocupado con otras prioridades.", efectos:{confianzaBanco:-3, ebitda:0.5}, consecuencia:"Postergar una revisión que el banco considera importante rara vez pasa desapercibido para ellos. Al menos, ese tiempo lo dedicaste a la operación."}
     ]
   }),
   (s,f)=>({
@@ -675,9 +675,9 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Tu proveedor de años pide sentarse a conversar. No es una crisis puntual, aclara — pero siente que la relación se ha vuelto puramente transaccional últimamente, y quiere saber si todavía hay algo más que eso entre ustedes.",
     choices:[
       {texto:"Proponer un acuerdo de largo plazo con condiciones preferenciales mutuas.", efectos:{confianzaProveedores:6, caja:-1}, consecuencia:"El compromiso formal, más allá de lo transaccional, es exactamente lo que esta conversación buscaba encontrar."},
-      {texto:"Mantener la relación tal como está, estrictamente comercial.", efectos:{confianzaProveedores:-2}, consecuencia:"Tu proveedor entiende la posición, aunque se va con la sensación confirmada de que la relación ya no es lo que era."},
-      {texto:"Ofrecer pagarle puntualmente por adelantado como gesto concreto de compromiso.", efectos:{confianzaProveedores:4, caja:-2}, consecuencia:"El gesto económico, aunque tiene un costo real, se siente como una respuesta genuina a su inquietud."},
-      {texto:"Escuchar sus preocupaciones sin comprometerte todavía a ningún cambio concreto.", efectos:{confianzaProveedores:1}, consecuencia:"El gesto de escuchar ayuda un poco, aunque sin ningún compromiso real detrás, no cambia demasiado la percepción."}
+      {texto:"Mantener la relación tal como está, estrictamente comercial.", efectos:{confianzaProveedores:-2, ebitda:0.5}, consecuencia:"Tu proveedor entiende la posición, aunque se va con la sensación confirmada de que la relación ya no es lo que era. A cambio, conservas intacto tu poder de negociación sobre precios."},
+      {texto:"Ofrecer pagarle puntualmente por adelantado como gesto concreto de compromiso.", efectos:{confianzaProveedores:4, caja:-2, ebitda:0.5}, consecuencia:"El gesto económico, aunque tiene un costo real, se siente como una respuesta genuina a su inquietud. Y el pago anticipado te da derecho a un descuento."},
+      {texto:"Escuchar sus preocupaciones sin comprometerte todavía a ningún cambio concreto.", efectos:{confianzaProveedores:1, ebitda:-0.2}, consecuencia:"El gesto de escuchar ayuda un poco, aunque sin ningún compromiso real detrás, no cambia demasiado la percepción. Mientras la relación sigue en el limbo, el proveedor prioriza los pedidos de otros clientes."}
     ]
   }),
   (s,f)=>({
@@ -686,7 +686,7 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Aceptar pagarle antes, aunque eso presione tu propio flujo de caja.", efectos:{confianzaProveedores:5, caja:-2, capitalTrabajo:-1}, consecuencia:"El gesto de ayudarlo cuando más lo necesitaba construye un tipo de lealtad que ningún contrato garantiza por sí solo."},
       {texto:"Negarte y mantener tus términos de pago actuales.", efectos:{confianzaProveedores:-3}, consecuencia:"Es tu derecho contractual, aunque tu proveedor no olvida quién estuvo dispuesto a ayudar cuando lo necesitó y quién no."},
-      {texto:"Ofrecer un adelanto parcial, no el pago completo anticipado.", efectos:{confianzaProveedores:2, caja:-1}, consecuencia:"Un punto medio que alivia parte de su apuro sin comprometer toda tu liquidez de una sola vez."},
+      {texto:"Ofrecer un adelanto parcial, no el pago completo anticipado.", efectos:{confianzaProveedores:2, caja:-1, ebitda:0.3}, consecuencia:"Un punto medio que alivia parte de su apuro sin comprometer toda tu liquidez de una sola vez. Y el proveedor, agradecido, te reconoce un pequeño descuento."},
       {texto:"Ayudarlo a conseguir financiamiento externo (factoring) en vez de asumir tú el costo.", efectos:{confianzaProveedores:3, caja:-0.3}, consecuencia:"Resuelves su problema real sin sacrificar tu propia caja — aunque el esfuerzo de gestionarlo también cuenta."}
     ]
   }),
@@ -695,9 +695,9 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Varios miembros del equipo, primero de forma informal y luego en una reunión conjunta, piden la posibilidad de trabajar con horarios más flexibles — llegar y salir dentro de un rango, en vez de un horario fijo estricto.",
     choices:[
       {texto:"Aceptar la flexibilidad total, confiando en que el trabajo se entrega igual.", efectos:{moralEquipo:8, ebitda:-0.5}, consecuencia:"El gesto de confianza se siente genuino, y la mayoría responde exactamente como esperabas — aunque coordinar reuniones se vuelve un poco más complicado."},
-      {texto:"Rechazar la petición, manteniendo el horario fijo tradicional.", efectos:{moralEquipo:-6}, consecuencia:"Es tu prerrogativa como gerencia, pero el equipo lo interpreta como una señal de desconfianza que no esperaban."},
-      {texto:"Ofrecer flexibilidad parcial, solo en la hora de entrada.", efectos:{moralEquipo:4}, consecuencia:"Un punto medio razonable que resuelve buena parte de la fricción sin ceder el control por completo."},
-      {texto:"Aceptar la flexibilidad, pero pedir un reporte semanal de horas trabajadas a cambio.", efectos:{moralEquipo:3, ebitda:0.3}, consecuencia:"El control adicional genera algo de incomodidad, aunque el reporte termina siendo útil para la operación."}
+      {texto:"Rechazar la petición, manteniendo el horario fijo tradicional.", efectos:{moralEquipo:-6, ebitda:0.5}, consecuencia:"Es tu prerrogativa como gerencia, pero el equipo lo interpreta como una señal de desconfianza que no esperaban. La coordinación del día a día, eso sí, sigue siendo sencilla."},
+      {texto:"Ofrecer flexibilidad parcial, solo en la hora de entrada.", efectos:{moralEquipo:4, ebitda:-0.2}, consecuencia:"Un punto medio razonable que resuelve buena parte de la fricción sin ceder el control por completo."},
+      {texto:"Aceptar la flexibilidad, pero pedir un reporte semanal de horas trabajadas a cambio.", efectos:{moralEquipo:3, ebitda:0.3, caja:-0.3}, consecuencia:"El control adicional genera algo de incomodidad, aunque el reporte termina siendo útil para la operación. Implementar la herramienta de registro de horas tiene un pequeño costo."}
     ]
   }),
   (s,f)=>({
@@ -705,8 +705,8 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"El equipo cerró un mes especialmente difícil con resultados sólidos, sin que nadie se lo pidiera explícitamente. Tienes la oportunidad de reconocerlo — o dejarlo pasar como si solo estuvieran haciendo su trabajo.",
     choices:[
       {texto:"Organizar un reconocimiento genuino: almuerzo, mención especial, un bono simbólico.", efectos:{caja:-1.5, moralEquipo:7}, consecuencia:"El costo es menor comparado con lo que genera sentirse realmente visto después de un mes difícil."},
-      {texto:"Dejarlo pasar sin ningún gesto especial.", efectos:{moralEquipo:-4}, consecuencia:"El equipo nota la ausencia de reconocimiento tanto como hubiera notado su presencia."},
-      {texto:"Un simple correo de agradecimiento, sin ningún costo adicional.", efectos:{moralEquipo:2}, consecuencia:"No es mucho, pero al menos el esfuerzo del mes no pasa completamente en silencio."},
+      {texto:"Dar el reconocimiento en forma de días libres, en vez de un bono.", efectos:{moralEquipo:5, ebitda:-1}, consecuencia:"El tiempo libre se agradece tanto como un bono, aunque la operación de esos días se resiente."},
+      {texto:"Un simple correo de agradecimiento, sin ningún costo adicional.", efectos:{moralEquipo:2, ebitda:-0.2}, consecuencia:"No es mucho, pero al menos el esfuerzo del mes no pasa completamente en silencio. Eso sí, quienes más se esforzaron esperaban algo más concreto, y se nota un poco en su ritmo."},
       {texto:"Convertir el logro en la nueva meta permanente, sin reconocimiento especial.", efectos:{moralEquipo:-2, ebitda:1}, consecuencia:"Exiges más rendimiento sostenido, pero el equipo siente que un buen mes solo trajo más presión, no reconocimiento."}
     ]
   }),
@@ -714,9 +714,9 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Rumores de recorte de personal generan ansiedad en el equipo",
     contexto:"Sin que hayas dicho nada al respecto, empiezan a circular rumores internos de un posible recorte de personal — probablemente originados por una decisión financiera reciente que alguien malinterpretó.",
     choices:[
-      {texto:"Convocar una reunión abierta y aclarar la situación con transparencia total.", efectos:{moralEquipo:6, reputacion:1}, consecuencia:"La transparencia directa, incluso cuando la noticia no es perfecta, calma más que cualquier comunicado formal."},
-      {texto:"Ignorar los rumores, dejando que se disipen solos con el tiempo.", efectos:{moralEquipo:-5}, consecuencia:"El silencio no calma la ansiedad — la alimenta, dejando que cada quien imagine el peor escenario posible."},
-      {texto:"Enviar un comunicado escrito breve, sin espacio para preguntas.", efectos:{moralEquipo:2}, consecuencia:"Algo es mejor que nada, aunque la falta de espacio para preguntas deja dudas genuinas sin resolver."},
+      {texto:"Convocar una reunión abierta y aclarar la situación con transparencia total.", efectos:{moralEquipo:5, reputacion:1, ebitda:-0.5}, consecuencia:"La transparencia directa, incluso cuando la noticia no es perfecta, calma más que cualquier comunicado formal. Parar la operación para la reunión, eso sí, cuesta medio día de trabajo."},
+      {texto:"Anunciar bonos de retención para el personal clave mientras se define la estructura.", efectos:{caja:-3, moralEquipo:2, ebitda:1}, consecuencia:"Aseguras a quienes no puedes perder y la operación no se frena, aunque el resto del equipo nota quién recibió bono y quién no."},
+      {texto:"Enviar un comunicado escrito breve, sin espacio para preguntas.", efectos:{moralEquipo:2, ebitda:-0.2}, consecuencia:"Algo es mejor que nada, aunque la falta de espacio para preguntas deja dudas genuinas sin resolver. Y esas dudas siguen distrayendo al equipo."},
       {texto:"Aprovechar la ansiedad para negociar condiciones más favorables en la próxima renovación de contratos.", efectos:{moralEquipo:-4, caja:2}, consecuencia:"La jugada funciona en el papel, pero el equipo eventualmente entiende de qué se trató realmente esa negociación."}
     ]
   }),
@@ -725,19 +725,19 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Uno de tus clientes más grandes te ofrece pagar el total de su próximo pedido de contado, en vez de a los 60 días habituales — a cambio de un descuento considerable sobre el precio de lista.",
     choices:[
       {texto:"Aceptar el descuento a cambio de la liquidez inmediata.", efectos:{razonCorriente:0.2, caja:2, ebitda:-1}, consecuencia:"El margen se reduce, pero tener el dinero ahora en vez de en dos meses cambia genuinamente tu posición de liquidez."},
-      {texto:"Rechazar, prefiriendo cobrar el precio completo aunque tarde en llegar.", efectos:{ebitda:1}, consecuencia:"Conservas todo el margen de la venta, apostando a que tu liquidez actual aguanta los dos meses de espera."},
+      {texto:"Rechazar, prefiriendo cobrar el precio completo aunque tarde en llegar.", efectos:{ebitda:1, razonCorriente:-0.05}, consecuencia:"Conservas todo el margen de la venta, apostando a que tu liquidez actual aguanta los dos meses de espera."},
       {texto:"Negociar un descuento menor a cambio del mismo pago de contado.", efectos:{razonCorriente:0.15, caja:1.5, ebitda:-0.5}, consecuencia:"Un punto medio que recupera parte del margen sin renunciar del todo a la liquidez inmediata."},
-      {texto:"Aceptar solo un pago parcial de contado, el resto en el plazo normal.", efectos:{razonCorriente:0.1, caja:1}, consecuencia:"Una solución cautelosa que mejora tu liquidez sin comprometer toda la venta al descuento."}
+      {texto:"Aceptar solo un pago parcial de contado, el resto en el plazo normal.", efectos:{razonCorriente:0.1, caja:1, ebitda:-0.3}, consecuencia:"Una solución cautelosa que mejora tu liquidez sin comprometer toda la venta al descuento. La parte pagada de contado lleva un pequeño descuento."}
     ]
   }),
   (s,f)=>({
     tipo:'random', titulo:"Tu proveedor principal ofrece ampliar tu plazo de pago habitual",
     contexto:"Tu proveedor principal, en un gesto poco común, te ofrece ampliar tu plazo de pago habitual de 30 a 60 días — sin ningún cargo adicional, como reconocimiento a años de pagos puntuales.",
     choices:[
-      {texto:"Aceptar la ampliación completa del plazo.", efectos:{razonCorriente:0.25, confianzaProveedores:2}, consecuencia:"La holgura adicional en tu liquidez de corto plazo llega justo cuando más la puedes aprovechar."},
-      {texto:"Rechazar, prefiriendo mantener el ciclo de pago corto de siempre.", efectos:{confianzaProveedores:1}, consecuencia:"El gesto de seguir pagando rápido, aunque no lo necesites, refuerza una relación que ya era sólida."},
-      {texto:"Aceptar una ampliación parcial, a 45 días en vez de 60.", efectos:{razonCorriente:0.12, confianzaProveedores:1}, consecuencia:"Un término medio que mejora tu liquidez sin estirar la relación más de lo prudente."},
-      {texto:"Aceptar la ampliación, comprometiéndote a un volumen de compra mayor a cambio.", efectos:{razonCorriente:0.2, ebitda:0.5, confianzaProveedores:1}, consecuencia:"Ambos salen ganando: tu liquidez mejora, y tu proveedor asegura un volumen de negocio más predecible."}
+      {texto:"Aceptar la ampliación completa del plazo.", efectos:{razonCorriente:0.25, confianzaProveedores:2, ebitda:-0.5}, consecuencia:"La holgura adicional en tu liquidez de corto plazo llega justo cuando más la puedes aprovechar. Eso sí, renuncias al descuento por pronto pago que venías aprovechando."},
+      {texto:"Rechazar, prefiriendo mantener el ciclo de pago corto de siempre.", efectos:{confianzaProveedores:1, ebitda:0.3, caja:-0.5}, consecuencia:"El gesto de seguir pagando rápido, aunque no lo necesites, refuerza una relación que ya era sólida. Pagar rápido te mantiene el descuento por pronto pago, aunque la caja sale antes de lo necesario."},
+      {texto:"Aceptar una ampliación parcial, a 45 días en vez de 60.", efectos:{razonCorriente:0.12, confianzaProveedores:1, ebitda:-0.2}, consecuencia:"Un término medio que mejora tu liquidez sin estirar la relación más de lo prudente."},
+      {texto:"Aceptar la ampliación, comprometiéndote a un volumen de compra mayor a cambio.", efectos:{razonCorriente:0.2, ebitda:0.5, confianzaProveedores:1, capitalTrabajo:-2}, consecuencia:"Ambos salen ganando: tu liquidez mejora, y tu proveedor asegura un volumen de negocio más predecible. Comprar más volumen, eso sí, inmoviliza capital de trabajo."}
     ]
   })
 ];

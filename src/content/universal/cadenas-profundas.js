@@ -50,7 +50,7 @@ function cadenaRenataEtapa3(s,f){
     return { tipo:'karma', titulo:"Renata Cifuentes se va",
       contexto:"Renata Cifuentes renuncia formalmente. Se va en buenos términos, sin drama, pero se va — y con ella, años de conocimiento operativo que no se transfieren de un día para otro. El equipo lo siente de inmediato, incluso antes de que se le nombre reemplazo.",
       choices:[
-        {texto:"Iniciar de inmediato la búsqueda de un reemplazo externo senior.", efectos:{caja:-4, ebitda:-3, moralEquipo:-2}, consecuencia:"El costo de reemplazar años de experiencia, de golpe, resulta más alto de lo que parecía en el papel."},
+        {texto:"Iniciar de inmediato la búsqueda de un reemplazo externo senior.", efectos:{caja:-4, ebitda:-1.5, moralEquipo:-2, reputacion:1}, consecuencia:"El costo de reemplazar años de experiencia, de golpe, resulta más alto de lo que parecía en el papel. A cambio, llega alguien con trayectoria reconocida en el sector."},
         {texto:"Promover internamente a alguien del propio equipo de Renata.", efectos:{caja:-1, ebitda:-2, moralEquipo:1}, consecuencia:"Es más barato y el equipo lo recibe mejor, aunque la curva de aprendizaje sigue siendo real."},
         {texto:"Pedirle a Renata que se quede un mes de transición para entrenar a su sucesor.", efectos:{caja:-2, ebitda:-1}, consecuencia:"Renata acepta el gesto profesional, y ese mes de transición amortigua buena parte del golpe."},
         {texto:"No hacer un plan formal de transición y asumir el golpe operativo directamente.", efectos:{ebitda:-4, moralEquipo:-3}, consecuencia:"Sin ningún plan de transición, el vacío que deja Renata se siente en toda la operación durante semanas."}
@@ -104,7 +104,7 @@ function cadenaAuditoriaEtapa3(s,f){
     return { tipo:'karma', titulo:"La revisión fiscal termina en sanción formal",
       contexto:"La revisión fiscal termina peor de lo que esperabas: una sanción formal, con una multa y —lo que más pesa a largo plazo— una marca permanente en tu historial de cumplimiento que cualquier banco o inversionista serio va a ver de ahora en adelante.",
       choices:[
-        {texto:"Pagar la multa de inmediato y cerrar el capítulo cuanto antes.", efectos:{caja:-6}, consecuencia:"El pago inmediato cierra el proceso, aunque la marca en tu historial de cumplimiento queda de todas formas."},
+        {texto:"Pagar la multa de inmediato y cerrar el capítulo cuanto antes.", efectos:{caja:-4.5}, consecuencia:"El pago inmediato cierra el proceso, aunque la marca en tu historial de cumplimiento queda de todas formas. Pagar de inmediato, eso sí, te da derecho a la reducción de la sanción que contempla la ley."},
         {texto:"Apelar formalmente la sanción, aunque tome más tiempo.", efectos:{caja:-3, reputacion:-1}, consecuencia:"La apelación puede reducir el monto final, aunque prolonga la incertidumbre y el desgaste del proceso."},
         {texto:"Aceptar la sanción y reestructurar internamente los procesos que la originaron.", efectos:{caja:-5, ebitda:1}, consecuencia:"El costo inmediato es alto, pero la reestructuración real reduce el riesgo de que algo así vuelva a pasar."},
         {texto:"Negociar un plan de pago extendido para la multa.", efectos:{caja:-2, deuda:3}, consecuencia:"Alivias la presión de caja inmediata, convirtiendo parte de la sanción en una obligación financiera más."}
@@ -160,8 +160,8 @@ function cadenaSelloEtapa3(s,f){
       choices:[
         {texto:"Responder públicamente reconociendo las fallas y comprometiéndote a corregirlas.", efectos:{reputacion:-2, caja:-1}, consecuencia:"Reconocerlo públicamente limita el daño, aunque no lo elimina del todo."},
         {texto:"No responder públicamente y dejar que el tema pierda relevancia con el tiempo.", efectos:{reputacion:-4}, consecuencia:"Sin ninguna respuesta de tu parte, la versión de la fundación queda como la única narrativa disponible."},
-        {texto:"Cuestionar públicamente los criterios de evaluación de la fundación.", efectos:{reputacion:-5}, consecuencia:"Atacar al mensajero rara vez mejora la percepción de un problema que, en el fondo, era real."},
-        {texto:"Iniciar en privado un programa real de impacto social, sin buscar reconocimiento inmediato.", efectos:{reputacion:-2, caja:-2}, consecuencia:"Empezar de cero, esta vez de verdad, es el camino más largo pero también el único genuinamente sólido."}
+        {texto:"Cuestionar públicamente los criterios de evaluación de la fundación.", efectos:{reputacion:-5, moralEquipo:1}, consecuencia:"Atacar al mensajero rara vez mejora la percepción de un problema que, en el fondo, era real. Puertas adentro, al menos, el equipo cierra filas contigo."},
+        {texto:"Iniciar en privado un programa real de impacto social, sin buscar reconocimiento inmediato.", efectos:{reputacion:-2, caja:-2, moralEquipo:2}, consecuencia:"Empezar de cero, esta vez de verdad, es el camino más largo pero también el único genuinamente sólido. Y el equipo se involucra en el programa con un entusiasmo que no esperabas."}
       ]};
   }
 }

@@ -7,10 +7,10 @@ const CONSTRUYEYA_CASES = [
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del comprador ($3M)",
     reporte:"Razón Corriente del comprador: <b>0.9</b>. Mantiene otros 2 créditos hipotecarios activos con un nivel de endeudamiento total considerado alto por el sector financiero."},
   choices:[
-    {texto:"Aceptar financiar directamente los 24 meses completos.", efectos:{caja:-4, capitalTrabajo:-3, razonCorriente:-0.15, diasCartera:90}, consecuencia:"Cierras la venta de 15 unidades de una vez, pero ahora eres tú quien asume el riesgo crediticio que normalmente asumiría un banco."},
-    {texto:"Ofrecer 12 meses de financiamiento directo y el resto por crédito hipotecario.", efectos:{caja:-1, razonCorriente:-0.05, diasCartera:45}, consecuencia:"Compartes el riesgo con el sistema financiero tradicional en vez de asumirlo tú solo por completo."},
-    {texto:"Exigir crédito hipotecario tradicional, sin financiamiento directo.", efectos:{razonCorriente:0.03}, consecuencia:"Proteges tu balance por completo, aunque el comprador podría desistir si el banco le exige más requisitos de los que esperaba."},
-    {texto:"Estructurar el pago a través de una fiduciaria, que asume la administración del riesgo crediticio.", efectos:{caja:-2, capitalTrabajo:1, diasCartera:15}, consecuencia:"Cierras la venta sin cargar tú directamente con el riesgo de mora, a cambio de una comisión fiduciaria."}
+    {texto:"Aceptar financiar directamente los 24 meses completos.", efectos:{caja:-4, capitalTrabajo:-3, razonCorriente:-0.15, diasCartera:90, ebitda:3, diasInventario:-20}, consecuencia:"Cierras la venta de 15 unidades de una vez, pero ahora eres tú quien asume el riesgo crediticio que normalmente asumiría un banco."},
+    {texto:"Ofrecer 12 meses de financiamiento directo y el resto por crédito hipotecario.", efectos:{caja:-1, razonCorriente:-0.05, diasCartera:45, ebitda:2, diasInventario:-15}, consecuencia:"Compartes el riesgo con el sistema financiero tradicional en vez de asumirlo tú solo por completo."},
+    {texto:"Exigir crédito hipotecario tradicional, sin financiamiento directo.", efectos:{razonCorriente:0.03, ebitda:-1}, consecuencia:"Proteges tu balance por completo, aunque el comprador podría desistir si el banco le exige más requisitos de los que esperaba. Esta vez el comprador desiste de parte de las unidades."},
+    {texto:"Estructurar el pago a través de una fiduciaria, que asume la administración del riesgo crediticio.", efectos:{caja:-2, capitalTrabajo:1, diasCartera:15, ebitda:1.5, diasInventario:-15}, consecuencia:"Cierras la venta sin cargar tú directamente con el riesgo de mora, a cambio de una comisión fiduciaria."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir garantía hipotecaria de otro inmueble antes de aceptar financiamiento directo.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:20},
     consecuencia:"Una Razón Corriente de 0.9 y dos créditos hipotecarios activos son señales claras de un comprador ya bastante apalancado."}
@@ -23,7 +23,7 @@ const CONSTRUYEYA_CASES = [
     {texto:"Tomar crédito constructor a tasa fija por $15M.", efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15}, consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
     {texto:"Tomar crédito constructor a tasa variable, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República — especialmente riesgoso en un sector con ciclos largos."},
-    {texto:"Ceder 20% del proyecto a un fondo inmobiliario a cambio del mismo monto.", efectos:{caja:15, capitalTrabajo:15}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras del proyecto."},
+    {texto:"Ceder 20% del proyecto a un fondo inmobiliario a cambio del mismo monto.", efectos:{caja:15, capitalTrabajo:15, wacc:1}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras del proyecto. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
     {texto:"Usar el lote sin desarrollar como garantía para un crédito con mejor tasa.", efectos:{caja:14, deuda:14, wacc:0.1, capitalTrabajo:14}, consecuencia:"La garantía adicional te consigue una tasa más favorable, aunque ese activo queda comprometido mientras dure el crédito."}
   ],
   choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
@@ -33,7 +33,7 @@ const CONSTRUYEYA_CASES = [
   contexto:"Un choque en la cadena de suministro sube el precio del acero y el cemento 18% de un mes a otro, justo en medio de la etapa estructural.",
   choices:[
     {texto:"Absorber el alza en tu presupuesto de obra actual.", efectos:{ebitda:-3, caja:-2}, consecuencia:"El proyecto sigue en marcha sin cambios visibles, pero tu margen se reduce de forma directa."},
-    {texto:"Trasladar el alza a los compradores que aún no han firmado.", efectos:{ebitda:1}, consecuencia:"Proteges tu margen en las unidades pendientes de venta, aunque encareces el producto en un mercado ya sensible a precio."},
+    {texto:"Trasladar el alza a los compradores que aún no han firmado.", efectos:{ebitda:1, diasInventario:10}, consecuencia:"Proteges tu margen en las unidades pendientes de venta, aunque encareces el producto en un mercado ya sensible a precio. Las unidades pendientes se venden más despacio."},
     {texto:"Buscar un proveedor alterno de materiales, con menor respaldo de marca.", efectos:{ebitda:0.5, capitalTrabajo:-2}, consecuencia:"Reduces el impacto del alza, aunque asumes cierto riesgo de calidad en un componente estructural."},
     {texto:"Rediseñar parte de la estructura para reducir el consumo de acero sin comprometer la norma.", efectos:{caja:-3, ebitda:1}, consecuencia:"El rediseño tiene costo de ingeniería, pero reduce tu exposición al precio del insumo de forma permanente en este proyecto."}
   ]
@@ -44,8 +44,8 @@ const CONSTRUYEYA_CASES = [
     {texto:"Recortar personal y cuadrillas de obra para bajar costos fijos.", efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes cuadrillas experimentadas que serán difíciles de recontratar después."},
-    {texto:"Pausar el inicio de la siguiente etapa hasta que la demanda se recupere.", efectos:{ebitda:2, capitalTrabajo:1}, consecuencia:"Evitas comprometer más capital en un mercado débil, aunque el proyecto se atrasa frente al cronograma original."},
-    {texto:"Ofrecer financiamiento propio más atractivo que el bancario para reactivar ventas.", efectos:{caja:-4, capitalTrabajo:-3}, consecuencia:"Reactivas ventas asumiendo tú el riesgo crediticio que el banco ya no está dispuesto a tomar tan fácil."},
+    {texto:"Pausar el inicio de la siguiente etapa hasta que la demanda se recupere.", efectos:{ebitda:2, capitalTrabajo:1, reputacion:-2}, consecuencia:"Evitas comprometer más capital en un mercado débil, aunque el proyecto se atrasa frente al cronograma original. Los compradores en preventa de esa etapa no reciben bien el aplazamiento."},
+    {texto:"Ofrecer financiamiento propio más atractivo que el bancario para reactivar ventas.", efectos:{caja:-4, capitalTrabajo:-3, ebitda:2, diasInventario:-10}, consecuencia:"Reactivas ventas asumiendo tú el riesgo crediticio que el banco ya no está dispuesto a tomar tan fácil."},
     {texto:"Vender un bloque de unidades a descuento a un fondo inmobiliario institucional.", efectos:{caja:8, ebitda:-3, diasInventario:-30, valorInventario:-10}, consecuencia:"Recuperas liquidez de inmediato y liberas inventario, a cambio de sacrificar margen en ese bloque de unidades."}
   ]
 },
@@ -56,8 +56,8 @@ const CONSTRUYEYA_CASES = [
      consecuencia:"El banco aprueba el crédito con mejores condiciones de las que merecías con tus cifras reales."},
     {texto:"Rechazarlo y presentar los estados financieros reales, ajustando la solicitud.", efectos:{caja:-3, confianzaBanco:5, razonCorriente:0.05, reputacion:5},
      consecuencia:"El monto aprobado es menor, pero tu información financiera sigue siendo confiable."},
-    {texto:"Mejorar los indicadores reales primero, acelerando el cobro de cuotas iniciales pendientes.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, ebitda:1, reputacion:2},
-     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel."},
+    {texto:"Mejorar los indicadores reales primero, acelerando el cobro de cuotas iniciales pendientes.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, diasCartera:-8, ebitda:-1},
+     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel. Mientras tanto, el crecimiento que pensabas financiar con el crédito queda en pausa."},
     {texto:"Buscar un fondo de deuda inmobiliaria alternativo, sin tocar la contabilidad.", efectos:{caja:4, wacc:1.2, deuda:4},
      consecuencia:"Consigues capital sin mentir en tus estados financieros, a un costo más alto que el crédito bancario tradicional."}
   ]
@@ -83,15 +83,15 @@ function CONSTRUYEYA_SUBCONTRATISTAS(s,f){ return {tipo:'calendario', titulo:"Pa
     {texto:"Pagar la mayoría y diferir un saldo 30 días con acuerdo de los subcontratistas.", efectos:{caja:-6}, diferir:{monto:3.3, turnos:1, motivo:"Saldo diferido a subcontratistas", tipo:'proveedor'},
      consecuencia:"Aceptan por esta vez, aunque varios subcontratistas trabajan con varios proyectos y no toleran atrasos repetidos."},
     {texto:"Tomar un crédito de obra de corto plazo.", efectos:{deuda:5, wacc:0.5, caja:-4}, consecuencia:"Evitas fricción con las cuadrillas, pero sumas una deuda más a tu estructura de capital."},
-    {texto:"Usar el desembolso ya aprobado del crédito constructor para cubrir el pago.", efectos:{razonCorriente:-0.08, caja:-9}, consecuencia:"Cumples sin pedir deuda nueva, aunque adelantas un recurso que tenías destinado a otra fase de la obra."}
+    {texto:"Usar el desembolso ya aprobado del crédito constructor para cubrir el pago.", efectos:{caja:-3, capitalTrabajo:-5, razonCorriente:-0.08}, consecuencia:"Cumples sin pedir deuda nueva, aunque adelantas un recurso que tenías destinado a otra fase de la obra."}
   ]};}
 function CONSTRUYEYA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta e impuesto predial de unidades sin vender",
   contexto:"Llega la fecha de declarar renta, junto con el impuesto predial de las unidades que aún no se han vendido.",
   choices:[
-    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7}, consecuencia:"Cumples sin generar ninguna obligación adicional."},
+    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN y el municipio.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
     {texto:"Contratar un asesor tributario especializado en el sector inmobiliario.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas específicas del sector."},
-    {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{razonCorriente:-0.08, caja:-7}, consecuencia:"Cumples igual, pero sacrificas el colchón construido para otro tipo de imprevistos."}
+    {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const CONSTRUYEYA_RANDOM = [
   (s,f)=>MACRO_TASA_INTERES(s,f, true),
@@ -102,7 +102,7 @@ const CONSTRUYEYA_RANDOM = [
       {texto:"Contratar de inmediato al equipo de arquitectura para el ajuste urgente.", efectos:{caja:-4, capitalTrabajo:-1}, consecuencia:"Resuelves el trámite lo más rápido posible, minimizando el atraso sobre el cronograma general."},
       {texto:"Esperar el turno normal de revisión sin acelerar el trámite.", efectos:{ebitda:-2}, consecuencia:"Ahorras el costo de urgencia, pero la obra se atrasa varias semanas mientras el trámite avanza a su ritmo habitual."},
       {texto:"Apelar formalmente la exigencia de la curaduría.", efectos:{caja:-2, ebitda:-1}, consecuencia:"El proceso se alarga y no garantiza un resultado distinto, pero deja constancia formal de tu posición."},
-      {texto:"Contratar un gestor de trámites especializado en curadurías para agilizar el proceso.", efectos:{caja:-3}, consecuencia:"Su conocimiento del proceso interno reduce el tiempo de espera de forma notable, a cambio de sus honorarios."}
+      {texto:"Contratar un gestor de trámites especializado en curadurías para agilizar el proceso.", efectos:{caja:-3, ebitda:-0.5}, consecuencia:"Su conocimiento del proceso interno reduce el tiempo de espera de forma notable, a cambio de sus honorarios. Aun así, la obra pierde algunos días mientras el trámite se mueve."}
     ]}),
   (s,f)=>({tipo:'random', titulo:"Red de servicios no mapeada detiene la obra",
     contexto:"Durante la excavación aparece una red de acueducto no mapeada que obliga a detener la obra temporalmente mientras se coordina con la empresa de servicios.",
@@ -110,7 +110,7 @@ const CONSTRUYEYA_RANDOM = [
       {texto:"Pagar por una coordinación urgente con la empresa de servicios.", efectos:{caja:-5}, consecuencia:"Retomas la obra en pocos días, a un costo de gestión considerable por la urgencia."},
       {texto:"Esperar el trámite regular de coordinación.", efectos:{ebitda:-3}, consecuencia:"Ahorras el costo de la gestión urgente, pero la obra queda detenida varias semanas."},
       {texto:"Rediseñar temporalmente la cimentación para trabajar alrededor de la red mientras se resuelve.", efectos:{caja:-3, ebitda:-1}, consecuencia:"La obra no se detiene del todo, aunque el rediseño temporal tiene su propio costo de ingeniería."},
-      {texto:"Reclamar el sobrecosto a la entidad de servicios públicos por la red no reportada.", efectos:{caja:-1}, consecuencia:"Inicias un proceso de reclamación que, si prospera, podría compensar parte del costo — aunque no es inmediato."}
+      {texto:"Reclamar el sobrecosto a la entidad de servicios públicos por la red no reportada.", efectos:{caja:-1, ebitda:-2, confianzaProveedores:-2}, consecuencia:"Inicias un proceso de reclamación que, si prospera, podría compensar parte del costo — aunque no es inmediato. Mientras tanto, la obra sigue detenida en parte y la relación con la empresa de servicios se tensa."}
     ]}),
 
   (s,f)=>({
@@ -121,8 +121,8 @@ const CONSTRUYEYA_RANDOM = [
        consecuencia:"Cumples la norma al pie de la letra, aunque el proyecto se paraliza por un tiempo indefinido mientras las autoridades hacen su evaluación."},
       {texto:"Continuar la obra discretamente mientras se gestiona el permiso en paralelo.", efectos:{ebitda:2, reputacion:-8},
        consecuencia:"Ganas tiempo de construcción, pero si se descubre que avanzaste sin autorización, la multa y el daño reputacional pueden ser mucho mayores que la demora evitada."},
-      {texto:"Contratar un arqueólogo privado para acelerar la evaluación oficial.", efectos:{caja:-4},
-       consecuencia:"El proceso avanza más rápido de lo habitual, aunque no garantiza que las autoridades lo acepten sin su propia revisión adicional."},
+      {texto:"Contratar un arqueólogo privado para acelerar la evaluación oficial.", efectos:{caja:-4, ebitda:-2},
+       consecuencia:"El proceso avanza más rápido de lo habitual, aunque no garantiza que las autoridades lo acepten sin su propia revisión adicional. Mientras tanto, la obra sigue detenida."},
       {texto:"Rediseñar los cimientos para evitar la zona del hallazgo y seguir construyendo alrededor.", efectos:{caja:-5, ebitda:-1},
        consecuencia:"Encuentras una salida técnica que evita la paralización total, a un costo de rediseño considerable."}
     ]
@@ -145,11 +145,11 @@ const CONSTRUYEYA_RANDOM = [
     tipo:'random', titulo:"Nueva norma sismorresistente obliga a rediseñar",
     contexto:"Una actualización a la norma sismorresistente entra en vigencia justo cuando tu proyecto está en etapa de diseño estructural avanzado, obligando ajustes antes de poder continuar.",
     choices:[
-      {texto:"Rediseñar completamente la estructura conforme a la nueva norma, sin atajos.", efectos:{caja:-7, ebitda:-1},
-       consecuencia:"El proyecto cumple la norma más reciente sin ninguna ambigüedad legal futura, a un costo de rediseño considerable."},
-      {texto:"Aplicar solo los ajustes mínimos indispensables para cumplir formalmente.", efectos:{caja:-3},
+      {texto:"Rediseñar completamente la estructura conforme a la nueva norma, sin atajos.", efectos:{caja:-7, ebitda:-1, reputacion:3, confianzaBanco:2},
+       consecuencia:"El proyecto cumple la norma más reciente sin ninguna ambigüedad legal futura, a un costo de rediseño considerable. Compradores y banco lo valoran: es un proyecto sin riesgos normativos."},
+      {texto:"Aplicar solo los ajustes mínimos indispensables para cumplir formalmente.", efectos:{caja:-3, reputacion:-1},
        consecuencia:"Cumples la norma al menor costo posible, aunque el margen de holgura estructural queda más ajustado del que hubieras preferido."},
-      {texto:"Consultar con la curaduría si el proyecto puede acogerse a la norma anterior por estar ya en trámite.", efectos:{caja:-1},
+      {texto:"Consultar con la curaduría si el proyecto puede acogerse a la norma anterior por estar ya en trámite.", efectos:{caja:-1, ebitda:-1.5},
        consecuencia:"Si la respuesta es favorable, te ahorras el rediseño. Si no lo es, perdiste tiempo valioso esperando una respuesta que no llegó a tu favor."},
       {texto:"Detener el proyecto hasta contratar una firma estructural especializada en la nueva norma.", efectos:{ebitda:-3, diasCartera:15},
        consecuencia:"Te aseguras un diseño técnicamente sólido desde cero, a costa de un atraso considerable en el cronograma del proyecto."}
@@ -159,28 +159,28 @@ const CONSTRUYEYA_RANDOM = [
     tipo:'random', titulo:"Robo de materiales en la obra",
     contexto:"Amaneces con un reporte de robo de materiales de construcción de valor considerable en una de tus obras activas, sin cámaras de seguridad instaladas en la zona afectada.",
     choices:[
-      {texto:"Denunciar formalmente y contratar vigilancia privada permanente para el resto de la obra.", efectos:{caja:-4},
-       consecuencia:"No recuperas lo robado, pero reduces sustancialmente el riesgo de que se repita durante el resto del proyecto."},
+      {texto:"Denunciar formalmente y contratar vigilancia privada permanente para el resto de la obra.", efectos:{caja:-4, ebitda:-1, reputacion:1},
+       consecuencia:"No recuperas lo robado, pero reduces sustancialmente el riesgo de que se repita durante el resto del proyecto. Mientras repones lo robado, la obra pierde unos días."},
       {texto:"Absorber la pérdida y reponer el material sin cambios de seguridad adicionales.", efectos:{caja:-5},
        consecuencia:"Resuelves el problema inmediato del material faltante, sin abordar la vulnerabilidad que permitió el robo."},
       {texto:"Investigar internamente si algún trabajador de la obra estuvo involucrado.", efectos:{moralEquipo:-4},
        consecuencia:"La investigación puede esclarecer lo ocurrido, aunque el ambiente de sospecha generalizada golpea la moral de todo el equipo de obra, culpable o no."},
-      {texto:"Reclamar la pérdida a tu póliza de seguro de obra, si la tienes vigente.", efectos:{caja:-1, wacc:-0.1},
-       consecuencia:"Si tu póliza cubre este tipo de siniestro, recuperas buena parte del valor con un deducible menor al costo total."}
+      {texto:"Reclamar la pérdida a tu póliza de seguro de obra, si la tienes vigente.", efectos:{caja:-1, ebitda:-1},
+       consecuencia:"Si tu póliza cubre este tipo de siniestro, recuperas buena parte del valor con un deducible menor al costo total. Mientras se procesa el reclamo, la obra espera el material."}
     ]
   }),
   (s,f)=>({
     tipo:'random', titulo:"Cliente exige adelantar la entrega con penalidad de por medio",
     contexto:"Tu cliente pide adelantar la fecha de entrega del proyecto varias semanas respecto al cronograma pactado, argumentando compromisos propios, y menciona que el contrato incluye una penalidad si no se cumple.",
     choices:[
-      {texto:"Aceptar el adelanto contratando turnos extendidos y personal adicional temporal.", efectos:{caja:-6, ebitda:-1},
-       consecuencia:"Cumples con el nuevo plazo evitando la penalidad, a un costo operativo considerable por la aceleración forzada."},
-      {texto:"Negociar una entrega parcial por fases en vez de la fecha completa adelantada.", efectos:{caja:-2, diasCartera:-5},
-       consecuencia:"Encuentras un punto intermedio que satisface parte de la urgencia del cliente sin comprometer toda la calidad del proyecto."},
+      {texto:"Aceptar el adelanto contratando turnos extendidos y personal adicional temporal.", efectos:{caja:-6, ebitda:-1, reputacion:3, diasCartera:-10},
+       consecuencia:"Cumples con el nuevo plazo evitando la penalidad, a un costo operativo considerable por la aceleración forzada. El cliente, satisfecho, paga la entrega anticipada sin demoras."},
+      {texto:"Negociar una entrega parcial por fases en vez de la fecha completa adelantada.", efectos:{caja:-2, diasCartera:-5, ebitda:-0.5},
+       consecuencia:"Encuentras un punto intermedio que satisface parte de la urgencia del cliente sin comprometer toda la calidad del proyecto. Coordinar la obra por fases tiene, eso sí, un costo operativo."},
       {texto:"Rechazar el adelanto y asumir la penalidad contractual si el cliente insiste en el plazo original pactado.", efectos:{caja:-4},
        consecuencia:"Pagas la penalidad, pero mantienes el cronograma original sin comprometer la calidad de la obra por la prisa."},
-      {texto:"Ofrecer un descuento a cambio de mantener el cronograma original sin penalidad.", efectos:{caja:-2, reputacion:1},
-       consecuencia:"El cliente acepta el descuento a cambio de esperar el plazo original, evitando la aceleración forzada del proyecto."}
+      {texto:"Ofrecer un descuento a cambio de mantener el cronograma original sin penalidad.", efectos:{ebitda:-1.5, reputacion:1},
+       consecuencia:"El cliente acepta el descuento a cambio de esperar el plazo original, evitando la aceleración forzada del proyecto. El descuento sale directo de tu margen."}
     ]
   }),
   (s,f)=>({

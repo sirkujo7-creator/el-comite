@@ -24,7 +24,7 @@ const MODAURBANA_CASES = [
     {texto:"Tomar crédito bancario a tasa fija por $15M.", efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15}, consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
     {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República."},
-    {texto:"Ceder 20% de participación a un inversionista ángel por el mismo monto.", efectos:{caja:15, capitalTrabajo:15}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras de la marca."},
+    {texto:"Ceder 20% de participación a un inversionista ángel por el mismo monto.", efectos:{caja:15, capitalTrabajo:15, wacc:1}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras de la marca. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
     {texto:"Hacer factoring de la cartera de clientes mayoristas actuales para financiar la nueva colección.", efectos:{caja:12, ebitda:-2, capitalTrabajo:10}, consecuencia:"Financias la colección con dinero que ya te debían, sin tomar deuda nueva, a cambio de un descuento sobre esa cartera."}
   ],
   choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
@@ -57,8 +57,8 @@ const MODAURBANA_CASES = [
      consecuencia:"El banco aprueba el crédito con mejores condiciones de las que merecías con tus cifras reales."},
     {texto:"Rechazarlo y presentar los estados financieros reales, ajustando la solicitud.", efectos:{caja:-3, confianzaBanco:5, razonCorriente:0.05, reputacion:5},
      consecuencia:"El monto aprobado es menor, pero tu información financiera sigue siendo confiable."},
-    {texto:"Mejorar los indicadores reales primero, cobrando cartera vencida antes de volver a aplicar.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, ebitda:1, reputacion:2},
-     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel."},
+    {texto:"Mejorar los indicadores reales primero, cobrando cartera vencida antes de volver a aplicar.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, diasCartera:-8, ebitda:-1},
+     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel. Mientras tanto, el crecimiento que pensabas financiar con el crédito queda en pausa."},
     {texto:"Buscar un crédito alternativo no bancario, sin tocar la contabilidad.", efectos:{caja:4, wacc:1.2, deuda:4},
      consecuencia:"Consigues el capital sin mentir en tus estados financieros, aunque el costo de ese crédito es más alto que el de la banca tradicional."}
   ]
@@ -89,7 +89,7 @@ function MODAURBANA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina y pr
 function MODAURBANA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y liquidación de inventario de temporada pasada",
   contexto:"Llega la fecha de declarar renta, mientras aún tienes inventario de la temporada pasada por liquidar en bodega.",
   choices:[
-    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7}, consecuencia:"Cumples sin generar ninguna obligación adicional."},
+    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
     {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas que reducen el valor final a pagar."},
     {texto:"Liquidar parte del inventario de temporada pasada para financiar el pago.", efectos:{caja:2, ebitda:-2, diasInventario:-20, valorInventario:-6}, consecuencia:"Cubres buena parte del pago con inventario que de todos modos ya estaba perdiendo valor en bodega."}
@@ -109,17 +109,17 @@ const MODAURBANA_RANDOM = [
     choices:[
       {texto:"Pagar por una gestión aduanera urgente para liberar el lote.", efectos:{caja:-4}, consecuencia:"Recuperas el lote a tiempo para buena parte de la temporada, a un costo de gestión considerable."},
       {texto:"Esperar el trámite regular de aduana.", efectos:{ebitda:-3, diasInventario:10}, consecuencia:"Ahorras el costo de la gestión urgente, pero pierdes buena parte de la ventana comercial de la temporada."},
-      {texto:"Lanzar la temporada solo con lo que ya tienes en bodega y ajustar la estrategia de surtido.", efectos:{ebitda:-1}, consecuencia:"Sales a tiempo con menos variedad de la planeada, aunque no dependes de que se resuelva el trámite aduanero."},
-      {texto:"Reclamar el sobrecosto y el retraso al operador logístico responsable.", efectos:{caja:-1}, consecuencia:"Inicias un proceso de reclamación que, si prospera, podría compensar parte de la pérdida — aunque no es inmediato."}
+      {texto:"Lanzar la temporada solo con lo que ya tienes en bodega y ajustar la estrategia de surtido.", efectos:{ebitda:-1, reputacion:-1}, consecuencia:"Sales a tiempo con menos variedad de la planeada, aunque no dependes de que se resuelva el trámite aduanero. Algunos clientes extrañan las referencias anunciadas."},
+      {texto:"Reclamar el sobrecosto y el retraso al operador logístico responsable.", efectos:{caja:-1, ebitda:-2}, consecuencia:"Inicias un proceso de reclamación que, si prospera, podría compensar parte de la pérdida — aunque no es inmediato. Mientras tanto, el lote sigue retenido y pierdes parte de la temporada."}
     ]}),
   (s,f)=>{
     const inventarioSano = s.diasInventario!=null && s.diasInventario <= 45;
     return {tipo:'random', titulo:"Una prenda se vuelve tendencia viral",
       contexto:`Una prenda de tu colección se vuelve tendencia en redes sociales y la demanda se dispara esta semana. ${inventarioSano ? 'Tu inventario está rotando a buen ritmo para responder a la demanda extra.' : 'Tu inventario lleva varios turnos rotando lento, justo cuando más se necesitaría stock disponible.'}`,
       choices:[
-        {texto:"Aprovechar y producir un reabastecimiento urgente de la prenda.", efectos: inventarioSano ? {caja:5, ebitda:3} : {caja:2, ebitda:1, confianzaProveedores:-5},
-         consecuencia: inventarioSano ? "Tu cadena de producción responde a tiempo y capturas la demanda casi por completo." : "La demanda llega, pero tu producción no tiene la holgura para responder rápido: terminas pidiendo producción urgente a la maquiladora, en peores condiciones."},
-        {texto:"Limitar la promoción para no comprometer la calidad de producción actual.", efectos:{ebitda:1}, consecuencia:"Creces con prudencia: menos ingreso inmediato, pero ningún cliente nuevo recibe una prenda de menor calidad por la prisa."},
+        {texto:"Aprovechar y producir un reabastecimiento urgente de la prenda.", efectos: inventarioSano ? {caja:2, ebitda:3, diasInventario:5} : {caja:2, ebitda:1, confianzaProveedores:-5},
+         consecuencia: inventarioSano ? "Tu cadena de producción responde a tiempo y capturas la demanda casi por completo. Eso sí, si la tendencia se enfría, las unidades extra se quedan en bodega." : "La demanda llega, pero tu producción no tiene la holgura para responder rápido: terminas pidiendo producción urgente a la maquiladora, en peores condiciones."},
+        {texto:"Limitar la promoción para no comprometer la calidad de producción actual.", efectos:{ebitda:1, reputacion:-1}, consecuencia:"Creces con prudencia: menos ingreso inmediato, pero ningún cliente nuevo recibe una prenda de menor calidad por la prisa. Algunos clientes que no consiguieron la prenda la buscan en la competencia."},
         {texto:"Subcontratar una segunda maquiladora temporal para atender el pico de demanda.", efectos:{caja:-2, ebitda:2}, consecuencia:"Cubres el pico de demanda sin comprometer tu producción habitual, a cambio de un costo adicional este periodo."},
         {texto:"Lanzar una edición limitada numerada para capitalizar la tendencia sin sobreproducir.", efectos:{ebitda:2, diasInventario:-5, valorInventario:-2}, consecuencia:"Capitalizas el momento viral sin arriesgarte a producir de más si la tendencia se apaga tan rápido como llegó."}
       ]};
@@ -133,8 +133,8 @@ const MODAURBANA_RANDOM = [
        consecuencia:"Capitalizas el momento viral con producción acelerada, aunque a un costo de manufactura más alto por la urgencia."},
       {texto:"Contactar a la influencer para formalizar una colaboración paga a futuro.", efectos:{caja:-2, reputacion:4},
        consecuencia:"Conviertes un golpe de suerte en una relación comercial sostenible a mediano plazo, aunque no todas las influencers responden a este tipo de acercamiento."},
-      {texto:"Dejar que la demanda se agote con el inventario actual, sin producir más de esa referencia.", efectos:{ebitda:1},
-       consecuencia:"Evitas el riesgo de sobreproducir para una tendencia que podría apagarse tan rápido como llegó, aunque dejas ventas sobre la mesa mientras dura el momento."},
+      {texto:"Dejar que la demanda se agote con el inventario actual, sin producir más de esa referencia.", efectos:{ebitda:1, reputacion:-1},
+       consecuencia:"Evitas el riesgo de sobreproducir para una tendencia que podría apagarse tan rápido como llegó, aunque dejas ventas sobre la mesa mientras dura el momento. Y algunos clientes que llegaron por la publicación se van con las manos vacías."},
       {texto:"Subir el precio de esa referencia específica mientras dure el pico de demanda.", efectos:{ebitda:3, reputacion:-3},
        consecuencia:"Capitalizas el momento con mejor margen, aunque algunos clientes notan el aumento repentino y lo comentan como oportunismo."}
     ]
@@ -149,7 +149,7 @@ const MODAURBANA_RANDOM = [
        consecuencia:"La decisión cuesta producción y proveedores a corto plazo, pero es la única respuesta defendible ante un hallazgo de este tipo."},
       {texto:"Mantener la relación mientras exiges un plan de corrección al proveedor, sin hacerlo público.", efectos:{ebitda:1, reputacion:-6, confianzaProveedores:2},
        consecuencia:"Evitas la disrupción inmediata en tu cadena de suministro, pero si la denuncia sigue creciendo, tu silencio se interpreta como complicidad."},
-      {texto:"Negar cualquier conocimiento previo y no tomar ninguna acción sobre el proveedor.", efectos:{reputacion:-12, confianzaProveedores:-2},
+      {texto:"Negar cualquier conocimiento previo y no tomar ninguna acción sobre el proveedor.", efectos:{ebitda:1.5, reputacion:-12, confianzaProveedores:-2},
        consecuencia:"La negación sin acción, frente a una denuncia pública y documentada, suele salir peor que cualquier otra respuesta posible."},
       {texto:"Financiar directamente un programa de escolarización para los menores identificados, manteniendo al proveedor bajo supervisión estricta.", efectos:{caja:-4, reputacion:3, confianzaProveedores:1},
        consecuencia:"Atiendes la causa humana del problema inmediato, aunque mantener al proveedor sigue siendo una decisión que muchos cuestionarían."}
@@ -175,11 +175,11 @@ const MODAURBANA_RANDOM = [
     tipo:'random', titulo:"Un competidor copia tu diseño y lo vende más barato",
     contexto:"Detectas que un competidor lanzó una prenda casi idéntica a uno de tus diseños más exitosos, vendiéndola a un precio considerablemente menor.",
     choices:[
-      {texto:"Iniciar un proceso legal por infracción de diseño industrial, si tienes el registro correspondiente.", efectos:{caja:-3},
+      {texto:"Iniciar un proceso legal por infracción de diseño industrial, si tienes el registro correspondiente.", efectos:{caja:-3, reputacion:2},
        consecuencia:"El proceso puede tomar meses y no siempre termina a tu favor, pero envía un mensaje claro sobre proteger tu propiedad intelectual."},
       {texto:"Lanzar rápidamente una variación mejorada del diseño original para diferenciarte.", efectos:{caja:-2, ebitda:1},
        consecuencia:"Te adelantas con una versión superior antes de que el mercado asocie el diseño original solo con la copia barata."},
-      {texto:"Bajar el precio de tu diseño original para competir directamente.", efectos:{ebitda:-2},
+      {texto:"Bajar el precio de tu diseño original para competir directamente.", efectos:{ebitda:-2, diasInventario:-5},
        consecuencia:"Defiendes tu participación de mercado en esa referencia, a costa de un margen que ya considerabas parte de tu rentabilidad."},
       {texto:"No hacer nada, confiando en que tu marca y calidad se diferencian solas.", efectos:{ebitda:-1},
        consecuencia:"Para una parte de tu clientela, la marca sí importa. Para otra parte, sensible al precio, la copia barata es suficiente."}

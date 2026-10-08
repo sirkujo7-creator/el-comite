@@ -11,7 +11,7 @@ const TECHNOVA_CASES = [
      consecuencia:"Aseguras ingreso recurrente a largo plazo, pero a un margen bastante más delgado del que tenías."},
     {texto:"Ofrecer un descuento menor (15%) con funcionalidades adicionales en vez de rebaja total.", efectos:{ebitda:-1, caja:-1},
      consecuencia:"Cedes menos margen del que pedían y le das algo de valor tangible a cambio — una negociación más equilibrada."},
-    {texto:"Rechazar el descuento y arriesgar la renovación.", efectos:{caja:1, ebitda:1},
+    {texto:"Rechazar el descuento y arriesgar la renovación.", efectos:{caja:1, ebitda:1, wacc:0.3},
      consecuencia:"Proteges tu margen por completo, aunque te expones a perder el 40% de tu ingreso recurrente si el cliente decide no renovar."},
     {texto:"Proponer pricing por consumo, alineando el pago a su crecimiento real.", efectos:{ebitda:0.5, capitalTrabajo:-1, wacc:-0.1},
      consecuencia:"Cambias la conversación de 'descuento' a 'modelo de pago': si el cliente crece, tú creces con él; si no, tampoco pierdes tanto margen."}
@@ -28,8 +28,8 @@ const TECHNOVA_CASES = [
      consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
     {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República."},
-    {texto:"Levantar una ronda de inversión ángel, cediendo 20% de la empresa.", efectos:{caja:15, capitalTrabajo:15},
-     consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades y del control futuro de TechNova."},
+    {texto:"Levantar una ronda de inversión ángel, cediendo 20% de la empresa.", efectos:{caja:15, capitalTrabajo:15, wacc:1},
+     consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades y del control futuro de TechNova. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
     {texto:"Tomar venture debt: deuda respaldada por tus inversionistas actuales, con warrants a favor de ellos.", efectos:{caja:12, deuda:12, wacc:0.8, capitalTrabajo:12},
      consecuencia:"Cuesta un poco más que un crédito tradicional y cede pequeñas opciones futuras, pero no diluye tu control operativo hoy."}
   ],
@@ -40,7 +40,7 @@ const TECHNOVA_CASES = [
   contexto:"Tu arquitecto principal recibe una oferta de la competencia con 40% más de sueldo.",
   choices:[
     {texto:"Igualar la oferta de inmediato.", efectos:{caja:-3, ebitda:-2, moralEquipo:6}, consecuencia:"Retienes el talento crítico y el equipo lo nota: tu estructura de costos de desarrollo sube de forma permanente, pero la moral se sostiene."},
-    {texto:"Ofrecer opciones accionarias en vez de igualar en efectivo.", efectos:{ebitda:-1, moralEquipo:3}, consecuencia:"Alineas su incentivo con el crecimiento de largo plazo de la empresa, sin golpear tanto tu caja hoy."},
+    {texto:"Ofrecer opciones accionarias en vez de igualar en efectivo.", efectos:{ebitda:-1, moralEquipo:3, wacc:0.3}, consecuencia:"Alineas su incentivo con el crecimiento de largo plazo de la empresa, sin golpear tanto tu caja hoy. Eso sí, cada opción que entregas diluye a los socios actuales."},
     {texto:"Dejarlo ir y redistribuir el conocimiento en el equipo.", efectos:{ebitda:-3, capitalTrabajo:-1, moralEquipo:-10}, consecuencia:"Pierdes velocidad de desarrollo por varios meses, y el resto del equipo se pregunta si es momento de mirar otras ofertas también."},
     {texto:"Contraofertar con un bono de retención atado a resultados de los próximos dos trimestres.", efectos:{caja:-1, ebitda:-1, moralEquipo:2}, consecuencia:"Condicionas la retención a resultados concretos, lo cual protege tu caja si el desempeño no acompaña."}
   ]
@@ -51,7 +51,7 @@ const TECHNOVA_CASES = [
     {texto:"Recortar el equipo de soporte para bajar costos.", efectos:{ebitda:4, capitalTrabajo:1, moralEquipo:-12, reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero la experiencia de los clientes que sí se quedan se resiente — y el resto del equipo técnico observa cómo tratas a quien ya no necesitas."},
-    {texto:"Reducir gastos generales sin tocar el equipo.", efectos:{ebitda:2, capitalTrabajo:1}, consecuencia:"El ajuste es más lento, pero protege la capacidad de atención al cliente y la moral del equipo."},
+    {texto:"Reducir gastos generales sin tocar el equipo.", efectos:{ebitda:2, capitalTrabajo:1, caja:-1}, consecuencia:"El ajuste es más lento, pero protege la capacidad de atención al cliente y la moral del equipo. Cancelar antes de tiempo algunos contratos de servicios y oficina tiene sus penalidades."},
     {texto:"Tomar un crédito puente para sostener la operación.", efectos:{caja:6, deuda:8, wacc:0.5, capitalTrabajo:4}, consecuencia:"Ganas tiempo sin recortar nada, pero sumas deuda justo cuando tu ingreso recurrente es más bajo."},
     {texto:"Lanzar un plan 'lite' más barato para retener a quienes quieren cancelar.", efectos:{ebitda:-1, caja:1, capitalTrabajo:1}, consecuencia:"Reduces la fuga de clientes a cambio de un ingreso promedio más bajo por cuenta."}
   ]
@@ -63,8 +63,8 @@ const TECHNOVA_CASES = [
      consecuencia:"El banco aprueba el crédito con mejores condiciones de las que merecías con tus cifras reales."},
     {texto:"Rechazarlo y presentar los estados financieros reales, ajustando la solicitud.", efectos:{caja:-3, confianzaBanco:5, razonCorriente:0.05, reputacion:5},
      consecuencia:"El monto aprobado es menor, pero tu información financiera sigue siendo confiable."},
-    {texto:"Mejorar los indicadores reales primero, cobrando cartera atrasada de clientes enterprise.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, ebitda:1, reputacion:2},
-     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel."},
+    {texto:"Mejorar los indicadores reales primero, cobrando cartera atrasada de clientes enterprise.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, diasCartera:-8, ebitda:-1},
+     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel. Mientras tanto, el crecimiento que pensabas financiar con el crédito queda en pausa."},
     {texto:"Buscar venture debt en lugar de crédito bancario, sin tocar la contabilidad.", efectos:{caja:4, wacc:1, deuda:4},
      consecuencia:"Consigues capital sin mentir en tus estados financieros, a un costo algo mayor que el crédito bancario tradicional."}
   ]
@@ -74,12 +74,12 @@ const TECHNOVA_CASES = [
   investigacion:{costo:1, boton:"Pedir a ingeniería una estimación real de horas de desarrollo ($1M)",
     reporte:"El equipo estima que la integración tomaría <b>3 semanas completas</b> de un desarrollador senior, tiempo que hoy está asignado a funcionalidades del roadmap general del producto."},
   choices:[
-    {texto:"Aceptar y desarrollar la integración gratuita para asegurar la renovación.", efectos:{caja:-3, ebitda:-1, moralEquipo:-3}, consecuencia:"Retienes al cliente más grande, a costa de tiempo de desarrollo que no estaba presupuestado y de un equipo que siente que trabaja gratis para un solo cliente."},
+    {texto:"Aceptar y desarrollar la integración gratuita para asegurar la renovación.", efectos:{caja:-3, ebitda:-1, moralEquipo:-3, wacc:-0.2}, consecuencia:"Retienes al cliente más grande, a costa de tiempo de desarrollo que no estaba presupuestado y de un equipo que siente que trabaja gratis para un solo cliente. A cambio, tu ingreso recurrente más importante queda asegurado."},
     {texto:"Rechazar la integración gratuita y ofrecerla como un desarrollo pago aparte.", efectos:{ebitda:-0.5}, consecuencia:"Proteges tu roadmap y tu margen, arriesgando la renovación de tu cliente más importante."},
     {texto:"Ofrecer una versión simplificada de la integración, gratis, y la versión completa como pago adicional.", efectos:{caja:-1, ebitda:0.5}, consecuencia:"Un punto medio que el cliente acepta, aunque no queda tan satisfecho como con la integración completa que pedía."},
     {texto:"Convertir la integración en un caso de estudio público a cambio de hacerla gratis, ganando marketing.", efectos:{caja:-2, ebitda:-0.5, reputacion:3}, consecuencia:"Absorbes el costo de desarrollo, pero lo capitalizas como material comercial para atraer clientes similares."}
   ],
-  choiceInformado:{texto:"Con el costo real de 3 semanas confirmado, ofrecer la version simplificada gratis y la completa como pago adicional.", efectos:{caja:0, ebitda:1},
+  choiceInformado:{texto:"Con el costo real de 3 semanas confirmado, ofrecer la versión simplificada gratis y la completa como pago adicional.", efectos:{caja:-1, ebitda:1},
     consecuencia:"Conocer el costo exacto en horas te da el argumento preciso para no regalar más desarrollo del que la relación comercial justifica."}
 },
 ];
@@ -95,10 +95,10 @@ function TECHNOVA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina y bono
 function TECHNOVA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y facturación de servicios digitales",
   contexto:"Llega la fecha de declarar renta, incluyendo la retención especial que aplica sobre ingresos de servicios digitales.",
   choices:[
-    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7}, consecuencia:"Cumples sin generar ninguna obligación adicional."},
+    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
     {texto:"Contratar un asesor tributario especializado en economía digital.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas específicas del sector."},
-    {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{razonCorriente:-0.08, caja:-7}, consecuencia:"Cumples igual, pero sacrificas el colchón construido para otro tipo de imprevistos."}
+    {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const TECHNOVA_RANDOM = [
   (s,f)=>MACRO_TRM_COSTOS_USD(s,f,"tu factura mensual de infraestructura cloud (AWS/Azure), que pagas en dólares"),
@@ -107,7 +107,7 @@ const TECHNOVA_RANDOM = [
   (s,f)=>({tipo:'random', titulo:"Caída del servicio por 6 horas",
     contexto:"Un error en un despliegue tumba la plataforma durante 6 horas en horario laboral. Varios clientes enterprise reportan pérdidas operativas por la caída.",
     choices:[
-      {texto:"Compensar a los clientes afectados con crédito en su próxima factura.", efectos:{caja:-3, ebitda:-1}, consecuencia:"El gesto calma a los clientes más grandes, aunque tiene un costo directo en ingreso reconocido."},
+      {texto:"Compensar a los clientes afectados con crédito en su próxima factura.", efectos:{caja:-3, ebitda:-1, reputacion:2}, consecuencia:"El gesto calma a los clientes más grandes, aunque tiene un costo directo en ingreso reconocido."},
       {texto:"Invertir de inmediato en redundancia de infraestructura para que no vuelva a pasar.", efectos:{caja:-6, wacc:-0.1}, capex:true, consecuencia:"Resuelves la causa raíz del problema, a un costo de inversión considerable este periodo."},
       {texto:"Comunicar el incidente de forma mínima y seguir operando sin cambios estructurales.", efectos:{ebitda:-2}, consecuencia:"Ahorras el gasto de inversión, pero varios clientes empiezan a evaluar alternativas por la falta de una respuesta contundente."},
       {texto:"Contratar temporalmente un proveedor externo de monitoreo 24/7 mientras se refuerza el equipo interno.", efectos:{caja:-2, ebitda:-1}, consecuencia:"Ganas tranquilidad operativa de corto plazo sin comprometer una inversión estructural todavía."}
@@ -115,8 +115,8 @@ const TECHNOVA_RANDOM = [
   (s,f)=>({tipo:'random', titulo:"Un competidor lanza una función clon",
     contexto:"Un competidor directo lanza una copia casi idéntica de tu función más popular, a menor precio.",
     choices:[
-      {texto:"Bajar el precio de esa función para no perder clientes por costo.", efectos:{ebitda:-3}, consecuencia:"Mantienes tu base de clientes, aunque cediste margen en tu diferencial más fuerte."},
-      {texto:"Acelerar el desarrollo de la siguiente versión para mantenerte adelante.", efectos:{caja:-4, ebitda:-1, moralEquipo:-3}, consecuencia:"Presionas al equipo técnico a un ritmo más alto de lo planeado, a cambio de no perder la ventaja competitiva."},
+      {texto:"Bajar el precio de esa función para no perder clientes por costo.", efectos:{ebitda:-3, wacc:-0.1}, consecuencia:"Mantienes tu base de clientes, aunque cediste margen en tu diferencial más fuerte."},
+      {texto:"Acelerar el desarrollo de la siguiente versión para mantenerte adelante.", efectos:{caja:-4, ebitda:-1, moralEquipo:-3, reputacion:3}, consecuencia:"Presionas al equipo técnico a un ritmo más alto de lo planeado, a cambio de no perder la ventaja competitiva."},
       {texto:"No reaccionar y confiar en tu servicio al cliente como diferencial.", efectos:{ebitda:-1}, consecuencia:"Ahorras cualquier inversión de reacción, apostando a que la relación con tus clientes actuales pese más que el precio."},
       {texto:"Comunicar activamente a tus clientes las diferencias técnicas reales frente al clon.", efectos:{caja:-1, ebitda:0.5}, consecuencia:"Inviertes en educar al mercado sobre por qué tu producto es distinto, sin tocar precio ni acelerar desarrollo de forma forzada."}
     ]}),
@@ -127,9 +127,9 @@ const TECHNOVA_RANDOM = [
     choices:[
       {texto:"Corregirla de inmediato con un equipo dedicado, aunque signifique pausar otros desarrollos.", efectos:{caja:-4, ebitda:-2, reputacion:4},
        consecuencia:"El sprint se reorganiza por completo, pero cierras la vulnerabilidad antes de que alguien más la encuentre con peores intenciones."},
-      {texto:"Corregirla en el próximo ciclo de desarrollo normal, sin alterar el roadmap actual.", efectos:{reputacion:-3},
-       consecuencia:"Ahorras la disrupción inmediata, aunque cada día que la vulnerabilidad sigue abierta es un día de riesgo que decidiste tolerar."},
-      {texto:"Pagarle una recompensa al investigador y hacer pública la corrección como gesto de transparencia.", efectos:{caja:-2, reputacion:6},
+      {texto:"Corregirla en el próximo ciclo de desarrollo normal, sin alterar el roadmap actual.", efectos:{reputacion:-3, ebitda:0.5},
+       consecuencia:"Ahorras la disrupción inmediata, aunque cada día que la vulnerabilidad sigue abierta es un día de riesgo que decidiste tolerar. El roadmap, al menos, sale a tiempo."},
+      {texto:"Pagarle una recompensa al investigador y hacer pública la corrección como gesto de transparencia.", efectos:{caja:-5, ebitda:-2, reputacion:6},
        consecuencia:"El programa de recompensas por vulnerabilidades es costoso, pero construye una reputación de seguridad tomada en serio — algo que tus clientes B2B valoran mucho."},
       {texto:"Pedirle al investigador que no divulgue nada mientras decides qué hacer, sin comprometerte a un plazo.", efectos:{reputacion:-2},
        consecuencia:"Ganas tiempo, aunque un investigador de seguridad tratado sin claridad puede optar por la divulgación pública de todas formas."}
@@ -143,20 +143,20 @@ const TECHNOVA_RANDOM = [
        consecuencia:"Pagar por una salida ordenada es mucho más barato que reconstruir ese conocimiento perdido desde cero más adelante."},
       {texto:"Dejarlo ir sin condiciones adicionales y asumir el riesgo de la documentación faltante.", efectos:{ebitda:-2, moralEquipo:-3},
        consecuencia:"El equipo que se queda absorbe la carga de reconstruir el conocimiento perdido sobre la marcha, mientras la operación sigue exigiendo lo mismo de siempre."},
-      {texto:"Contratar rápidamente un reemplazo senior, aunque cueste más de lo presupuestado.", efectos:{caja:-5, ebitda:-1},
+      {texto:"Contratar rápidamente un reemplazo senior, aunque cueste más de lo presupuestado.", efectos:{caja:-5, ebitda:-0.5},
        consecuencia:"Reduces el vacío técnico más rápido, a un costo salarial más alto del que tenías planeado para ese cargo."},
-      {texto:"Iniciar de inmediato un plan de documentación técnica exhaustiva como política permanente.", efectos:{caja:-2, ebitda:-1},
-       consecuencia:"No resuelve la pérdida actual, pero reduce sustancialmente el riesgo de que la próxima salida clave duela tanto como esta."}
+      {texto:"Iniciar de inmediato un plan de documentación técnica exhaustiva como política permanente.", efectos:{caja:-2, ebitda:-2},
+       consecuencia:"No resuelve la pérdida actual, pero reduce sustancialmente el riesgo de que la próxima salida clave duela tanto como esta. Mientras tanto, el vacío actual sigue frenando el desarrollo."}
     ]
   }),
   (s,f)=>({
     tipo:'random', titulo:"Un inversionista ángel ofrece una ronda de financiamiento",
     contexto:"Un inversionista ángel con buen historial en SaaS te ofrece una ronda de financiamiento a cambio de una participación accionaria y un puesto en el comité asesor.",
     choices:[
-      {texto:"Aceptar la ronda completa y ceder la participación y el puesto asesor solicitados.", efectos:{caja:9, deuda:-2, ebitda:1, reputacion:-1},
+      {texto:"Aceptar la ronda completa y ceder la participación y el puesto asesor solicitados.", efectos:{caja:9, deuda:-2, ebitda:1, reputacion:-1, wacc:1},
        consecuencia:"El capital fresco acelera tu contratación y desarrollo de producto, aunque ahora respondes también ante un nuevo asesor con voz en decisiones clave — y el equipo original nota que las decisiones ya no son solo tuyas."},
-      {texto:"Negociar una ronda más pequeña sin ceder puesto en el comité asesor.", efectos:{caja:4},
-       consecuencia:"Consigues parte del capital manteniendo tu autonomía completa en la toma de decisiones."},
+      {texto:"Negociar una ronda más pequeña sin ceder puesto en el comité asesor.", efectos:{caja:4, wacc:0.5},
+       consecuencia:"Consigues parte del capital manteniendo tu autonomía completa en la toma de decisiones. Ese capital, eso sí, espera un retorno alto: tu costo de capital sube."},
       {texto:"Rechazar la oferta y seguir financiando el crecimiento solo con ingresos propios.", efectos:{capitalTrabajo:-1},
        consecuencia:"Mantienes control total, a costa de un ritmo de crecimiento más lento del que el capital fresco hubiera permitido."},
       {texto:"Pedir referencias de otros fundadores que ya trabajaron con este inversionista antes de decidir.", efectos:{caja:-0.3},
@@ -181,8 +181,8 @@ const TECHNOVA_RANDOM = [
     tipo:'random', titulo:"Caída prolongada del proveedor de infraestructura en la nube",
     contexto:"Tu proveedor de servicios en la nube sufre una caída regional que deja tu plataforma inaccesible durante varias horas, justo durante el horario pico de uso de tus clientes empresariales.",
     choices:[
-      {texto:"Comunicar de inmediato y con total transparencia el incidente a todos tus clientes.", efectos:{reputacion:3},
-       consecuencia:"La comunicación clara durante una falla que no fue tu culpa directa ayuda a que tus clientes entiendan y no sobrerreaccionen."},
+      {texto:"Comunicar de inmediato y con total transparencia el incidente a todos tus clientes.", efectos:{reputacion:3, moralEquipo:-1},
+       consecuencia:"La comunicación clara durante una falla que no fue tu culpa directa ayuda a que tus clientes entiendan y no sobrerreaccionen. Eso sí, tu equipo de soporte pasa el día desbordado respondiendo consultas."},
       {texto:"Esperar a que el proveedor resuelva sin comunicar nada mientras tanto.", efectos:{reputacion:-5},
        consecuencia:"El silencio durante una caída se siente, para tus clientes, igual de grave que la caída misma."},
       {texto:"Migrar a una arquitectura multi-nube para reducir la dependencia de un solo proveedor.", efectos:{caja:-6, wacc:-0.1},

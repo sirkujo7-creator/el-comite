@@ -7,7 +7,7 @@ const VITAFIT_CASES = [
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del cliente ($3M)",
     reporte:"Razón Corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
   choices:[
-    {texto:"Aceptar los 90 días completos, sin condiciones adicionales.", efectos:{caja:-3, capitalTrabajo:-2, razonCorriente:-0.15, diasCartera:35},
+    {texto:"Aceptar los 90 días completos, sin condiciones adicionales.", efectos:{caja:-3, capitalTrabajo:-2, razonCorriente:-0.15, diasCartera:35, reputacion:2},
      consecuencia:"El cliente sigue pagando y la relación queda intacta, pero tu ciclo de conversión de efectivo se alarga: ahora financias tú su operación."},
     {texto:"Negociar 60 días con 2% de descuento si paga antes de 45.", efectos:{caja:-1, razonCorriente:-0.05, ebitda:-1, diasCartera:15},
      consecuencia:"Reduces algo la presión sobre tu capital de trabajo, aunque el 2% de descuento sobre el total facturado golpea tu margen operativo."},
@@ -29,10 +29,10 @@ const VITAFIT_CASES = [
      consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
     {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República."},
-    {texto:"Ceder 20% de participación a un inversionista ángel por el mismo monto.", efectos:{caja:15, capitalTrabajo:15},
-     consecuencia:"No agregas deuda ni intereses, pero cediste una porción real de las utilidades y del control futuro de Vita Fit."},
-    {texto:"Combinar: tomar solo $8M en crédito fijo y buscar un pequeño inversionista para el resto.", efectos:{caja:15, deuda:8, wacc:0.2, capitalTrabajo:15},
-     consecuencia:"Divides el riesgo entre deuda y capital propio — una estructura mixta, más compleja de gestionar pero más resiliente ante un solo tipo de choque."}
+    {texto:"Ceder 20% de participación a un inversionista ángel por el mismo monto.", efectos:{caja:15, capitalTrabajo:15, wacc:1},
+     consecuencia:"No agregas deuda ni intereses, pero cediste una porción real de las utilidades y del control futuro de Vita Fit. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
+    {texto:"Combinar: tomar solo $8M en crédito fijo y buscar un pequeño inversionista para el resto.", efectos:{caja:15, deuda:8, wacc:0.6, capitalTrabajo:15},
+     consecuencia:"Divides el riesgo entre deuda y capital propio — una estructura mixta, más compleja de gestionar pero más resiliente ante un solo tipo de choque. Eso sí, la parte de capital propio encarece tu costo de capital promedio."}
   ],
   choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
     consecuencia:"Con el rango proyectado en mano, decides que un punto porcentual de subida es un riesgo real y te blindas parcialmente frente a él."}
@@ -44,7 +44,7 @@ const VITAFIT_CASES = [
      consecuencia:"El 5% de descuento equivale a una tasa efectiva anual muy superior a tu costo de capital, y el pago puntual refuerza tu imagen ante el proveedor — aunque te deja con menos caja este mes."},
     {texto:"Mantener el crédito a 60 días para no sacrificar liquidez.", efectos:{capitalTrabajo:2, ebitda:-0.5},
      consecuencia:"Conservas tu efectivo disponible, pero dejaste sobre la mesa un ahorro que probablemente valía más que el costo de oportunidad de tu caja."},
-    {texto:"Pedir un descuento aún mayor a cambio de un contrato de largo plazo.", efectos:{caja:-4, ebitda:3, confianzaProveedores:10, diasInventario:-4},
+    {texto:"Pedir un descuento aún mayor a cambio de un contrato de largo plazo.", efectos:{caja:-4, ebitda:3, confianzaProveedores:10, diasInventario:-4, wacc:0.2},
      consecuencia:"El proveedor acepta 7% a cambio de exclusividad por un año, y hasta mejora tus tiempos de reposición. Negociaste a largo plazo, aunque ahora dependes más de esa única relación."},
     {texto:"Proponer pago escalonado: 50% de contado y 50% a 60 días.", efectos:{caja:-4, ebitda:1, capitalTrabajo:1, confianzaProveedores:3},
      consecuencia:"Consigues parte del ahorro y algo de buena voluntad del proveedor, sin comprometer toda tu liquidez de una sola vez."}
@@ -71,8 +71,8 @@ const VITAFIT_CASES = [
      consecuencia:"El banco aprueba el crédito con mejores condiciones de las que merecías con tus cifras reales. Tarde o temprano, alguien más las revisa."},
     {texto:"Rechazarlo y presentar los estados financieros reales, ajustando la solicitud.", efectos:{caja:-3, confianzaBanco:5, razonCorriente:0.05, reputacion:5},
      consecuencia:"El monto aprobado es menor, pero tu información financiera sigue siendo confiable — un activo que vale más de lo que parece."},
-    {texto:"Mejorar los indicadores reales primero, cobrando cartera vencida antes de volver a aplicar.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, ebitda:1, reputacion:2},
-     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel."},
+    {texto:"Mejorar los indicadores reales primero, cobrando cartera vencida antes de volver a aplicar.", efectos:{caja:2, capitalTrabajo:3, confianzaBanco:3, diasCartera:-8, ebitda:-1},
+     consecuencia:"Toma más tiempo, pero mejoras tu capacidad de pago real, no solo en el papel. Mientras tanto, el crecimiento que pensabas financiar con el crédito queda en pausa."},
     {texto:"Buscar un crédito alternativo no bancario, sin tocar la contabilidad.", efectos:{caja:4, wacc:1.2, deuda:4},
      consecuencia:"Consigues el capital sin mentir en tus estados financieros, aunque el costo de ese crédito es más alto que el de la banca tradicional."}
   ]
@@ -104,13 +104,13 @@ function VITAFIT_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina, prima 
 function VITAFIT_RENTA(s,f){ return {tipo:'calendario', titulo:"Declaración y pago de renta",
   contexto:"Llega la fecha de declarar y pagar el impuesto de renta del periodo. La DIAN no negocia el vencimiento, solo la forma de pago.",
   choices:[
-    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7}, consecuencia:"Cumples sin generar ninguna obligación adicional."},
+    {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN, a cambio de intereses.", efectos:{caja:-2, deuda:5, wacc:0.4},
      consecuencia:"Alivias la presión de caja, pero conviertes una obligación tributaria en deuda financiera con intereses."},
     {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5},
      consecuencia:"Los honorarios tienen costo, pero identifica deducciones legítimas que reducen el valor final a pagar."},
-    {texto:"Usar parte de la reserva de contingencia para cubrir el pago sin tocar la caja operativa.", efectos:{razonCorriente:-0.08, caja:-7},
-     consecuencia:"Cumples igual, pero sacrificas el colchón que habías construido para otro tipo de imprevistos."}
+    {texto:"Usar parte de la reserva de contingencia para cubrir el pago sin tocar la caja operativa.", efectos:{caja:-4, razonCorriente:-0.12},
+     consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const VITAFIT_RANDOM = [
   (s,f)=>MACRO_TASA_INTERES(s,f),
@@ -119,28 +119,28 @@ const VITAFIT_RANDOM = [
   (s,f)=>({tipo:'random', titulo:"Lote de suplementos por vencer",
     contexto:"Revisando bodega, encuentras un lote grande de suplementos que caduca en tres semanas — parte de aquel pedido de gran volumen de hace algunos turnos.",
     choices:[
-      {texto:"Liquidar todo con 40% de descuento antes de que venza.", efectos:{caja:3, ebitda:-2, diasInventario:-15, valorInventario:-4}, consecuencia:"Recuperas algo de caja y liberas espacio de bodega, aunque vendiste por debajo de tu margen habitual."},
+      {texto:"Liquidar todo con 40% de descuento antes de que venza.", efectos:{caja:3, ebitda:-2, diasInventario:-15, valorInventario:-4, reputacion:-1}, consecuencia:"Recuperas algo de caja y liberas espacio de bodega, aunque vendiste por debajo de tu margen habitual. Y rematar producto de marca con descuento tan agresivo la devalúa un poco ante tus clientes."},
       {texto:"Donarlo a un gimnasio comunitario aliado.", efectos:{ebitda:-1, confianzaProveedores:5, reputacion:3, diasInventario:-15, valorInventario:-4}, consecuencia:"No recuperas caja, pero evitas la pérdida total y fortaleces tu reputación en el gremio del sector."},
-      {texto:"Dejarlo en bodega y asumir la pérdida total al vencer.", efectos:{ebitda:-4, diasInventario:-15, valorInventario:-4}, consecuencia:"Es la opción que menos esfuerzo pide hoy, y la que más te cuesta: el valor completo del lote se convierte en pérdida operativa."},
+      {texto:"Devolverlo al proveedor a cambio de comprometerte con un pedido más grande la próxima temporada.", efectos:{ebitda:-0.5, diasInventario:-10, valorInventario:-4, capitalTrabajo:-3}, consecuencia:"El proveedor recibe el lote y te lo abona, así que casi no pierdes margen hoy. A cambio, quedas atado a un pedido mayor: capital de trabajo comprometido en inventario futuro."},
       {texto:"Reformularlo en combos promocionales de salida rápida.", efectos:{caja:2, ebitda:-1, diasInventario:-15, valorInventario:-3}, consecuencia:"Encuentras un punto medio: no liquidas tan barato como un descuento masivo, pero mueves el inventario antes de que caduque."}
     ]}),
   (s,f)=>({tipo:'random', titulo:"Daño en los equipos de cardio",
     contexto:"Dos caminadoras de alta gama presentan una falla eléctrica simultánea y requieren mantenimiento correctivo urgente.",
     choices:[
       {texto:"Reparar de inmediato con el proveedor autorizado.", efectos:{caja:-4}, capex:true, consecuencia:"El servicio se restablece sin poner en riesgo la garantía de fábrica."},
-      {texto:"Contratar a un técnico independiente, más barato pero sin garantía.", efectos:{caja:-2}, consecuencia:"Ahorras la mitad del costo, aunque cualquier falla futura relacionada ya no estará cubierta por el fabricante."},
+      {texto:"Contratar a un técnico independiente, más barato pero sin garantía.", efectos:{caja:-2, ebitda:-0.5}, consecuencia:"Ahorras la mitad del costo, aunque cualquier falla futura relacionada ya no estará cubierta por el fabricante. Y la reparación informal deja el equipo más propenso a nuevas paradas."},
       {texto:"Sacar los equipos de servicio hasta el próximo periodo de presupuesto.", efectos:{ebitda:-3}, consecuencia:"Ahorras el gasto hoy, pero varios clientes se quejan y algunos no renuevan membresía."},
-      {texto:"Alquilar equipos temporales mientras defines la reparación con calma.", efectos:{caja:-3, ebitda:-1}, consecuencia:"Evitas la queja de tus clientes sin apurar una decisión de reparación, a cambio de un costo de arriendo adicional."}
+      {texto:"Alquilar equipos temporales mientras defines la reparación con calma.", efectos:{caja:-3, ebitda:-1, reputacion:1}, consecuencia:"Evitas la queja de tus clientes sin apurar una decisión de reparación, a cambio de un costo de arriendo adicional."}
     ]}),
 
   (s,f)=>({
     tipo:'random', titulo:"Tu instructor estrella exige exclusividad o se va con sus clientes",
     contexto:"El instructor de spinning más popular del gimnasio, quien arrastra consigo a buena parte de la clientela fiel, te exige un contrato de exclusividad con mejores condiciones o amenaza con abrir su propio estudio y llevarse a sus alumnos.",
     choices:[
-      {texto:"Aceptar sus condiciones y firmar un contrato de exclusividad más generoso.", efectos:{ebitda:-3, moralEquipo:5},
+      {texto:"Aceptar sus condiciones y firmar un contrato de exclusividad más generoso.", efectos:{ebitda:-3, moralEquipo:-2, reputacion:2},
        consecuencia:"Retienes al instructor y a su clientela fiel, aunque el resto del equipo de entrenadores empieza a preguntarse por qué él sí y ellos no."},
-      {texto:"Negarte y dejar que se vaya, apostando a que sus alumnos se queden por el gimnasio, no por él.", efectos:{ebitda:-4, reputacion:-2},
-       consecuencia:"Una parte de sus alumnos efectivamente se queda. La mayoría, sin embargo, sigue al instructor a su nuevo estudio."},
+      {texto:"Negarte y dejar que se vaya, apostando a que sus alumnos se queden por el gimnasio, no por él.", efectos:{ebitda:-4, reputacion:-2, caja:2},
+       consecuencia:"Una parte de sus alumnos efectivamente se queda. La mayoría, sin embargo, sigue al instructor a su nuevo estudio. Al menos, su salario deja de pesar en la nómina."},
       {texto:"Ofrecerle una participación en las membresías premium que él mismo venda.", efectos:{ebitda:-1, moralEquipo:3},
        consecuencia:"Encuentras un esquema que lo motiva sin comprometerte a una exclusividad rígida ni desestabilizar la estructura salarial del resto."},
       {texto:"Contratar a otro instructor de perfil similar como respaldo, sin confrontarlo directamente.", efectos:{caja:-3},
@@ -157,7 +157,7 @@ const VITAFIT_RANDOM = [
        consecuencia:"Mantienes parte del ingreso de esos clientes sin forzarlos a elegir entre pagar y no asistir."},
       {texto:"No hacer ningún cambio y esperar a que el brote pase por sí solo.", efectos:{ebitda:-3},
        consecuencia:"Ahorras el gasto en medidas adicionales, pero pierdes más clientes de los necesarios mientras el brote sigue su curso."},
-      {texto:"Congelar temporalmente las membresías de quienes lo soliciten, sin cobrarles durante la pausa.", efectos:{caja:-2, reputacion:3},
+      {texto:"Congelar temporalmente las membresías de quienes lo soliciten, sin cobrarles durante la pausa.", efectos:{caja:-1.5, ebitda:-1, reputacion:5},
        consecuencia:"El gesto genera lealtad real, a cambio de un ingreso que dejas de percibir mientras dure la pausa."}
     ]
   }),
@@ -169,8 +169,8 @@ const VITAFIT_RANDOM = [
        consecuencia:"Frenas parte de la fuga de clientes sensibles al precio, a costa de un margen que ya era ajustado."},
       {texto:"Diferenciarte reforzando las clases grupales y la asesoría personalizada, sin tocar el precio.", efectos:{caja:-3, reputacion:4},
        consecuencia:"Apuestas a que el valor agregado, no el precio, es lo que retiene a tu clientela más fiel."},
-      {texto:"Lanzar una membresía básica más económica, sin tocar tu membresía premium actual.", efectos:{ebitda:-1, caja:1},
-       consecuencia:"Segmentas tu oferta para no perder del todo a los clientes sensibles al precio, sin sacrificar a los que sí valoran el servicio completo."},
+      {texto:"Lanzar una membresía básica más económica, sin tocar tu membresía premium actual.", efectos:{ebitda:-1.5, caja:1},
+       consecuencia:"Segmentas tu oferta para no perder del todo a los clientes sensibles al precio, sin sacrificar a los que sí valoran el servicio completo. Eso sí, algunos clientes premium se pasan a la membresía básica."},
       {texto:"No hacer ningún cambio y confiar en la fidelidad de tu clientela actual.", efectos:{ebitda:-1},
        consecuencia:"Algunos clientes efectivamente se quedan por costumbre y cercanía. Otros, simplemente, se van a probar la opción más barata."}
     ]
@@ -195,13 +195,13 @@ const VITAFIT_RANDOM = [
     investigacion:{costo:1, boton:"Revisar las cámaras de seguridad y el registro de mantenimiento de la máquina ($1M)",
       reporte:"Las cámaras muestran que la máquina sí tenía el mantenimiento al día, pero el cliente no siguió las instrucciones de uso visibles en el equipo."},
     choices:[
-      {texto:"Ofrecer una compensación económica inmediata para evitar cualquier proceso legal.", efectos:{caja:-3, reputacion:1},
+      {texto:"Ofrecer una compensación económica inmediata para evitar cualquier proceso legal.", efectos:{caja:-3, reputacion:3},
        consecuencia:"Cierras el tema rápido, aunque sin claridad sobre la responsabilidad real, sienta un precedente costoso para cualquier reclamo futuro."},
       {texto:"Negarte a compensar, argumentando que el cliente asumió el riesgo al usar el equipo.", efectos:{reputacion:-4},
        consecuencia:"Puede que tengas razón, pero un cliente que se siente ignorado después de un accidente rara vez se queda callado en redes sociales."},
       {texto:"Contratar un seguro de responsabilidad civil para instalaciones deportivas de aquí en adelante.", efectos:{caja:-2, wacc:-0.1},
        consecuencia:"No resuelve el caso actual, pero te protege de que el próximo incidente similar sea un golpe tan directo a tu caja."},
-      {texto:"Reforzar la señalización y supervisión en el área de pesos libres.", efectos:{caja:-1, reputacion:2},
+      {texto:"Reforzar la señalización y supervisión en el área de pesos libres.", efectos:{caja:-1, reputacion:1},
        consecuencia:"Una medida preventiva razonable, aunque no cambia nada sobre cómo termina resolviéndose este caso puntual."}
     ],
     choiceInformado:{texto:"Con la evidencia de que la máquina estaba en buen estado y el cliente no siguió las instrucciones, rechazar la compensación con respaldo documentado.", efectos:{reputacion:-1},

@@ -2,15 +2,20 @@
    EVENTOS RAMIFICADOS COMPARTIDOS
    ========================================================= */
 function eventoAuditoriaExterna(s, f){
+  // Encubrir es una apuesta: a veces la "corrección" pasa la auditoría — por eso hay quien lo intenta.
+  const encubrimientoFunciona = Math.random() < 0.25;
   return {
     tipo:'karma',
     titulo:"El banco pide una auditoría externa",
     contexto:"Como parte de una revisión rutinaria de tu línea de crédito, el banco exige una auditoría externa de los estados financieros que ajustaste hace unos turnos.",
     choices:[
-      {texto:"Colaborar totalmente y esperar el resultado de la auditoría.", efectos:{confianzaBanco:-30, caja:-8, wacc:3, reputacion:-8},
+      {texto:"Colaborar totalmente y esperar el resultado de la auditoría.", efectos:{confianzaBanco:-30, caja:-2, wacc:3, reputacion:-8},
        consecuencia:"La auditoría detecta las inconsistencias. El banco no cancela el crédito, pero lo reclasifica como de mayor riesgo: tu costo de capital sube de forma permanente."},
-      {texto:"Contratar apresuradamente a otro contador para 'corregir' los registros antes de la visita.", efectos:{caja:-6, confianzaBanco:-40, wacc:4, reputacion:-15},
-       consecuencia:"El intento de corrección tardía resulta más evidente que el error original. El banco pierde casi toda la confianza en tu información financiera."},
+      {texto:"Contratar apresuradamente a otro contador para 'corregir' los registros antes de la visita.",
+       efectos: encubrimientoFunciona ? {caja:-6, confianzaBanco:-5, wacc:0.5, reputacion:-2} : {caja:-6, confianzaBanco:-40, wacc:4, reputacion:-15},
+       consecuencia: encubrimientoFunciona
+         ? "Esta vez la corrección pasa la revisión: el auditor no encuentra nada grave. Pero ahora hay dos personas que saben lo que hiciste, y unos registros que no resistirían una segunda mirada."
+         : "El intento de corrección tardía resulta más evidente que el error original. El banco pierde casi toda la confianza en tu información financiera."},
       {texto:"Confesar proactivamente el ajuste indebido antes de que la auditoría lo encuentre.", efectos:{confianzaBanco:-15, caja:-3, wacc:1, reputacion:-3},
        consecuencia:"El banco valora la transparencia tardía más que el silencio, aunque igual endurece tus condiciones."},
       {texto:"Contratar una firma externa para hacer una autoauditoría y presentarla junto con un plan de corrección.", efectos:{caja:-5, confianzaBanco:-8, wacc:0.5, reputacion:2},

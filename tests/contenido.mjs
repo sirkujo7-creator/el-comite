@@ -33,6 +33,17 @@ export async function recolectarCasos(html) {
       if (typeof v === 'function') {
         let r;
         try { r = v(state, flags); } catch { return; }
+        // Opciones con resultado al azar (p. ej. caja:pick([-5,4])): se construye el caso
+        // varias veces y se marcan; cuentan como "riesgo" en las reglas 2 y 3.
+        if (r && Array.isArray(r.choices)) {
+          for (let k = 0; k < 6; k++) {
+            let otra; try { otra = v(state, flags); } catch { break; }
+            if (!otra || !Array.isArray(otra.choices)) break;
+            r.choices.forEach((ch, i) => {
+              if (otra.choices[i] && JSON.stringify(otra.choices[i].efectos) !== JSON.stringify(ch.efectos)) ch.__aleatorio = true;
+            });
+          }
+        }
         if (r && typeof r === 'object') caminar(r, origen + '()', prof + 1);
         return;
       }
