@@ -8,7 +8,7 @@ const SECTORS = [
     kpiInicial:{caja:40, capitalTrabajo:30, razonCorriente:1.6, deuda:18, ebitda:9, wacc:12.0, diasInventario:42, diasCartera:35, valorInventario:14, confianzaProveedores:68, confianzaBanco:60, reputacion:60, moralEquipo:62},
     cases:VITAFIT_CASES, calendario:[VITAFIT_NOMINA, VITAFIT_RENTA], random:VITAFIT_RANDOM,
     karmaExtra:[{ id:'viralInfluencer', trigger:(s)=>s.reputacion!=null && s.reputacion>=70,
-      build:(s,f)=>({tipo:'karma', titulo:"Un influencer local te etiqueta en una publicación viral",
+      build:(s,f)=>({tipo:'karma', titulo:"Una influencer local te etiqueta en una publicación viral",
         contexto:"Una influencer de fitness con cientos de miles de seguidores publica una rutina grabada en tu gimnasio, etiquetándote sin que se lo hayas pedido. Las inscripciones empiezan a repuntar de inmediato, y ella te escribe ofreciendo una colaboración paga.",
         choices:[
           {texto:"Aceptar la colaboración paga y ampliar la campaña con ella.", efectos:{caja:-4, reputacion:6, ebitda:2}, consecuencia:"El impulso orgánico se convierte en una estrategia sostenida, aunque el costo de la colaboración se siente de inmediato."},
@@ -26,7 +26,7 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Fuga de cerebros", contexto:"La moral del equipo técnico tocó fondo. Dos desarrolladores senior presentan su renuncia la misma semana, alegando 'falta de reconocimiento y estabilidad'.",
         choices:[
           {texto:"Contraofertar de inmediato con mejoras salariales y de beneficios para todo el equipo técnico.", efectos:{caja:-7, moralEquipo:20}, consecuencia:"Frenas la sangría a un costo alto, pero recuperas parte de la confianza perdida en el equipo que se queda."},
-          {texto:"Dejarlos ir y contratar reemplazos de forma acelerada.", efectos:{caja:-4, ebitda:-4, moralEquipo:-5, capitalTrabajo:3}, consecuencia:"El proceso de reemplazo y curva de aprendizaje golpea la velocidad de desarrollo por varios meses. A cambio, la nómina de los reemplazos es más liviana que la de los seniors que se fueron."},
+          {texto:"Dejarlos ir y contratar reemplazos de forma acelerada.", efectos:{caja:-4, ebitda:-4, moralEquipo:-5, capitalTrabajo:3}, consecuencia:"El proceso de reemplazo y la curva de aprendizaje golpean la velocidad de desarrollo por varios meses. A cambio, la nómina de los reemplazos es más liviana que la de los seniors que se fueron."},
           {texto:"Convocar una reunión abierta para escuchar al equipo y ajustar la cultura interna sin subir salarios todavía.", efectos:{moralEquipo:10, ebitda:-1}, consecuencia:"El gesto de escuchar sin prometer dinero calma parcialmente al equipo, aunque no resuelve la causa económica de fondo."},
           {texto:"Ofrecer participación accionaria (equity) al equipo técnico clave que se queda.", efectos:{moralEquipo:15, ebitda:-1, wacc:0.5}, consecuencia:"Alineas el incentivo de largo plazo del equipo con el de la empresa, sin un desembolso de caja inmediato tan alto. Eso sí, diluyes a los socios actuales, que ahora exigen más retorno: tu costo de capital sube."}
         ]})
@@ -80,7 +80,7 @@ const SECTORS = [
         ]})
     }] },
   { id:'modaurbana', emoji:'👗', nombre:'Moda Urbana', rubro:'Retail de ropa y confección', categoria:'secundario',
-    descripcion:'El inventario de moda pierde valor si no rota a tiempo con la temporada, y compite de frente contra el fast-fashion importado.',
+    descripcion:'El inventario de moda pierde valor si no rota a tiempo con la temporada, y compite de frente contra el fast fashion importado.',
     tieneInventario:true, requiereCapex:false, perecedero:true,
     kpiInicial:{caja:32, capitalTrabajo:24, razonCorriente:1.5, deuda:15, ebitda:7, wacc:13.5, diasInventario:55, diasCartera:50, valorInventario:18, confianzaProveedores:65, confianzaBanco:58, reputacion:60, moralEquipo:58},
     cases:MODAURBANA_CASES, calendario:[MODAURBANA_NOMINA, MODAURBANA_RENTA], random:MODAURBANA_RANDOM,

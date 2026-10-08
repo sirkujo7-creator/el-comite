@@ -4,7 +4,7 @@
 function MACRO_TASA_INTERES(s,f,dobleGolpe){
   const impacto = f.deudaVariable ? {wacc:1.5} : {wacc:0.3};
   return {
-    tipo:'macro', titulo:"El Banco de la República sube las tasas", titular:"¿Se Acabó el Dinero Barato? El Banco Central Sorprende al Mercado", impactoAutomatico: impacto,
+    tipo:'macro', titulo:"El Banco de la República sube las tasas", titular:"¿Se acabó el dinero barato? El banco central sorprende al mercado", impactoAutomatico: impacto,
     contexto: f.deudaVariable
       ? `El Banco de la República sube su tasa de referencia 150 puntos básicos. Como tomaste crédito a tasa variable, tu cuota mensual sube de inmediato y tu costo de capital ya se ajustó.${dobleGolpe? ' Además, el crédito hipotecario de tus posibles compradores también se encarece, lo que enfría la demanda.' : ''}`
       : `El Banco de la República sube su tasa de referencia 150 puntos básicos. Tu crédito actual es a tasa fija, así que tu cuota no cambia — pero el costo de cualquier deuda nueva ya subió un poco.${dobleGolpe? ' El crédito hipotecario de tus compradores también se encarece, lo que puede enfriar la demanda incluso sin tocar tu deuda.' : ''}`,
@@ -31,7 +31,7 @@ function MACRO_TASA_INTERES(s,f,dobleGolpe){
 }
 function MACRO_REFORMA_TRIBUTARIA_GENERICA(s,f,objeto){
   return {
-    tipo:'macro', titulo:"Reforma tributaria aprobada", titular:"Última Hora: El Congreso Aprueba una Reforma que Nadie Vio Venir", impactoAutomatico:{ebitda:-1.5},
+    tipo:'macro', titulo:"Reforma tributaria aprobada", titular:"Última hora: el Congreso aprueba una reforma que nadie vio venir", impactoAutomatico:{ebitda:-1.5},
     contexto:`El Congreso aprueba una reforma tributaria que sube la tasa efectiva de renta y ajusta la carga tributaria sobre ${objeto}, vigente desde ya — el impacto en tu margen ya se sintió este periodo.`,
     choices:[
       {texto:"Trasladar el incremento a tus precios.", efectos:{ebitda:2.5, confianzaProveedores:-3}, consecuencia:"Recuperas margen, pero algunos clientes sensibles al precio empiezan a comparar con la competencia."},
@@ -43,7 +43,7 @@ function MACRO_REFORMA_TRIBUTARIA_GENERICA(s,f,objeto){
 }
 function MACRO_TRM_COSTOS_USD(s,f,objeto){
   return {
-    tipo:'macro', titulo:"Devaluación repentina del peso", titular:"¿La Crisis ha Llegado? El Peso se Devalúa de un Día para Otro", impactoAutomatico:{ebitda:-1.5},
+    tipo:'macro', titulo:"Devaluación repentina del peso", titular:"¿Llegó la crisis? El peso se devalúa de un día para otro", impactoAutomatico:{ebitda:-1.5},
     contexto:`La TRM sube 8% de un día para otro, encareciendo de inmediato ${objeto} — el efecto en tu margen de este periodo ya se aplicó.`,
     choices:[
       {texto:"Trasladar el alza a tus precios de inmediato.", efectos:{ebitda:2.5, confianzaProveedores:-2}, consecuencia:"Recuperas margen en pesos, pero generas fricción con clientes que compraron la semana pasada a otro valor."},

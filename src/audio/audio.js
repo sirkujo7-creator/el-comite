@@ -320,7 +320,7 @@ function sonidoCorreoTodos(){
     osc.stop(start + 0.17);
   });
 }
-// Encuesta de clima: tono neutro de "notificacion de formulario"
+// Encuesta de clima: tono neutro de "notificación de formulario"
 function sonidoEncuestaClima(){
   const ctx = getAudioCtx();
   if(!ctx) return;

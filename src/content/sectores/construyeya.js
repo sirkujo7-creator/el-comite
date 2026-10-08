@@ -5,15 +5,15 @@ const CONSTRUYEYA_CASES = [
 { tipo:'caso', titulo:"El comprador grande pide financiamiento directo",
   contexto:"Un inversionista que compra 15 apartamentos para arriendo pide que la constructora le financie directamente a 24 meses, en vez de crédito hipotecario tradicional.",
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del comprador ($3M)",
-    reporte:"Razón Corriente del comprador: <b>0.9</b>. Mantiene otros 2 créditos hipotecarios activos con un nivel de endeudamiento total considerado alto por el sector financiero."},
+    reporte:"Razón corriente del comprador: <b>0.9</b>. Mantiene otros 2 créditos hipotecarios activos con un nivel de endeudamiento total considerado alto por el sector financiero."},
   choices:[
     {texto:"Aceptar financiar directamente los 24 meses completos.", efectos:{caja:-4, capitalTrabajo:-3, razonCorriente:-0.15, diasCartera:90, ebitda:3, diasInventario:-20}, consecuencia:"Cierras la venta de 15 unidades de una vez, pero ahora eres tú quien asume el riesgo crediticio que normalmente asumiría un banco."},
     {texto:"Ofrecer 12 meses de financiamiento directo y el resto por crédito hipotecario.", efectos:{caja:-1, razonCorriente:-0.05, diasCartera:45, ebitda:2, diasInventario:-15}, consecuencia:"Compartes el riesgo con el sistema financiero tradicional en vez de asumirlo tú solo por completo."},
-    {texto:"Exigir crédito hipotecario tradicional, sin financiamiento directo.", efectos:{razonCorriente:0.03, ebitda:-1}, consecuencia:"Proteges tu balance por completo, aunque el comprador podría desistir si el banco le exige más requisitos de los que esperaba. Esta vez el comprador desiste de parte de las unidades."},
+    {texto:"Exigir crédito hipotecario tradicional, sin financiamiento directo.", efectos:{razonCorriente:0.03, ebitda:-1}, consecuencia:"Proteges tu balance por completo, aunque el comprador podría desistir si el banco le exige más requisitos de los que esperaba. Esta vez, desiste de parte de las unidades."},
     {texto:"Estructurar el pago a través de una fiduciaria, que asume la administración del riesgo crediticio.", efectos:{caja:-2, capitalTrabajo:1, diasCartera:15, ebitda:1.5, diasInventario:-15}, consecuencia:"Cierras la venta sin cargar tú directamente con el riesgo de mora, a cambio de una comisión fiduciaria."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir garantía hipotecaria de otro inmueble antes de aceptar financiamiento directo.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:20},
-    consecuencia:"Una Razón Corriente de 0.9 y dos créditos hipotecarios activos son señales claras de un comprador ya bastante apalancado."}
+    consecuencia:"Una razón corriente de 0.9 y dos créditos hipotecarios activos son señales claras de un comprador ya bastante apalancado."}
 },
 { tipo:'caso', titulo:"Financiamiento para la siguiente etapa de obra",
   contexto:"Necesitas $15.000.000 para iniciar la siguiente etapa constructiva de la torre.",
@@ -68,7 +68,7 @@ const CONSTRUYEYA_CASES = [
     reporte:"El estudio confirma que el margen del proyecto es <b>bajo pero positivo</b>, y que los subsidios estatales de vivienda social suelen pagarse con puntualidad superior al promedio del sector privado."},
   choices:[
     {texto:"Aceptar el proyecto completo, asumiendo el margen más bajo a cambio de volumen y reputación.", efectos:{caja:-8, ebitda:1, reputacion:6, capitalTrabajo:-5}, consecuencia:"Ganas visibilidad y buena imagen pública, con una rentabilidad bastante más ajustada que tus proyectos habituales."},
-    {texto:"Rechazar la oferta y enfocarte en proyectos de mayor margen.", efectos:{diasInventario:2}, consecuencia:"Proteges tu rentabilidad promedio, renunciando al respaldo político y mediático que el programa ofrecía — y a un terreno que ya tenías medio evaluado, ahora otro constructor lo va a tomar."},
+    {texto:"Rechazar la oferta y enfocarte en proyectos de mayor margen.", efectos:{diasInventario:2}, consecuencia:"Proteges tu rentabilidad promedio, renunciando al respaldo político y mediático que el programa ofrecía — y a un terreno que ya tenías medio evaluado y que ahora tomará otro constructor."},
     {texto:"Aceptar solo una fase reducida del proyecto, como piloto antes de comprometerte a todo el terreno.", efectos:{caja:-4, reputacion:3, capitalTrabajo:-2}, consecuencia:"Entras al programa social sin comprometer toda tu capacidad operativa de una sola vez."},
     {texto:"Proponer un esquema mixto: parte del terreno para vivienda social, parte para vivienda de venta libre.", efectos:{caja:-6, ebitda:1.5, reputacion:3, capitalTrabajo:-4}, consecuencia:"Un punto medio que mejora el margen general del proyecto sin renunciar del todo al componente social."}
   ],
@@ -81,7 +81,7 @@ function CONSTRUYEYA_SUBCONTRATISTAS(s,f){ return {tipo:'calendario', titulo:"Pa
   choices:[
     {texto:"Pagar todo con la caja disponible.", efectos:{caja:-9}, consecuencia:"Cumples en tiempo y forma, sin costo adicional, y la obra sigue su cronograma."},
     {texto:"Pagar la mayoría y diferir un saldo 30 días con acuerdo de los subcontratistas.", efectos:{caja:-6}, diferir:{monto:3.3, turnos:1, motivo:"Saldo diferido a subcontratistas", tipo:'proveedor'},
-     consecuencia:"Aceptan por esta vez, aunque varios subcontratistas trabajan con varios proyectos y no toleran atrasos repetidos."},
+     consecuencia:"Aceptan por esta vez, aunque varios subcontratistas atienden otros proyectos a la vez y no toleran atrasos repetidos."},
     {texto:"Tomar un crédito de obra de corto plazo.", efectos:{deuda:5, wacc:0.5, caja:-4}, consecuencia:"Evitas fricción con las cuadrillas, pero sumas una deuda más a tu estructura de capital."},
     {texto:"Usar el desembolso ya aprobado del crédito constructor para cubrir el pago.", efectos:{caja:-3, capitalTrabajo:-5, razonCorriente:-0.08}, consecuencia:"Cumples sin pedir deuda nueva, aunque adelantas un recurso que tenías destinado a otra fase de la obra."}
   ]};}
@@ -90,7 +90,7 @@ function CONSTRUYEYA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta e impu
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN y el municipio.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario especializado en el sector inmobiliario.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas específicas del sector."},
+    {texto:"Contratar un asesor tributario especializado en el sector inmobiliario.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas específicas del sector."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const CONSTRUYEYA_RANDOM = [

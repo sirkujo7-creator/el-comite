@@ -5,7 +5,7 @@ const VITAFIT_CASES = [
 { tipo:'caso', titulo:"El cliente estrella pide más plazo",
   contexto:"Un fondo de empleados que paga las membresías corporativas de 200 trabajadores (35% de tus ingresos) te pide pasar de 30 a 90 días de plazo, justo cuando tienes nómina y proveedores de suplementos por cubrir este mes.",
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del cliente ($3M)",
-    reporte:"Razón Corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
+    reporte:"Razón corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
   choices:[
     {texto:"Aceptar los 90 días completos, sin condiciones adicionales.", efectos:{caja:-3, capitalTrabajo:-2, razonCorriente:-0.15, diasCartera:35, reputacion:2},
      consecuencia:"El cliente sigue pagando y la relación queda intacta, pero tu ciclo de conversión de efectivo se alarga: ahora financias tú su operación."},
@@ -18,7 +18,7 @@ const VITAFIT_CASES = [
      consecuencia:"El cliente acepta un plazo intermedio a cambio de referir nuevas cuentas: sacrificas flujo inmediato por una promesa de crecimiento que no está garantizada."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir un pagaré con aval antes de aceptar cualquier plazo mayor a 30 días.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:5},
-    consecuencia:"Una Razón Corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
+    consecuencia:"Una razón corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
 },
 { tipo:'caso', titulo:"Necesitas capital para crecer",
   contexto:"Para ampliar el inventario de suplementos y comprar un nuevo lote de equipos de fuerza necesitas $15.000.000 adicionales de capital de trabajo.",
@@ -56,8 +56,8 @@ const VITAFIT_CASES = [
     {texto:"Recortar personal para bajar costos fijos de inmediato.", efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes entrenadores con relación directa con tus clientes más antiguos — y el costo humano de la decisión no desaparece solo porque bajó el gasto."},
-    {texto:"Reducir gastos generales y renegociar contratos antes de tocar la planilla.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5},
-     consecuencia:"El ajuste es más lento pero protege tu equipo, aunque tensiona alguna relación comercial."},
+    {texto:"Reducir gastos generales y renegociar contratos antes de tocar la nómina.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5},
+     consecuencia:"El ajuste es más lento, pero protege a tu equipo, aunque tensiona alguna relación comercial."},
     {texto:"Buscar un crédito puente para sostener la operación sin recortar nada.", efectos:{caja:6, deuda:8, wacc:0.5, capitalTrabajo:4},
      consecuencia:"Ganas tiempo sin tocar la nómina, pero cargas deuda adicional justo cuando tus ingresos son más bajos."},
     {texto:"Lanzar un servicio online de bajo costo para diversificar ingresos.", efectos:{caja:-3, ebitda:1, capitalTrabajo:-1},
@@ -88,7 +88,7 @@ const VITAFIT_CASES = [
     {texto:"Usar la oferta como argumento para conseguir mejores condiciones de un banco, sin vender nada.", efectos:{deuda:8, caja:8, wacc:-0.3}, consecuencia:"Consigues financiamiento en mejores condiciones al mostrar el respaldo de una oferta real, sin ceder la sucursal."}
   ],
   choiceInformado:{texto:"Con la sobrevaloración del 12% confirmada, vender la sucursal sin dudarlo.", efectos:{caja:11, ebitda:-2, capitalTrabajo:3},
-    consecuencia:"Vender por encima del valor razonable de mercado, cuando ya lo confirmaste con una fuente independiente, es difícil de justificar rechazar."}
+    consecuencia:"Cuando una fuente independiente confirma que te pagan por encima del valor razonable de mercado, rechazar la oferta es difícil de justificar."}
 },
 ];
 function VITAFIT_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina, prima y mantenimiento de equipos",
@@ -108,7 +108,7 @@ function VITAFIT_RENTA(s,f){ return {tipo:'calendario', titulo:"Declaración y p
     {texto:"Acogerse a una facilidad de pago con la DIAN, a cambio de intereses.", efectos:{caja:-2, deuda:5, wacc:0.4},
      consecuencia:"Alivias la presión de caja, pero conviertes una obligación tributaria en deuda financiera con intereses."},
     {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5},
-     consecuencia:"Los honorarios tienen costo, pero identifica deducciones legítimas que reducen el valor final a pagar."},
+     consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas que reducen el valor final a pagar."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago sin tocar la caja operativa.", efectos:{caja:-4, razonCorriente:-0.12},
      consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
@@ -196,7 +196,7 @@ const VITAFIT_RANDOM = [
       reporte:"Las cámaras muestran que la máquina sí tenía el mantenimiento al día, pero el cliente no siguió las instrucciones de uso visibles en el equipo."},
     choices:[
       {texto:"Ofrecer una compensación económica inmediata para evitar cualquier proceso legal.", efectos:{caja:-3, reputacion:3},
-       consecuencia:"Cierras el tema rápido, aunque sin claridad sobre la responsabilidad real, sienta un precedente costoso para cualquier reclamo futuro."},
+       consecuencia:"Cierras el tema rápido, aunque, sin claridad sobre la responsabilidad real, el pago sienta un precedente costoso para cualquier reclamo futuro."},
       {texto:"Negarte a compensar, argumentando que el cliente asumió el riesgo al usar el equipo.", efectos:{reputacion:-4},
        consecuencia:"Puede que tengas razón, pero un cliente que se siente ignorado después de un accidente rara vez se queda callado en redes sociales."},
       {texto:"Contratar un seguro de responsabilidad civil para instalaciones deportivas de aquí en adelante.", efectos:{caja:-2, wacc:-0.1},

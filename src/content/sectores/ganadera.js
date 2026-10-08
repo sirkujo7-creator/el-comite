@@ -41,7 +41,7 @@ const GANADERA_CASES = [
 { tipo:'caso', titulo:"La cadena de frío falla en plena ola de calor",
   contexto:"El tanque de enfriamiento de leche, ya viejo, empieza a fallar justo en la época de más calor del año. Si no lo reemplazas pronto, vas a perder litros enteros de producción por descomposición antes de la recolección.",
   choices:[
-    {texto:"Reemplazar el tanque de frío por uno nuevo de mayor capacidad.", efectos:{caja:-7, diasInventario:-2}, capex:true, consecuencia:"Resuelves el problema de raíz y hasta ganas capacidad adicional, a un desembolso importante hoy."},
+    {texto:"Reemplazar el tanque de frío por uno nuevo de mayor capacidad.", efectos:{caja:-7, diasInventario:-2}, capex:true, consecuencia:"Resuelves el problema de raíz y hasta ganas capacidad adicional, a cambio de un desembolso importante hoy."},
     {texto:"Reparar el tanque actual con un mantenimiento de emergencia.", efectos:{caja:-2}, consecuencia:"Una solución más barata, aunque el riesgo de una nueva falla sigue latente con un equipo que ya está viejo."},
     {texto:"Alquilar temporalmente un tanque de frío móvil mientras decides qué hacer.", efectos:{caja:-3, diasInventario:-1}, consecuencia:"Una solución puente razonable, sin comprometerte todavía a la inversión completa."},
     {texto:"No hacer nada por ahora y asumir que parte de la producción se va a perder.", efectos:{ebitda:-3, valorInventario:-2}, consecuencia:"Ahorras el gasto inmediato, pero cada litro que se daña por el calor es ingreso que ya no vuelve."}
@@ -70,7 +70,7 @@ const GANADERA_CASES = [
 function GANADERA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Pago a vaqueros y personal de ordeño",
   contexto:"Llega el pago quincenal del personal de campo: vaqueros, ordeñadores y el encargado de mantenimiento — trabajo manual diario que no se puede posponer sin arriesgar la operación misma.",
   choices:[
-    {texto:"Pagar todo con la caja disponible.", efectos:{caja:-6}, consecuencia:"Cumples en tiempo y forma, sosteniendo la confianza del personal que sostiene la operación día a día."},
+    {texto:"Pagar todo con la caja disponible.", efectos:{caja:-6}, consecuencia:"Cumples en tiempo y forma, manteniendo la confianza del personal que sostiene la operación día a día."},
     {texto:"Pagar la mayoría y diferir un pequeño saldo con acuerdo del personal.", efectos:{caja:-4}, diferir:{monto:2.2, turnos:1, motivo:"Saldo diferido a personal de campo", tipo:'nomina'},
      consecuencia:"El personal acepta por esta vez, aunque depender de su buena voluntad tiene un límite."},
     {texto:"Tomar un adelanto de caja de corto plazo para cubrir la nómina completa.", efectos:{deuda:3, wacc:0.4, caja:-2}, consecuencia:"Evitas cualquier fricción con el personal, sumando una deuda de corto plazo a tu estructura de capital."},
@@ -81,11 +81,11 @@ function GANADERA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta, predial 
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-6, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional, y tu certificación sanitaria queda vigente sin sobresaltos. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la autoridad tributaria.", efectos:{caja:-2, deuda:4, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario rural para optimizar las deducciones aplicables al sector.", efectos:{caja:-4, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica beneficios tributarios legítimos para la actividad ganadera."},
+    {texto:"Contratar un asesor tributario rural para optimizar las deducciones aplicables al sector.", efectos:{caja:-4, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica beneficios tributarios legítimos para la actividad ganadera."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-3.5, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const GANADERA_RANDOM = [
-  (s,f)=>({tipo:'macro', titulo:"Una sequía prolongada reduce la disponibilidad de pastos", titular:"Fenómeno Climático Golpea a los Ganaderos de la Región", impactoAutomatico:{ebitda:-1},
+  (s,f)=>({tipo:'macro', titulo:"Una sequía prolongada reduce la disponibilidad de pastos", titular:"Fenómeno climático golpea a los ganaderos de la región", impactoAutomatico:{ebitda:-1},
     contexto:"Meses sin lluvia suficiente están secando los potreros de toda la región. Sin pasto natural, vas a necesitar comprar alimento suplementario para mantener la producción de leche estable — o dejar que la producción caiga.",
     choices:[
       {texto:"Comprar alimento balanceado suplementario para sostener la producción completa.", efectos:{caja:-4, ebitda:1}, consecuencia:"El costo extra pesa en el balance, pero evitas que la sequía te cueste producción real."},
@@ -94,7 +94,7 @@ const GANADERA_RANDOM = [
       {texto:"Invertir en un sistema de riego para los potreros más críticos.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Una solución más duradera frente a futuras sequías, aunque el desembolso de hoy es considerable."}
     ]
   }),
-  (s,f)=>({tipo:'macro', titulo:"El precio internacional de la carne sube con fuerza", titular:"Exportaciones de Carne Impulsan el Precio al Productor", impactoAutomatico:{caja:2},
+  (s,f)=>({tipo:'macro', titulo:"El precio internacional de la carne sube con fuerza", titular:"Exportaciones de carne impulsan el precio al productor", impactoAutomatico:{caja:2},
     contexto:"La demanda externa de carne bovina empuja el precio interno al alza, beneficiando también a quienes venden animales de descarte del hato lechero — ya reflejado como ingreso extra en tu caja.",
     choices:[
       {texto:"Vender de inmediato los animales de descarte aprovechando el precio alto.", efectos:{caja:3, valorInventario:-2}, consecuencia:"Capturas el buen momento del mercado antes de que el precio pueda corregirse."},
@@ -167,7 +167,7 @@ const GANADERA_RANDOM = [
     tipo:'random', titulo:"Tu banco ofrece una línea de crédito estacional para la finca",
     contexto:"Tu banco, conocedor del negocio ganadero, te ofrece una línea de crédito pensada específicamente para cubrir los meses de menor producción — con una tasa preferencial si demuestras que la usas exclusivamente para la operación del hato.",
     choices:[
-      {texto:"Tomar la línea completa y usarla exactamente como fue pensada.", efectos:{caja:4, deuda:3, confianzaBanco:5}, consecuencia:"El banco premia el uso responsable de una línea diseñada para vos con una relación cada vez más sólida."},
+      {texto:"Tomar la línea completa y usarla exactamente como fue pensada.", efectos:{caja:4, deuda:3, confianzaBanco:5}, consecuencia:"El banco premia el uso responsable de una línea diseñada para ti con una relación cada vez más sólida."},
       {texto:"Rechazar la línea, prefiriendo no depender de crédito estacional.", efectos:{confianzaBanco:-1}, consecuencia:"El banco respeta la decisión, aunque una oferta tan específica y bien pensada no vuelve a aparecer todos los años."},
       {texto:"Tomar solo una parte de la línea, la mínima necesaria.", efectos:{caja:2, deuda:1, confianzaBanco:2}, consecuencia:"Un uso prudente que cubre lo esencial sin comprometerte más de la cuenta."},
       {texto:"Tomar la línea completa, pero usar parte del dinero en algo distinto a lo pactado.", efectos:{caja:4, deuda:3, confianzaBanco:-4, ebitda:1}, consecuencia:"El banco lo nota tarde o temprano — desviar el uso de una línea con condiciones específicas rara vez pasa desapercibido."}
@@ -188,7 +188,7 @@ const GANADERA_RANDOM = [
     contexto:"Tu tanque de frío está al límite de su capacidad en esta temporada alta de producción. La finca vecina, con quien tienes buena relación, ofrece prestarte espacio de refrigeración adicional por unas semanas, a cambio de una tarifa.",
     choices:[
       {texto:"Aceptar el espacio adicional completo.", efectos:{diasInventario:-4, valorInventario:1, caja:-1}, consecuencia:"La capacidad extra resuelve la saturación justo cuando más la necesitabas."},
-      {texto:"Rechazar, y arreglártelas con la capacidad actual.", efectos:{diasInventario:3, valorInventario:-1}, consecuencia:"Ahorras la tarifa, pero la saturación del tanque empieza a pasarte factura en la rotación real."},
+      {texto:"Rechazar y arreglártelas con la capacidad actual.", efectos:{diasInventario:3, valorInventario:-1}, consecuencia:"Ahorras la tarifa, pero la saturación del tanque empieza a pasarte factura en la rotación real."},
       {texto:"Aceptar solo una parte del espacio ofrecido.", efectos:{diasInventario:-2, caja:-0.5}, consecuencia:"Un alivio parcial que no resuelve toda la saturación, pero tampoco compromete tanta caja."},
       {texto:"Aceptar el espacio completo, ofreciendo a cambio ayuda con transporte compartido en el futuro.", efectos:{diasInventario:-3, valorInventario:1, confianzaProveedores:2, caja:-1}, consecuencia:"El trueque de favores, además del pago, deja una relación más sólida de la que tenías antes — aunque el alivio de inventario es un poco menor que si solo hubieras pagado."}
     ]

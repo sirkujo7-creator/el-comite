@@ -63,18 +63,18 @@ const AGROVERDE_CASES = [
      consecuencia:"Consigues capital sin mentir en tus estados financieros, a un costo algo mayor que el crédito bancario tradicional."}
   ]
 },
-{ tipo:'caso', titulo:"Una certificadora orgánica ofrece un upgrade de certificación",
+{ tipo:'caso', titulo:"Una certificadora orgánica ofrece subir de nivel tu certificación",
   contexto:"La certificadora que ya te avala te ofrece subir a una certificación orgánica de nivel superior, que abre puertas a mercados premium en Europa — pero exige una inversión en procesos y una auditoría más estricta cada año.",
   investigacion:{costo:1.5, boton:"Pedir un estudio de precios premium en mercados con esa certificación ($1.5M)",
     reporte:"El estudio confirma un sobreprecio real de hasta <b>18%</b> en los mercados que exigen esa certificación superior, aunque el costo de mantenerla cada año no es menor."},
   choices:[
-    {texto:"Invertir en el upgrade completo de certificación.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Accedes a mercados premium con mejores precios, asumiendo un costo de proceso y auditoría permanente más alto."},
+    {texto:"Invertir en la certificación de nivel superior completa.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Accedes a mercados premium con mejores precios, asumiendo un costo de proceso y auditoría permanente más alto."},
     {texto:"Mantener la certificación actual, sin subir de nivel por ahora.", efectos:{ebitda:-0.3}, consecuencia:"Evitas la inversión y el compromiso adicional, aunque renuncias al sobreprecio de los mercados más exigentes mientras la competencia sí avanza hacia allá."},
     {texto:"Certificar solo una porción de la producción bajo el nuevo estándar, como prueba piloto.", efectos:{caja:-2, ebitda:0.5}, consecuencia:"Accedes parcialmente al mercado premium, sin comprometer toda tu operación al nuevo estándar de una vez."},
     {texto:"Buscar un comprador dispuesto a financiar parte del proceso de certificación a cambio de exclusividad.", efectos:{caja:-1, ebitda:1, diasCartera:10}, consecuencia:"Reduces tu inversión propia, a cambio de atarte comercialmente a un solo comprador durante la transición. Ese comprador, además, te impone sus plazos de pago."}
   ],
-  choiceInformado:{texto:"Con el sobreprecio del 18% confirmado, invertir en el upgrade completo sin reservas.", efectos:{caja:-4, ebitda:2.5},
-    consecuencia:"Un sobreprecio de esa magnitud, sostenido en el tiempo, hace que el costo del upgrade se recupere mucho más rápido de lo que parecía al principio."}
+  choiceInformado:{texto:"Con el sobreprecio del 18% confirmado, invertir en la certificación superior sin reservas.", efectos:{caja:-4, ebitda:2.5},
+    consecuencia:"Un sobreprecio de esa magnitud, sostenido en el tiempo, hace que el costo de la nueva certificación se recupere mucho más rápido de lo que parecía al principio."}
 },
 ];
 function AGROVERDE_COSECHA(s,f){ return {tipo:'calendario', titulo:"Pago a recolectores de la cosecha",
@@ -91,11 +91,11 @@ function AGROVERDE_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y arance
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor en comercio exterior para optimizar la carga arancelaria.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica beneficios arancelarios legítimos del tratado vigente."},
+    {texto:"Contratar un asesor en comercio exterior para optimizar la carga arancelaria.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica beneficios arancelarios legítimos del tratado vigente."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const AGROVERDE_RANDOM = [
-  (s,f)=>({tipo:'macro', titulo:"El dólar sube y tus exportaciones valen más en pesos", titular:"El Dólar se Dispara: Ganadores y Perdedores en la Economía Real", impactoAutomatico:{caja:3},
+  (s,f)=>({tipo:'macro', titulo:"El dólar sube y tus exportaciones valen más en pesos", titular:"El dólar se dispara: ganadores y perdedores en la economía real", impactoAutomatico:{caja:3},
     contexto:"La TRM sube 8%. Como exportas en dólares, cada contenedor que despachas ahora te genera más ingreso en pesos — ya reflejado en tu caja — aunque tus insumos importados (fertilizantes, empaques) también se encarecen.",
     choices:[
       {texto:"Reinvertir el excedente cambiario en el cultivo.", efectos:{ebitda:2, caja:-2}, consecuencia:"Aprovechas el viento a favor para fortalecer la producción futura en vez de solo repartir la ganancia."},
@@ -144,7 +144,7 @@ const AGROVERDE_RANDOM = [
       {texto:"Redirigir el envío a un puerto alterno, aunque implique costos logísticos extra.", efectos:{caja:-5, ebitda:-1, reputacion:2},
        consecuencia:"Consigues sacar el producto a tiempo, a un costo logístico considerablemente mayor al plan original. Tu comprador internacional toma nota de que cumpliste pese al paro."},
       {texto:"Esperar sin costo adicional a que el paro se resuelva por sí solo.", efectos:{ebitda:-4, diasCartera:10},
-       consecuencia:"Ahorras el gasto logístico extra, pero una parte del producto perecedero no sobrevive la espera en las condiciones del puerto."},
+       consecuencia:"Ahorras el gasto logístico extra, pero una parte del producto perecedero no sobrevive a la espera en las condiciones del puerto."},
       {texto:"Vender el lote afectado a un comprador local a precio reducido antes de que se dañe.", efectos:{caja:3, ebitda:-3, reputacion:-2},
        consecuencia:"Recuperas algo de valor rápidamente, muy por debajo del precio de exportación que tenías pactado originalmente. Y quedas mal con el comprador internacional que esperaba ese lote."}
     ]

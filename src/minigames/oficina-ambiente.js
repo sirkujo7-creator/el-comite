@@ -122,7 +122,7 @@ function eventoSofiaReaparece(s,f){
   if(f.sofiaRespetada){
     return { tipo:'karma', titulo:"Sofía Lindo propone una tregua competitiva", retrato: RETRATO_SOFIA_LINDO,
       presentacion:"Tu competidora más directa vuelve a cruzarse en tu camino — esta vez no con una amenaza.",
-      contexto:"Sofía Lindo, tu competidora más directa, te contacta con algo inesperado: una propuesta de colaboración puntual en un segmento donde ninguna de las dos compite directamente. 'Prefiero tenerte de aliada ocasional que de enemiga total', te dice sin rodeos.",
+      contexto:"Sofía Lindo, tu competidora más directa, te contacta con algo inesperado: una propuesta de colaboración puntual en un segmento donde ninguna de las dos compite directamente. 'Prefiero tenerte como aliada ocasional que como enemiga', te dice sin rodeos.",
       choices:[
         {texto:"Aceptar la colaboración puntual propuesta.", efectos:{ebitda:1, reputacion:1, confianzaProveedores:-1}, consecuencia:"La colaboración funciona mejor de lo esperado, aunque alguno de tus proveedores de siempre nota con extrañeza que ahora compartes espacio con la competencia."},
         {texto:"Rechazar cualquier acercamiento, manteniendo la rivalidad pura.", efectos:{reputacion:1}, consecuencia:"Sofía respeta la claridad de la posición, aunque la oportunidad de colaboración queda descartada."},
@@ -136,7 +136,7 @@ function eventoSofiaReaparece(s,f){
       choices:[
         {texto:"Contraatacar igualando o mejorando la oferta para retener la relación.", efectos:{caja:-2, ebitda:-0.5, confianzaProveedores:3}, consecuencia:"Retienes la relación, a un costo directo que Sofía sabía que tendrías que asumir."},
         {texto:"No reaccionar directamente y enfocarte en fortalecer otras relaciones.", efectos:{ebitda:-1}, consecuencia:"Pierdes algo de terreno en este frente específico, pero evitas una guerra de precios que nadie gana del todo."},
-        {texto:"Hacer un movimiento propio hacia uno de sus clientes o proveedores clave.", efectos:{ebitda:1, reputacion:-1}, consecuencia:"Escalas la rivalidad de forma directa — Sofía lo va a notar, y probablemente responder."},
+        {texto:"Hacer un movimiento propio hacia uno de sus clientes o proveedores clave.", efectos:{ebitda:1, reputacion:-1}, consecuencia:"Escalas la rivalidad de forma directa — Sofía lo va a notar y probablemente responderá."},
         {texto:"Fortalecer la relación con el resto de tu cartera para reducir tu exposición futura.", efectos:{caja:-1, confianzaProveedores:2}, consecuencia:"Una respuesta defensiva e inteligente: no gana la batalla puntual, pero reduce tu vulnerabilidad general."}
       ]};
   }
@@ -150,14 +150,14 @@ function eventoHiginioReaparece(s,f){
       choices:[
         {texto:"Escuchar el consejo con toda la atención, sin interrupciones.", efectos:{reputacion:2, moralEquipo:2}, consecuencia:"El tiempo que le das, más que el consejo mismo, es lo que Don Higinio realmente valora a esta altura."},
         {texto:"Agradecerle todo lo aprendido a lo largo del camino, abiertamente.", efectos:{moralEquipo:3}, consecuencia:"El gesto de gratitud genuina cierra, de forma honesta, una relación que empezó como simple curiosidad."},
-        {texto:"Pedirle que comparta esa misma sabiduría con el resto del equipo directivo.", efectos:{moralEquipo:2, reputacion:1}, consecuencia:"Don Higinio, encantado de que su experiencia trascienda más allá de una sola conversación, acepta con gusto."},
+        {texto:"Pedirle que comparta esa misma sabiduría con el resto del equipo directivo.", efectos:{moralEquipo:2, reputacion:1}, consecuencia:"Don Higinio, encantado de que su experiencia llegue más allá de una sola conversación, acepta con gusto."},
         {texto:"Escuchar por cortesía, aunque ya sientes que tienes tu propio camino claro.", efectos:{reputacion:0.5}, consecuencia:"La conversación es breve y cordial, sin que ninguno de los dos espere más de lo que fue."}
       ]};
   } else {
     return { tipo:'karma', titulo:"Don Higinio regresa con una pregunta incómoda", retrato: RETRATO_DON_HIGINIO, presentacion:"Don Higinio Restrepo vuelve — esta vez con algo más directo que decirte.",
       contexto:"Don Higinio Restrepo vuelve, esta vez con una pregunta directa que no esperabas: '¿Todavía te acuerdas por qué empezaste esto?' No es retórica — genuinamente quiere saber si, en medio de tantas decisiones tácticas, no perdiste de vista el propósito original.",
       choices:[
-        {texto:"Responder con honestidad, incluso si la respuesta no es la que esperabas dar.", efectos:{moralEquipo:2, reputacion:-0.5}, consecuencia:"La honestidad, incluso incómoda, es exactamente lo que Don Higinio esperaba de la conversación. Don Higinio, fiel a su estilo, comenta la conversación con otros del gremio."},
+        {texto:"Responder con honestidad, incluso si la respuesta no es la que esperabas dar.", efectos:{moralEquipo:2, reputacion:-0.5}, consecuencia:"La honestidad, incluso incómoda, es exactamente lo que Don Higinio esperaba de la conversación. Fiel a su estilo, luego la comenta con otros del gremio."},
         {texto:"Admitir que, en el día a día, el propósito original se ha ido diluyendo.", efectos:{moralEquipo:-1, reputacion:1}, consecuencia:"El reconocimiento honesto de esa deriva es, paradójicamente, el primer paso para corregirla."},
         {texto:"Cambiar de tema, incómodo con una pregunta tan personal.", efectos:{moralEquipo:-1, ebitda:0.2}, consecuencia:"Don Higinio no insiste, pero la pregunta sin responder se queda dando vueltas más de lo que esperabas."},
         {texto:"Usar la conversación para replantear en voz alta tus prioridades reales.", efectos:{moralEquipo:3, reputacion:1, caja:-0.3}, consecuencia:"El ejercicio de pensarlo en voz alta, frente a alguien que ya recorrió ese camino, aclara más de lo que anticipabas — aunque el tiempo dedicado a la introspección es tiempo que no dedicaste a la operación."}

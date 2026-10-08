@@ -35,7 +35,7 @@ function cadenaReestructuracionEtapa3(s,f){
       contexto:"La reestructuración se completa. Tu deuda ahora está distribuida en plazos que realmente corresponden a tu operación, y tu liquidez de corto plazo deja de estar bajo presión constante. No es un cambio dramático en el papel de un solo turno, pero es un cambio real y sostenido.",
       choices:[
         {texto:"Usar la nueva solidez financiera para negociar mejores condiciones con proveedores.", efectos:{confianzaProveedores:3, razonCorriente:0.15}, consecuencia:"La solidez financiera real, bien comunicada, abre puertas comerciales que antes costaban más esfuerzo."},
-        {texto:"Comunicar el saneamiento financiero a tu junta y grupos de interés.", efectos:{reputacion:3, razonCorriente:0.1}, consecuencia:"La transparencia sobre haber resuelto un problema real construye más credibilidad que ocultarlo hubiera generado."},
+        {texto:"Comunicar el saneamiento financiero a tu junta y grupos de interés.", efectos:{reputacion:3, razonCorriente:0.1}, consecuencia:"La transparencia sobre haber resuelto un problema real construye más credibilidad de la que habría generado ocultarlo."},
         {texto:"Aprovechar la nueva holgura para invertir en algo que llevabas tiempo posponiendo.", efectos:{ebitda:1.5, razonCorriente:0.05}, consecuencia:"La liquidez recuperada, bien canalizada, empieza a generar valor real más allá de solo verse bien en el balance."},
         {texto:"Mantener la nueva disciplina financiera sin cambios adicionales por ahora.", efectos:{razonCorriente:0.2}, consecuencia:"La prudencia de consolidar antes de moverte de nuevo también es una decisión sólida."}
       ]};
@@ -56,7 +56,7 @@ const CADENAS_PROFUNDAS = [
   { id:'cadena_renata', trigger:(s,f)=> s.moralEquipo!=null && s.moralEquipo <= 40,
     build:(s,f)=>({
       tipo:'karma', titulo:"Renata Cifuentes pide una reunión seria",
-      contexto:"Renata Cifuentes, tu mejor gerente de operaciones, pide hablar contigo con un tono que no habías escuchado antes de ella. Está agotada, dice sin rodeos, y necesita saber si hay un compromiso real de la empresa con su bienestar — o si debería empezar a buscar en otro lado.",
+      contexto:"Renata Cifuentes, tu mejor gerente de operaciones, pide hablar contigo con un tono que nunca le habías escuchado. Está agotada, dice sin rodeos, y necesita saber si hay un compromiso real de la empresa con su bienestar — o si debería empezar a buscar en otro lado.",
       choices:[
         {texto:"Comprometerte de forma concreta: menos carga, más reconocimiento, seguimiento real.", efectos:{caja:-1, moralEquipo:4}, setFlags:{renataComprometido:true}, disparar:{turnos:4, evento:cadenaRenataEtapa2},
          consecuencia:"El compromiso concreto, no solo verbal, es exactamente lo que Renata necesitaba escuchar."},
@@ -88,7 +88,7 @@ const CADENAS_PROFUNDAS = [
   { id:'cadena_sello', trigger:(s,f)=> s.reputacion >= 65,
     build:(s,f)=>({
       tipo:'karma', titulo:"Una fundación te invita a certificarte como empresa socialmente responsable",
-      contexto:"Una fundación reconocida en temas de responsabilidad empresarial te invita a postular a su sello de certificación — un reconocimiento que toma en serio, con verificación real de las iniciativas que se declaran, no solo un logo más para la página web.",
+      contexto:"Una fundación reconocida en temas de responsabilidad empresarial te invita a postular a su sello de certificación — un reconocimiento que se toma en serio, con verificación real de las iniciativas que se declaran, no solo un logo más para la página web.",
       choices:[
         {texto:"Postular con un compromiso genuino: iniciativas reales, medibles, sostenidas en el tiempo.", efectos:{caja:-1.5}, setFlags:{selloGenuino:true}, disparar:{turnos:4, evento:cadenaSelloEtapa2},
          consecuencia:"El compromiso real, aunque cuesta más desde el principio, es la única base sólida para un sello que se verifica de verdad."},

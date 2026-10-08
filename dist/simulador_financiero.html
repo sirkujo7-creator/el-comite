@@ -1549,7 +1549,7 @@ function sonidoCorreoTodos(){
     osc.stop(start + 0.17);
   });
 }
-// Encuesta de clima: tono neutro de "notificacion de formulario"
+// Encuesta de clima: tono neutro de "notificación de formulario"
 function sonidoEncuestaClima(){
   const ctx = getAudioCtx();
   if(!ctx) return;
@@ -2103,7 +2103,7 @@ function applyEfectos(e, origen){
 
   if(state.razonCorriente < 1.0){
     state.wacc = clamp(state.wacc + 2, 5, 35);
-    systemicNotes.push("Tu Razón Corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
+    systemicNotes.push("Tu razón corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
   }
   if(state.deuda >= 40){
     state.wacc = clamp(state.wacc + 0.3, 5, 35);
@@ -2119,9 +2119,9 @@ function applyEfectos(e, origen){
   }
   if(state.caja <= 8){
     state.confianzaBanco = clamp(state.confianzaBanco - 2, 0, 100);
-    systemicNotes.push("Tu Caja está en niveles críticos: el banco lo nota en tus movimientos y reduce silenciosamente su confianza en tu capacidad de pago (<b>Confianza bancaria -2</b>).");
+    systemicNotes.push("Tu caja está en niveles críticos: el banco lo nota en tus movimientos y reduce silenciosamente su confianza en tu capacidad de pago (<b>Confianza bancaria -2</b>).");
     state.confianzaProveedores = clamp(state.confianzaProveedores - 2, 0, 100);
-    systemicNotes.push("Con la Caja en niveles críticos, tus proveedores empiezan a sentir el riesgo de no cobrar y se ponen más exigentes (<b>Confianza de proveedores -2</b>).");
+    systemicNotes.push("Con la caja en niveles críticos, tus proveedores empiezan a sentir el riesgo de no cobrar y se ponen más exigentes (<b>Confianza de proveedores -2</b>).");
   }
   if(state.diasCartera >= 90){
     state.wacc = clamp(state.wacc + 0.2, 5, 35);
@@ -3730,7 +3730,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Proponer una alianza más limitada, solo para un insumo puntual.", efectos:{ebitda:1, reputacion:-0.5},
        consecuencia:"Un paso prudente: obtienes parte del beneficio sin exponer toda tu operación a la relación. Aun así, algunos clientes fieles no ven con buenos ojos que cooperes con la competencia."},
       {texto:"Usar la negociación para obtener información sobre su operación, sin intención real de firmar.", efectos:{reputacion:-4, ebitda:1.5},
-       consecuencia:"Consigues algo de información valiosa, pero si se entera que negociaste de mala fe, esa puerta se cierra para siempre — y probablemente hable con otros del gremio."}
+       consecuencia:"Consigues algo de información valiosa, pero si se entera de que negociaste de mala fe, esa puerta se cierra para siempre — y probablemente hable con otros del gremio."}
     ]
   }),
   (s,f)=>({
@@ -3940,7 +3940,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Ofrecerles a los candidatos adicionales un inicio diferido para el próximo trimestre.", efectos:{moralEquipo:2, ebitda:-0.5},
        consecuencia:"Un punto intermedio razonable, aunque corres el riesgo de perder a los mejores candidatos frente a otras ofertas mientras esperan."},
       {texto:"Pagar los bonos de referido igual, aunque no contrates a los candidatos adicionales.", efectos:{caja:-2, moralEquipo:4},
-       consecuencia:"El gesto cuesta dinero sin ampliar el equipo, pero mantiene la confianza en que el programa de referidos vale la pena participar."}
+       consecuencia:"El gesto cuesta dinero sin ampliar el equipo, pero mantiene la confianza en que vale la pena participar en el programa de referidos."}
     ]
   }),
   (s,f)=>({
@@ -3950,7 +3950,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Pagar el monto reclamado para evitar cualquier conflicto legal o reputacional.", efectos:{caja:-4, reputacion:2},
        consecuencia:"Cierras el tema de raíz, aunque nunca sabrás con certeza si el monto reclamado era exactamente el correcto."},
       {texto:"Exigir pruebas documentales antes de considerar cualquier pago.", efectos:{reputacion:-1, caja:-0.5},
-       consecuencia:"Es lo correcto desde el punto de vista formal, aunque la relación personal con esa persona probablemente no sobreviva la exigencia. Y la consulta con tu abogado tiene su costo."},
+       consecuencia:"Es lo correcto desde el punto de vista formal, aunque la relación personal con esa persona probablemente no sobreviva a la exigencia. Y la consulta con tu abogado tiene su costo."},
       {texto:"Ofrecer una negociación por una fracción del monto reclamado, sin admitir ni negar la deuda.", efectos:{caja:-2},
        consecuencia:"Encuentras un punto medio pragmático que cierra el tema sin comprometerte con el monto completo reclamado."},
       {texto:"Ignorar el reclamo por completo, al no existir ningún documento que lo respalde.", efectos:{reputacion:-3},
@@ -4032,7 +4032,7 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Un incidente aislado con un cliente escaló en redes sociales y tu calificación promedio en plataformas de reseñas cayó de forma notoria en pocos días. El equipo de mercadeo pide una respuesta antes de que se profundice.",
     choices:[
       {texto:"Contratar una agencia de manejo de crisis en redes para gestionar la narrativa activamente.", efectos:{caja:-3, reputacion:5},
-       consecuencia:"La reputación se recupera más rápido de lo que hubiera pasado sola, aunque el costo no es menor para un incidente puntual."},
+       consecuencia:"La reputación se recupera más rápido de lo que se habría recuperado sola, aunque el costo no es menor para un incidente puntual."},
       {texto:"Responder personalmente y de forma transparente al cliente afectado, sin intermediarios.", efectos:{reputacion:3, caja:-0.5},
        consecuencia:"El gesto humano se nota y calma buena parte de la conversación, aunque no tiene el alcance de una campaña profesional. Le ofreces además una compensación al cliente afectado."},
       {texto:"No responder públicamente y dejar que el tema se diluya solo con el tiempo.", efectos:{reputacion:-3},
@@ -4071,7 +4071,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"El seguro de la empresa vence y las primas subieron considerablemente",
-    contexto:"Renovar la póliza de seguros integral de la empresa (activos, responsabilidad civil, interrupción de negocio) llegó con un aumento de prima mucho mayor al esperado. Reducir la cobertura abarataría el costo, pero también la protección.",
+    contexto:"La renovación de la póliza de seguros integral de la empresa (activos, responsabilidad civil, interrupción de negocio) llegó con un aumento de prima mucho mayor al esperado. Reducir la cobertura abarataría el costo, pero también la protección.",
     choices:[
       {texto:"Renovar la cobertura completa, aceptando el aumento de prima sin negociarlo.", efectos:{caja:-4},
        consecuencia:"Mantienes tu protección intacta ante cualquier eventualidad grave, al precio más alto disponible en el mercado actual."},
@@ -4148,7 +4148,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Aceptar, pero con respuestas cuidadosamente controladas por tu equipo de comunicaciones.", efectos:{caja:-0.5}, setFlags:{valentinaFavorable:false}, disparar:{turnos:3, evento:eventoValentinaReaparece},
        consecuencia:"La entrevista sale, pero Valentina nota lo ensayada que se sintió cada respuesta."},
       {texto:"Rechazar la entrevista por ahora, sin dar mayor explicación.", efectos:{reputacion:-0.5}, setFlags:{valentinaFavorable:false}, disparar:{turnos:3, evento:eventoValentinaReaparece},
-       consecuencia:"Valentina lo toma con profesionalismo, aunque el rechazo queda en su memoria — y una fuente menos amigable para tu próxima mención en prensa."},
+       consecuencia:"Valentina lo toma con profesionalismo, aunque el rechazo queda en su memoria — y se convierte en una fuente menos amigable para tu próxima mención en prensa."},
       {texto:"Aceptar la entrevista y aprovecharla para anunciar algo genuinamente positivo de la empresa.", efectos:{reputacion:3, caja:-0.3}, setFlags:{valentinaFavorable:true}, disparar:{turnos:3, evento:eventoValentinaReaparece},
        consecuencia:"La combinación de transparencia y una buena noticia real hace que la entrevista salga mejor de lo esperado."}
     ]
@@ -4158,7 +4158,7 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Esteban 'Teto' Vargas, un excompañero de universidad que ahora dirige un fondo de inversión pequeño pero activo, te escribe de la nada — como si no hubieran pasado los años — proponiéndote capital a cambio de una participación en la empresa. El tono es casual, casi como en los viejos tiempos.",
     choices:[
       {texto:"Aceptar la propuesta, confiando en la relación de tantos años.", efectos:{caja:6, ebitda:0.5, reputacion:-1}, setFlags:{tetoRechazado:false}, disparar:{turnos:5, evento:eventoTetoReaparece},
-       consecuencia:"El capital llega rápido, con la informalidad característica de Teto — aunque eso también te preocupa un poco, y alguno en tu junta cuestiona la falta de formalidad del proceso."},
+       consecuencia:"El capital llega rápido, con la informalidad característica de Teto — aunque eso también te preocupa un poco, y alguien de tu junta cuestiona la falta de formalidad del proceso."},
       {texto:"Rechazar la propuesta educadamente, prefiriendo mantener distancia entre lo personal y lo profesional.", efectos:{capitalTrabajo:-0.5}, setFlags:{tetoRechazado:true}, disparar:{turnos:5, evento:eventoTetoReaparece},
        consecuencia:"Teto lo toma con humor, aunque insiste en que 'la oferta sigue en pie' — mientras tanto, sigues sin ese capital que hubiera acelerado algunos planes."},
       {texto:"Pedir toda la documentación formal del fondo antes de considerar algo.", efectos:{caja:-0.5}, setFlags:{tetoRechazado:false}, disparar:{turnos:5, evento:eventoTetoReaparece},
@@ -4174,7 +4174,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Seguir su recomendación al pie de la letra, sin cuestionarla.", efectos:{caja:-2}, setFlags:{elviraEscuchada:true}, disparar:{turnos:4, evento:eventoElviraReaparece},
        consecuencia:"El costo se siente hoy, aunque confías en el criterio que te ha funcionado antes."},
       {texto:"Pedirle una segunda opinión antes de gastar en corregir la cláusula.", efectos:{caja:-1}, setFlags:{elviraEscuchada:true}, disparar:{turnos:4, evento:eventoElviraReaparece},
-       consecuencia:"La segunda opinión confirma su diagnóstico — el gasto adicional en consultarlo, al menos, te da certeza."},
+       consecuencia:"La segunda opinión confirma su diagnóstico — el gasto adicional de consultarla, al menos, te da certeza."},
       {texto:"Decidir que el riesgo es demasiado improbable como para justificar el gasto.", efectos:{reputacion:-0.3}, setFlags:{elviraEscuchada:false}, disparar:{turnos:4, evento:eventoElviraReaparece},
        consecuencia:"Ahorras el costo inmediato, apostando a que ese escenario específico nunca llegue a materializarse — la Dra. Bonilla queda con la sensación de que su criterio no pesó lo suficiente."},
       {texto:"Corregir solo parcialmente la cláusula, buscando un punto medio de costo.", efectos:{caja:-1}, setFlags:{elviraEscuchada:false}, disparar:{turnos:4, evento:eventoElviraReaparece},
@@ -4193,7 +4193,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"El banco propone consolidar todas tus líneas de crédito",
-    contexto:"Tienes varias líneas de crédito abiertas con distintas tasas y plazos, cada una de una necesidad puntual del pasado. El banco te propone consolidarlas todas en un solo crédito, con una tasa promedio y un solo pago mensual — más simple de administrar, aunque no necesariamente más barato.",
+    contexto:"Tienes varias líneas de crédito abiertas con distintas tasas y plazos, cada una abierta para una necesidad puntual del pasado. El banco te propone consolidarlas todas en un solo crédito, con una tasa promedio y un solo pago mensual — más simple de administrar, aunque no necesariamente más barato.",
     choices:[
       {texto:"Consolidar todo en un solo crédito, aceptando la tasa promedio ofrecida.", efectos:{wacc:-0.3, deuda:-1, caja:-0.5}, consecuencia:"Simplificas tu administración financiera y hasta mejoras ligeramente tu costo promedio de capital. La estructuración del crédito consolidado cobra una comisión."},
       {texto:"Mantener las líneas separadas tal como están.", efectos:{caja:-0.2}, consecuencia:"Conservas el control individual de cada línea, aunque sigues administrando varias tasas y fechas de pago distintas — y ese tiempo administrativo tiene su propio costo."},
@@ -5250,7 +5250,7 @@ function resolverDilemaCafe(resultado){
   if(resultado === 'A'){
     efectos = {ebitda:0.05, moralEquipo:1};
     stampClass='neu'; stampTexto='AHORRO LOGRADO';
-    mensaje = "Lo lograste: 10 clics en menos de 3 segundos. Ahorro extremo, pero todo el equipo te vio hacerlo y ahora te odia un poco.";
+    mensaje = "Lo lograste: 10 clics en menos de 6 segundos. Ahorro extremo, pero todo el equipo te vio hacerlo y ahora te odia un poco.";
   } else if(resultado === 'A_fallo'){
     efectos = {moralEquipo:-1};
     stampClass='neg'; stampTexto='INTENTO FALLIDO';
@@ -6032,7 +6032,7 @@ function eventoSofiaReaparece(s,f){
   if(f.sofiaRespetada){
     return { tipo:'karma', titulo:"Sofía Lindo propone una tregua competitiva", retrato: RETRATO_SOFIA_LINDO,
       presentacion:"Tu competidora más directa vuelve a cruzarse en tu camino — esta vez no con una amenaza.",
-      contexto:"Sofía Lindo, tu competidora más directa, te contacta con algo inesperado: una propuesta de colaboración puntual en un segmento donde ninguna de las dos compite directamente. 'Prefiero tenerte de aliada ocasional que de enemiga total', te dice sin rodeos.",
+      contexto:"Sofía Lindo, tu competidora más directa, te contacta con algo inesperado: una propuesta de colaboración puntual en un segmento donde ninguna de las dos compite directamente. 'Prefiero tenerte como aliada ocasional que como enemiga', te dice sin rodeos.",
       choices:[
         {texto:"Aceptar la colaboración puntual propuesta.", efectos:{ebitda:1, reputacion:1, confianzaProveedores:-1}, consecuencia:"La colaboración funciona mejor de lo esperado, aunque alguno de tus proveedores de siempre nota con extrañeza que ahora compartes espacio con la competencia."},
         {texto:"Rechazar cualquier acercamiento, manteniendo la rivalidad pura.", efectos:{reputacion:1}, consecuencia:"Sofía respeta la claridad de la posición, aunque la oportunidad de colaboración queda descartada."},
@@ -6046,7 +6046,7 @@ function eventoSofiaReaparece(s,f){
       choices:[
         {texto:"Contraatacar igualando o mejorando la oferta para retener la relación.", efectos:{caja:-2, ebitda:-0.5, confianzaProveedores:3}, consecuencia:"Retienes la relación, a un costo directo que Sofía sabía que tendrías que asumir."},
         {texto:"No reaccionar directamente y enfocarte en fortalecer otras relaciones.", efectos:{ebitda:-1}, consecuencia:"Pierdes algo de terreno en este frente específico, pero evitas una guerra de precios que nadie gana del todo."},
-        {texto:"Hacer un movimiento propio hacia uno de sus clientes o proveedores clave.", efectos:{ebitda:1, reputacion:-1}, consecuencia:"Escalas la rivalidad de forma directa — Sofía lo va a notar, y probablemente responder."},
+        {texto:"Hacer un movimiento propio hacia uno de sus clientes o proveedores clave.", efectos:{ebitda:1, reputacion:-1}, consecuencia:"Escalas la rivalidad de forma directa — Sofía lo va a notar y probablemente responderá."},
         {texto:"Fortalecer la relación con el resto de tu cartera para reducir tu exposición futura.", efectos:{caja:-1, confianzaProveedores:2}, consecuencia:"Una respuesta defensiva e inteligente: no gana la batalla puntual, pero reduce tu vulnerabilidad general."}
       ]};
   }
@@ -6060,14 +6060,14 @@ function eventoHiginioReaparece(s,f){
       choices:[
         {texto:"Escuchar el consejo con toda la atención, sin interrupciones.", efectos:{reputacion:2, moralEquipo:2}, consecuencia:"El tiempo que le das, más que el consejo mismo, es lo que Don Higinio realmente valora a esta altura."},
         {texto:"Agradecerle todo lo aprendido a lo largo del camino, abiertamente.", efectos:{moralEquipo:3}, consecuencia:"El gesto de gratitud genuina cierra, de forma honesta, una relación que empezó como simple curiosidad."},
-        {texto:"Pedirle que comparta esa misma sabiduría con el resto del equipo directivo.", efectos:{moralEquipo:2, reputacion:1}, consecuencia:"Don Higinio, encantado de que su experiencia trascienda más allá de una sola conversación, acepta con gusto."},
+        {texto:"Pedirle que comparta esa misma sabiduría con el resto del equipo directivo.", efectos:{moralEquipo:2, reputacion:1}, consecuencia:"Don Higinio, encantado de que su experiencia llegue más allá de una sola conversación, acepta con gusto."},
         {texto:"Escuchar por cortesía, aunque ya sientes que tienes tu propio camino claro.", efectos:{reputacion:0.5}, consecuencia:"La conversación es breve y cordial, sin que ninguno de los dos espere más de lo que fue."}
       ]};
   } else {
     return { tipo:'karma', titulo:"Don Higinio regresa con una pregunta incómoda", retrato: RETRATO_DON_HIGINIO, presentacion:"Don Higinio Restrepo vuelve — esta vez con algo más directo que decirte.",
       contexto:"Don Higinio Restrepo vuelve, esta vez con una pregunta directa que no esperabas: '¿Todavía te acuerdas por qué empezaste esto?' No es retórica — genuinamente quiere saber si, en medio de tantas decisiones tácticas, no perdiste de vista el propósito original.",
       choices:[
-        {texto:"Responder con honestidad, incluso si la respuesta no es la que esperabas dar.", efectos:{moralEquipo:2, reputacion:-0.5}, consecuencia:"La honestidad, incluso incómoda, es exactamente lo que Don Higinio esperaba de la conversación. Don Higinio, fiel a su estilo, comenta la conversación con otros del gremio."},
+        {texto:"Responder con honestidad, incluso si la respuesta no es la que esperabas dar.", efectos:{moralEquipo:2, reputacion:-0.5}, consecuencia:"La honestidad, incluso incómoda, es exactamente lo que Don Higinio esperaba de la conversación. Fiel a su estilo, luego la comenta con otros del gremio."},
         {texto:"Admitir que, en el día a día, el propósito original se ha ido diluyendo.", efectos:{moralEquipo:-1, reputacion:1}, consecuencia:"El reconocimiento honesto de esa deriva es, paradójicamente, el primer paso para corregirla."},
         {texto:"Cambiar de tema, incómodo con una pregunta tan personal.", efectos:{moralEquipo:-1, ebitda:0.2}, consecuencia:"Don Higinio no insiste, pero la pregunta sin responder se queda dando vueltas más de lo que esperabas."},
         {texto:"Usar la conversación para replantear en voz alta tus prioridades reales.", efectos:{moralEquipo:3, reputacion:1, caja:-0.3}, consecuencia:"El ejercicio de pensarlo en voz alta, frente a alguien que ya recorrió ese camino, aclara más de lo que anticipabas — aunque el tiempo dedicado a la introspección es tiempo que no dedicaste a la operación."}
@@ -6305,7 +6305,7 @@ function cadenaReestructuracionEtapa3(s,f){
       contexto:"La reestructuración se completa. Tu deuda ahora está distribuida en plazos que realmente corresponden a tu operación, y tu liquidez de corto plazo deja de estar bajo presión constante. No es un cambio dramático en el papel de un solo turno, pero es un cambio real y sostenido.",
       choices:[
         {texto:"Usar la nueva solidez financiera para negociar mejores condiciones con proveedores.", efectos:{confianzaProveedores:3, razonCorriente:0.15}, consecuencia:"La solidez financiera real, bien comunicada, abre puertas comerciales que antes costaban más esfuerzo."},
-        {texto:"Comunicar el saneamiento financiero a tu junta y grupos de interés.", efectos:{reputacion:3, razonCorriente:0.1}, consecuencia:"La transparencia sobre haber resuelto un problema real construye más credibilidad que ocultarlo hubiera generado."},
+        {texto:"Comunicar el saneamiento financiero a tu junta y grupos de interés.", efectos:{reputacion:3, razonCorriente:0.1}, consecuencia:"La transparencia sobre haber resuelto un problema real construye más credibilidad de la que habría generado ocultarlo."},
         {texto:"Aprovechar la nueva holgura para invertir en algo que llevabas tiempo posponiendo.", efectos:{ebitda:1.5, razonCorriente:0.05}, consecuencia:"La liquidez recuperada, bien canalizada, empieza a generar valor real más allá de solo verse bien en el balance."},
         {texto:"Mantener la nueva disciplina financiera sin cambios adicionales por ahora.", efectos:{razonCorriente:0.2}, consecuencia:"La prudencia de consolidar antes de moverte de nuevo también es una decisión sólida."}
       ]};
@@ -6326,7 +6326,7 @@ const CADENAS_PROFUNDAS = [
   { id:'cadena_renata', trigger:(s,f)=> s.moralEquipo!=null && s.moralEquipo <= 40,
     build:(s,f)=>({
       tipo:'karma', titulo:"Renata Cifuentes pide una reunión seria",
-      contexto:"Renata Cifuentes, tu mejor gerente de operaciones, pide hablar contigo con un tono que no habías escuchado antes de ella. Está agotada, dice sin rodeos, y necesita saber si hay un compromiso real de la empresa con su bienestar — o si debería empezar a buscar en otro lado.",
+      contexto:"Renata Cifuentes, tu mejor gerente de operaciones, pide hablar contigo con un tono que nunca le habías escuchado. Está agotada, dice sin rodeos, y necesita saber si hay un compromiso real de la empresa con su bienestar — o si debería empezar a buscar en otro lado.",
       choices:[
         {texto:"Comprometerte de forma concreta: menos carga, más reconocimiento, seguimiento real.", efectos:{caja:-1, moralEquipo:4}, setFlags:{renataComprometido:true}, disparar:{turnos:4, evento:cadenaRenataEtapa2},
          consecuencia:"El compromiso concreto, no solo verbal, es exactamente lo que Renata necesitaba escuchar."},
@@ -6358,7 +6358,7 @@ const CADENAS_PROFUNDAS = [
   { id:'cadena_sello', trigger:(s,f)=> s.reputacion >= 65,
     build:(s,f)=>({
       tipo:'karma', titulo:"Una fundación te invita a certificarte como empresa socialmente responsable",
-      contexto:"Una fundación reconocida en temas de responsabilidad empresarial te invita a postular a su sello de certificación — un reconocimiento que toma en serio, con verificación real de las iniciativas que se declaran, no solo un logo más para la página web.",
+      contexto:"Una fundación reconocida en temas de responsabilidad empresarial te invita a postular a su sello de certificación — un reconocimiento que se toma en serio, con verificación real de las iniciativas que se declaran, no solo un logo más para la página web.",
       choices:[
         {texto:"Postular con un compromiso genuino: iniciativas reales, medibles, sostenidas en el tiempo.", efectos:{caja:-1.5}, setFlags:{selloGenuino:true}, disparar:{turnos:4, evento:cadenaSelloEtapa2},
          consecuencia:"El compromiso real, aunque cuesta más desde el principio, es la única base sólida para un sello que se verifica de verdad."},
@@ -6528,15 +6528,15 @@ const KARMA_CASES = [
    CISNE NEGRO — solo aparece si vas demasiado bien
    ========================================================= */
 const BLACK_SWAN_POOL = [
-  (s,f)=>({tipo:'macro', titulo:"Crisis financiera global", titular:"Alerta Roja: Estalla una Crisis Financiera Internacional",
+  (s,f)=>({tipo:'macro', titulo:"Crisis financiera global", titular:"Alerta roja: estalla una crisis financiera internacional",
     contexto:`Justo cuando tu gestión parecía sólida, estalla una crisis financiera internacional. Los bancos restringen crédito en todo el sistema y el costo del dinero se dispara para todo el mercado, ${nombreEmpresaActual()} incluido.`,
     choices:[
-      {texto:"Congelar toda inversión y atrincherarte en liquidez.", efectos:{caja:2, ebitda:-2, wacc:0.5}, consecuencia:"Frenas en seco cualquier apuesta nueva. Sobrevives el shock sin crecer, pero tampoco retrocedes de forma dramática."},
+      {texto:"Congelar toda inversión y atrincherarte en liquidez.", efectos:{caja:2, ebitda:-2, wacc:0.5}, consecuencia:"Frenas en seco cualquier apuesta nueva. Sobrevives al shock sin crecer, pero tampoco retrocedes de forma dramática."},
       {texto:"Aprovechar que tus indicadores están sanos para tomar deuda barata antes de que suba más.", efectos:{caja:8, deuda:8, wacc:0.8}, consecuencia:"Te apalancas justo antes de que el crédito se encarezca aún más para todo el mercado — una apuesta audaz en medio de la tormenta."},
       {texto:"Renegociar preventivamente condiciones con banco y proveedores antes de que ellos te llamen a ti.", efectos:{wacc:-0.3, confianzaBanco:5, confianzaProveedores:5, caja:-3}, consecuencia:"Llegar primero a la mesa de negociación, en vez de esperar a que te busquen, te deja en mejor posición que a la mayoría de tus pares del sector."},
       {texto:"Recortar de forma preventiva y agresiva para blindar el balance.", efectos:{ebitda:5, reputacion:-6, confianzaProveedores:-6}, consecuencia:"Proteges los números duros, aunque el recorte preventivo — sin que la crisis te haya tocado todavía directamente — no cae bien puertas adentro."}
     ]}),
-  (s,f)=>({tipo:'macro', titulo:"Shock de demanda sectorial", titular:"Terremoto de Mercado: La Demanda se Desploma Sin Aviso",
+  (s,f)=>({tipo:'macro', titulo:"Shock de demanda sectorial", titular:"Terremoto en el mercado: la demanda se desploma sin aviso",
     contexto:`Un cambio abrupto en el comportamiento del consumidor golpea a todo el sector de ${nombreEmpresaActual()} al mismo tiempo — no es un error tuyo, es un shock de demanda que nadie vio venir.`,
     choices:[
       {texto:"Diversificar ingresos de emergencia hacia una línea de negocio adyacente.", efectos:{caja:-5, ebitda:1}, consecuencia:"Abres un frente nuevo mientras el shock pasa, a un costo de inversión considerable y sin garantía de que rinda a tiempo."},
@@ -7508,7 +7508,7 @@ function renderEnding(ending){
 function MACRO_TASA_INTERES(s,f,dobleGolpe){
   const impacto = f.deudaVariable ? {wacc:1.5} : {wacc:0.3};
   return {
-    tipo:'macro', titulo:"El Banco de la República sube las tasas", titular:"¿Se Acabó el Dinero Barato? El Banco Central Sorprende al Mercado", impactoAutomatico: impacto,
+    tipo:'macro', titulo:"El Banco de la República sube las tasas", titular:"¿Se acabó el dinero barato? El banco central sorprende al mercado", impactoAutomatico: impacto,
     contexto: f.deudaVariable
       ? `El Banco de la República sube su tasa de referencia 150 puntos básicos. Como tomaste crédito a tasa variable, tu cuota mensual sube de inmediato y tu costo de capital ya se ajustó.${dobleGolpe? ' Además, el crédito hipotecario de tus posibles compradores también se encarece, lo que enfría la demanda.' : ''}`
       : `El Banco de la República sube su tasa de referencia 150 puntos básicos. Tu crédito actual es a tasa fija, así que tu cuota no cambia — pero el costo de cualquier deuda nueva ya subió un poco.${dobleGolpe? ' El crédito hipotecario de tus compradores también se encarece, lo que puede enfriar la demanda incluso sin tocar tu deuda.' : ''}`,
@@ -7535,7 +7535,7 @@ function MACRO_TASA_INTERES(s,f,dobleGolpe){
 }
 function MACRO_REFORMA_TRIBUTARIA_GENERICA(s,f,objeto){
   return {
-    tipo:'macro', titulo:"Reforma tributaria aprobada", titular:"Última Hora: El Congreso Aprueba una Reforma que Nadie Vio Venir", impactoAutomatico:{ebitda:-1.5},
+    tipo:'macro', titulo:"Reforma tributaria aprobada", titular:"Última hora: el Congreso aprueba una reforma que nadie vio venir", impactoAutomatico:{ebitda:-1.5},
     contexto:`El Congreso aprueba una reforma tributaria que sube la tasa efectiva de renta y ajusta la carga tributaria sobre ${objeto}, vigente desde ya — el impacto en tu margen ya se sintió este periodo.`,
     choices:[
       {texto:"Trasladar el incremento a tus precios.", efectos:{ebitda:2.5, confianzaProveedores:-3}, consecuencia:"Recuperas margen, pero algunos clientes sensibles al precio empiezan a comparar con la competencia."},
@@ -7547,7 +7547,7 @@ function MACRO_REFORMA_TRIBUTARIA_GENERICA(s,f,objeto){
 }
 function MACRO_TRM_COSTOS_USD(s,f,objeto){
   return {
-    tipo:'macro', titulo:"Devaluación repentina del peso", titular:"¿La Crisis ha Llegado? El Peso se Devalúa de un Día para Otro", impactoAutomatico:{ebitda:-1.5},
+    tipo:'macro', titulo:"Devaluación repentina del peso", titular:"¿Llegó la crisis? El peso se devalúa de un día para otro", impactoAutomatico:{ebitda:-1.5},
     contexto:`La TRM sube 8% de un día para otro, encareciendo de inmediato ${objeto} — el efecto en tu margen de este periodo ya se aplicó.`,
     choices:[
       {texto:"Trasladar el alza a tus precios de inmediato.", efectos:{ebitda:2.5, confianzaProveedores:-2}, consecuencia:"Recuperas margen en pesos, pero generas fricción con clientes que compraron la semana pasada a otro valor."},
@@ -7565,7 +7565,7 @@ const VITAFIT_CASES = [
 { tipo:'caso', titulo:"El cliente estrella pide más plazo",
   contexto:"Un fondo de empleados que paga las membresías corporativas de 200 trabajadores (35% de tus ingresos) te pide pasar de 30 a 90 días de plazo, justo cuando tienes nómina y proveedores de suplementos por cubrir este mes.",
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del cliente ($3M)",
-    reporte:"Razón Corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
+    reporte:"Razón corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
   choices:[
     {texto:"Aceptar los 90 días completos, sin condiciones adicionales.", efectos:{caja:-3, capitalTrabajo:-2, razonCorriente:-0.15, diasCartera:35, reputacion:2},
      consecuencia:"El cliente sigue pagando y la relación queda intacta, pero tu ciclo de conversión de efectivo se alarga: ahora financias tú su operación."},
@@ -7578,7 +7578,7 @@ const VITAFIT_CASES = [
      consecuencia:"El cliente acepta un plazo intermedio a cambio de referir nuevas cuentas: sacrificas flujo inmediato por una promesa de crecimiento que no está garantizada."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir un pagaré con aval antes de aceptar cualquier plazo mayor a 30 días.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:5},
-    consecuencia:"Una Razón Corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
+    consecuencia:"Una razón corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
 },
 { tipo:'caso', titulo:"Necesitas capital para crecer",
   contexto:"Para ampliar el inventario de suplementos y comprar un nuevo lote de equipos de fuerza necesitas $15.000.000 adicionales de capital de trabajo.",
@@ -7616,8 +7616,8 @@ const VITAFIT_CASES = [
     {texto:"Recortar personal para bajar costos fijos de inmediato.", efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes entrenadores con relación directa con tus clientes más antiguos — y el costo humano de la decisión no desaparece solo porque bajó el gasto."},
-    {texto:"Reducir gastos generales y renegociar contratos antes de tocar la planilla.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5},
-     consecuencia:"El ajuste es más lento pero protege tu equipo, aunque tensiona alguna relación comercial."},
+    {texto:"Reducir gastos generales y renegociar contratos antes de tocar la nómina.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5},
+     consecuencia:"El ajuste es más lento, pero protege a tu equipo, aunque tensiona alguna relación comercial."},
     {texto:"Buscar un crédito puente para sostener la operación sin recortar nada.", efectos:{caja:6, deuda:8, wacc:0.5, capitalTrabajo:4},
      consecuencia:"Ganas tiempo sin tocar la nómina, pero cargas deuda adicional justo cuando tus ingresos son más bajos."},
     {texto:"Lanzar un servicio online de bajo costo para diversificar ingresos.", efectos:{caja:-3, ebitda:1, capitalTrabajo:-1},
@@ -7648,7 +7648,7 @@ const VITAFIT_CASES = [
     {texto:"Usar la oferta como argumento para conseguir mejores condiciones de un banco, sin vender nada.", efectos:{deuda:8, caja:8, wacc:-0.3}, consecuencia:"Consigues financiamiento en mejores condiciones al mostrar el respaldo de una oferta real, sin ceder la sucursal."}
   ],
   choiceInformado:{texto:"Con la sobrevaloración del 12% confirmada, vender la sucursal sin dudarlo.", efectos:{caja:11, ebitda:-2, capitalTrabajo:3},
-    consecuencia:"Vender por encima del valor razonable de mercado, cuando ya lo confirmaste con una fuente independiente, es difícil de justificar rechazar."}
+    consecuencia:"Cuando una fuente independiente confirma que te pagan por encima del valor razonable de mercado, rechazar la oferta es difícil de justificar."}
 },
 ];
 function VITAFIT_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina, prima y mantenimiento de equipos",
@@ -7668,7 +7668,7 @@ function VITAFIT_RENTA(s,f){ return {tipo:'calendario', titulo:"Declaración y p
     {texto:"Acogerse a una facilidad de pago con la DIAN, a cambio de intereses.", efectos:{caja:-2, deuda:5, wacc:0.4},
      consecuencia:"Alivias la presión de caja, pero conviertes una obligación tributaria en deuda financiera con intereses."},
     {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5},
-     consecuencia:"Los honorarios tienen costo, pero identifica deducciones legítimas que reducen el valor final a pagar."},
+     consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas que reducen el valor final a pagar."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago sin tocar la caja operativa.", efectos:{caja:-4, razonCorriente:-0.12},
      consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
@@ -7756,7 +7756,7 @@ const VITAFIT_RANDOM = [
       reporte:"Las cámaras muestran que la máquina sí tenía el mantenimiento al día, pero el cliente no siguió las instrucciones de uso visibles en el equipo."},
     choices:[
       {texto:"Ofrecer una compensación económica inmediata para evitar cualquier proceso legal.", efectos:{caja:-3, reputacion:3},
-       consecuencia:"Cierras el tema rápido, aunque sin claridad sobre la responsabilidad real, sienta un precedente costoso para cualquier reclamo futuro."},
+       consecuencia:"Cierras el tema rápido, aunque, sin claridad sobre la responsabilidad real, el pago sienta un precedente costoso para cualquier reclamo futuro."},
       {texto:"Negarte a compensar, argumentando que el cliente asumió el riesgo al usar el equipo.", efectos:{reputacion:-4},
        consecuencia:"Puede que tengas razón, pero un cliente que se siente ignorado después de un accidente rara vez se queda callado en redes sociales."},
       {texto:"Contratar un seguro de responsabilidad civil para instalaciones deportivas de aquí en adelante.", efectos:{caja:-2, wacc:-0.1},
@@ -7832,7 +7832,7 @@ const TECHNOVA_CASES = [
      consecuencia:"Cedes menos margen del que pedían y le das algo de valor tangible a cambio — una negociación más equilibrada."},
     {texto:"Rechazar el descuento y arriesgar la renovación.", efectos:{caja:1, ebitda:1, wacc:0.3},
      consecuencia:"Proteges tu margen por completo, aunque te expones a perder el 40% de tu ingreso recurrente si el cliente decide no renovar."},
-    {texto:"Proponer pricing por consumo, alineando el pago a su crecimiento real.", efectos:{ebitda:0.5, capitalTrabajo:-1, wacc:-0.1},
+    {texto:"Proponer un esquema de precios por consumo, alineando el pago a su crecimiento real.", efectos:{ebitda:0.5, capitalTrabajo:-1, wacc:-0.1},
      consecuencia:"Cambias la conversación de 'descuento' a 'modelo de pago': si el cliente crece, tú creces con él; si no, tampoco pierdes tanto margen."}
   ],
   choiceInformado:{texto:"Con el patrón de descuentos repetidos, condicionar cualquier rebaja a un caso de éxito público y referidos verificables.", efectos:{ebitda:-1, caja:-1},
@@ -7907,7 +7907,7 @@ function TECHNOVA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina y bono
   choices:[
     {texto:"Pagar todo con la caja disponible.", efectos:{caja:-9}, consecuencia:"Cumples en tiempo y forma, sin costo adicional."},
     {texto:"Pagar salarios completos, pero diferir los bonos 30 días con acuerdo del equipo.", efectos:{caja:-6, moralEquipo:-8}, diferir:{monto:3.3, turnos:1, motivo:"Bonos diferidos al equipo", tipo:'nomina'},
-     consecuencia:"El equipo acepta por esta vez, aunque un bono aplazado repetidamente erosiona la confianza rápido en el sector tech."},
+     consecuencia:"El equipo acepta por esta vez, aunque un bono aplazado repetidamente erosiona rápido la confianza en el sector tecnológico."},
     {texto:"Tomar un crédito de nómina de corto plazo.", efectos:{deuda:5, wacc:0.5, caja:-4}, consecuencia:"Evitas fricción con el equipo, pero sumas una deuda más a tu estructura de capital."},
     {texto:"Congelar los bonos por este trimestre y comunicarlo abiertamente al equipo.", efectos:{caja:-6, moralEquipo:-15}, consecuencia:"Ahorras el gasto del bono por completo, pero la señal de austeridad golpea directo la moral de tu equipo técnico."}
   ]};}
@@ -7916,7 +7916,7 @@ function TECHNOVA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y factura
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario especializado en economía digital.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas específicas del sector."},
+    {texto:"Contratar un asesor tributario especializado en economía digital.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas específicas del sector."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const TECHNOVA_RANDOM = [
@@ -7992,7 +7992,7 @@ const TECHNOVA_RANDOM = [
        consecuencia:"Proteges la coherencia de tu producto, aunque tu cliente más grande queda visiblemente insatisfecho y empieza a mirar alternativas."},
       {texto:"Incluir la funcionalidad en el roadmap general del producto, beneficiando a todos los clientes.", efectos:{ebitda:-2, reputacion:3},
        consecuencia:"Conviertes una petición puntual en una mejora para toda tu base de clientes, aunque tarda más en estar lista de lo que tu cliente esperaba."},
-      {texto:"Subcontratar el desarrollo a un freelance especializado para no distraer a tu equipo interno.", efectos:{caja:-2, ebitda:1},
+      {texto:"Subcontratar el desarrollo a un desarrollador independiente especializado para no distraer a tu equipo interno.", efectos:{caja:-2, ebitda:1},
        consecuencia:"Resuelves la petición sin sacrificar tu roadmap interno, a cambio de depender de un tercero para algo que toca directamente tu producto."}
     ]
   }),
@@ -8007,7 +8007,7 @@ const TECHNOVA_RANDOM = [
       {texto:"Migrar a una arquitectura multi-nube para reducir la dependencia de un solo proveedor.", efectos:{caja:-6, wacc:-0.1},
        consecuencia:"Es una inversión considerable en resiliencia técnica que reduce drásticamente el riesgo de que esto se repita."},
       {texto:"Ofrecer una compensación en forma de crédito de servicio a los clientes afectados.", efectos:{caja:-2, reputacion:4},
-       consecuencia:"El gesto cuesta ingreso recurrente, pero refuerza la confianza de tus clientes empresariales en momentos donde más se necesita."}
+       consecuencia:"El gesto cuesta ingreso recurrente, pero refuerza la confianza de tus clientes empresariales en los momentos en que más se necesita."}
     ]
   })
 ];
@@ -8077,18 +8077,18 @@ const AGROVERDE_CASES = [
      consecuencia:"Consigues capital sin mentir en tus estados financieros, a un costo algo mayor que el crédito bancario tradicional."}
   ]
 },
-{ tipo:'caso', titulo:"Una certificadora orgánica ofrece un upgrade de certificación",
+{ tipo:'caso', titulo:"Una certificadora orgánica ofrece subir de nivel tu certificación",
   contexto:"La certificadora que ya te avala te ofrece subir a una certificación orgánica de nivel superior, que abre puertas a mercados premium en Europa — pero exige una inversión en procesos y una auditoría más estricta cada año.",
   investigacion:{costo:1.5, boton:"Pedir un estudio de precios premium en mercados con esa certificación ($1.5M)",
     reporte:"El estudio confirma un sobreprecio real de hasta <b>18%</b> en los mercados que exigen esa certificación superior, aunque el costo de mantenerla cada año no es menor."},
   choices:[
-    {texto:"Invertir en el upgrade completo de certificación.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Accedes a mercados premium con mejores precios, asumiendo un costo de proceso y auditoría permanente más alto."},
+    {texto:"Invertir en la certificación de nivel superior completa.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Accedes a mercados premium con mejores precios, asumiendo un costo de proceso y auditoría permanente más alto."},
     {texto:"Mantener la certificación actual, sin subir de nivel por ahora.", efectos:{ebitda:-0.3}, consecuencia:"Evitas la inversión y el compromiso adicional, aunque renuncias al sobreprecio de los mercados más exigentes mientras la competencia sí avanza hacia allá."},
     {texto:"Certificar solo una porción de la producción bajo el nuevo estándar, como prueba piloto.", efectos:{caja:-2, ebitda:0.5}, consecuencia:"Accedes parcialmente al mercado premium, sin comprometer toda tu operación al nuevo estándar de una vez."},
     {texto:"Buscar un comprador dispuesto a financiar parte del proceso de certificación a cambio de exclusividad.", efectos:{caja:-1, ebitda:1, diasCartera:10}, consecuencia:"Reduces tu inversión propia, a cambio de atarte comercialmente a un solo comprador durante la transición. Ese comprador, además, te impone sus plazos de pago."}
   ],
-  choiceInformado:{texto:"Con el sobreprecio del 18% confirmado, invertir en el upgrade completo sin reservas.", efectos:{caja:-4, ebitda:2.5},
-    consecuencia:"Un sobreprecio de esa magnitud, sostenido en el tiempo, hace que el costo del upgrade se recupere mucho más rápido de lo que parecía al principio."}
+  choiceInformado:{texto:"Con el sobreprecio del 18% confirmado, invertir en la certificación superior sin reservas.", efectos:{caja:-4, ebitda:2.5},
+    consecuencia:"Un sobreprecio de esa magnitud, sostenido en el tiempo, hace que el costo de la nueva certificación se recupere mucho más rápido de lo que parecía al principio."}
 },
 ];
 function AGROVERDE_COSECHA(s,f){ return {tipo:'calendario', titulo:"Pago a recolectores de la cosecha",
@@ -8105,11 +8105,11 @@ function AGROVERDE_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y arance
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor en comercio exterior para optimizar la carga arancelaria.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica beneficios arancelarios legítimos del tratado vigente."},
+    {texto:"Contratar un asesor en comercio exterior para optimizar la carga arancelaria.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica beneficios arancelarios legítimos del tratado vigente."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const AGROVERDE_RANDOM = [
-  (s,f)=>({tipo:'macro', titulo:"El dólar sube y tus exportaciones valen más en pesos", titular:"El Dólar se Dispara: Ganadores y Perdedores en la Economía Real", impactoAutomatico:{caja:3},
+  (s,f)=>({tipo:'macro', titulo:"El dólar sube y tus exportaciones valen más en pesos", titular:"El dólar se dispara: ganadores y perdedores en la economía real", impactoAutomatico:{caja:3},
     contexto:"La TRM sube 8%. Como exportas en dólares, cada contenedor que despachas ahora te genera más ingreso en pesos — ya reflejado en tu caja — aunque tus insumos importados (fertilizantes, empaques) también se encarecen.",
     choices:[
       {texto:"Reinvertir el excedente cambiario en el cultivo.", efectos:{ebitda:2, caja:-2}, consecuencia:"Aprovechas el viento a favor para fortalecer la producción futura en vez de solo repartir la ganancia."},
@@ -8158,7 +8158,7 @@ const AGROVERDE_RANDOM = [
       {texto:"Redirigir el envío a un puerto alterno, aunque implique costos logísticos extra.", efectos:{caja:-5, ebitda:-1, reputacion:2},
        consecuencia:"Consigues sacar el producto a tiempo, a un costo logístico considerablemente mayor al plan original. Tu comprador internacional toma nota de que cumpliste pese al paro."},
       {texto:"Esperar sin costo adicional a que el paro se resuelva por sí solo.", efectos:{ebitda:-4, diasCartera:10},
-       consecuencia:"Ahorras el gasto logístico extra, pero una parte del producto perecedero no sobrevive la espera en las condiciones del puerto."},
+       consecuencia:"Ahorras el gasto logístico extra, pero una parte del producto perecedero no sobrevive a la espera en las condiciones del puerto."},
       {texto:"Vender el lote afectado a un comprador local a precio reducido antes de que se dañe.", efectos:{caja:3, ebitda:-3, reputacion:-2},
        consecuencia:"Recuperas algo de valor rápidamente, muy por debajo del precio de exportación que tenías pactado originalmente. Y quedas mal con el comprador internacional que esperaba ese lote."}
     ]
@@ -8308,7 +8308,7 @@ const GANADERA_CASES = [
 { tipo:'caso', titulo:"La cadena de frío falla en plena ola de calor",
   contexto:"El tanque de enfriamiento de leche, ya viejo, empieza a fallar justo en la época de más calor del año. Si no lo reemplazas pronto, vas a perder litros enteros de producción por descomposición antes de la recolección.",
   choices:[
-    {texto:"Reemplazar el tanque de frío por uno nuevo de mayor capacidad.", efectos:{caja:-7, diasInventario:-2}, capex:true, consecuencia:"Resuelves el problema de raíz y hasta ganas capacidad adicional, a un desembolso importante hoy."},
+    {texto:"Reemplazar el tanque de frío por uno nuevo de mayor capacidad.", efectos:{caja:-7, diasInventario:-2}, capex:true, consecuencia:"Resuelves el problema de raíz y hasta ganas capacidad adicional, a cambio de un desembolso importante hoy."},
     {texto:"Reparar el tanque actual con un mantenimiento de emergencia.", efectos:{caja:-2}, consecuencia:"Una solución más barata, aunque el riesgo de una nueva falla sigue latente con un equipo que ya está viejo."},
     {texto:"Alquilar temporalmente un tanque de frío móvil mientras decides qué hacer.", efectos:{caja:-3, diasInventario:-1}, consecuencia:"Una solución puente razonable, sin comprometerte todavía a la inversión completa."},
     {texto:"No hacer nada por ahora y asumir que parte de la producción se va a perder.", efectos:{ebitda:-3, valorInventario:-2}, consecuencia:"Ahorras el gasto inmediato, pero cada litro que se daña por el calor es ingreso que ya no vuelve."}
@@ -8337,7 +8337,7 @@ const GANADERA_CASES = [
 function GANADERA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Pago a vaqueros y personal de ordeño",
   contexto:"Llega el pago quincenal del personal de campo: vaqueros, ordeñadores y el encargado de mantenimiento — trabajo manual diario que no se puede posponer sin arriesgar la operación misma.",
   choices:[
-    {texto:"Pagar todo con la caja disponible.", efectos:{caja:-6}, consecuencia:"Cumples en tiempo y forma, sosteniendo la confianza del personal que sostiene la operación día a día."},
+    {texto:"Pagar todo con la caja disponible.", efectos:{caja:-6}, consecuencia:"Cumples en tiempo y forma, manteniendo la confianza del personal que sostiene la operación día a día."},
     {texto:"Pagar la mayoría y diferir un pequeño saldo con acuerdo del personal.", efectos:{caja:-4}, diferir:{monto:2.2, turnos:1, motivo:"Saldo diferido a personal de campo", tipo:'nomina'},
      consecuencia:"El personal acepta por esta vez, aunque depender de su buena voluntad tiene un límite."},
     {texto:"Tomar un adelanto de caja de corto plazo para cubrir la nómina completa.", efectos:{deuda:3, wacc:0.4, caja:-2}, consecuencia:"Evitas cualquier fricción con el personal, sumando una deuda de corto plazo a tu estructura de capital."},
@@ -8348,11 +8348,11 @@ function GANADERA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta, predial 
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-6, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional, y tu certificación sanitaria queda vigente sin sobresaltos. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la autoridad tributaria.", efectos:{caja:-2, deuda:4, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario rural para optimizar las deducciones aplicables al sector.", efectos:{caja:-4, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica beneficios tributarios legítimos para la actividad ganadera."},
+    {texto:"Contratar un asesor tributario rural para optimizar las deducciones aplicables al sector.", efectos:{caja:-4, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica beneficios tributarios legítimos para la actividad ganadera."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-3.5, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const GANADERA_RANDOM = [
-  (s,f)=>({tipo:'macro', titulo:"Una sequía prolongada reduce la disponibilidad de pastos", titular:"Fenómeno Climático Golpea a los Ganaderos de la Región", impactoAutomatico:{ebitda:-1},
+  (s,f)=>({tipo:'macro', titulo:"Una sequía prolongada reduce la disponibilidad de pastos", titular:"Fenómeno climático golpea a los ganaderos de la región", impactoAutomatico:{ebitda:-1},
     contexto:"Meses sin lluvia suficiente están secando los potreros de toda la región. Sin pasto natural, vas a necesitar comprar alimento suplementario para mantener la producción de leche estable — o dejar que la producción caiga.",
     choices:[
       {texto:"Comprar alimento balanceado suplementario para sostener la producción completa.", efectos:{caja:-4, ebitda:1}, consecuencia:"El costo extra pesa en el balance, pero evitas que la sequía te cueste producción real."},
@@ -8361,7 +8361,7 @@ const GANADERA_RANDOM = [
       {texto:"Invertir en un sistema de riego para los potreros más críticos.", efectos:{caja:-5, ebitda:1.5}, capex:true, consecuencia:"Una solución más duradera frente a futuras sequías, aunque el desembolso de hoy es considerable."}
     ]
   }),
-  (s,f)=>({tipo:'macro', titulo:"El precio internacional de la carne sube con fuerza", titular:"Exportaciones de Carne Impulsan el Precio al Productor", impactoAutomatico:{caja:2},
+  (s,f)=>({tipo:'macro', titulo:"El precio internacional de la carne sube con fuerza", titular:"Exportaciones de carne impulsan el precio al productor", impactoAutomatico:{caja:2},
     contexto:"La demanda externa de carne bovina empuja el precio interno al alza, beneficiando también a quienes venden animales de descarte del hato lechero — ya reflejado como ingreso extra en tu caja.",
     choices:[
       {texto:"Vender de inmediato los animales de descarte aprovechando el precio alto.", efectos:{caja:3, valorInventario:-2}, consecuencia:"Capturas el buen momento del mercado antes de que el precio pueda corregirse."},
@@ -8434,7 +8434,7 @@ const GANADERA_RANDOM = [
     tipo:'random', titulo:"Tu banco ofrece una línea de crédito estacional para la finca",
     contexto:"Tu banco, conocedor del negocio ganadero, te ofrece una línea de crédito pensada específicamente para cubrir los meses de menor producción — con una tasa preferencial si demuestras que la usas exclusivamente para la operación del hato.",
     choices:[
-      {texto:"Tomar la línea completa y usarla exactamente como fue pensada.", efectos:{caja:4, deuda:3, confianzaBanco:5}, consecuencia:"El banco premia el uso responsable de una línea diseñada para vos con una relación cada vez más sólida."},
+      {texto:"Tomar la línea completa y usarla exactamente como fue pensada.", efectos:{caja:4, deuda:3, confianzaBanco:5}, consecuencia:"El banco premia el uso responsable de una línea diseñada para ti con una relación cada vez más sólida."},
       {texto:"Rechazar la línea, prefiriendo no depender de crédito estacional.", efectos:{confianzaBanco:-1}, consecuencia:"El banco respeta la decisión, aunque una oferta tan específica y bien pensada no vuelve a aparecer todos los años."},
       {texto:"Tomar solo una parte de la línea, la mínima necesaria.", efectos:{caja:2, deuda:1, confianzaBanco:2}, consecuencia:"Un uso prudente que cubre lo esencial sin comprometerte más de la cuenta."},
       {texto:"Tomar la línea completa, pero usar parte del dinero en algo distinto a lo pactado.", efectos:{caja:4, deuda:3, confianzaBanco:-4, ebitda:1}, consecuencia:"El banco lo nota tarde o temprano — desviar el uso de una línea con condiciones específicas rara vez pasa desapercibido."}
@@ -8455,7 +8455,7 @@ const GANADERA_RANDOM = [
     contexto:"Tu tanque de frío está al límite de su capacidad en esta temporada alta de producción. La finca vecina, con quien tienes buena relación, ofrece prestarte espacio de refrigeración adicional por unas semanas, a cambio de una tarifa.",
     choices:[
       {texto:"Aceptar el espacio adicional completo.", efectos:{diasInventario:-4, valorInventario:1, caja:-1}, consecuencia:"La capacidad extra resuelve la saturación justo cuando más la necesitabas."},
-      {texto:"Rechazar, y arreglártelas con la capacidad actual.", efectos:{diasInventario:3, valorInventario:-1}, consecuencia:"Ahorras la tarifa, pero la saturación del tanque empieza a pasarte factura en la rotación real."},
+      {texto:"Rechazar y arreglártelas con la capacidad actual.", efectos:{diasInventario:3, valorInventario:-1}, consecuencia:"Ahorras la tarifa, pero la saturación del tanque empieza a pasarte factura en la rotación real."},
       {texto:"Aceptar solo una parte del espacio ofrecido.", efectos:{diasInventario:-2, caja:-0.5}, consecuencia:"Un alivio parcial que no resuelve toda la saturación, pero tampoco compromete tanta caja."},
       {texto:"Aceptar el espacio completo, ofreciendo a cambio ayuda con transporte compartido en el futuro.", efectos:{diasInventario:-3, valorInventario:1, confianzaProveedores:2, caja:-1}, consecuencia:"El trueque de favores, además del pago, deja una relación más sólida de la que tenías antes — aunque el alivio de inventario es un poco menor que si solo hubieras pagado."}
     ]
@@ -8493,15 +8493,15 @@ const CONSTRUYEYA_CASES = [
 { tipo:'caso', titulo:"El comprador grande pide financiamiento directo",
   contexto:"Un inversionista que compra 15 apartamentos para arriendo pide que la constructora le financie directamente a 24 meses, en vez de crédito hipotecario tradicional.",
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del comprador ($3M)",
-    reporte:"Razón Corriente del comprador: <b>0.9</b>. Mantiene otros 2 créditos hipotecarios activos con un nivel de endeudamiento total considerado alto por el sector financiero."},
+    reporte:"Razón corriente del comprador: <b>0.9</b>. Mantiene otros 2 créditos hipotecarios activos con un nivel de endeudamiento total considerado alto por el sector financiero."},
   choices:[
     {texto:"Aceptar financiar directamente los 24 meses completos.", efectos:{caja:-4, capitalTrabajo:-3, razonCorriente:-0.15, diasCartera:90, ebitda:3, diasInventario:-20}, consecuencia:"Cierras la venta de 15 unidades de una vez, pero ahora eres tú quien asume el riesgo crediticio que normalmente asumiría un banco."},
     {texto:"Ofrecer 12 meses de financiamiento directo y el resto por crédito hipotecario.", efectos:{caja:-1, razonCorriente:-0.05, diasCartera:45, ebitda:2, diasInventario:-15}, consecuencia:"Compartes el riesgo con el sistema financiero tradicional en vez de asumirlo tú solo por completo."},
-    {texto:"Exigir crédito hipotecario tradicional, sin financiamiento directo.", efectos:{razonCorriente:0.03, ebitda:-1}, consecuencia:"Proteges tu balance por completo, aunque el comprador podría desistir si el banco le exige más requisitos de los que esperaba. Esta vez el comprador desiste de parte de las unidades."},
+    {texto:"Exigir crédito hipotecario tradicional, sin financiamiento directo.", efectos:{razonCorriente:0.03, ebitda:-1}, consecuencia:"Proteges tu balance por completo, aunque el comprador podría desistir si el banco le exige más requisitos de los que esperaba. Esta vez, desiste de parte de las unidades."},
     {texto:"Estructurar el pago a través de una fiduciaria, que asume la administración del riesgo crediticio.", efectos:{caja:-2, capitalTrabajo:1, diasCartera:15, ebitda:1.5, diasInventario:-15}, consecuencia:"Cierras la venta sin cargar tú directamente con el riesgo de mora, a cambio de una comisión fiduciaria."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir garantía hipotecaria de otro inmueble antes de aceptar financiamiento directo.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:20},
-    consecuencia:"Una Razón Corriente de 0.9 y dos créditos hipotecarios activos son señales claras de un comprador ya bastante apalancado."}
+    consecuencia:"Una razón corriente de 0.9 y dos créditos hipotecarios activos son señales claras de un comprador ya bastante apalancado."}
 },
 { tipo:'caso', titulo:"Financiamiento para la siguiente etapa de obra",
   contexto:"Necesitas $15.000.000 para iniciar la siguiente etapa constructiva de la torre.",
@@ -8556,7 +8556,7 @@ const CONSTRUYEYA_CASES = [
     reporte:"El estudio confirma que el margen del proyecto es <b>bajo pero positivo</b>, y que los subsidios estatales de vivienda social suelen pagarse con puntualidad superior al promedio del sector privado."},
   choices:[
     {texto:"Aceptar el proyecto completo, asumiendo el margen más bajo a cambio de volumen y reputación.", efectos:{caja:-8, ebitda:1, reputacion:6, capitalTrabajo:-5}, consecuencia:"Ganas visibilidad y buena imagen pública, con una rentabilidad bastante más ajustada que tus proyectos habituales."},
-    {texto:"Rechazar la oferta y enfocarte en proyectos de mayor margen.", efectos:{diasInventario:2}, consecuencia:"Proteges tu rentabilidad promedio, renunciando al respaldo político y mediático que el programa ofrecía — y a un terreno que ya tenías medio evaluado, ahora otro constructor lo va a tomar."},
+    {texto:"Rechazar la oferta y enfocarte en proyectos de mayor margen.", efectos:{diasInventario:2}, consecuencia:"Proteges tu rentabilidad promedio, renunciando al respaldo político y mediático que el programa ofrecía — y a un terreno que ya tenías medio evaluado y que ahora tomará otro constructor."},
     {texto:"Aceptar solo una fase reducida del proyecto, como piloto antes de comprometerte a todo el terreno.", efectos:{caja:-4, reputacion:3, capitalTrabajo:-2}, consecuencia:"Entras al programa social sin comprometer toda tu capacidad operativa de una sola vez."},
     {texto:"Proponer un esquema mixto: parte del terreno para vivienda social, parte para vivienda de venta libre.", efectos:{caja:-6, ebitda:1.5, reputacion:3, capitalTrabajo:-4}, consecuencia:"Un punto medio que mejora el margen general del proyecto sin renunciar del todo al componente social."}
   ],
@@ -8569,7 +8569,7 @@ function CONSTRUYEYA_SUBCONTRATISTAS(s,f){ return {tipo:'calendario', titulo:"Pa
   choices:[
     {texto:"Pagar todo con la caja disponible.", efectos:{caja:-9}, consecuencia:"Cumples en tiempo y forma, sin costo adicional, y la obra sigue su cronograma."},
     {texto:"Pagar la mayoría y diferir un saldo 30 días con acuerdo de los subcontratistas.", efectos:{caja:-6}, diferir:{monto:3.3, turnos:1, motivo:"Saldo diferido a subcontratistas", tipo:'proveedor'},
-     consecuencia:"Aceptan por esta vez, aunque varios subcontratistas trabajan con varios proyectos y no toleran atrasos repetidos."},
+     consecuencia:"Aceptan por esta vez, aunque varios subcontratistas atienden otros proyectos a la vez y no toleran atrasos repetidos."},
     {texto:"Tomar un crédito de obra de corto plazo.", efectos:{deuda:5, wacc:0.5, caja:-4}, consecuencia:"Evitas fricción con las cuadrillas, pero sumas una deuda más a tu estructura de capital."},
     {texto:"Usar el desembolso ya aprobado del crédito constructor para cubrir el pago.", efectos:{caja:-3, capitalTrabajo:-5, razonCorriente:-0.08}, consecuencia:"Cumples sin pedir deuda nueva, aunque adelantas un recurso que tenías destinado a otra fase de la obra."}
   ]};}
@@ -8578,7 +8578,7 @@ function CONSTRUYEYA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta e impu
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN y el municipio.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario especializado en el sector inmobiliario.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas específicas del sector."},
+    {texto:"Contratar un asesor tributario especializado en el sector inmobiliario.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas específicas del sector."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const CONSTRUYEYA_RANDOM = [
@@ -8738,7 +8738,7 @@ const MODAURBANA_CASES = [
 { tipo:'caso', titulo:"La tienda por departamentos pide más plazo",
   contexto:"Tu cliente mayorista más grande (una cadena de tiendas por departamentos, 35% de tus ventas) te pide pasar de 30 a 90 días de plazo.",
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del cliente ($3M)",
-    reporte:"Razón Corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
+    reporte:"Razón corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
   choices:[
     {texto:"Aceptar los 90 días completos, sin condiciones adicionales.", efectos:{caja:-3, capitalTrabajo:-2, razonCorriente:-0.15, diasCartera:35}, consecuencia:"El cliente sigue comprando y la relación queda intacta, pero tu ciclo de conversión de efectivo se alarga."},
     {texto:"Negociar 60 días con 2% de descuento si paga antes de 45.", efectos:{caja:-1, razonCorriente:-0.05, ebitda:-1, diasCartera:15}, consecuencia:"Reduces algo la presión sobre tu capital de trabajo, aunque el descuento golpea tu margen operativo."},
@@ -8747,7 +8747,7 @@ const MODAURBANA_CASES = [
     {texto:"Ofrecer factoring: vender la cartera de este cliente a un descuento a cambio de caja inmediata.", efectos:{caja:4, ebitda:-2, diasCartera:-10}, consecuencia:"Obtienes liquidez de inmediato sin tomar deuda, a cambio de ceder parte del valor de la cartera a la entidad de factoring."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir un pagaré con aval antes de aceptar cualquier plazo mayor a 30 días.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:5},
-    consecuencia:"Una Razón Corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
+    consecuencia:"Una razón corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
 },
 { tipo:'caso', titulo:"Financiamiento para la colección de temporada",
   contexto:"Necesitas $15.000.000 para producir la colección de la próxima temporada antes de que pierda vigencia comercial.",
@@ -8763,12 +8763,12 @@ const MODAURBANA_CASES = [
   choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
     consecuencia:"Con el rango proyectado en mano, decides que un punto porcentual de subida es un riesgo real y te blindas parcialmente frente a él."}
 },
-{ tipo:'caso', titulo:"Llega fast-fashion importado más barato",
-  contexto:"Una cadena de fast-fashion importado abre en tu zona con precios muy por debajo de los tuyos en prendas similares.",
+{ tipo:'caso', titulo:"Llega fast fashion importado más barato",
+  contexto:"Una cadena de fast fashion importado abre en tu zona con precios muy por debajo de los tuyos en prendas similares.",
   choices:[
     {texto:"Bajar tus precios para competir directamente.", efectos:{ebitda:-4, caja:1}, consecuencia:"Mantienes el volumen de ventas, aunque entras en una guerra de precios que golpea tu margen de forma directa."},
     {texto:"Diferenciarte con diseño propio y producción local exclusiva.", efectos:{caja:-3, ebitda:1}, consecuencia:"Sales de competir solo por precio, aunque construir una propuesta de diseño diferenciada toma tiempo e inversión."},
-    {texto:"Apostar por un nicho de sostenibilidad y producción local frente al fast-fashion.", efectos:{caja:-2, ebitda:0.5, confianzaProveedores:5}, consecuencia:"Atraes a un segmento de clientes dispuesto a pagar más por origen y sostenibilidad, aunque es un mercado más pequeño."},
+    {texto:"Apostar por un nicho de sostenibilidad y producción local frente al fast fashion.", efectos:{caja:-2, ebitda:0.5, confianzaProveedores:5}, consecuencia:"Atraes a un segmento de clientes dispuesto a pagar más por origen y sostenibilidad, aunque es un mercado más pequeño."},
     {texto:"No cambiar nada y esperar a ver si el efecto de la nueva competencia se diluye.", efectos:{ebitda:-2}, consecuencia:"Ahorras cualquier inversión de reacción, aunque cedes terreno mientras decides qué hacer."}
   ]
 },
@@ -8778,7 +8778,7 @@ const MODAURBANA_CASES = [
     {texto:"Recortar personal de tienda para bajar costos fijos.", efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes vendedores con relación directa con tus clientes frecuentes."},
-    {texto:"Reducir gastos generales y renegociar con maquiladoras antes de tocar personal.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5}, consecuencia:"El ajuste es más lento pero protege tu equipo de tienda, aunque tensiona alguna relación de producción."},
+    {texto:"Reducir gastos generales y renegociar con maquiladoras antes de tocar personal.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5}, consecuencia:"El ajuste es más lento, pero protege a tu equipo de tienda, aunque tensiona alguna relación de producción."},
     {texto:"Buscar un crédito puente para sostener la operación.", efectos:{caja:6, deuda:8, wacc:0.5, capitalTrabajo:4}, consecuencia:"Ganas tiempo sin recortar nada, pero cargas deuda adicional justo cuando tus ingresos son más bajos."},
     {texto:"Liquidar parte de la colección con descuento agresivo para acelerar la rotación.", efectos:{caja:3, ebitda:-2, diasInventario:-15, valorInventario:-5}, consecuencia:"Recuperas caja y liberas espacio de bodega, aunque vendes por debajo de tu margen habitual."}
   ]
@@ -8824,16 +8824,16 @@ function MODAURBANA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y liqui
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas que reducen el valor final a pagar."},
+    {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas que reducen el valor final a pagar."},
     {texto:"Liquidar parte del inventario de temporada pasada para financiar el pago.", efectos:{caja:2, ebitda:-2, diasInventario:-20, valorInventario:-6}, consecuencia:"Cubres buena parte del pago con inventario que de todos modos ya estaba perdiendo valor en bodega."}
   ]};}
 const MODAURBANA_RANDOM = [
   (s,f)=>MACRO_TRM_COSTOS_USD(s,f,"las telas e insumos importados de tu próxima colección"),
-  (s,f)=>({tipo:'macro', titulo:"Sube el arancel a la ropa importada", titular:"Guerra Comercial en Casa: Sube el Arancel a la Ropa Importada", impactoAutomatico:{ebitda:1},
-    contexto:"El gobierno sube el arancel a las importaciones de fast-fashion para proteger la industria nacional — lo cual ya te favorece frente a la competencia importada, aunque también encarece la tela importada que tú mismo usas.",
+  (s,f)=>({tipo:'macro', titulo:"Sube el arancel a la ropa importada", titular:"Guerra comercial en casa: sube el arancel a la ropa importada", impactoAutomatico:{ebitda:1},
+    contexto:"El gobierno sube el arancel a las importaciones de fast fashion para proteger la industria nacional — lo cual ya te favorece frente a la competencia importada, aunque también encarece la tela importada que tú mismo usas.",
     choices:[
-      {texto:"Aprovechar la menor competencia para subir tus precios.", efectos:{ebitda:2, diasInventario:3}, consecuencia:"Con el fast-fashion más caro, tienes más margen de maniobra en precio, aunque el precio más alto también hace que la ropa rote un poco más lento en tienda."},
-      {texto:"Mantener tus precios y ganar participación de mercado frente al fast-fashion encarecido.", efectos:{capitalTrabajo:-1}, consecuencia:"Capturas clientes que antes preferían lo importado más barato, a cambio de no capitalizar el margen extra de inmediato."},
+      {texto:"Aprovechar la menor competencia para subir tus precios.", efectos:{ebitda:2, diasInventario:3}, consecuencia:"Con el fast fashion más caro, tienes más margen de maniobra en precio, aunque el precio más alto también hace que la ropa rote un poco más lento en tienda."},
+      {texto:"Mantener tus precios y ganar participación de mercado frente al fast fashion encarecido.", efectos:{capitalTrabajo:-1}, consecuencia:"Capturas clientes que antes preferían lo importado más barato, a cambio de no capitalizar el margen extra de inmediato."},
       {texto:"Buscar proveedores de tela nacional para reducir tu propia exposición al arancel.", efectos:{caja:-2, ebitda:0.5}, consecuencia:"Reduces tu dependencia de tela importada, aunque el cambio de proveedor toma tiempo de ajuste en tu producción."},
       {texto:"No cambiar nada por ahora y evaluar el efecto completo el próximo periodo.", efectos:{diasInventario:1}, consecuencia:"Ganas algo del efecto favorable sin mover nada todavía, aunque también sin capitalizarlo del todo."}
     ]}),
@@ -8971,7 +8971,7 @@ const SECTORS = [
     kpiInicial:{caja:40, capitalTrabajo:30, razonCorriente:1.6, deuda:18, ebitda:9, wacc:12.0, diasInventario:42, diasCartera:35, valorInventario:14, confianzaProveedores:68, confianzaBanco:60, reputacion:60, moralEquipo:62},
     cases:VITAFIT_CASES, calendario:[VITAFIT_NOMINA, VITAFIT_RENTA], random:VITAFIT_RANDOM,
     karmaExtra:[{ id:'viralInfluencer', trigger:(s)=>s.reputacion!=null && s.reputacion>=70,
-      build:(s,f)=>({tipo:'karma', titulo:"Un influencer local te etiqueta en una publicación viral",
+      build:(s,f)=>({tipo:'karma', titulo:"Una influencer local te etiqueta en una publicación viral",
         contexto:"Una influencer de fitness con cientos de miles de seguidores publica una rutina grabada en tu gimnasio, etiquetándote sin que se lo hayas pedido. Las inscripciones empiezan a repuntar de inmediato, y ella te escribe ofreciendo una colaboración paga.",
         choices:[
           {texto:"Aceptar la colaboración paga y ampliar la campaña con ella.", efectos:{caja:-4, reputacion:6, ebitda:2}, consecuencia:"El impulso orgánico se convierte en una estrategia sostenida, aunque el costo de la colaboración se siente de inmediato."},
@@ -8989,7 +8989,7 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Fuga de cerebros", contexto:"La moral del equipo técnico tocó fondo. Dos desarrolladores senior presentan su renuncia la misma semana, alegando 'falta de reconocimiento y estabilidad'.",
         choices:[
           {texto:"Contraofertar de inmediato con mejoras salariales y de beneficios para todo el equipo técnico.", efectos:{caja:-7, moralEquipo:20}, consecuencia:"Frenas la sangría a un costo alto, pero recuperas parte de la confianza perdida en el equipo que se queda."},
-          {texto:"Dejarlos ir y contratar reemplazos de forma acelerada.", efectos:{caja:-4, ebitda:-4, moralEquipo:-5, capitalTrabajo:3}, consecuencia:"El proceso de reemplazo y curva de aprendizaje golpea la velocidad de desarrollo por varios meses. A cambio, la nómina de los reemplazos es más liviana que la de los seniors que se fueron."},
+          {texto:"Dejarlos ir y contratar reemplazos de forma acelerada.", efectos:{caja:-4, ebitda:-4, moralEquipo:-5, capitalTrabajo:3}, consecuencia:"El proceso de reemplazo y la curva de aprendizaje golpean la velocidad de desarrollo por varios meses. A cambio, la nómina de los reemplazos es más liviana que la de los seniors que se fueron."},
           {texto:"Convocar una reunión abierta para escuchar al equipo y ajustar la cultura interna sin subir salarios todavía.", efectos:{moralEquipo:10, ebitda:-1}, consecuencia:"El gesto de escuchar sin prometer dinero calma parcialmente al equipo, aunque no resuelve la causa económica de fondo."},
           {texto:"Ofrecer participación accionaria (equity) al equipo técnico clave que se queda.", efectos:{moralEquipo:15, ebitda:-1, wacc:0.5}, consecuencia:"Alineas el incentivo de largo plazo del equipo con el de la empresa, sin un desembolso de caja inmediato tan alto. Eso sí, diluyes a los socios actuales, que ahora exigen más retorno: tu costo de capital sube."}
         ]})
@@ -9043,7 +9043,7 @@ const SECTORS = [
         ]})
     }] },
   { id:'modaurbana', emoji:'👗', nombre:'Moda Urbana', rubro:'Retail de ropa y confección', categoria:'secundario',
-    descripcion:'El inventario de moda pierde valor si no rota a tiempo con la temporada, y compite de frente contra el fast-fashion importado.',
+    descripcion:'El inventario de moda pierde valor si no rota a tiempo con la temporada, y compite de frente contra el fast fashion importado.',
     tieneInventario:true, requiereCapex:false, perecedero:true,
     kpiInicial:{caja:32, capitalTrabajo:24, razonCorriente:1.5, deuda:15, ebitda:7, wacc:13.5, diasInventario:55, diasCartera:50, valorInventario:18, confianzaProveedores:65, confianzaBanco:58, reputacion:60, moralEquipo:58},
     cases:MODAURBANA_CASES, calendario:[MODAURBANA_NOMINA, MODAURBANA_RENTA], random:MODAURBANA_RANDOM,

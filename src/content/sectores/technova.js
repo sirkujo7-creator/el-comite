@@ -13,7 +13,7 @@ const TECHNOVA_CASES = [
      consecuencia:"Cedes menos margen del que pedían y le das algo de valor tangible a cambio — una negociación más equilibrada."},
     {texto:"Rechazar el descuento y arriesgar la renovación.", efectos:{caja:1, ebitda:1, wacc:0.3},
      consecuencia:"Proteges tu margen por completo, aunque te expones a perder el 40% de tu ingreso recurrente si el cliente decide no renovar."},
-    {texto:"Proponer pricing por consumo, alineando el pago a su crecimiento real.", efectos:{ebitda:0.5, capitalTrabajo:-1, wacc:-0.1},
+    {texto:"Proponer un esquema de precios por consumo, alineando el pago a su crecimiento real.", efectos:{ebitda:0.5, capitalTrabajo:-1, wacc:-0.1},
      consecuencia:"Cambias la conversación de 'descuento' a 'modelo de pago': si el cliente crece, tú creces con él; si no, tampoco pierdes tanto margen."}
   ],
   choiceInformado:{texto:"Con el patrón de descuentos repetidos, condicionar cualquier rebaja a un caso de éxito público y referidos verificables.", efectos:{ebitda:-1, caja:-1},
@@ -88,7 +88,7 @@ function TECHNOVA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Nómina y bono
   choices:[
     {texto:"Pagar todo con la caja disponible.", efectos:{caja:-9}, consecuencia:"Cumples en tiempo y forma, sin costo adicional."},
     {texto:"Pagar salarios completos, pero diferir los bonos 30 días con acuerdo del equipo.", efectos:{caja:-6, moralEquipo:-8}, diferir:{monto:3.3, turnos:1, motivo:"Bonos diferidos al equipo", tipo:'nomina'},
-     consecuencia:"El equipo acepta por esta vez, aunque un bono aplazado repetidamente erosiona la confianza rápido en el sector tech."},
+     consecuencia:"El equipo acepta por esta vez, aunque un bono aplazado repetidamente erosiona rápido la confianza en el sector tecnológico."},
     {texto:"Tomar un crédito de nómina de corto plazo.", efectos:{deuda:5, wacc:0.5, caja:-4}, consecuencia:"Evitas fricción con el equipo, pero sumas una deuda más a tu estructura de capital."},
     {texto:"Congelar los bonos por este trimestre y comunicarlo abiertamente al equipo.", efectos:{caja:-6, moralEquipo:-15}, consecuencia:"Ahorras el gasto del bono por completo, pero la señal de austeridad golpea directo la moral de tu equipo técnico."}
   ]};}
@@ -97,7 +97,7 @@ function TECHNOVA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y factura
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario especializado en economía digital.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas específicas del sector."},
+    {texto:"Contratar un asesor tributario especializado en economía digital.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas específicas del sector."},
     {texto:"Usar parte de la reserva de contingencia para cubrir el pago.", efectos:{caja:-4, razonCorriente:-0.12}, consecuencia:"Cumples sin vaciar la caja operativa, pero sacrificas el colchón construido para otro tipo de imprevistos y tu liquidez de corto plazo se resiente."}
   ]};}
 const TECHNOVA_RANDOM = [
@@ -173,7 +173,7 @@ const TECHNOVA_RANDOM = [
        consecuencia:"Proteges la coherencia de tu producto, aunque tu cliente más grande queda visiblemente insatisfecho y empieza a mirar alternativas."},
       {texto:"Incluir la funcionalidad en el roadmap general del producto, beneficiando a todos los clientes.", efectos:{ebitda:-2, reputacion:3},
        consecuencia:"Conviertes una petición puntual en una mejora para toda tu base de clientes, aunque tarda más en estar lista de lo que tu cliente esperaba."},
-      {texto:"Subcontratar el desarrollo a un freelance especializado para no distraer a tu equipo interno.", efectos:{caja:-2, ebitda:1},
+      {texto:"Subcontratar el desarrollo a un desarrollador independiente especializado para no distraer a tu equipo interno.", efectos:{caja:-2, ebitda:1},
        consecuencia:"Resuelves la petición sin sacrificar tu roadmap interno, a cambio de depender de un tercero para algo que toca directamente tu producto."}
     ]
   }),
@@ -188,7 +188,7 @@ const TECHNOVA_RANDOM = [
       {texto:"Migrar a una arquitectura multi-nube para reducir la dependencia de un solo proveedor.", efectos:{caja:-6, wacc:-0.1},
        consecuencia:"Es una inversión considerable en resiliencia técnica que reduce drásticamente el riesgo de que esto se repita."},
       {texto:"Ofrecer una compensación en forma de crédito de servicio a los clientes afectados.", efectos:{caja:-2, reputacion:4},
-       consecuencia:"El gesto cuesta ingreso recurrente, pero refuerza la confianza de tus clientes empresariales en momentos donde más se necesita."}
+       consecuencia:"El gesto cuesta ingreso recurrente, pero refuerza la confianza de tus clientes empresariales en los momentos en que más se necesita."}
     ]
   })
 ];

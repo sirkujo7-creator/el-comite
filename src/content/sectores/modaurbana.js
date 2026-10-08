@@ -5,7 +5,7 @@ const MODAURBANA_CASES = [
 { tipo:'caso', titulo:"La tienda por departamentos pide más plazo",
   contexto:"Tu cliente mayorista más grande (una cadena de tiendas por departamentos, 35% de tus ventas) te pide pasar de 30 a 90 días de plazo.",
   investigacion:{costo:3, boton:"Solicitar reporte de central de riesgo del cliente ($3M)",
-    reporte:"Razón Corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
+    reporte:"Razón corriente del cliente: <b>0.8</b>. Su endeudamiento de corto plazo se incrementó <b>40%</b> en el último semestre."},
   choices:[
     {texto:"Aceptar los 90 días completos, sin condiciones adicionales.", efectos:{caja:-3, capitalTrabajo:-2, razonCorriente:-0.15, diasCartera:35}, consecuencia:"El cliente sigue comprando y la relación queda intacta, pero tu ciclo de conversión de efectivo se alarga."},
     {texto:"Negociar 60 días con 2% de descuento si paga antes de 45.", efectos:{caja:-1, razonCorriente:-0.05, ebitda:-1, diasCartera:15}, consecuencia:"Reduces algo la presión sobre tu capital de trabajo, aunque el descuento golpea tu margen operativo."},
@@ -14,7 +14,7 @@ const MODAURBANA_CASES = [
     {texto:"Ofrecer factoring: vender la cartera de este cliente a un descuento a cambio de caja inmediata.", efectos:{caja:4, ebitda:-2, diasCartera:-10}, consecuencia:"Obtienes liquidez de inmediato sin tomar deuda, a cambio de ceder parte del valor de la cartera a la entidad de factoring."}
   ],
   choiceInformado:{texto:"Con el reporte en mano, exigir un pagaré con aval antes de aceptar cualquier plazo mayor a 30 días.", efectos:{capitalTrabajo:1, razonCorriente:0.05, diasCartera:5},
-    consecuencia:"Una Razón Corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
+    consecuencia:"Una razón corriente de 0.8 y un endeudamiento de corto plazo creciendo 40% no son síntomas de expansión: son síntomas de iliquidez."}
 },
 { tipo:'caso', titulo:"Financiamiento para la colección de temporada",
   contexto:"Necesitas $15.000.000 para producir la colección de la próxima temporada antes de que pierda vigencia comercial.",
@@ -30,12 +30,12 @@ const MODAURBANA_CASES = [
   choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
     consecuencia:"Con el rango proyectado en mano, decides que un punto porcentual de subida es un riesgo real y te blindas parcialmente frente a él."}
 },
-{ tipo:'caso', titulo:"Llega fast-fashion importado más barato",
-  contexto:"Una cadena de fast-fashion importado abre en tu zona con precios muy por debajo de los tuyos en prendas similares.",
+{ tipo:'caso', titulo:"Llega fast fashion importado más barato",
+  contexto:"Una cadena de fast fashion importado abre en tu zona con precios muy por debajo de los tuyos en prendas similares.",
   choices:[
     {texto:"Bajar tus precios para competir directamente.", efectos:{ebitda:-4, caja:1}, consecuencia:"Mantienes el volumen de ventas, aunque entras en una guerra de precios que golpea tu margen de forma directa."},
     {texto:"Diferenciarte con diseño propio y producción local exclusiva.", efectos:{caja:-3, ebitda:1}, consecuencia:"Sales de competir solo por precio, aunque construir una propuesta de diseño diferenciada toma tiempo e inversión."},
-    {texto:"Apostar por un nicho de sostenibilidad y producción local frente al fast-fashion.", efectos:{caja:-2, ebitda:0.5, confianzaProveedores:5}, consecuencia:"Atraes a un segmento de clientes dispuesto a pagar más por origen y sostenibilidad, aunque es un mercado más pequeño."},
+    {texto:"Apostar por un nicho de sostenibilidad y producción local frente al fast fashion.", efectos:{caja:-2, ebitda:0.5, confianzaProveedores:5}, consecuencia:"Atraes a un segmento de clientes dispuesto a pagar más por origen y sostenibilidad, aunque es un mercado más pequeño."},
     {texto:"No cambiar nada y esperar a ver si el efecto de la nueva competencia se diluye.", efectos:{ebitda:-2}, consecuencia:"Ahorras cualquier inversión de reacción, aunque cedes terreno mientras decides qué hacer."}
   ]
 },
@@ -45,7 +45,7 @@ const MODAURBANA_CASES = [
     {texto:"Recortar personal de tienda para bajar costos fijos.", efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes vendedores con relación directa con tus clientes frecuentes."},
-    {texto:"Reducir gastos generales y renegociar con maquiladoras antes de tocar personal.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5}, consecuencia:"El ajuste es más lento pero protege tu equipo de tienda, aunque tensiona alguna relación de producción."},
+    {texto:"Reducir gastos generales y renegociar con maquiladoras antes de tocar personal.", efectos:{ebitda:2, capitalTrabajo:1, confianzaProveedores:-5}, consecuencia:"El ajuste es más lento, pero protege a tu equipo de tienda, aunque tensiona alguna relación de producción."},
     {texto:"Buscar un crédito puente para sostener la operación.", efectos:{caja:6, deuda:8, wacc:0.5, capitalTrabajo:4}, consecuencia:"Ganas tiempo sin recortar nada, pero cargas deuda adicional justo cuando tus ingresos son más bajos."},
     {texto:"Liquidar parte de la colección con descuento agresivo para acelerar la rotación.", efectos:{caja:3, ebitda:-2, diasInventario:-15, valorInventario:-5}, consecuencia:"Recuperas caja y liberas espacio de bodega, aunque vendes por debajo de tu margen habitual."}
   ]
@@ -91,16 +91,16 @@ function MODAURBANA_RENTA(s,f){ return {tipo:'calendario', titulo:"Renta y liqui
   choices:[
     {texto:"Pagar de contado el valor completo estimado.", efectos:{caja:-7, confianzaBanco:2}, consecuencia:"Cumples sin generar ninguna obligación adicional. Además, un historial tributario impecable mejora tu perfil ante el banco."},
     {texto:"Acogerse a una facilidad de pago con la DIAN.", efectos:{caja:-2, deuda:5, wacc:0.4}, consecuencia:"Alivias la presión de caja, pero conviertes impuestos en deuda financiera con intereses."},
-    {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Sus honorarios tienen costo, pero identifica deducciones legítimas que reducen el valor final a pagar."},
+    {texto:"Contratar un asesor tributario externo para revisar deducciones antes de declarar.", efectos:{caja:-5, ebitda:0.5}, consecuencia:"Los honorarios cuestan, pero el asesor identifica deducciones legítimas que reducen el valor final a pagar."},
     {texto:"Liquidar parte del inventario de temporada pasada para financiar el pago.", efectos:{caja:2, ebitda:-2, diasInventario:-20, valorInventario:-6}, consecuencia:"Cubres buena parte del pago con inventario que de todos modos ya estaba perdiendo valor en bodega."}
   ]};}
 const MODAURBANA_RANDOM = [
   (s,f)=>MACRO_TRM_COSTOS_USD(s,f,"las telas e insumos importados de tu próxima colección"),
-  (s,f)=>({tipo:'macro', titulo:"Sube el arancel a la ropa importada", titular:"Guerra Comercial en Casa: Sube el Arancel a la Ropa Importada", impactoAutomatico:{ebitda:1},
-    contexto:"El gobierno sube el arancel a las importaciones de fast-fashion para proteger la industria nacional — lo cual ya te favorece frente a la competencia importada, aunque también encarece la tela importada que tú mismo usas.",
+  (s,f)=>({tipo:'macro', titulo:"Sube el arancel a la ropa importada", titular:"Guerra comercial en casa: sube el arancel a la ropa importada", impactoAutomatico:{ebitda:1},
+    contexto:"El gobierno sube el arancel a las importaciones de fast fashion para proteger la industria nacional — lo cual ya te favorece frente a la competencia importada, aunque también encarece la tela importada que tú mismo usas.",
     choices:[
-      {texto:"Aprovechar la menor competencia para subir tus precios.", efectos:{ebitda:2, diasInventario:3}, consecuencia:"Con el fast-fashion más caro, tienes más margen de maniobra en precio, aunque el precio más alto también hace que la ropa rote un poco más lento en tienda."},
-      {texto:"Mantener tus precios y ganar participación de mercado frente al fast-fashion encarecido.", efectos:{capitalTrabajo:-1}, consecuencia:"Capturas clientes que antes preferían lo importado más barato, a cambio de no capitalizar el margen extra de inmediato."},
+      {texto:"Aprovechar la menor competencia para subir tus precios.", efectos:{ebitda:2, diasInventario:3}, consecuencia:"Con el fast fashion más caro, tienes más margen de maniobra en precio, aunque el precio más alto también hace que la ropa rote un poco más lento en tienda."},
+      {texto:"Mantener tus precios y ganar participación de mercado frente al fast fashion encarecido.", efectos:{capitalTrabajo:-1}, consecuencia:"Capturas clientes que antes preferían lo importado más barato, a cambio de no capitalizar el margen extra de inmediato."},
       {texto:"Buscar proveedores de tela nacional para reducir tu propia exposición al arancel.", efectos:{caja:-2, ebitda:0.5}, consecuencia:"Reduces tu dependencia de tela importada, aunque el cambio de proveedor toma tiempo de ajuste en tu producción."},
       {texto:"No cambiar nada por ahora y evaluar el efecto completo el próximo periodo.", efectos:{diasInventario:1}, consecuencia:"Ganas algo del efecto favorable sin mover nada todavía, aunque también sin capitalizarlo del todo."}
     ]}),

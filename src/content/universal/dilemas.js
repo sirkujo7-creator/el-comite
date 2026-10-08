@@ -179,7 +179,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Proponer una alianza más limitada, solo para un insumo puntual.", efectos:{ebitda:1, reputacion:-0.5},
        consecuencia:"Un paso prudente: obtienes parte del beneficio sin exponer toda tu operación a la relación. Aun así, algunos clientes fieles no ven con buenos ojos que cooperes con la competencia."},
       {texto:"Usar la negociación para obtener información sobre su operación, sin intención real de firmar.", efectos:{reputacion:-4, ebitda:1.5},
-       consecuencia:"Consigues algo de información valiosa, pero si se entera que negociaste de mala fe, esa puerta se cierra para siempre — y probablemente hable con otros del gremio."}
+       consecuencia:"Consigues algo de información valiosa, pero si se entera de que negociaste de mala fe, esa puerta se cierra para siempre — y probablemente hable con otros del gremio."}
     ]
   }),
   (s,f)=>({
@@ -389,7 +389,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Ofrecerles a los candidatos adicionales un inicio diferido para el próximo trimestre.", efectos:{moralEquipo:2, ebitda:-0.5},
        consecuencia:"Un punto intermedio razonable, aunque corres el riesgo de perder a los mejores candidatos frente a otras ofertas mientras esperan."},
       {texto:"Pagar los bonos de referido igual, aunque no contrates a los candidatos adicionales.", efectos:{caja:-2, moralEquipo:4},
-       consecuencia:"El gesto cuesta dinero sin ampliar el equipo, pero mantiene la confianza en que el programa de referidos vale la pena participar."}
+       consecuencia:"El gesto cuesta dinero sin ampliar el equipo, pero mantiene la confianza en que vale la pena participar en el programa de referidos."}
     ]
   }),
   (s,f)=>({
@@ -399,7 +399,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Pagar el monto reclamado para evitar cualquier conflicto legal o reputacional.", efectos:{caja:-4, reputacion:2},
        consecuencia:"Cierras el tema de raíz, aunque nunca sabrás con certeza si el monto reclamado era exactamente el correcto."},
       {texto:"Exigir pruebas documentales antes de considerar cualquier pago.", efectos:{reputacion:-1, caja:-0.5},
-       consecuencia:"Es lo correcto desde el punto de vista formal, aunque la relación personal con esa persona probablemente no sobreviva la exigencia. Y la consulta con tu abogado tiene su costo."},
+       consecuencia:"Es lo correcto desde el punto de vista formal, aunque la relación personal con esa persona probablemente no sobreviva a la exigencia. Y la consulta con tu abogado tiene su costo."},
       {texto:"Ofrecer una negociación por una fracción del monto reclamado, sin admitir ni negar la deuda.", efectos:{caja:-2},
        consecuencia:"Encuentras un punto medio pragmático que cierra el tema sin comprometerte con el monto completo reclamado."},
       {texto:"Ignorar el reclamo por completo, al no existir ningún documento que lo respalde.", efectos:{reputacion:-3},
@@ -481,7 +481,7 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Un incidente aislado con un cliente escaló en redes sociales y tu calificación promedio en plataformas de reseñas cayó de forma notoria en pocos días. El equipo de mercadeo pide una respuesta antes de que se profundice.",
     choices:[
       {texto:"Contratar una agencia de manejo de crisis en redes para gestionar la narrativa activamente.", efectos:{caja:-3, reputacion:5},
-       consecuencia:"La reputación se recupera más rápido de lo que hubiera pasado sola, aunque el costo no es menor para un incidente puntual."},
+       consecuencia:"La reputación se recupera más rápido de lo que se habría recuperado sola, aunque el costo no es menor para un incidente puntual."},
       {texto:"Responder personalmente y de forma transparente al cliente afectado, sin intermediarios.", efectos:{reputacion:3, caja:-0.5},
        consecuencia:"El gesto humano se nota y calma buena parte de la conversación, aunque no tiene el alcance de una campaña profesional. Le ofreces además una compensación al cliente afectado."},
       {texto:"No responder públicamente y dejar que el tema se diluya solo con el tiempo.", efectos:{reputacion:-3},
@@ -520,7 +520,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"El seguro de la empresa vence y las primas subieron considerablemente",
-    contexto:"Renovar la póliza de seguros integral de la empresa (activos, responsabilidad civil, interrupción de negocio) llegó con un aumento de prima mucho mayor al esperado. Reducir la cobertura abarataría el costo, pero también la protección.",
+    contexto:"La renovación de la póliza de seguros integral de la empresa (activos, responsabilidad civil, interrupción de negocio) llegó con un aumento de prima mucho mayor al esperado. Reducir la cobertura abarataría el costo, pero también la protección.",
     choices:[
       {texto:"Renovar la cobertura completa, aceptando el aumento de prima sin negociarlo.", efectos:{caja:-4},
        consecuencia:"Mantienes tu protección intacta ante cualquier eventualidad grave, al precio más alto disponible en el mercado actual."},
@@ -597,7 +597,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Aceptar, pero con respuestas cuidadosamente controladas por tu equipo de comunicaciones.", efectos:{caja:-0.5}, setFlags:{valentinaFavorable:false}, disparar:{turnos:3, evento:eventoValentinaReaparece},
        consecuencia:"La entrevista sale, pero Valentina nota lo ensayada que se sintió cada respuesta."},
       {texto:"Rechazar la entrevista por ahora, sin dar mayor explicación.", efectos:{reputacion:-0.5}, setFlags:{valentinaFavorable:false}, disparar:{turnos:3, evento:eventoValentinaReaparece},
-       consecuencia:"Valentina lo toma con profesionalismo, aunque el rechazo queda en su memoria — y una fuente menos amigable para tu próxima mención en prensa."},
+       consecuencia:"Valentina lo toma con profesionalismo, aunque el rechazo queda en su memoria — y se convierte en una fuente menos amigable para tu próxima mención en prensa."},
       {texto:"Aceptar la entrevista y aprovecharla para anunciar algo genuinamente positivo de la empresa.", efectos:{reputacion:3, caja:-0.3}, setFlags:{valentinaFavorable:true}, disparar:{turnos:3, evento:eventoValentinaReaparece},
        consecuencia:"La combinación de transparencia y una buena noticia real hace que la entrevista salga mejor de lo esperado."}
     ]
@@ -607,7 +607,7 @@ const ETHICAL_DILEMMA_POOL = [
     contexto:"Esteban 'Teto' Vargas, un excompañero de universidad que ahora dirige un fondo de inversión pequeño pero activo, te escribe de la nada — como si no hubieran pasado los años — proponiéndote capital a cambio de una participación en la empresa. El tono es casual, casi como en los viejos tiempos.",
     choices:[
       {texto:"Aceptar la propuesta, confiando en la relación de tantos años.", efectos:{caja:6, ebitda:0.5, reputacion:-1}, setFlags:{tetoRechazado:false}, disparar:{turnos:5, evento:eventoTetoReaparece},
-       consecuencia:"El capital llega rápido, con la informalidad característica de Teto — aunque eso también te preocupa un poco, y alguno en tu junta cuestiona la falta de formalidad del proceso."},
+       consecuencia:"El capital llega rápido, con la informalidad característica de Teto — aunque eso también te preocupa un poco, y alguien de tu junta cuestiona la falta de formalidad del proceso."},
       {texto:"Rechazar la propuesta educadamente, prefiriendo mantener distancia entre lo personal y lo profesional.", efectos:{capitalTrabajo:-0.5}, setFlags:{tetoRechazado:true}, disparar:{turnos:5, evento:eventoTetoReaparece},
        consecuencia:"Teto lo toma con humor, aunque insiste en que 'la oferta sigue en pie' — mientras tanto, sigues sin ese capital que hubiera acelerado algunos planes."},
       {texto:"Pedir toda la documentación formal del fondo antes de considerar algo.", efectos:{caja:-0.5}, setFlags:{tetoRechazado:false}, disparar:{turnos:5, evento:eventoTetoReaparece},
@@ -623,7 +623,7 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Seguir su recomendación al pie de la letra, sin cuestionarla.", efectos:{caja:-2}, setFlags:{elviraEscuchada:true}, disparar:{turnos:4, evento:eventoElviraReaparece},
        consecuencia:"El costo se siente hoy, aunque confías en el criterio que te ha funcionado antes."},
       {texto:"Pedirle una segunda opinión antes de gastar en corregir la cláusula.", efectos:{caja:-1}, setFlags:{elviraEscuchada:true}, disparar:{turnos:4, evento:eventoElviraReaparece},
-       consecuencia:"La segunda opinión confirma su diagnóstico — el gasto adicional en consultarlo, al menos, te da certeza."},
+       consecuencia:"La segunda opinión confirma su diagnóstico — el gasto adicional de consultarla, al menos, te da certeza."},
       {texto:"Decidir que el riesgo es demasiado improbable como para justificar el gasto.", efectos:{reputacion:-0.3}, setFlags:{elviraEscuchada:false}, disparar:{turnos:4, evento:eventoElviraReaparece},
        consecuencia:"Ahorras el costo inmediato, apostando a que ese escenario específico nunca llegue a materializarse — la Dra. Bonilla queda con la sensación de que su criterio no pesó lo suficiente."},
       {texto:"Corregir solo parcialmente la cláusula, buscando un punto medio de costo.", efectos:{caja:-1}, setFlags:{elviraEscuchada:false}, disparar:{turnos:4, evento:eventoElviraReaparece},
@@ -642,7 +642,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"El banco propone consolidar todas tus líneas de crédito",
-    contexto:"Tienes varias líneas de crédito abiertas con distintas tasas y plazos, cada una de una necesidad puntual del pasado. El banco te propone consolidarlas todas en un solo crédito, con una tasa promedio y un solo pago mensual — más simple de administrar, aunque no necesariamente más barato.",
+    contexto:"Tienes varias líneas de crédito abiertas con distintas tasas y plazos, cada una abierta para una necesidad puntual del pasado. El banco te propone consolidarlas todas en un solo crédito, con una tasa promedio y un solo pago mensual — más simple de administrar, aunque no necesariamente más barato.",
     choices:[
       {texto:"Consolidar todo en un solo crédito, aceptando la tasa promedio ofrecida.", efectos:{wacc:-0.3, deuda:-1, caja:-0.5}, consecuencia:"Simplificas tu administración financiera y hasta mejoras ligeramente tu costo promedio de capital. La estructuración del crédito consolidado cobra una comisión."},
       {texto:"Mantener las líneas separadas tal como están.", efectos:{caja:-0.2}, consecuencia:"Conservas el control individual de cada línea, aunque sigues administrando varias tasas y fechas de pago distintas — y ese tiempo administrativo tiene su propio costo."},

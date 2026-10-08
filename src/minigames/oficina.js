@@ -226,7 +226,7 @@ function resolverDilemaCafe(resultado){
   if(resultado === 'A'){
     efectos = {ebitda:0.05, moralEquipo:1};
     stampClass='neu'; stampTexto='AHORRO LOGRADO';
-    mensaje = "Lo lograste: 10 clics en menos de 3 segundos. Ahorro extremo, pero todo el equipo te vio hacerlo y ahora te odia un poco.";
+    mensaje = "Lo lograste: 10 clics en menos de 6 segundos. Ahorro extremo, pero todo el equipo te vio hacerlo y ahora te odia un poco.";
   } else if(resultado === 'A_fallo'){
     efectos = {moralEquipo:-1};
     stampClass='neg'; stampTexto='INTENTO FALLIDO';

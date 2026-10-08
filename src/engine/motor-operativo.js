@@ -147,7 +147,7 @@ function applyEfectos(e, origen){
 
   if(state.razonCorriente < 1.0){
     state.wacc = clamp(state.wacc + 2, 5, 35);
-    systemicNotes.push("Tu Razón Corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
+    systemicNotes.push("Tu razón corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
   }
   if(state.deuda >= 40){
     state.wacc = clamp(state.wacc + 0.3, 5, 35);
@@ -163,9 +163,9 @@ function applyEfectos(e, origen){
   }
   if(state.caja <= 8){
     state.confianzaBanco = clamp(state.confianzaBanco - 2, 0, 100);
-    systemicNotes.push("Tu Caja está en niveles críticos: el banco lo nota en tus movimientos y reduce silenciosamente su confianza en tu capacidad de pago (<b>Confianza bancaria -2</b>).");
+    systemicNotes.push("Tu caja está en niveles críticos: el banco lo nota en tus movimientos y reduce silenciosamente su confianza en tu capacidad de pago (<b>Confianza bancaria -2</b>).");
     state.confianzaProveedores = clamp(state.confianzaProveedores - 2, 0, 100);
-    systemicNotes.push("Con la Caja en niveles críticos, tus proveedores empiezan a sentir el riesgo de no cobrar y se ponen más exigentes (<b>Confianza de proveedores -2</b>).");
+    systemicNotes.push("Con la caja en niveles críticos, tus proveedores empiezan a sentir el riesgo de no cobrar y se ponen más exigentes (<b>Confianza de proveedores -2</b>).");
   }
   if(state.diasCartera >= 90){
     state.wacc = clamp(state.wacc + 0.2, 5, 35);

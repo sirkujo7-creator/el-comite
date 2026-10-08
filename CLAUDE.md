@@ -182,7 +182,7 @@ Pasos:
 
 Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna diferencia.
 
-### Fase 2 — Calidad de contenido automatizada
+### Fase 2 — Calidad de contenido automatizada ✅ completada (oct. 2026)
 - Validador de esquema para casos (campos obligatorios, rangos de efectos).
 - Reporte automático de cobertura por indicador y sector (prioridad: razón corriente, capital de trabajo, valor de inventario y días de cartera, especialmente en Ganadería).
 - Revisión gramatical del texto (ej.: "tenerte de aliada" → "tenerte como aliada").
@@ -198,7 +198,6 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
 
 ## 7. Pendientes conocidos
 
-- Revisión gramatical general (regla 10, Fase 2).
 - Los efectos condicionales (p. ej. `inventarioSano ? {...} : {...}`) solo se validan en la rama
   que corresponde al estado inicial; revisar a mano las otras ramas al editarlas.
 - `valorInventario` tiene dos lecturas en el contenido: perder valor (robo, plaga, vencimiento) es
@@ -219,6 +218,14 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
   depender de un solo cliente/proveedor sube el WACC y diversificar lo baja. Cinco opciones
   sin sentido como decisión se reemplazaron (ver commit). El encubrimiento ante la auditoría
   externa es una apuesta (25 %).
+- Revisión gramatical completa (oct. 2026): se leyeron las ~3.100 frases del juego. 61 correcciones:
+  titulares con mayúscula inicial (no estilo inglés), concordancia, preposiciones ("sobrevivir a",
+  "enterarse de que"), voseo → tuteo, anglicismos sin glosario (upgrade, pricing, freelance, tech).
+  Se conservan los términos financieros que tienen entrada en el glosario (fee, equity, venture
+  debt, warrants, spot). Pendiente opcional: las citas usan comillas simples ('…'); la norma
+  prefiere comillas angulares («…»).
+- Pruebas nuevas: esquema de casos, cobertura mínima (4 casos por indicador y sector) y ramas
+  condicionales (estados extremos).
 - 16 casos nuevos para cobertura: 2 universales (cartera, razón corriente), 4 Vita Fit,
   4 Agroverde, 2 Ganadería, 4 Construye Ya (inventario). Mínimo por sector: 4 casos por
   indicador aplicable.
