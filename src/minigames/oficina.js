@@ -12,7 +12,7 @@ function aplicarYFinalizarEventoOficina(resultElId, efectos, mensaje, stampClass
   const chips = chipOrder.filter(k=>efectos[k]).map(k=>{
     const val = efectos[k];
     const money = (k==='caja'||k==='ebitda');
-    const goodDir = val>0;
+    const goodDir = deltaEsSano(k, val);
     return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val, money?'money':'num')}</span>`;
   }).join('');
 

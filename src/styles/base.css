@@ -73,8 +73,8 @@
   .stat{border:1px solid var(--line-strong); border-radius:8px; padding:9px 10px; background:var(--bg-panel); transition:border-color .4s ease, transform .2s ease, box-shadow .2s ease; cursor:default; position:relative;}
   .stat-sparkline{ display:block; width:100%; height:14px; margin-top:5px; opacity:0.85; }
   .stat-trend{ font-size:9px; margin-left:3px; }
-  .stat-trend.up{ color:#7FADD9; }
-  .stat-trend.down{ color:var(--danger); }
+  .stat-trend.sano{ color:var(--teal); }
+  .stat-trend.malo{ color:var(--danger); }
   .floating-delta{
     position:absolute; right:8px; top:6px; font-family:'IBM Plex Mono',monospace;
     font-size:12px; font-weight:700; pointer-events:none; z-index:5;

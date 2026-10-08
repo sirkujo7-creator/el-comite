@@ -83,8 +83,8 @@
   .stat{border:1px solid var(--line-strong); border-radius:8px; padding:9px 10px; background:var(--bg-panel); transition:border-color .4s ease, transform .2s ease, box-shadow .2s ease; cursor:default; position:relative;}
   .stat-sparkline{ display:block; width:100%; height:14px; margin-top:5px; opacity:0.85; }
   .stat-trend{ font-size:9px; margin-left:3px; }
-  .stat-trend.up{ color:#7FADD9; }
-  .stat-trend.down{ color:var(--danger); }
+  .stat-trend.sano{ color:var(--teal); }
+  .stat-trend.malo{ color:var(--danger); }
   .floating-delta{
     position:absolute; right:8px; top:6px; font-family:'IBM Plex Mono',monospace;
     font-size:12px; font-weight:700; pointer-events:none; z-index:5;
@@ -2207,6 +2207,42 @@ function fmtDelta(v, kind){
   if(kind==='pct') return sign+v.toFixed(1)+"%";
   return sign+(Number.isInteger(v)?v:v.toFixed(1));
 }
+// "Lo sano" de cada indicador: el rango que colorFor pinta en verde. Un cambio es sano si
+// acerca el indicador a ese rango, o lo mueve en la dirección favorable sin sacarlo de él.
+// Se usa SOLO para lo visual (flechas, números de cambio, destellos, fichas); el motor
+// operativo conserva su propia lógica (esMejorSiSube).
+const RANGOS_SANOS = {
+  caja:{min:15}, capitalTrabajo:{min:10}, razonCorriente:{min:1.3}, deuda:{max:25},
+  ebitda:{min:8}, wacc:{max:14}, diasInventario:{min:25, max:55}, diasCartera:{max:60},
+  // Valor de inventario: hasta 25 es un activo sano (perderlo por robo, plaga o vencimiento es
+  // malo); desde 25 es capital atrapado y bajarlo es lo sano. Por eso el "objetivo" es 25.
+  valorInventario:{min:25, max:25},
+  confianzaProveedores:{min:70}, confianzaBanco:{min:70}, reputacion:{min:70}, moralEquipo:{min:70}
+};
+function rangoSano(key){
+  const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
+  if(u) return {max:u.alerta};
+  return RANGOS_SANOS[key] || {min:-Infinity};
+}
+// ¿Pasar de `antes` a `despues` acerca el indicador a lo sano?
+function cambioEsSano(key, antes, despues){
+  if(antes==null || despues==null || antes===despues) return true;
+  const r = rangoSano(key);
+  const tieneMin = r.min!=null, tieneMax = r.max!=null;
+  if(tieneMin && tieneMax){
+    const dentro = v => v>=r.min && v<=r.max;
+    if(dentro(antes)) return dentro(despues);
+    const distancia = v => v<r.min ? r.min-v : v>r.max ? v-r.max : 0;
+    return distancia(despues) < distancia(antes);
+  }
+  return tieneMin ? despues > antes : despues < antes;
+}
+// Variante para un efecto ya aplicado: el valor actual es el "después".
+function deltaEsSano(key, delta){
+  if(!delta || !state || state[key]==null) return delta ? (delta>0) === esMejorSiSube(key) : true;
+  return cambioEsSano(key, state[key]-delta, state[key]);
+}
+
 function colorFor(key, v){
   // Umbrales propios del sector (solo por arriba): p. ej. Ganadería, donde pocos días de inventario es lo sano.
   const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
@@ -2419,7 +2455,10 @@ function tendenciaHTML(key){
   const subiendo = racha.dir === 1;
   const flecha = subiendo ? '▲' : '▼';
   const fuego = racha.turnos >= 3 ? ' 🔥' : '';
-  return `<span class="stat-trend ${subiendo?'up':'down'}" title="${racha.turnos} turno(s) seguidos en esta dirección">${flecha}${fuego}</span>`;
+  // La flecha dice hacia dónde se movió; el color, si ese movimiento es sano (verde) o no (rojo).
+  const hist = kpiHistorial[key] || [];
+  const sano = hist.length >= 2 ? cambioEsSano(key, hist[hist.length-2], hist[hist.length-1]) : true;
+  return `<span class="stat-trend ${sano?'sano':'malo'}" title="${racha.turnos} turno(s) seguidos en esta dirección">${flecha}${fuego}</span>`;
 }
 function mostrarNumeroFlotante(selector, delta, kind, bueno, esInversion){
   const card = document.querySelector(selector);
@@ -2888,7 +2927,7 @@ function tieneContrapartidaPositiva(efectos, keyExcluir){
     if(k === keyExcluir) return false;
     const delta = efectos[k];
     if(!delta) return false;
-    return (delta>0) === esMejorSiSube(k);
+    return deltaEsSano(k, delta);
   });
 }
 function flashKpiCards(efectos){
@@ -2900,7 +2939,7 @@ function flashKpiCards(efectos){
     const selector = esRelacional ? '.rel-chip[data-tip="'+key+'"]' : '.stat[data-kpi="'+key+'"]';
     const card = document.querySelector(selector);
     if(!card) return;
-    const bueno = (delta>0) === esMejorSiSube(key);
+    const bueno = deltaEsSano(key, delta);
     const esPasivo = origenUltimoCambio[key] === 'pasivo';
     const esInversion = !bueno && ['caja','ebitda'].includes(key) && tieneContrapartidaPositiva(efectos, key);
     ['flash-bg-good','flash-bg-bad','flash-bg-pasivo','flash-bg-inversion'].forEach(c=>card.classList.remove(c));
@@ -2937,7 +2976,7 @@ function renderTicker(deltas){
       let deltaHtml = '';
       let flashClass = '';
       if(delta){
-        const goodDir = (d.key==='deuda'||d.key==='wacc'||d.key==='diasInventario') ? delta<0 : delta>0;
+        const goodDir = deltaEsSano(d.key, delta);
         deltaHtml = `<span class="stat-delta show ${goodDir?'up':'down'}">${fmtDelta(delta, d.kind)}</span>`;
         flashClass = delta > 0 ? 'flash-up' : 'flash-down';
       }
@@ -4851,7 +4890,7 @@ function finalizarBandeja(porTiempo){
   const chips = chipOrder.filter(k=>efectosTotales[k]).map(k=>{
     const val = efectosTotales[k];
     const money = (k==='caja'||k==='ebitda');
-    const goodDir = val>0;
+    const goodDir = deltaEsSano(k, val);
     return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val, money?'money':'num')}</span>`;
   }).join('');
 
@@ -4997,7 +5036,7 @@ function aplicarYFinalizarEventoOficina(resultElId, efectos, mensaje, stampClass
   const chips = chipOrder.filter(k=>efectos[k]).map(k=>{
     const val = efectos[k];
     const money = (k==='caja'||k==='ebitda');
-    const goodDir = val>0;
+    const goodDir = deltaEsSano(k, val);
     return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val, money?'money':'num')}</span>`;
   }).join('');
 
@@ -6627,7 +6666,7 @@ function renderTransition(c){
       const v = c.impactoAutomatico[k];
       const money = (k==='caja'||k==='capitalTrabajo'||k==='deuda'||k==='ebitda');
       const kind = money?'money':(k==='diasInventario'?'dias':'num');
-      const goodDir = (k==='deuda'||k==='wacc'||k==='diasInventario') ? v<0 : v>0;
+      const goodDir = deltaEsSano(k, v);
       return `<span class="impact-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} <span class="impact-arrow">→</span> ${fmtDelta(v,kind)}</span>`;
     }).join('');
     impactHtml = `<div class="impact-preview">${chips}</div>`;
@@ -6780,7 +6819,7 @@ function selectChoice(c, ch){
     const val = efectosAplicados[k];
     const money = (k==='caja'||k==='capitalTrabajo'||k==='deuda'||k==='ebitda');
     const kind = money?'money':(k==='diasInventario'?'dias':'num');
-    const goodDir = (k==='deuda'||k==='wacc'||k==='diasInventario') ? val<0 : val>0;
+    const goodDir = deltaEsSano(k, val);
     return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val,kind)}</span>`;
   }).join('');
 
@@ -6916,7 +6955,7 @@ function chipsDeEfectos(efectos){
     const val = efectos[k];
     const kd = KPI_DEFS.find(d=>d.key===k);
     const kind = kd ? kd.kind : 'num';
-    const bueno = (val>0) === esMejorSiSube(k);
+    const bueno = deltaEsSano(k, val);
     const etiqueta = KPI_LABEL[k] || k;
     return `<span class="delta-chip ${bueno?'up':'down'}">${etiqueta} ${fmtDelta(val, kind)}</span>`;
   }).join('');

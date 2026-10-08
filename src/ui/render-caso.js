@@ -7,7 +7,7 @@ function renderTransition(c){
       const v = c.impactoAutomatico[k];
       const money = (k==='caja'||k==='capitalTrabajo'||k==='deuda'||k==='ebitda');
       const kind = money?'money':(k==='diasInventario'?'dias':'num');
-      const goodDir = (k==='deuda'||k==='wacc'||k==='diasInventario') ? v<0 : v>0;
+      const goodDir = deltaEsSano(k, v);
       return `<span class="impact-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} <span class="impact-arrow">→</span> ${fmtDelta(v,kind)}</span>`;
     }).join('');
     impactHtml = `<div class="impact-preview">${chips}</div>`;
@@ -160,7 +160,7 @@ function selectChoice(c, ch){
     const val = efectosAplicados[k];
     const money = (k==='caja'||k==='capitalTrabajo'||k==='deuda'||k==='ebitda');
     const kind = money?'money':(k==='diasInventario'?'dias':'num');
-    const goodDir = (k==='deuda'||k==='wacc'||k==='diasInventario') ? val<0 : val>0;
+    const goodDir = deltaEsSano(k, val);
     return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val,kind)}</span>`;
   }).join('');
 

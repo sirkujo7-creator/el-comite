@@ -51,7 +51,10 @@ function tendenciaHTML(key){
   const subiendo = racha.dir === 1;
   const flecha = subiendo ? '▲' : '▼';
   const fuego = racha.turnos >= 3 ? ' 🔥' : '';
-  return `<span class="stat-trend ${subiendo?'up':'down'}" title="${racha.turnos} turno(s) seguidos en esta dirección">${flecha}${fuego}</span>`;
+  // La flecha dice hacia dónde se movió; el color, si ese movimiento es sano (verde) o no (rojo).
+  const hist = kpiHistorial[key] || [];
+  const sano = hist.length >= 2 ? cambioEsSano(key, hist[hist.length-2], hist[hist.length-1]) : true;
+  return `<span class="stat-trend ${sano?'sano':'malo'}" title="${racha.turnos} turno(s) seguidos en esta dirección">${flecha}${fuego}</span>`;
 }
 function mostrarNumeroFlotante(selector, delta, kind, bueno, esInversion){
   const card = document.querySelector(selector);

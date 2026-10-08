@@ -4,7 +4,7 @@ function chipsDeEfectos(efectos){
     const val = efectos[k];
     const kd = KPI_DEFS.find(d=>d.key===k);
     const kind = kd ? kd.kind : 'num';
-    const bueno = (val>0) === esMejorSiSube(k);
+    const bueno = deltaEsSano(k, val);
     const etiqueta = KPI_LABEL[k] || k;
     return `<span class="delta-chip ${bueno?'up':'down'}">${etiqueta} ${fmtDelta(val, kind)}</span>`;
   }).join('');

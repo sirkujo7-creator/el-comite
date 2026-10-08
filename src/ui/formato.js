@@ -13,6 +13,42 @@ function fmtDelta(v, kind){
   if(kind==='pct') return sign+v.toFixed(1)+"%";
   return sign+(Number.isInteger(v)?v:v.toFixed(1));
 }
+// "Lo sano" de cada indicador: el rango que colorFor pinta en verde. Un cambio es sano si
+// acerca el indicador a ese rango, o lo mueve en la dirección favorable sin sacarlo de él.
+// Se usa SOLO para lo visual (flechas, números de cambio, destellos, fichas); el motor
+// operativo conserva su propia lógica (esMejorSiSube).
+const RANGOS_SANOS = {
+  caja:{min:15}, capitalTrabajo:{min:10}, razonCorriente:{min:1.3}, deuda:{max:25},
+  ebitda:{min:8}, wacc:{max:14}, diasInventario:{min:25, max:55}, diasCartera:{max:60},
+  // Valor de inventario: hasta 25 es un activo sano (perderlo por robo, plaga o vencimiento es
+  // malo); desde 25 es capital atrapado y bajarlo es lo sano. Por eso el "objetivo" es 25.
+  valorInventario:{min:25, max:25},
+  confianzaProveedores:{min:70}, confianzaBanco:{min:70}, reputacion:{min:70}, moralEquipo:{min:70}
+};
+function rangoSano(key){
+  const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
+  if(u) return {max:u.alerta};
+  return RANGOS_SANOS[key] || {min:-Infinity};
+}
+// ¿Pasar de `antes` a `despues` acerca el indicador a lo sano?
+function cambioEsSano(key, antes, despues){
+  if(antes==null || despues==null || antes===despues) return true;
+  const r = rangoSano(key);
+  const tieneMin = r.min!=null, tieneMax = r.max!=null;
+  if(tieneMin && tieneMax){
+    const dentro = v => v>=r.min && v<=r.max;
+    if(dentro(antes)) return dentro(despues);
+    const distancia = v => v<r.min ? r.min-v : v>r.max ? v-r.max : 0;
+    return distancia(despues) < distancia(antes);
+  }
+  return tieneMin ? despues > antes : despues < antes;
+}
+// Variante para un efecto ya aplicado: el valor actual es el "después".
+function deltaEsSano(key, delta){
+  if(!delta || !state || state[key]==null) return delta ? (delta>0) === esMejorSiSube(key) : true;
+  return cambioEsSano(key, state[key]-delta, state[key]);
+}
+
 function colorFor(key, v){
   // Umbrales propios del sector (solo por arriba): p. ej. Ganadería, donde pocos días de inventario es lo sano.
   const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];

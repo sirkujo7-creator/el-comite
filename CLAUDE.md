@@ -119,7 +119,11 @@ tests/                               arnés + pruebas (npm test)
 - `sparklineSVG`: código muerto conservado a propósito.
 - **Final oculto trágico**: es deliberado.
 - Rango de moral: se dejó como está tras el ajuste de +16 %.
-- Flechas de tendencia: subida azul claro `#7FADD9`, bajada siempre roja, 🔥 desde racha 3.
+- Flechas de tendencia (decisión de oct. 2026, reemplaza la anterior): ▲/▼ según hacia dónde se
+  movió el valor; **verde si el movimiento acerca el indicador a lo sano, rojo si lo aleja**
+  (aunque esté en zona crítica, si se recupera va en verde). 🔥 desde racha 3. "Lo sano" está en
+  `RANGOS_SANOS` (`ui/formato.js`, `cambioEsSano`/`deltaEsSano`) y se usa en todo lo visual:
+  flechas, números de cambio, destellos y fichas. El motor sigue usando `esMejorSiSube`.
 - Inversión se colorea ámbar `#D98847` (no como pérdida).
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: PNG transparente, grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
@@ -197,8 +201,10 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
 - Revisión gramatical general (regla 10, Fase 2).
 - Los efectos condicionales (p. ej. `inventarioSano ? {...} : {...}`) solo se validan en la rama
   que corresponde al estado inicial; revisar a mano las otras ramas al editarlas.
-- `valorInventario` no está en `CAMPOS_INVERTIDOS` (para las reglas, más es mejor) pero `colorFor`
-  lo marca en riesgo cuando es alto. Decidir con Juan qué significa antes de usarlo como palanca.
+- `valorInventario` tiene dos lecturas en el contenido: perder valor (robo, plaga, vencimiento) es
+  malo; tener demasiado es capital atrapado. Decisión: en lo visual el objetivo sano es 25
+  (por debajo, perder valor es rojo; por encima, bajarlo es verde). En las reglas de contenido
+  sigue contando "más es mejor" (perder valor = costo).
 - La copia del HTML en el Proyecto de claude.ai puede estar desactualizada frente a la última versión entregada.
 
 ## 8. Historial de cambios de contenido y balance

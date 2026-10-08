@@ -42,7 +42,7 @@ function tieneContrapartidaPositiva(efectos, keyExcluir){
     if(k === keyExcluir) return false;
     const delta = efectos[k];
     if(!delta) return false;
-    return (delta>0) === esMejorSiSube(k);
+    return deltaEsSano(k, delta);
   });
 }
 function flashKpiCards(efectos){
@@ -54,7 +54,7 @@ function flashKpiCards(efectos){
     const selector = esRelacional ? '.rel-chip[data-tip="'+key+'"]' : '.stat[data-kpi="'+key+'"]';
     const card = document.querySelector(selector);
     if(!card) return;
-    const bueno = (delta>0) === esMejorSiSube(key);
+    const bueno = deltaEsSano(key, delta);
     const esPasivo = origenUltimoCambio[key] === 'pasivo';
     const esInversion = !bueno && ['caja','ebitda'].includes(key) && tieneContrapartidaPositiva(efectos, key);
     ['flash-bg-good','flash-bg-bad','flash-bg-pasivo','flash-bg-inversion'].forEach(c=>card.classList.remove(c));
@@ -91,7 +91,7 @@ function renderTicker(deltas){
       let deltaHtml = '';
       let flashClass = '';
       if(delta){
-        const goodDir = (d.key==='deuda'||d.key==='wacc'||d.key==='diasInventario') ? delta<0 : delta>0;
+        const goodDir = deltaEsSano(d.key, delta);
         deltaHtml = `<span class="stat-delta show ${goodDir?'up':'down'}">${fmtDelta(delta, d.kind)}</span>`;
         flashClass = delta > 0 ? 'flash-up' : 'flash-down';
       }
