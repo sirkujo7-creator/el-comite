@@ -34,7 +34,7 @@ let historialTitulosRecientes = [];
 function registrarTituloReciente(titulo){
   if(!titulo) return;
   historialTitulosRecientes.push(titulo);
-  if(historialTitulosRecientes.length > 4) historialTitulosRecientes.shift();
+  if(historialTitulosRecientes.length > 10) historialTitulosRecientes.shift();
 }
 function buscarCasoParaIndicador(indicador){
   // solo una coincidencia que no se haya mostrado hace poco — si la unica opcion

@@ -49,6 +49,9 @@ const SECTORS = [
   { id:'ganadera', emoji:'🐄', nombre:'Ganadera Los Llanos', rubro:'Ganadería lechera y cría de bovinos', categoria:'primario',
     descripcion:'Cada litro de leche que no se vende o refrigera a tiempo se pierde en horas — y una epidemia en el hato puede borrar meses de trabajo de un día para otro.',
     tieneInventario:true, requiereCapex:true, perecedero:true,
+    // La leche fresca no se almacena: pocos días de inventario es lo sano. Lo peligroso es la
+    // leche represada (días altos), no quedarse "corto" como en el comercio.
+    umbrales:{ diasInventario:{ alerta:15, peligro:25, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." } },
     kpiInicial:{caja:36, capitalTrabajo:26, razonCorriente:1.5, deuda:17, ebitda:7.5, wacc:13.5, diasInventario:6, diasCartera:32, valorInventario:9, confianzaProveedores:66, confianzaBanco:58, reputacion:60, moralEquipo:60},
     cases:GANADERA_CASES, calendario:[GANADERA_NOMINA, GANADERA_RENTA], random:GANADERA_RANDOM,
     karmaExtra:[{ id:'programaTV', trigger:(s)=>s.reputacion!=null && s.reputacion>=70,

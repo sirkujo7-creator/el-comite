@@ -67,7 +67,9 @@ function resaltarGlosario(texto){
 function getTooltipHTML(key){
   if(KPI_INFO[key]){
     const info = KPI_INFO[key];
-    return `<b>${KPI_LABEL[key]||key}</b>${info.def}<div class="rango">Rango saludable: ${info.rango}</div>`;
+    const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
+    const rango = (u && u.rango) || info.rango;
+    return `<b>${KPI_LABEL[key]||key}</b>${info.def}<div class="rango">Rango saludable: ${rango}</div>`;
   }
   if(key.indexOf('sector:')===0){
     const s = SECTORS.find(x=>x.id===key.slice(7));

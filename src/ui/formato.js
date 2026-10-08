@@ -14,6 +14,9 @@ function fmtDelta(v, kind){
   return sign+(Number.isInteger(v)?v:v.toFixed(1));
 }
 function colorFor(key, v){
+  // Umbrales propios del sector (solo por arriba): p. ej. Ganadería, donde pocos días de inventario es lo sano.
+  const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
+  if(u) return v>=u.peligro ? 'danger' : v>=u.alerta ? 'gold' : 'teal';
   const t = {
     caja: v<=5?'danger':v<=15?'gold':'teal',
     capitalTrabajo: v<0?'danger':v<10?'gold':'teal',
