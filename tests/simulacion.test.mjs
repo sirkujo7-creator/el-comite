@@ -52,10 +52,6 @@ test('reporte', (t) => {
   for (const f of filas) t.diagnostic(f);
 });
 
-// Pendiente (comportamiento heredado del original): en Ganadería y Construye Ya, la decisión
-// extra por indicador crítico (elegirDecisionExtra → buscarCasoParaIndicador) recicla los
-// mismos 3–4 casos, porque historialTitulosRecientes solo recuerda los últimos 4 títulos.
-// Corregirlo cambia el juego: queda para la Fase 2/3. Al llegar a cero, quitar el `todo`.
-test('regla 9 — ningún caso aparece más de 2 veces por partida', { todo: 'pendiente: memoria anti-repetición de 4 títulos' }, () => {
+test('regla 9 — ningún caso aparece más de 2 veces por partida', () => {
   assert.deepEqual(repeticiones, [], `${repeticiones.length} repeticiones:\n  ${repeticiones.slice(0, 30).join('\n  ')}`);
 });

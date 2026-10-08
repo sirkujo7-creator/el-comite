@@ -1790,6 +1790,7 @@ function initState(){
   nextBoardTurn = 5;
   cisneNegroMostrado = false;
   historialOficinaReciente = [];
+  historialTitulosRecientes = [];
   kpiHistorial = {};
   rachaIndicador = {};
   contadorDecisionesExtra = 0;
@@ -2523,14 +2524,13 @@ function elegirDeBagPriorizado(bag){
 // Busca, de forma robusta, un caso que toque el indicador dado — recarga la bolsa
 // completa si hace falta, en vez de rendirse solo porque el sorteo previo ya la vació
 // o no le tocó un caso relevante por casualidad.
-// Se recuerdan los últimos títulos mostrados para evitar que la búsqueda por indicador
-// termine repitiendo el mismo caso varias veces seguidas cuando solo hay una opción
-// disponible para ese indicador en el sector — mejor no forzar nada esta vez que repetir.
+// Se recuerdan todos los títulos mostrados en la partida (se reinicia en initState) para que
+// la búsqueda por indicador nunca repita un caso ya visto: si un indicador pasa muchos turnos
+// en crítico y solo hay pocos casos que lo toquen, mejor no forzar nada que repetir.
 let historialTitulosRecientes = [];
 function registrarTituloReciente(titulo){
   if(!titulo) return;
   historialTitulosRecientes.push(titulo);
-  if(historialTitulosRecientes.length > 10) historialTitulosRecientes.shift();
 }
 function buscarCasoParaIndicador(indicador){
   // solo una coincidencia que no se haya mostrado hace poco — si la unica opcion
@@ -4250,6 +4250,34 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Rechazar, prefiriendo mantener el ciclo de pago corto de siempre.", efectos:{confianzaProveedores:1, ebitda:0.3, caja:-0.5}, consecuencia:"El gesto de seguir pagando rápido, aunque no lo necesites, refuerza una relación que ya era sólida. Pagar rápido te mantiene el descuento por pronto pago, aunque la caja sale antes de lo necesario."},
       {texto:"Aceptar una ampliación parcial, a 45 días en vez de 60.", efectos:{razonCorriente:0.12, confianzaProveedores:1, ebitda:-0.2}, consecuencia:"Un término medio que mejora tu liquidez sin estirar la relación más de lo prudente."},
       {texto:"Aceptar la ampliación, comprometiéndote a un volumen de compra mayor a cambio.", efectos:{razonCorriente:0.2, ebitda:0.5, confianzaProveedores:1, capitalTrabajo:-2}, consecuencia:"Ambos salen ganando: tu liquidez mejora, y tu proveedor asegura un volumen de negocio más predecible. Comprar más volumen, eso sí, inmoviliza capital de trabajo."}
+    ]
+  }),
+  (s,f)=>({
+    tipo:'random', titulo:"La cartera vencida ya supera la quinta parte de tus ventas",
+    contexto:`El informe de edades de cartera de ${nombreEmpresaActual()} muestra que más del 20% de lo facturado lleva más de 60 días sin pagarse. En el estado de resultados esas ventas existen; en la caja, todavía no.`,
+    choices:[
+      {texto:"Contratar una firma de cobranza que cobra un porcentaje de lo recuperado.", efectos:{diasCartera:-15, caja:2, ebitda:-1},
+       consecuencia:"La cartera empieza a moverse y entra efectivo, aunque la comisión de la firma sale de tu margen."},
+      {texto:"Ofrecer un descuento por pronto pago a los clientes atrasados.", efectos:{diasCartera:-10, caja:3, ebitda:-1.5, razonCorriente:0.05},
+       consecuencia:"Muchos clientes aprovechan el descuento y pagan: la caja respira, a costa de resignar parte del precio facturado."},
+      {texto:"Vender la cartera vencida a una firma de factoring.", efectos:{diasCartera:-25, caja:5, ebitda:-3, razonCorriente:0.1},
+       consecuencia:"Conviertes la cartera en efectivo de inmediato, pero el factoring la compra con un descuento fuerte: la liquidez te sale cara."},
+      {texto:"Endurecer la política de crédito: nuevos pedidos solo de contado hasta que cada cliente se ponga al día.", efectos:{diasCartera:-8, razonCorriente:0.05, reputacion:-2, ebitda:-1},
+       consecuencia:"Frenas el crecimiento de la cartera de raíz, aunque algunos clientes lo toman mal y reducen sus pedidos."}
+    ]
+  }),
+  (s,f)=>({
+    tipo:'random', titulo:"Varias obligaciones de corto plazo vencen el mismo mes",
+    contexto:`Por cómo se fueron firmando los créditos y las facturas de proveedores, varias obligaciones de corto plazo vencen en el mismo mes. Tu razón corriente está en ${s.razonCorriente.toFixed(2)} y el banco la mira de cerca.`,
+    choices:[
+      {texto:"Refinanciar parte de las obligaciones a largo plazo con el banco.", efectos:{razonCorriente:0.25, wacc:0.4, deuda:2},
+       consecuencia:"Al pasar deuda de corto a largo plazo, tu razón corriente mejora de golpe, aunque pagarás más intereses durante más tiempo."},
+      {texto:"Vender un activo no estratégico para cubrir los vencimientos.", efectos:{caja:4, razonCorriente:0.2, ebitda:-1},
+       consecuencia:"Conviertes un activo inmóvil en liquidez, aunque ese activo aportaba algo a la operación."},
+      {texto:"Negociar con los proveedores un calendario de pagos escalonado.", efectos:{razonCorriente:0.1, confianzaProveedores:-4},
+       consecuencia:"Ganas holgura sin pedir crédito, aunque los proveedores aceptan a regañadientes y lo recordarán en la próxima negociación."},
+      {texto:"Pagar todo con la caja disponible y aplazar las inversiones del trimestre.", efectos:{caja:-5, razonCorriente:0.05, ebitda:-1, confianzaBanco:2},
+       consecuencia:"Pagar pasivos corrientes con caja reduce los dos lados de la razón corriente: como tienes más activos que pasivos de corto plazo, la razón incluso mejora un poco. El costo es aplazar las inversiones que tenías previstas."}
     ]
   })
 ];
@@ -7699,7 +7727,55 @@ const VITAFIT_RANDOM = [
     ],
     choiceInformado:{texto:"Con la evidencia de que la máquina estaba en buen estado y el cliente no siguió las instrucciones, rechazar la compensación con respaldo documentado.", efectos:{reputacion:-1},
       consecuencia:"Tienes la razón y la evidencia para sostenerla, aunque decir que no a un cliente lesionado siempre deja algo de incomodidad, tenga uno la razón o no."}
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"El proveedor de proteína ofrece 15% de descuento por compra trimestral",
+    contexto:"Tu proveedor de proteína en polvo te ofrece un 15% de descuento si compras de una vez el volumen de todo el trimestre, en lugar de los pedidos mensuales de siempre.",
+    choices:[
+      {texto:"Comprar el volumen trimestral completo con el descuento.", efectos:{caja:-6, ebitda:2, diasInventario:20, valorInventario:6},
+       consecuencia:"El costo unitario baja, pero llenas la bodega de producto que tardará meses en rotar y que tiene fecha de vencimiento."},
+      {texto:"Mantener los pedidos mensuales al precio normal.", efectos:{ebitda:-0.5, confianzaProveedores:-1},
+       consecuencia:"Conservas un inventario ágil y renuncias al ahorro — y el proveedor nota que no aprovechaste su oferta."},
+      {texto:"Comprar con descuento solo los dos sabores que más rotan.", efectos:{caja:-3, ebitda:1, diasInventario:8, valorInventario:3},
+       consecuencia:"Capturas parte del ahorro sin llenar la bodega de sabores que se mueven despacio."},
+      {texto:"Proponerle al proveedor que guarde el inventario en su bodega y te despache cada mes al precio con descuento.", efectos:{caja:-1.5, ebitda:1.5, diasInventario:2},
+       consecuencia:"El proveedor acepta a cambio de una tarifa de almacenamiento: consigues buena parte del descuento sin llenar tu bodega."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Las bebidas energéticas de marca propia rotan la mitad de lo previsto",
+    contexto:"Las bebidas energéticas de marca propia que lanzaste hace unos meses se venden a la mitad del ritmo proyectado. Ocupan la nevera del mostrador y el capital invertido en ellas sigue quieto.",
+    choices:[
+      {texto:"Incluirlas gratis en las membresías premium durante un mes.", efectos:{diasInventario:-10, valorInventario:-3, ebitda:-1, reputacion:2},
+       consecuencia:"El inventario se mueve y los socios premium lo agradecen, aunque regalas producto que pagaste."},
+      {texto:"Bajar el precio en el mostrador hasta agotar existencias.", efectos:{diasInventario:-12, valorInventario:-3, caja:2, ebitda:-1.5},
+       consecuencia:"Recuperas caja y liberas la nevera, a costa de vender por debajo del margen que proyectaste."},
+      {texto:"Venderlas al costo a una cadena de tiendas de barrio.", efectos:{diasInventario:-15, valorInventario:-4, caja:3, ebitda:-2, reputacion:-1},
+       consecuencia:"Sacas todo el lote de una vez, aunque ver tu marca en oferta en la tienda de la esquina no le ayuda a su imagen."},
+      {texto:"Mantenerlas y pedirle a un entrenador que las recomiende en sus clases.", efectos:{caja:-1, diasInventario:3, ebitda:0.5},
+       consecuencia:"La recomendación ayuda un poco a las ventas, pero el bono del entrenador cuesta y el inventario sigue acumulando días."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Un gimnasio que cierra ofrece venderte su inventario de suplementos",
+    contexto:"Un gimnasio de la zona cierra sus puertas y te ofrece todo su inventario de suplementos a mitad de precio. Hay producto con vencimiento lejano y otro que vence en pocos meses.",
+    choices:[
+      {texto:"Comprar todo el lote a mitad de precio.", efectos:{caja:-5, valorInventario:8, diasInventario:15, ebitda:1.5},
+       consecuencia:"El margen potencial es alto, pero inmovilizas caja en inventario que tardará en rotar, y parte vence pronto."},
+      {texto:"Comprar solo los productos con vencimiento lejano.", efectos:{caja:-2, valorInventario:3, diasInventario:5, ebitda:0.5},
+       consecuencia:"Aprovechas parte de la oportunidad sin asumir el riesgo del producto que está por vencer."},
+      {texto:"Rechazar la oferta: tu bodega ya está en su punto.", efectos:{ebitda:-0.5},
+       consecuencia:"Mantienes el inventario equilibrado, aunque un competidor compra el lote y lo remata cerca de tu sede."},
+      {texto:"Proponer venderlo en consignación: le pagas solo lo que se venda.", efectos:{ebitda:0.8, diasInventario:4},
+       consecuencia:"El dueño acepta: no inmovilizas caja, aunque cedes espacio de exhibición y bodega a producto que no es tuyo."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Empresas aliadas atrasan el pago de sus planes corporativos",
+    contexto:"Tres empresas que pagan planes corporativos para sus empleados llevan dos meses sin pagar. Sus empleados siguen entrenando como si nada.",
+    choices:[
+      {texto:"Suspender el acceso a los empleados de las empresas morosas.", efectos:{diasCartera:-18, reputacion:-2, ebitda:-1},
+       consecuencia:"Las empresas pagan rápido, pero sus empleados se sienten castigados por algo que no depende de ellos, y algunos no vuelven."},
+      {texto:"Facturar los planes corporativos por anticipado desde el próximo ciclo.", efectos:{diasCartera:-12, razonCorriente:0.05, ebitda:-1.5},
+       consecuencia:"Tu cartera se sanea y tu liquidez mejora, aunque una de las empresas no acepta el cambio y cancela su plan."},
+      {texto:"Darles 30 días más sin cambiar nada.", efectos:{diasCartera:12, reputacion:1},
+       consecuencia:"Las empresas agradecen la paciencia, pero financias tú, sin intereses, el bienestar de sus empleados."},
+      {texto:"Ofrecerles pagar con tarjeta de crédito corporativa, asumiendo tú la comisión.", efectos:{diasCartera:-15, caja:1, ebitda:-0.8},
+       consecuencia:"El dinero entra de inmediato por el datáfono, aunque la comisión de la tarjeta sale de tu margen."}
+    ]})
 ];
 
 /* =========================================================================================
@@ -8099,7 +8175,55 @@ const AGROVERDE_RANDOM = [
       {texto:"Hacer una liquidación parcial y moderada, no agresiva.", efectos:{diasInventario:-8, valorInventario:-1, caja:1}, consecuencia:"Un punto medio que mejora algo tu rotación sin regalar el inventario completo."},
       {texto:"Donarlo a cambio del beneficio tributario correspondiente.", efectos:{diasInventario:-15, valorInventario:-3, reputacion:3}, consecuencia:"No recuperas caja directa, pero el beneficio tributario y el gesto público compensan parte de la pérdida."}
     ]
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"La bodega de café pergamino está llena antes de la cosecha principal",
+    contexto:"Todavía tienes café de la traviesa almacenado y la cosecha principal empieza en tres semanas. No hay espacio para lo que viene.",
+    choices:[
+      {texto:"Vender ya el café almacenado al precio actual de la bolsa.", efectos:{diasInventario:-15, valorInventario:-5, caja:5, ebitda:-0.5},
+       consecuencia:"Liberas la bodega y entra caja, aunque vendes en un momento en que el precio no está en su mejor punto."},
+      {texto:"Alquilar una bodega adicional y esperar un mejor precio.", efectos:{caja:-2, diasInventario:10, valorInventario:3, ebitda:1},
+       consecuencia:"Si el precio sube, la espera valdrá la pena; mientras tanto, pagas arriendo y el café acumula días en inventario."},
+      {texto:"Vender a futuro la mitad del café con un contrato a tres meses.", efectos:{caja:2, diasInventario:-5, valorInventario:-2, wacc:-0.1},
+       consecuencia:"Aseguras el precio de la mitad del lote y reduces tu riesgo, aunque renuncias a una eventual alza en esa porción."},
+      {texto:"Tostar parte del grano y venderlo como café de marca propia.", efectos:{caja:-3, valorInventario:4, diasInventario:5, ebitda:1.5, reputacion:1},
+       consecuencia:"El café tostado vale bastante más que el pergamino, aunque montar la línea de tostión cuesta y el mercado de marca se construye despacio."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Una helada daña parte del aguacate almacenado",
+    contexto:"Una helada atípica afectó la piel de parte del aguacate que tenías listo para exportar. La fruta sirve, pero ya no cumple el estándar del comprador internacional.",
+    choices:[
+      {texto:"Venderlo de inmediato en el mercado nacional como fruta de segunda.", efectos:{caja:2, valorInventario:-4, diasInventario:-6, ebitda:-1.5},
+       consecuencia:"Recuperas algo de caja rápido, muy por debajo del precio de exportación."},
+      {texto:"Procesarlo en aceite de aguacate con una planta aliada.", efectos:{caja:-2, valorInventario:-1, diasInventario:-4, ebitda:0.5},
+       consecuencia:"El procesamiento cuesta, pero el aceite conserva buena parte del valor de la fruta."},
+      {texto:"Reclamar al seguro agrícola y esperar el peritaje.", efectos:{caja:2.5, valorInventario:-5, diasInventario:6},
+       consecuencia:"El seguro paga una parte de la pérdida, pero mientras llega el perito la fruta sigue deteriorándose en bodega."},
+      {texto:"Donarlo a un banco de alimentos y aplicar la deducción tributaria.", efectos:{valorInventario:-4, diasInventario:-6, reputacion:3, ebitda:-1},
+       consecuencia:"No entra caja, pero la deducción alivia el golpe y el gesto se nota en la región."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"El comprador del exterior pide pagarte a 90 días",
+    contexto:"Tu comprador principal en el exterior quiere renovar el contrato de café, pero ahora pide pagar a 90 días en lugar de 30.",
+    choices:[
+      {texto:"Aceptar los 90 días para asegurar el contrato.", efectos:{diasCartera:30, razonCorriente:-0.1, ebitda:1.5},
+       consecuencia:"Aseguras el volumen y el precio, aunque ahora financias tres meses de la operación de tu comprador."},
+      {texto:"Aceptar, pero descontar las facturas con un banco (factoring de exportación).", efectos:{diasCartera:5, caja:1, ebitda:0.5},
+       consecuencia:"Recibes el dinero casi de inmediato, aunque el banco se queda con una parte por adelantártelo."},
+      {texto:"Exigir una carta de crédito irrevocable a 30 días.", efectos:{diasCartera:-5, ebitda:-1},
+       consecuencia:"El comprador acepta la carta de crédito, pero pide un pequeño descuento por asumir el costo bancario."},
+      {texto:"Rechazar el cambio y buscar otro comprador que pague a 30 días.", efectos:{ebitda:-0.5},
+       consecuencia:"Mantienes tu plazo de cobro, aunque el nuevo comprador paga un poco menos por kilo."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Tu lote premium podría certificarse como café especial",
+    contexto:"Una catación confirmó que tu mejor lote puede certificarse como café especial, con un sobreprecio importante. La certificación cuesta y toma varias semanas.",
+    choices:[
+      {texto:"Certificar el lote completo como café especial.", efectos:{caja:-3, valorInventario:5, diasInventario:8, ebitda:1},
+       consecuencia:"El café vale más, aunque pasa más tiempo en bodega mientras se completa la certificación."},
+      {texto:"Certificar solo la mitad y vender el resto ya como café estándar.", efectos:{caja:-1.5, valorInventario:2, diasInventario:-3, ebitda:0.5},
+       consecuencia:"Pruebas el mercado de especiales sin frenar todo tu flujo de ventas."},
+      {texto:"Vender todo ya como café estándar.", efectos:{caja:3, valorInventario:-4, diasInventario:-10, ebitda:-0.5},
+       consecuencia:"Entra caja de inmediato, aunque dejas sobre la mesa el sobreprecio del café especial."},
+      {texto:"Asociarte con una tostadora que pague la certificación a cambio de la exclusividad del lote.", efectos:{valorInventario:3, diasInventario:5, ebitda:0.5, wacc:0.1},
+       consecuencia:"No pones dinero para la certificación, pero quedas atado a un solo comprador para tu mejor café."}
+    ]})
 ];
 
 /* =========================================================================================
@@ -8296,7 +8420,31 @@ const GANADERA_RANDOM = [
       {texto:"Aceptar solo una parte del espacio ofrecido.", efectos:{diasInventario:-2, caja:-0.5}, consecuencia:"Un alivio parcial que no resuelve toda la saturación, pero tampoco compromete tanta caja."},
       {texto:"Aceptar el espacio completo, ofreciendo a cambio ayuda con transporte compartido en el futuro.", efectos:{diasInventario:-3, valorInventario:1, confianzaProveedores:2, caja:-1}, consecuencia:"El trueque de favores, además del pago, deja una relación más sólida de la que tenías antes — aunque el alivio de inventario es un poco menor que si solo hubieras pagado."}
     ]
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"El queso madurado se acumula en el cuarto frío",
+    contexto:"La línea de queso que empezaste para darle salida a la leche sobrante rota más lento de lo previsto. El cuarto frío está lleno y el queso sigue sumando días en inventario.",
+    choices:[
+      {texto:"Venderlo al por mayor a un distribuidor regional, con descuento.", efectos:{diasInventario:-8, valorInventario:-3, caja:3, ebitda:-1},
+       consecuencia:"Vacías el cuarto frío y entra caja, a un precio bastante menor del que esperabas."},
+      {texto:"Abrir un punto de venta directo los fines de semana en el pueblo.", efectos:{caja:-2, diasInventario:-5, ebitda:1, reputacion:1},
+       consecuencia:"Vendes al precio completo y la gente empieza a conocer tu marca, aunque montar el punto de venta cuesta."},
+      {texto:"Reducir la producción de queso y volver a vender la leche cruda.", efectos:{diasInventario:-3, ebitda:-1, confianzaProveedores:2},
+       consecuencia:"La planta procesadora recibe de nuevo tu leche con gusto, aunque renuncias al margen extra del queso."},
+      {texto:"Seguir madurándolo: el queso añejo se vende más caro.", efectos:{diasInventario:6, valorInventario:3, ebitda:0.5},
+       consecuencia:"El queso gana valor con el tiempo, pero también gana días en bodega mientras encuentras quién lo compre."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"La planta procesadora empieza a pagarte a 60 días",
+    contexto:"La planta que te compra la leche anuncia que, por sus propios problemas de liquidez, pasará de pagarte a 15 días a pagarte a 60.",
+    choices:[
+      {texto:"Aceptar el nuevo plazo para no perder a tu comprador principal.", efectos:{diasCartera:25, razonCorriente:-0.1, confianzaProveedores:2},
+       consecuencia:"La relación se mantiene, pero ahora financias tú dos meses de la operación de la planta."},
+      {texto:"Vender parte de la leche a una cooperativa que paga a 15 días, aunque a menor precio.", efectos:{diasCartera:-5, ebitda:-1.5},
+       consecuencia:"Proteges tu flujo de caja, a costa de un precio por litro más bajo en esa porción."},
+      {texto:"Pedirle a la planta un anticipo quincenal a cambio de un pequeño descuento.", efectos:{diasCartera:5, ebitda:-0.8, razonCorriente:0.03},
+       consecuencia:"La planta acepta: cobras más rápido de lo que proponía, a cambio de un margen algo menor."},
+      {texto:"Tomar un crédito de capital de trabajo a un año mientras se normalizan los pagos.", efectos:{caja:4, deuda:4, wacc:0.3, razonCorriente:-0.05},
+       consecuencia:"Entra caja para operar, pero como es deuda de corto plazo, tu razón corriente incluso baja un poco: suben a la vez el efectivo y los pasivos corrientes."}
+    ]})
 ];
 
 /* =========================================================================================
@@ -8493,7 +8641,55 @@ const CONSTRUYEYA_RANDOM = [
       {texto:"Reasignarlos a otro proyecto activo tuyo, ajustando el presupuesto de ambos.", efectos:{diasInventario:-10, ebitda:-0.5}, consecuencia:"Evitas que el capital siga atrapado sin necesidad de vender con pérdida, aunque reorganizar el presupuesto de dos proyectos toma esfuerzo."},
       {texto:"Alquilar espacio de bodega adicional para no comprometer el flujo de tus otros proyectos.", efectos:{caja:-1, diasInventario:2}, consecuencia:"El material sigue esperando, pero al menos deja de estorbar la operación normal de tu bodega principal."}
     ]
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"Doce apartamentos terminados siguen sin venderse",
+    contexto:"La última etapa del proyecto está terminada, pero doce apartamentos siguen sin comprador. Cada mes pagas administración, impuesto predial y el costo financiero de tenerlos quietos.",
+    choices:[
+      {texto:"Bajar el precio un 8% para venderlos este trimestre.", efectos:{diasInventario:-25, valorInventario:-8, caja:6, ebitda:-2},
+       consecuencia:"Los apartamentos se venden y entra caja, a costa de sacrificar margen en cada unidad."},
+      {texto:"Ofrecerlos en arriendo con opción de compra.", efectos:{diasInventario:-10, valorInventario:-3, ebitda:1, capitalTrabajo:-2},
+       consecuencia:"Generas ingreso mensual y algunos inquilinos terminarán comprando, aunque el capital invertido vuelve muy despacio."},
+      {texto:"Lanzar una campaña de mercadeo sin tocar el precio.", efectos:{caja:-2, diasInventario:-8, ebitda:0.5},
+       consecuencia:"Algunas unidades se venden a precio completo, aunque la campaña cuesta y no resuelve todo el inventario."},
+      {texto:"Subsidiar dos puntos de la tasa hipotecaria de los compradores.", efectos:{diasInventario:-18, valorInventario:-6, caja:3, ebitda:-1.5, capitalTrabajo:-1},
+       consecuencia:"La cuota más baja atrae compradores sin bajar el precio de lista, aunque el subsidio de tasa sale de tu bolsillo."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Un proveedor ofrece congelar el precio del acero para dos etapas",
+    contexto:"Tu proveedor de acero te ofrece el precio de hoy si compras de una vez el material para la etapa actual y la siguiente. El mercado espera alzas, pero no es seguro.",
+    choices:[
+      {texto:"Comprar de contado el acero de ambas etapas.", efectos:{caja:-8, valorInventario:10, diasInventario:15, ebitda:2},
+       consecuencia:"Te blindas contra el alza, pero inmovilizas caja en material que no usarás en meses."},
+      {texto:"Comprar solo el acero de la etapa actual.", efectos:{caja:-3, valorInventario:3, diasInventario:3},
+       consecuencia:"No comprometes caja de más, aunque quedas expuesto al precio que tenga el acero cuando arranque la siguiente etapa."},
+      {texto:"Firmar un contrato de precio fijo con entregas por etapa.", efectos:{caja:-1, ebitda:1.5, wacc:0.1, confianzaProveedores:2},
+       consecuencia:"Aseguras el precio sin llenar la bodega, a cambio de un anticipo y de un compromiso de compra que ya no puedes cambiar."},
+      {texto:"Comprar todo con crédito del proveedor a 90 días.", efectos:{deuda:6, valorInventario:10, diasInventario:15, ebitda:2, wacc:0.3},
+       consecuencia:"Aseguras el precio sin tocar tu caja, aunque sumas deuda con intereses por un material que tardarás en usar."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Un comprador ofrece un lote a cambio de tres apartamentos",
+    contexto:"Un propietario de tierra te ofrece permutar un lote bien ubicado por tres de tus apartamentos sin vender. El lote serviría para un proyecto futuro.",
+    choices:[
+      {texto:"Aceptar la permuta completa.", efectos:{diasInventario:-10, valorInventario:-6, razonCorriente:-0.08, ebitda:1},
+       consecuencia:"Sacas tres unidades del inventario y consigues tierra para crecer, pero cambiaste activos que podías vender pronto por uno que tardará años en convertirse en caja: tu razón corriente baja."},
+      {texto:"Exigir el pago en efectivo, sin permuta.", efectos:{diasInventario:2, ebitda:-0.5},
+       consecuencia:"El propietario no tiene el efectivo y la oportunidad se enfría; los apartamentos siguen esperando comprador."},
+      {texto:"Permutar el lote por dos apartamentos más un saldo en efectivo.", efectos:{diasInventario:-7, valorInventario:-4, caja:2, razonCorriente:-0.03, ebitda:0.5},
+       consecuencia:"Un punto medio: consigues el lote, liberas inventario y además entra algo de caja."},
+      {texto:"Pedir un avalúo independiente del lote antes de decidir.", efectos:{caja:-0.5, diasInventario:3},
+       consecuencia:"Decidirás con información, aunque el avalúo cuesta y los apartamentos siguen sin venderse mientras tanto."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"La fiduciaria retiene el dinero de las preventas",
+    contexto:"Las cuotas iniciales de los compradores de la nueva etapa están en la fiduciaria, que no las liberará hasta que alcances el punto de equilibrio de ventas. Tu caja está comprometida en obra y el dinero de los compradores, quieto.",
+    choices:[
+      {texto:"Acelerar la preventa con descuentos para llegar rápido al punto de equilibrio.", efectos:{ebitda:-2, diasCartera:-15, caja:4, razonCorriente:0.1},
+       consecuencia:"Llegas al punto de equilibrio y la fiduciaria libera los recursos, a costa del margen de las unidades vendidas con descuento."},
+      {texto:"Financiar la obra con crédito constructor mientras tanto.", efectos:{caja:5, deuda:5, wacc:0.3, razonCorriente:-0.05},
+       consecuencia:"La obra sigue a buen ritmo, aunque sumas deuda de corto plazo justo cuando tu liquidez ya está apretada."},
+      {texto:"Pausar la obra hasta que la fiduciaria libere los recursos.", efectos:{caja:1, diasInventario:10, reputacion:-2},
+       consecuencia:"Proteges tu caja, pero la obra detenida suma días de inventario en proceso y los compradores empiezan a preguntar."},
+      {texto:"Negociar con la fiduciaria una liberación parcial con garantías adicionales.", efectos:{caja:2, diasCartera:-5, razonCorriente:-0.03},
+       consecuencia:"Recibes una parte del dinero, aunque los activos que diste en garantía quedan comprometidos."}
+    ]})
 ];
 
 /* =========================================================================================

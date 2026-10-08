@@ -192,6 +192,30 @@ const GANADERA_RANDOM = [
       {texto:"Aceptar solo una parte del espacio ofrecido.", efectos:{diasInventario:-2, caja:-0.5}, consecuencia:"Un alivio parcial que no resuelve toda la saturación, pero tampoco compromete tanta caja."},
       {texto:"Aceptar el espacio completo, ofreciendo a cambio ayuda con transporte compartido en el futuro.", efectos:{diasInventario:-3, valorInventario:1, confianzaProveedores:2, caja:-1}, consecuencia:"El trueque de favores, además del pago, deja una relación más sólida de la que tenías antes — aunque el alivio de inventario es un poco menor que si solo hubieras pagado."}
     ]
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"El queso madurado se acumula en el cuarto frío",
+    contexto:"La línea de queso que empezaste para darle salida a la leche sobrante rota más lento de lo previsto. El cuarto frío está lleno y el queso sigue sumando días en inventario.",
+    choices:[
+      {texto:"Venderlo al por mayor a un distribuidor regional, con descuento.", efectos:{diasInventario:-8, valorInventario:-3, caja:3, ebitda:-1},
+       consecuencia:"Vacías el cuarto frío y entra caja, a un precio bastante menor del que esperabas."},
+      {texto:"Abrir un punto de venta directo los fines de semana en el pueblo.", efectos:{caja:-2, diasInventario:-5, ebitda:1, reputacion:1},
+       consecuencia:"Vendes al precio completo y la gente empieza a conocer tu marca, aunque montar el punto de venta cuesta."},
+      {texto:"Reducir la producción de queso y volver a vender la leche cruda.", efectos:{diasInventario:-3, ebitda:-1, confianzaProveedores:2},
+       consecuencia:"La planta procesadora recibe de nuevo tu leche con gusto, aunque renuncias al margen extra del queso."},
+      {texto:"Seguir madurándolo: el queso añejo se vende más caro.", efectos:{diasInventario:6, valorInventario:3, ebitda:0.5},
+       consecuencia:"El queso gana valor con el tiempo, pero también gana días en bodega mientras encuentras quién lo compre."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"La planta procesadora empieza a pagarte a 60 días",
+    contexto:"La planta que te compra la leche anuncia que, por sus propios problemas de liquidez, pasará de pagarte a 15 días a pagarte a 60.",
+    choices:[
+      {texto:"Aceptar el nuevo plazo para no perder a tu comprador principal.", efectos:{diasCartera:25, razonCorriente:-0.1, confianzaProveedores:2},
+       consecuencia:"La relación se mantiene, pero ahora financias tú dos meses de la operación de la planta."},
+      {texto:"Vender parte de la leche a una cooperativa que paga a 15 días, aunque a menor precio.", efectos:{diasCartera:-5, ebitda:-1.5},
+       consecuencia:"Proteges tu flujo de caja, a costa de un precio por litro más bajo en esa porción."},
+      {texto:"Pedirle a la planta un anticipo quincenal a cambio de un pequeño descuento.", efectos:{diasCartera:5, ebitda:-0.8, razonCorriente:0.03},
+       consecuencia:"La planta acepta: cobras más rápido de lo que proponía, a cambio de un margen algo menor."},
+      {texto:"Tomar un crédito de capital de trabajo a un año mientras se normalizan los pagos.", efectos:{caja:4, deuda:4, wacc:0.3, razonCorriente:-0.05},
+       consecuencia:"Entra caja para operar, pero como es deuda de corto plazo, tu razón corriente incluso baja un poco: suben a la vez el efectivo y los pasivos corrientes."}
+    ]})
 ];
 

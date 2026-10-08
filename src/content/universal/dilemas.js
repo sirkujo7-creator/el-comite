@@ -739,6 +739,34 @@ const ETHICAL_DILEMMA_POOL = [
       {texto:"Aceptar una ampliación parcial, a 45 días en vez de 60.", efectos:{razonCorriente:0.12, confianzaProveedores:1, ebitda:-0.2}, consecuencia:"Un término medio que mejora tu liquidez sin estirar la relación más de lo prudente."},
       {texto:"Aceptar la ampliación, comprometiéndote a un volumen de compra mayor a cambio.", efectos:{razonCorriente:0.2, ebitda:0.5, confianzaProveedores:1, capitalTrabajo:-2}, consecuencia:"Ambos salen ganando: tu liquidez mejora, y tu proveedor asegura un volumen de negocio más predecible. Comprar más volumen, eso sí, inmoviliza capital de trabajo."}
     ]
+  }),
+  (s,f)=>({
+    tipo:'random', titulo:"La cartera vencida ya supera la quinta parte de tus ventas",
+    contexto:`El informe de edades de cartera de ${nombreEmpresaActual()} muestra que más del 20% de lo facturado lleva más de 60 días sin pagarse. En el estado de resultados esas ventas existen; en la caja, todavía no.`,
+    choices:[
+      {texto:"Contratar una firma de cobranza que cobra un porcentaje de lo recuperado.", efectos:{diasCartera:-15, caja:2, ebitda:-1},
+       consecuencia:"La cartera empieza a moverse y entra efectivo, aunque la comisión de la firma sale de tu margen."},
+      {texto:"Ofrecer un descuento por pronto pago a los clientes atrasados.", efectos:{diasCartera:-10, caja:3, ebitda:-1.5, razonCorriente:0.05},
+       consecuencia:"Muchos clientes aprovechan el descuento y pagan: la caja respira, a costa de resignar parte del precio facturado."},
+      {texto:"Vender la cartera vencida a una firma de factoring.", efectos:{diasCartera:-25, caja:5, ebitda:-3, razonCorriente:0.1},
+       consecuencia:"Conviertes la cartera en efectivo de inmediato, pero el factoring la compra con un descuento fuerte: la liquidez te sale cara."},
+      {texto:"Endurecer la política de crédito: nuevos pedidos solo de contado hasta que cada cliente se ponga al día.", efectos:{diasCartera:-8, razonCorriente:0.05, reputacion:-2, ebitda:-1},
+       consecuencia:"Frenas el crecimiento de la cartera de raíz, aunque algunos clientes lo toman mal y reducen sus pedidos."}
+    ]
+  }),
+  (s,f)=>({
+    tipo:'random', titulo:"Varias obligaciones de corto plazo vencen el mismo mes",
+    contexto:`Por cómo se fueron firmando los créditos y las facturas de proveedores, varias obligaciones de corto plazo vencen en el mismo mes. Tu razón corriente está en ${s.razonCorriente.toFixed(2)} y el banco la mira de cerca.`,
+    choices:[
+      {texto:"Refinanciar parte de las obligaciones a largo plazo con el banco.", efectos:{razonCorriente:0.25, wacc:0.4, deuda:2},
+       consecuencia:"Al pasar deuda de corto a largo plazo, tu razón corriente mejora de golpe, aunque pagarás más intereses durante más tiempo."},
+      {texto:"Vender un activo no estratégico para cubrir los vencimientos.", efectos:{caja:4, razonCorriente:0.2, ebitda:-1},
+       consecuencia:"Conviertes un activo inmóvil en liquidez, aunque ese activo aportaba algo a la operación."},
+      {texto:"Negociar con los proveedores un calendario de pagos escalonado.", efectos:{razonCorriente:0.1, confianzaProveedores:-4},
+       consecuencia:"Ganas holgura sin pedir crédito, aunque los proveedores aceptan a regañadientes y lo recordarán en la próxima negociación."},
+      {texto:"Pagar todo con la caja disponible y aplazar las inversiones del trimestre.", efectos:{caja:-5, razonCorriente:0.05, ebitda:-1, confianzaBanco:2},
+       consecuencia:"Pagar pasivos corrientes con caja reduce los dos lados de la razón corriente: como tienes más activos que pasivos de corto plazo, la razón incluso mejora un poco. El costo es aplazar las inversiones que tenías previstas."}
+    ]
   })
 ];
 

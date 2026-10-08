@@ -87,15 +87,29 @@ tests/                               arnés + pruebas (npm test)
   eventos con burbujeo) + **reloj virtual** (setTimeout/rAF/Date avanzan solo cuando el arnés
   lo pide; los minijuegos se agotan solos) + `Math.random` con semilla (mulberry32).
 - `jugador.mjs`: juega partidas completas **haciendo clic en la interfaz**. Perfiles:
-  `bueno` (prudente), `agresivo` (todo por EBITDA), `imperio` (EBITDA + caja), `azar`.
+  `bueno` (prudente: además descuenta la deuda diferida y evita eventos `disparar`),
+  `agresivo` (todo por EBITDA), `imperio` (EBITDA + caja), `azar`.
   Espera 1,3 s tras cada clic (más que "Calculando impacto"): volver a pulsar antes encola
   cierres de modal duplicados — error del arnés, no del juego.
-- `equivalencia.test.mjs`: original vs dist/ con la misma semilla (vigente solo mientras
-  original/ sea la referencia de comportamiento; retirarla cuando se cambie el juego a propósito).
+- `equivalencia.test.mjs`: **opcional** (`EQUIV_REF=ruta.html npm test`). Compara partidas con
+  semilla fija entre un HTML de referencia y dist/. Úsala en refactorizaciones que no deben
+  cambiar el juego (p. ej. Fase 4): genera la referencia antes del cambio.
+- `contenido.mjs` recolecta todos los casos (llama a las constructoras con el estado real de cada
+  sector; construye varias veces para detectar opciones con resultado aleatorio).
 - `contenido.test.mjs` (reglas 1–7) y `simulacion.test.mjs` (reglas 8–9, imprime el reporte).
+  Para las reglas 2 y 3 cuentan como beneficio/riesgo no numérico: `capex`, `diferir`,
+  `disparar`, `setFlags` y los efectos aleatorios.
 - Las cifras de referencia de la regla 8 venían de un arnés anterior con otros perfiles.
-  Línea base con este arnés (84 partidas/perfil, dificultad media, oct. 2026):
-  bueno 0 % quiebra · agresivo 27 % · imperio 35 % (arquetipo Imperio en el perfil agresivo: 11 %) · azar 36 %.
+  Línea base con este arnés (84 partidas/perfil, dificultad media, mismas semillas):
+
+  | Perfil | Quiebra original/ | Quiebra tras Fase 2 (oct. 2026) |
+  |---|---|---|
+  | bueno | 0 % | 0 % |
+  | agresivo | 27,4 % | 19,0 % (arquetipo Imperio 11,9 %) |
+  | imperio | 34,5 % | 33,3 % |
+  | azar | 35,7 % | 33,3 % |
+
+  Casos repetidos más de 2 veces por partida: ~50 por perfil → 0.
 
 ---
 
@@ -180,14 +194,25 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
 
 ## 7. Pendientes conocidos
 
-Detectados por `npm test` al cerrar la Fase 1 (marcados `todo`: se listan, no fallan):
-- **Regla 2:** 243 pares de opciones dominadas en el contenido heredado (ej.: "Ceder 20 % a un
-  inversionista" domina al crédito bancario porque la dilución no se modela como indicador).
-- **Regla 3:** 216 opciones sin ningún efecto negativo ni riesgo.
-- **Regla 9:** en Ganadería, 3 casos aparecen 5–6 veces por partida (Construye Ya: 1 caso, 3–4).
-  Causa: `historialTitulosRecientes` recuerda solo 4 títulos y `elegirDecisionExtra` recicla
-  los pocos casos que tocan el indicador crítico.
-
-- Cobertura baja de casos para razón corriente (~2 %) y algunos indicadores de Ganadería.
-- Revisión gramatical general.
+- Revisión gramatical general (regla 10, Fase 2).
+- Los efectos condicionales (p. ej. `inventarioSano ? {...} : {...}`) solo se validan en la rama
+  que corresponde al estado inicial; revisar a mano las otras ramas al editarlas.
+- `valorInventario` no está en `CAMPOS_INVERTIDOS` (para las reglas, más es mejor) pero `colorFor`
+  lo marca en riesgo cuando es alto. Decidir con Juan qué significa antes de usarlo como palanca.
 - La copia del HTML en el Proyecto de claude.ai puede estar desactualizada frente a la última versión entregada.
+
+## 8. Historial de cambios de contenido y balance
+
+**Fase 2 (oct. 2026)** — ver commits para el detalle:
+- Ganadería: umbral propio de días de inventario (`SECTORS[].umbrales`; `colorFor` lo respeta).
+  Antes arrancaba en crítico con 6 días y la decisión extra empujaba aún más abajo.
+- Anti-repetición: `historialTitulosRecientes` recuerda toda la partida (se reinicia en
+  `initState`); la decisión extra nunca repite un caso ya visto.
+- Reglas 2 y 3 en cero: se corrigieron 243 pares dominados y 88 opciones sin costo. Criterios:
+  capital propio sube el WACC; pagar renta de contado mejora la confianza del banco;
+  depender de un solo cliente/proveedor sube el WACC y diversificar lo baja. Cinco opciones
+  sin sentido como decisión se reemplazaron (ver commit). El encubrimiento ante la auditoría
+  externa es una apuesta (25 %).
+- 16 casos nuevos para cobertura: 2 universales (cartera, razón corriente), 4 Vita Fit,
+  4 Agroverde, 2 Ganadería, 4 Construye Ya (inventario). Mínimo por sector: 4 casos por
+  indicador aplicable.

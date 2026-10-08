@@ -27,14 +27,13 @@ function elegirDeBagPriorizado(bag){
 // Busca, de forma robusta, un caso que toque el indicador dado — recarga la bolsa
 // completa si hace falta, en vez de rendirse solo porque el sorteo previo ya la vació
 // o no le tocó un caso relevante por casualidad.
-// Se recuerdan los últimos títulos mostrados para evitar que la búsqueda por indicador
-// termine repitiendo el mismo caso varias veces seguidas cuando solo hay una opción
-// disponible para ese indicador en el sector — mejor no forzar nada esta vez que repetir.
+// Se recuerdan todos los títulos mostrados en la partida (se reinicia en initState) para que
+// la búsqueda por indicador nunca repita un caso ya visto: si un indicador pasa muchos turnos
+// en crítico y solo hay pocos casos que lo toquen, mejor no forzar nada que repetir.
 let historialTitulosRecientes = [];
 function registrarTituloReciente(titulo){
   if(!titulo) return;
   historialTitulosRecientes.push(titulo);
-  if(historialTitulosRecientes.length > 10) historialTitulosRecientes.shift();
 }
 function buscarCasoParaIndicador(indicador){
   // solo una coincidencia que no se haya mostrado hace poco — si la unica opcion

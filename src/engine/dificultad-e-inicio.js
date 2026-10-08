@@ -79,6 +79,7 @@ function initState(){
   nextBoardTurn = 5;
   cisneNegroMostrado = false;
   historialOficinaReciente = [];
+  historialTitulosRecientes = [];
   kpiHistorial = {};
   rachaIndicador = {};
   contadorDecisionesExtra = 0;

@@ -206,6 +206,54 @@ const VITAFIT_RANDOM = [
     ],
     choiceInformado:{texto:"Con la evidencia de que la máquina estaba en buen estado y el cliente no siguió las instrucciones, rechazar la compensación con respaldo documentado.", efectos:{reputacion:-1},
       consecuencia:"Tienes la razón y la evidencia para sostenerla, aunque decir que no a un cliente lesionado siempre deja algo de incomodidad, tenga uno la razón o no."}
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"El proveedor de proteína ofrece 15% de descuento por compra trimestral",
+    contexto:"Tu proveedor de proteína en polvo te ofrece un 15% de descuento si compras de una vez el volumen de todo el trimestre, en lugar de los pedidos mensuales de siempre.",
+    choices:[
+      {texto:"Comprar el volumen trimestral completo con el descuento.", efectos:{caja:-6, ebitda:2, diasInventario:20, valorInventario:6},
+       consecuencia:"El costo unitario baja, pero llenas la bodega de producto que tardará meses en rotar y que tiene fecha de vencimiento."},
+      {texto:"Mantener los pedidos mensuales al precio normal.", efectos:{ebitda:-0.5, confianzaProveedores:-1},
+       consecuencia:"Conservas un inventario ágil y renuncias al ahorro — y el proveedor nota que no aprovechaste su oferta."},
+      {texto:"Comprar con descuento solo los dos sabores que más rotan.", efectos:{caja:-3, ebitda:1, diasInventario:8, valorInventario:3},
+       consecuencia:"Capturas parte del ahorro sin llenar la bodega de sabores que se mueven despacio."},
+      {texto:"Proponerle al proveedor que guarde el inventario en su bodega y te despache cada mes al precio con descuento.", efectos:{caja:-1.5, ebitda:1.5, diasInventario:2},
+       consecuencia:"El proveedor acepta a cambio de una tarifa de almacenamiento: consigues buena parte del descuento sin llenar tu bodega."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Las bebidas energéticas de marca propia rotan la mitad de lo previsto",
+    contexto:"Las bebidas energéticas de marca propia que lanzaste hace unos meses se venden a la mitad del ritmo proyectado. Ocupan la nevera del mostrador y el capital invertido en ellas sigue quieto.",
+    choices:[
+      {texto:"Incluirlas gratis en las membresías premium durante un mes.", efectos:{diasInventario:-10, valorInventario:-3, ebitda:-1, reputacion:2},
+       consecuencia:"El inventario se mueve y los socios premium lo agradecen, aunque regalas producto que pagaste."},
+      {texto:"Bajar el precio en el mostrador hasta agotar existencias.", efectos:{diasInventario:-12, valorInventario:-3, caja:2, ebitda:-1.5},
+       consecuencia:"Recuperas caja y liberas la nevera, a costa de vender por debajo del margen que proyectaste."},
+      {texto:"Venderlas al costo a una cadena de tiendas de barrio.", efectos:{diasInventario:-15, valorInventario:-4, caja:3, ebitda:-2, reputacion:-1},
+       consecuencia:"Sacas todo el lote de una vez, aunque ver tu marca en oferta en la tienda de la esquina no le ayuda a su imagen."},
+      {texto:"Mantenerlas y pedirle a un entrenador que las recomiende en sus clases.", efectos:{caja:-1, diasInventario:3, ebitda:0.5},
+       consecuencia:"La recomendación ayuda un poco a las ventas, pero el bono del entrenador cuesta y el inventario sigue acumulando días."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Un gimnasio que cierra ofrece venderte su inventario de suplementos",
+    contexto:"Un gimnasio de la zona cierra sus puertas y te ofrece todo su inventario de suplementos a mitad de precio. Hay producto con vencimiento lejano y otro que vence en pocos meses.",
+    choices:[
+      {texto:"Comprar todo el lote a mitad de precio.", efectos:{caja:-5, valorInventario:8, diasInventario:15, ebitda:1.5},
+       consecuencia:"El margen potencial es alto, pero inmovilizas caja en inventario que tardará en rotar, y parte vence pronto."},
+      {texto:"Comprar solo los productos con vencimiento lejano.", efectos:{caja:-2, valorInventario:3, diasInventario:5, ebitda:0.5},
+       consecuencia:"Aprovechas parte de la oportunidad sin asumir el riesgo del producto que está por vencer."},
+      {texto:"Rechazar la oferta: tu bodega ya está en su punto.", efectos:{ebitda:-0.5},
+       consecuencia:"Mantienes el inventario equilibrado, aunque un competidor compra el lote y lo remata cerca de tu sede."},
+      {texto:"Proponer venderlo en consignación: le pagas solo lo que se venda.", efectos:{ebitda:0.8, diasInventario:4},
+       consecuencia:"El dueño acepta: no inmovilizas caja, aunque cedes espacio de exhibición y bodega a producto que no es tuyo."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Empresas aliadas atrasan el pago de sus planes corporativos",
+    contexto:"Tres empresas que pagan planes corporativos para sus empleados llevan dos meses sin pagar. Sus empleados siguen entrenando como si nada.",
+    choices:[
+      {texto:"Suspender el acceso a los empleados de las empresas morosas.", efectos:{diasCartera:-18, reputacion:-2, ebitda:-1},
+       consecuencia:"Las empresas pagan rápido, pero sus empleados se sienten castigados por algo que no depende de ellos, y algunos no vuelven."},
+      {texto:"Facturar los planes corporativos por anticipado desde el próximo ciclo.", efectos:{diasCartera:-12, razonCorriente:0.05, ebitda:-1.5},
+       consecuencia:"Tu cartera se sanea y tu liquidez mejora, aunque una de las empresas no acepta el cambio y cancela su plan."},
+      {texto:"Darles 30 días más sin cambiar nada.", efectos:{diasCartera:12, reputacion:1},
+       consecuencia:"Las empresas agradecen la paciencia, pero financias tú, sin intereses, el bienestar de sus empleados."},
+      {texto:"Ofrecerles pagar con tarjeta de crédito corporativa, asumiendo tú la comisión.", efectos:{diasCartera:-15, caja:1, ebitda:-0.8},
+       consecuencia:"El dinero entra de inmediato por el datáfono, aunque la comisión de la tarjeta sale de tu margen."}
+    ]})
 ];
 

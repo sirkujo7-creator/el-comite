@@ -4,7 +4,8 @@ import { crearJuego, mulberry32 } from './harness.mjs';
 
 // Pesos por indicador para cada perfil de jugador. Un valor negativo = "menos es mejor".
 const PESOS = {
-  // Prudente: cuida liquidez, deuda y relaciones; crece sin apostar la empresa.
+  // Prudente: cuida liquidez, deuda y relaciones; crece sin apostar la empresa. Además
+  // descuenta la deuda diferida y evita consecuencias inciertas (ver puntuar).
   bueno: {
     caja: 1, capitalTrabajo: 0.5, razonCorriente: 8, deuda: -0.6, ebitda: 1.5, wacc: -2,
     diasInventario: -0.1, diasCartera: -0.1, valorInventario: 0.1,
@@ -26,13 +27,24 @@ function pesoAjustado(perfil, k, estado) {
   const enPeligro =
     (k === 'caja' && estado.caja < 12) ||
     (k === 'razonCorriente' && estado.razonCorriente < 1.1) ||
+    (k === 'deuda' && estado.deuda >= 40) ||
+    (k === 'wacc' && estado.wacc >= 17) ||
     (['confianzaProveedores', 'confianzaBanco', 'reputacion'].includes(k) && estado[k] < 30);
-  return enPeligro ? w * 3 : w;
+  if (enPeligro) return w * 3;
+  // Con la caja holgada, cada peso adicional vale menos que reducir deuda o riesgo.
+  if (k === 'caja' && estado.caja > 40) return w * 0.3;
+  return w;
 }
 
-function puntuar(perfil, efectos, estado) {
+function puntuar(perfil, opcion, estado) {
   let s = 0;
-  for (const [k, v] of Object.entries(efectos || {})) if (typeof v === 'number') s += v * pesoAjustado(perfil, k, estado);
+  for (const [k, v] of Object.entries(opcion.efectos || {})) if (typeof v === 'number') s += v * pesoAjustado(perfil, k, estado);
+  // El jugador prudente también pesa lo que no se ve de inmediato: la deuda diferida es caja
+  // que saldrá después, y un evento disparado es una consecuencia incierta que prefiere evitar.
+  if (perfil === 'bueno') {
+    if (opcion.diferir) s -= (opcion.diferir.monto || 0) * pesoAjustado(perfil, 'caja', estado) * 0.8;
+    if (opcion.disparar) s -= 2;
+  }
   return s;
 }
 
@@ -40,7 +52,7 @@ function elegirOpcion(perfil, opciones, estado, rng) {
   if (!PESOS[perfil]) return Math.floor(rng() * opciones.length);
   let mejor = -Infinity, candidatos = [];
   opciones.forEach((o, i) => {
-    const s = Math.round(puntuar(perfil, o.efectos, estado) * 1e6) / 1e6;
+    const s = Math.round(puntuar(perfil, o, estado) * 1e6) / 1e6;
     if (s > mejor) { mejor = s; candidatos = [i]; } else if (s === mejor) candidatos.push(i);
   });
   return candidatos[Math.floor(rng() * candidatos.length)];

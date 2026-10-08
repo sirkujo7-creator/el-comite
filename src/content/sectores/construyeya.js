@@ -192,6 +192,54 @@ const CONSTRUYEYA_RANDOM = [
       {texto:"Reasignarlos a otro proyecto activo tuyo, ajustando el presupuesto de ambos.", efectos:{diasInventario:-10, ebitda:-0.5}, consecuencia:"Evitas que el capital siga atrapado sin necesidad de vender con pérdida, aunque reorganizar el presupuesto de dos proyectos toma esfuerzo."},
       {texto:"Alquilar espacio de bodega adicional para no comprometer el flujo de tus otros proyectos.", efectos:{caja:-1, diasInventario:2}, consecuencia:"El material sigue esperando, pero al menos deja de estorbar la operación normal de tu bodega principal."}
     ]
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"Doce apartamentos terminados siguen sin venderse",
+    contexto:"La última etapa del proyecto está terminada, pero doce apartamentos siguen sin comprador. Cada mes pagas administración, impuesto predial y el costo financiero de tenerlos quietos.",
+    choices:[
+      {texto:"Bajar el precio un 8% para venderlos este trimestre.", efectos:{diasInventario:-25, valorInventario:-8, caja:6, ebitda:-2},
+       consecuencia:"Los apartamentos se venden y entra caja, a costa de sacrificar margen en cada unidad."},
+      {texto:"Ofrecerlos en arriendo con opción de compra.", efectos:{diasInventario:-10, valorInventario:-3, ebitda:1, capitalTrabajo:-2},
+       consecuencia:"Generas ingreso mensual y algunos inquilinos terminarán comprando, aunque el capital invertido vuelve muy despacio."},
+      {texto:"Lanzar una campaña de mercadeo sin tocar el precio.", efectos:{caja:-2, diasInventario:-8, ebitda:0.5},
+       consecuencia:"Algunas unidades se venden a precio completo, aunque la campaña cuesta y no resuelve todo el inventario."},
+      {texto:"Subsidiar dos puntos de la tasa hipotecaria de los compradores.", efectos:{diasInventario:-18, valorInventario:-6, caja:3, ebitda:-1.5, capitalTrabajo:-1},
+       consecuencia:"La cuota más baja atrae compradores sin bajar el precio de lista, aunque el subsidio de tasa sale de tu bolsillo."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Un proveedor ofrece congelar el precio del acero para dos etapas",
+    contexto:"Tu proveedor de acero te ofrece el precio de hoy si compras de una vez el material para la etapa actual y la siguiente. El mercado espera alzas, pero no es seguro.",
+    choices:[
+      {texto:"Comprar de contado el acero de ambas etapas.", efectos:{caja:-8, valorInventario:10, diasInventario:15, ebitda:2},
+       consecuencia:"Te blindas contra el alza, pero inmovilizas caja en material que no usarás en meses."},
+      {texto:"Comprar solo el acero de la etapa actual.", efectos:{caja:-3, valorInventario:3, diasInventario:3},
+       consecuencia:"No comprometes caja de más, aunque quedas expuesto al precio que tenga el acero cuando arranque la siguiente etapa."},
+      {texto:"Firmar un contrato de precio fijo con entregas por etapa.", efectos:{caja:-1, ebitda:1.5, wacc:0.1, confianzaProveedores:2},
+       consecuencia:"Aseguras el precio sin llenar la bodega, a cambio de un anticipo y de un compromiso de compra que ya no puedes cambiar."},
+      {texto:"Comprar todo con crédito del proveedor a 90 días.", efectos:{deuda:6, valorInventario:10, diasInventario:15, ebitda:2, wacc:0.3},
+       consecuencia:"Aseguras el precio sin tocar tu caja, aunque sumas deuda con intereses por un material que tardarás en usar."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Un comprador ofrece un lote a cambio de tres apartamentos",
+    contexto:"Un propietario de tierra te ofrece permutar un lote bien ubicado por tres de tus apartamentos sin vender. El lote serviría para un proyecto futuro.",
+    choices:[
+      {texto:"Aceptar la permuta completa.", efectos:{diasInventario:-10, valorInventario:-6, razonCorriente:-0.08, ebitda:1},
+       consecuencia:"Sacas tres unidades del inventario y consigues tierra para crecer, pero cambiaste activos que podías vender pronto por uno que tardará años en convertirse en caja: tu razón corriente baja."},
+      {texto:"Exigir el pago en efectivo, sin permuta.", efectos:{diasInventario:2, ebitda:-0.5},
+       consecuencia:"El propietario no tiene el efectivo y la oportunidad se enfría; los apartamentos siguen esperando comprador."},
+      {texto:"Permutar el lote por dos apartamentos más un saldo en efectivo.", efectos:{diasInventario:-7, valorInventario:-4, caja:2, razonCorriente:-0.03, ebitda:0.5},
+       consecuencia:"Un punto medio: consigues el lote, liberas inventario y además entra algo de caja."},
+      {texto:"Pedir un avalúo independiente del lote antes de decidir.", efectos:{caja:-0.5, diasInventario:3},
+       consecuencia:"Decidirás con información, aunque el avalúo cuesta y los apartamentos siguen sin venderse mientras tanto."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"La fiduciaria retiene el dinero de las preventas",
+    contexto:"Las cuotas iniciales de los compradores de la nueva etapa están en la fiduciaria, que no las liberará hasta que alcances el punto de equilibrio de ventas. Tu caja está comprometida en obra y el dinero de los compradores, quieto.",
+    choices:[
+      {texto:"Acelerar la preventa con descuentos para llegar rápido al punto de equilibrio.", efectos:{ebitda:-2, diasCartera:-15, caja:4, razonCorriente:0.1},
+       consecuencia:"Llegas al punto de equilibrio y la fiduciaria libera los recursos, a costa del margen de las unidades vendidas con descuento."},
+      {texto:"Financiar la obra con crédito constructor mientras tanto.", efectos:{caja:5, deuda:5, wacc:0.3, razonCorriente:-0.05},
+       consecuencia:"La obra sigue a buen ritmo, aunque sumas deuda de corto plazo justo cuando tu liquidez ya está apretada."},
+      {texto:"Pausar la obra hasta que la fiduciaria libere los recursos.", efectos:{caja:1, diasInventario:10, reputacion:-2},
+       consecuencia:"Proteges tu caja, pero la obra detenida suma días de inventario en proceso y los compradores empiezan a preguntar."},
+      {texto:"Negociar con la fiduciaria una liberación parcial con garantías adicionales.", efectos:{caja:2, diasCartera:-5, razonCorriente:-0.03},
+       consecuencia:"Recibes una parte del dinero, aunque los activos que diste en garantía quedan comprometidos."}
+    ]})
 ];
 

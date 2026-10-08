@@ -200,6 +200,54 @@ const AGROVERDE_RANDOM = [
       {texto:"Hacer una liquidación parcial y moderada, no agresiva.", efectos:{diasInventario:-8, valorInventario:-1, caja:1}, consecuencia:"Un punto medio que mejora algo tu rotación sin regalar el inventario completo."},
       {texto:"Donarlo a cambio del beneficio tributario correspondiente.", efectos:{diasInventario:-15, valorInventario:-3, reputacion:3}, consecuencia:"No recuperas caja directa, pero el beneficio tributario y el gesto público compensan parte de la pérdida."}
     ]
-  })
+  }),
+  (s,f)=>({tipo:'random', titulo:"La bodega de café pergamino está llena antes de la cosecha principal",
+    contexto:"Todavía tienes café de la traviesa almacenado y la cosecha principal empieza en tres semanas. No hay espacio para lo que viene.",
+    choices:[
+      {texto:"Vender ya el café almacenado al precio actual de la bolsa.", efectos:{diasInventario:-15, valorInventario:-5, caja:5, ebitda:-0.5},
+       consecuencia:"Liberas la bodega y entra caja, aunque vendes en un momento en que el precio no está en su mejor punto."},
+      {texto:"Alquilar una bodega adicional y esperar un mejor precio.", efectos:{caja:-2, diasInventario:10, valorInventario:3, ebitda:1},
+       consecuencia:"Si el precio sube, la espera valdrá la pena; mientras tanto, pagas arriendo y el café acumula días en inventario."},
+      {texto:"Vender a futuro la mitad del café con un contrato a tres meses.", efectos:{caja:2, diasInventario:-5, valorInventario:-2, wacc:-0.1},
+       consecuencia:"Aseguras el precio de la mitad del lote y reduces tu riesgo, aunque renuncias a una eventual alza en esa porción."},
+      {texto:"Tostar parte del grano y venderlo como café de marca propia.", efectos:{caja:-3, valorInventario:4, diasInventario:5, ebitda:1.5, reputacion:1},
+       consecuencia:"El café tostado vale bastante más que el pergamino, aunque montar la línea de tostión cuesta y el mercado de marca se construye despacio."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Una helada daña parte del aguacate almacenado",
+    contexto:"Una helada atípica afectó la piel de parte del aguacate que tenías listo para exportar. La fruta sirve, pero ya no cumple el estándar del comprador internacional.",
+    choices:[
+      {texto:"Venderlo de inmediato en el mercado nacional como fruta de segunda.", efectos:{caja:2, valorInventario:-4, diasInventario:-6, ebitda:-1.5},
+       consecuencia:"Recuperas algo de caja rápido, muy por debajo del precio de exportación."},
+      {texto:"Procesarlo en aceite de aguacate con una planta aliada.", efectos:{caja:-2, valorInventario:-1, diasInventario:-4, ebitda:0.5},
+       consecuencia:"El procesamiento cuesta, pero el aceite conserva buena parte del valor de la fruta."},
+      {texto:"Reclamar al seguro agrícola y esperar el peritaje.", efectos:{caja:2.5, valorInventario:-5, diasInventario:6},
+       consecuencia:"El seguro paga una parte de la pérdida, pero mientras llega el perito la fruta sigue deteriorándose en bodega."},
+      {texto:"Donarlo a un banco de alimentos y aplicar la deducción tributaria.", efectos:{valorInventario:-4, diasInventario:-6, reputacion:3, ebitda:-1},
+       consecuencia:"No entra caja, pero la deducción alivia el golpe y el gesto se nota en la región."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"El comprador del exterior pide pagarte a 90 días",
+    contexto:"Tu comprador principal en el exterior quiere renovar el contrato de café, pero ahora pide pagar a 90 días en lugar de 30.",
+    choices:[
+      {texto:"Aceptar los 90 días para asegurar el contrato.", efectos:{diasCartera:30, razonCorriente:-0.1, ebitda:1.5},
+       consecuencia:"Aseguras el volumen y el precio, aunque ahora financias tres meses de la operación de tu comprador."},
+      {texto:"Aceptar, pero descontar las facturas con un banco (factoring de exportación).", efectos:{diasCartera:5, caja:1, ebitda:0.5},
+       consecuencia:"Recibes el dinero casi de inmediato, aunque el banco se queda con una parte por adelantártelo."},
+      {texto:"Exigir una carta de crédito irrevocable a 30 días.", efectos:{diasCartera:-5, ebitda:-1},
+       consecuencia:"El comprador acepta la carta de crédito, pero pide un pequeño descuento por asumir el costo bancario."},
+      {texto:"Rechazar el cambio y buscar otro comprador que pague a 30 días.", efectos:{ebitda:-0.5},
+       consecuencia:"Mantienes tu plazo de cobro, aunque el nuevo comprador paga un poco menos por kilo."}
+    ]}),
+  (s,f)=>({tipo:'random', titulo:"Tu lote premium podría certificarse como café especial",
+    contexto:"Una catación confirmó que tu mejor lote puede certificarse como café especial, con un sobreprecio importante. La certificación cuesta y toma varias semanas.",
+    choices:[
+      {texto:"Certificar el lote completo como café especial.", efectos:{caja:-3, valorInventario:5, diasInventario:8, ebitda:1},
+       consecuencia:"El café vale más, aunque pasa más tiempo en bodega mientras se completa la certificación."},
+      {texto:"Certificar solo la mitad y vender el resto ya como café estándar.", efectos:{caja:-1.5, valorInventario:2, diasInventario:-3, ebitda:0.5},
+       consecuencia:"Pruebas el mercado de especiales sin frenar todo tu flujo de ventas."},
+      {texto:"Vender todo ya como café estándar.", efectos:{caja:3, valorInventario:-4, diasInventario:-10, ebitda:-0.5},
+       consecuencia:"Entra caja de inmediato, aunque dejas sobre la mesa el sobreprecio del café especial."},
+      {texto:"Asociarte con una tostadora que pague la certificación a cambio de la exclusividad del lote.", efectos:{valorInventario:3, diasInventario:5, ebitda:0.5, wacc:0.1},
+       consecuencia:"No pones dinero para la certificación, pero quedas atado a un solo comprador para tu mejor café."}
+    ]})
 ];
 
