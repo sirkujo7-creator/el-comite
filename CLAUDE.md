@@ -21,39 +21,46 @@
 
 ---
 
-## 2. Estado actual (punto de partida de la migración)
+## 2. Estado actual — repositorio modular (Fase 1 completada)
 
-Un único archivo: `simulador_financiero.html` (~9.400 líneas, ~1,68 MB).
+El juego ya no se edita en un solo HTML. **Se edita `src/` y se genera `dist/`.**
 
-| Líneas aprox. | Contenido |
+```
+original/simulador_financiero.html   referencia intacta (NO editar)
+src/index.html                       esqueleto; cada `<!-- @include ruta -->` inserta un archivo de src/
+src/styles/*.css                     14 hojas, en el orden del original
+src/{engine,systems,ui,minigames,audio,content}/*.js   65 fragmentos de un solo <script>
+assets/                              13 imágenes; en el código aparecen como @asset(ruta)
+build.mjs                            une todo en dist/simulador_financiero.html (sin dependencias)
+dist/simulador_financiero.html       archivo que se entrega a Juan (se versiona)
+tests/                               arnés + pruebas (npm test)
+```
+
+- **Comandos:** `npm run build` (genera dist/) · `npm test` (build + todas las pruebas, ~1 min).
+  Variables: `SIM_N` (partidas por perfil, defecto 84), `SIM_DIFICULTAD`, `EQUIV_N`.
+- **Los fragmentos JS NO son módulos ES:** se concatenan en orden dentro de un único `<script>`
+  y comparten el alcance global, igual que el original. El orden de `src/index.html` importa
+  (declaraciones `let/const` y llamadas de nivel superior). No añadir `import`/`export`.
+- Tras cualquier cambio en `src/` o `assets/`: `npm run build` y commitear también `dist/`.
+- Al cerrar la Fase 1, `dist/` era **idéntico byte a byte** al original.
+
+### Dónde está cada cosa (archivo → contenido clave)
+
+| Archivo | Contenido |
 |---|---|
-| 9 | Chart.js 4.4.0 por CDN (jsdelivr) |
-| 10–1115 | CSS (`<style>`) |
-| 1116–1222 | HTML (pantallas, modales) |
-| 1223–9404 | JS (`<script>`), ~256 funciones de nivel superior |
-| 2280–2291 | **Imágenes base64** (`COMITE_IMG_BASE64` + 11 `RETRATO_*`) — la mayor parte del peso |
-
-### Mapa del JS (orden aproximado en el archivo)
-
-| Zona | Constantes / funciones clave |
-|---|---|
-| Audio | `audioCtx`, drones, `SONIDO_OFICINA_POR_TIPO`, ambiente de menú |
-| Dificultad e impacto | `DIFICULTADES`, `DIFICULTAD_MODIFICADORES`, `KPI_CAMPOS_MULTIPLICATIVOS/ADITIVOS`, `IMPACTO_MULTIPLICADORES`, `CAMPOS_INVERTIDOS`, `amplificarEImpredecir` |
-| Ecos narrativos | `ECOS_DECISION_DURA`, `ECOS_DECISION_GENEROSA` |
-| Motor operativo | `aplicarMotorOperativo` (asimétrico, tope `MOTOR_OPERATIVO_TOPE = 1.2`, se aplica **una vez por turno real** en `nextTurn`), `ajustarDeltaSiCritico` |
-| Imágenes | `COMITE_IMG_BASE64`, `RETRATO_*` |
-| Metas y mandatos | `metaTrimestral`, `MANDATOS_INICIALES`, `META_ETIQUETAS`, `META_DELTAS`, `META_INVERTIDOS`, `META_RANGOS` |
-| Logros y carrera | `LOGROS_DEFINIDOS`, contadores (`contadorDecisionesExtra`, `deudaMaximaAlcanzada`, `rachaMetasCumplidas`…), `detectarArquetipo` |
-| Feedback visual | `TODOS_LOS_KPIS_VISUALES`, `kpiHistorial`, `rachaIndicador`, `flashKpiCards`, `mostrarNumeroFlotante`, `tendenciaHTML` |
-| Priorización | `indicadoresEnAlerta`, `indicadorPrioritario`, `elegirDeBagPriorizado`, `buscarCasoParaIndicador`, `elegirDecisionExtra`, `historialTitulosRecientes` (anti-repetición) |
-| Glosario | `GLOSARIO_FINANCIERO` (32 términos), `resaltarGlosario` |
-| Indicadores | `KPI_DEFS`, `KPI_LABEL`, `KPI_INFO`, `KPI_ICON_*`, `EXPLAIN`, `CONSEJOS_KPI` |
-| Contenido universal | `ETHICAL_DILEMMA_POOL`, `DILEMA_RESTRICCIONES`, `INBOX_EVENTS_POOL`, `OFICINA_EVENTS_POOL`, `BLACK_SWAN_POOL` |
-| Minijuegos | Fuga de capital (`FUGA_CAPITAL_*`), Oficina (`OFICINA_CONTEXTOS`, `OFICINA_RENDER_POR_TIPO`) |
-| Narrativa larga | `CARTA_META_COMITE`, `CADENAS_PROFUNDAS` (4 cadenas: Renata, Revisión Fiscal, Sello, Reestructuración), `ELENCO_INDICADORES`, `KARMA_CASES` |
-| Sectores | `*_CASES` y `*_RANDOM` por sector, `PERFILES`, `PERKS`, `SECTORS` (incluye `calendario` y `karmaExtra`) |
-| Cierre | `checkForcedEnding` → `checkForcedEndingInterno`, final oculto y final oculto trágico, `GUION_INFORME_FINAL` |
-| UI de bitácora | `renderLog`, `renderPantallaBitacora`, `toggleLog`, `chipsDeEfectos` |
+| engine/estado-global.js, constantes-partida.js | `state`, `flags`, `MAX_TURNS`… |
+| engine/dificultad-e-inicio.js | `DIFICULTADES`, `DIFICULTAD_MODIFICADORES`, `initState`, `clamp/shuffle/pick` |
+| engine/impacto.js | `IMPACTO_MULTIPLICADORES`, `CAMPOS_INVERTIDOS`, `amplificarEImpredecir`, ecos |
+| engine/motor-operativo.js | `aplicarMotorOperativo`, `ajustarDeltaSiCritico`, `applyEfectos` |
+| engine/resolucion-turno.js, junta-trimestral.js, finales.js, flujo-turno.js, inicio.js | `resolveTurn`, junta, `checkForcedEnding`, `nextTurn`, arranque |
+| systems/metas-e-imagenes.js | constantes `RETRATO_*`, `COMITE_IMG_BASE64`, `metaTrimestral` |
+| systems/metas-junta.js | `META_DELTAS`, `META_RANGOS`, `generarNuevaMeta` |
+| systems/priorizacion.js, priorizacion-casos.js | `indicadoresEnAlerta`, `buscarCasoParaIndicador`, `elegirDecisionExtra` |
+| systems/… | persistencia, mandato inicial, logros, glosario, arquetipos, mayor error, título, legado, estadísticas |
+| ui/… | formato, feedback visual, iconos KPI, tensión, render de caso, bitácora, post-mortem, panel CRT, pantallas de inicio, cinemática, pantalla completa |
+| minigames/… | auditoría, mercado volátil, bandeja, fuga de capital, oficina (+ ambiente) |
+| content/universal/… | dilemas, elenco, cadenas profundas, carta meta, karma, cisne negro… |
+| content/sectores/<sector>.js, sectores.js, perfiles.js | `*_CASES`, `*_RANDOM`, `SECTORS`, `PERFILES`, `PERKS` |
 
 ### Estado global
 `state`, `flags`, `history`, `turnNumber`, `currentCase`, `randomBag`, `mainQueue`, `sectorActual`, `perfilActual`, `perkActual`, `dificultadSeleccionada`, `legadosEmpresariales`, `metaTrimestral`, `mandatoInicial`. Todo es global mutable: **es la principal deuda técnica**.
@@ -75,12 +82,20 @@ Un único archivo: `simulador_financiero.html` (~9.400 líneas, ~1,68 MB).
 9. **Anti-repetición:** ningún caso debería aparecer más de 2 veces por partida.
 10. **Español correcto y natural** en todo texto de juego (revisar concordancia y preposiciones).
 
-### Arnés de pruebas (cómo se ha probado hasta ahora)
-- Node + `vm` con DOM falso: registro `FakeEl`, `FakeCanvas`, `FakeChart`, `fakeSetTimeout` que omite esperas ≥1000 ms, `requestAnimationFrame`, `createElement`, `style`.
-- Lecciones aprendidas (errores del arnés, no del juego):
-  - IDs efímeros: al reemplazar `turnModalContent.innerHTML`, borrar del registro los botones viejos (si no, se acumulan listeners).
-  - Condición correcta para avanzar: `if (decisionExtraAntes || !flags.decisionExtraUsadaEsteTurno) nextTurn()`.
-  - `pendingEndingResult` contiene tanto victorias como derrotas.
+### Arnés de pruebas (`tests/`)
+- `harness.mjs`: Node `vm` + DOM falso (árbol real parseado del HTML, selectores simples,
+  eventos con burbujeo) + **reloj virtual** (setTimeout/rAF/Date avanzan solo cuando el arnés
+  lo pide; los minijuegos se agotan solos) + `Math.random` con semilla (mulberry32).
+- `jugador.mjs`: juega partidas completas **haciendo clic en la interfaz**. Perfiles:
+  `bueno` (prudente), `agresivo` (todo por EBITDA), `imperio` (EBITDA + caja), `azar`.
+  Espera 1,3 s tras cada clic (más que "Calculando impacto"): volver a pulsar antes encola
+  cierres de modal duplicados — error del arnés, no del juego.
+- `equivalencia.test.mjs`: original vs dist/ con la misma semilla (vigente solo mientras
+  original/ sea la referencia de comportamiento; retirarla cuando se cambie el juego a propósito).
+- `contenido.test.mjs` (reglas 1–7) y `simulacion.test.mjs` (reglas 8–9, imprime el reporte).
+- Las cifras de referencia de la regla 8 venían de un arnés anterior con otros perfiles.
+  Línea base con este arnés (84 partidas/perfil, dificultad media, oct. 2026):
+  bueno 0 % quiebra · agresivo 27 % · imperio 35 % (arquetipo Imperio en el perfil agresivo: 11 %) · azar 36 %.
 
 ---
 
@@ -109,7 +124,7 @@ Un único archivo: `simulador_financiero.html` (~9.400 líneas, ~1,68 MB).
 
 ## 6. Plan de transformación
 
-### Fase 1 — Modularizar sin cambiar el comportamiento (la primera tarea)
+### Fase 1 — Modularizar sin cambiar el comportamiento ✅ completada
 
 **Objetivo:** pasar de un archivo de 9.400 líneas a un repositorio ordenado, **produciendo un HTML final idéntico en comportamiento**. Nada de mejoras de juego en esta fase.
 
@@ -164,6 +179,14 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
 ---
 
 ## 7. Pendientes conocidos
+
+Detectados por `npm test` al cerrar la Fase 1 (marcados `todo`: se listan, no fallan):
+- **Regla 2:** 243 pares de opciones dominadas en el contenido heredado (ej.: "Ceder 20 % a un
+  inversionista" domina al crédito bancario porque la dilución no se modela como indicador).
+- **Regla 3:** 216 opciones sin ningún efecto negativo ni riesgo.
+- **Regla 9:** en Ganadería, 3 casos aparecen 5–6 veces por partida (Construye Ya: 1 caso, 3–4).
+  Causa: `historialTitulosRecientes` recuerda solo 4 títulos y `elegirDecisionExtra` recicla
+  los pocos casos que tocan el indicador crítico.
 
 - Cobertura baja de casos para razón corriente (~2 %) y algunos indicadores de Ganadería.
 - Revisión gramatical general.
