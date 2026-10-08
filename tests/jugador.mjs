@@ -1,0 +1,139 @@
+// Jugador automático: juega una partida completa haciendo clic en la interfaz real
+// (sobre el arnés de tests/harness.mjs) y devuelve el resultado y una traza turno a turno.
+import { crearJuego, mulberry32 } from './harness.mjs';
+
+// Pesos por indicador para cada perfil de jugador. Un valor negativo = "menos es mejor".
+const PESOS = {
+  // Prudente: cuida liquidez, deuda y relaciones; crece sin apostar la empresa.
+  bueno: {
+    caja: 1, capitalTrabajo: 0.5, razonCorriente: 8, deuda: -0.6, ebitda: 1.5, wacc: -2,
+    diasInventario: -0.1, diasCartera: -0.1, valorInventario: 0.1,
+    confianzaProveedores: 0.25, confianzaBanco: 0.25, reputacion: 0.25, moralEquipo: 0.2,
+  },
+  // Crecimiento agresivo: todo por el EBITDA; ignora deuda, costo de capital y liquidez.
+  agresivo: { ebitda: 2, caja: 0.2, reputacion: 0.05 },
+  // Imperio: persigue a la vez EBITDA y caja altos (el arquetipo "El Imperio").
+  imperio: { ebitda: 1.5, caja: 1, capitalTrabajo: 0.3 },
+  // Azar: elige sin mirar los números.
+  azar: null,
+};
+export const PERFILES_JUGADOR = Object.keys(PESOS);
+
+// Umbrales de alerta: el jugador prudente triplica el peso de lo que está en peligro.
+function pesoAjustado(perfil, k, estado) {
+  const w = PESOS[perfil][k] || 0;
+  if (perfil !== 'bueno' || !estado) return w;
+  const enPeligro =
+    (k === 'caja' && estado.caja < 12) ||
+    (k === 'razonCorriente' && estado.razonCorriente < 1.1) ||
+    (['confianzaProveedores', 'confianzaBanco', 'reputacion'].includes(k) && estado[k] < 30);
+  return enPeligro ? w * 3 : w;
+}
+
+function puntuar(perfil, efectos, estado) {
+  let s = 0;
+  for (const [k, v] of Object.entries(efectos || {})) if (typeof v === 'number') s += v * pesoAjustado(perfil, k, estado);
+  return s;
+}
+
+function elegirOpcion(perfil, opciones, estado, rng) {
+  if (!PESOS[perfil]) return Math.floor(rng() * opciones.length);
+  let mejor = -Infinity, candidatos = [];
+  opciones.forEach((o, i) => {
+    const s = Math.round(puntuar(perfil, o.efectos, estado) * 1e6) / 1e6;
+    if (s > mejor) { mejor = s; candidatos = [i]; } else if (s === mejor) candidatos.push(i);
+  });
+  return candidatos[Math.floor(rng() * candidatos.length)];
+}
+
+const KPIS = ['caja', 'capitalTrabajo', 'razonCorriente', 'deuda', 'ebitda', 'wacc', 'diasInventario', 'diasCartera',
+  'valorInventario', 'confianzaProveedores', 'confianzaBanco', 'reputacion', 'moralEquipo'];
+const RE_CONTINUAR = /continue|continuar/i;
+
+function clicables(raiz) {
+  return raiz.querySelectorAll('button').filter((b) => !b.disabled && b.listeners.some((l) => l.type === 'click'))
+    .concat(raiz.querySelectorAll('[data-i]').filter((b) => b.tagName !== 'BUTTON' && b.listeners.length));
+}
+
+/**
+ * Juega una partida.
+ * @returns {{final, turnos, decisiones, traza, errores, apariciones}}
+ */
+export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil = 'bueno', dificultad = 'medio', maxPasos = 6000 } = {}) {
+  const j = crearJuego(html, { seed });
+  const rng = mulberry32((seed * 2654435761) ^ 0x5bd1e995);
+  const doc = j.document;
+  const traza = [];
+  const apariciones = {};
+
+  // Sonda de solo lectura: guarda el último caso cuyas opciones se dibujaron.
+  j.ev(`(() => { const original = renderChoices; renderChoices = function(c){ __ultimoCaso = c; return original.apply(this, arguments); }; })(); var __ultimoCaso = null;`);
+  // Registro de casos mostrados (para la regla de anti-repetición).
+  j.ev(`(() => { const original = renderCase; renderCase = function(c){ __casosMostrados.push([c.tipo, c.titulo]); return original.apply(this, arguments); }; })(); var __casosMostrados = [];`);
+
+  const pausa = (ms) => j.avanzar(ms);
+  await pausa(100);
+  await j.tecla('Escape');
+  await pausa(900);
+  await j.click(doc.getElementById('inicioBtn'));
+  await j.click(doc.querySelector(`.sector-card[data-id="${sector}"]`));
+  const btnDif = doc.querySelectorAll('#dificultadGrid .profile-card').find((b) => b.dataset.id === dificultad);
+  if (!btnDif) throw new Error('Dificultad inexistente: ' + dificultad);
+  await j.click(btnDif);
+  await j.click(doc.getElementById('confirmarBtn'));
+
+  let final = null;
+  let quietos = 0;
+  for (let paso = 0; paso < maxPasos; paso++) {
+    if (!j.ev('introCerrada')) { await j.tecla('Escape'); await pausa(900); continue; }
+    final = j.ev('pendingEndingResult');
+    if (final) break;
+    const modal = doc.getElementById('turnModalBackdrop').classList.contains('show');
+    const contenido = doc.getElementById('turnModalContent');
+    let objetivo = null;
+    if (modal) {
+      const botones = clicables(contenido);
+      const opciones = botones.filter((b) => b.classList.contains('choice-btn'));
+      if (opciones.length) {
+        const caso = j.ev('__ultimoCaso');
+        let lista = caso.choices.slice();
+        if (j.ev('investigado') && caso.choiceInformado) lista = lista.concat([caso.choiceInformado]);
+        const estado = j.ev('state');
+        const i = elegirOpcion(perfil, lista, estado, rng);
+        traza.push({
+          turno: j.ev('turnNumber'), tipo: caso.tipo, titulo: caso.titulo, opcion: i,
+          estado: Object.fromEntries(KPIS.filter((k) => estado[k] != null).map((k) => [k, Math.round(estado[k] * 1000) / 1000])),
+        });
+        objetivo = opciones[i];
+      } else {
+        objetivo = botones.find((b) => RE_CONTINUAR.test(b.id)) || botones.find((b) => b.id === 'verImpactoBtn')
+          || (botones.length ? botones[Math.floor(rng() * botones.length)] : null);
+      }
+    } else {
+      const ev = doc.getElementById('evaluarTurnoBtn');
+      if (ev && !ev.disabled) objetivo = ev;
+    }
+    // Tras cada clic se espera más que la transición "Calculando impacto" (1.000 ms), como haría
+    // una persona: volver a pulsar un botón ya pulsado encolaría cierres de modal duplicados.
+    if (objetivo) { quietos = 0; await j.click(objetivo); await pausa(1300); }
+    else { quietos++; await pausa(250); if (quietos > 400) throw new Error(`Partida atascada (semilla ${seed}, ${sector}, ${perfil}) en turno ${j.ev('turnNumber')}`); }
+  }
+  if (!final) throw new Error(`La partida no terminó en ${maxPasos} pasos (semilla ${seed})`);
+  // La junta trimestral y los vencimientos de deuda diferida son eventos estructurales con
+  // título fijo: se repiten por diseño y no cuentan para la regla de anti-repetición.
+  for (const [tipo, t] of j.ev('__casosMostrados')) {
+    if (tipo === 'junta' || tipo === 'vencimiento') continue;
+    apariciones[t] = (apariciones[t] || 0) + 1;
+  }
+  const estadoFinal = j.ev('state');
+  return {
+    final: {
+      tipoFinal: final.tipoFinal, badge: final.badge, rango: final.rango || null,
+      arquetipo: final.arquetipo ? final.arquetipo.nombre : null,
+      esFinalOculto: !!final.esFinalOculto, esFinalOcultoTragico: !!final.esFinalOcultoTragico,
+    },
+    turnos: j.ev('turnNumber'),
+    estadoFinal: Object.fromEntries(KPIS.filter((k) => estadoFinal[k] != null).map((k) => [k, Math.round(estadoFinal[k] * 1000) / 1000])),
+    traza, apariciones, errores: j.errores,
+  };
+}
