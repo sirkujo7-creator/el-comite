@@ -6,7 +6,10 @@
   "type": "module",
   "scripts": {
     "build": "node build.mjs",
-    "test": "node build.mjs && node --test \"tests/*.test.mjs\""
+    "test": "node build.mjs && node --test \"tests/*.test.mjs\"",
+    "balance": "node tests/balance.mjs"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }

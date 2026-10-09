@@ -18,12 +18,19 @@ const PESOS = {
   // Azar: elige sin mirar los números.
   azar: null,
 };
-export const PERFILES_JUGADOR = Object.keys(PESOS);
+// Metódico: el prudente que además persigue la meta trimestral de la junta (como haría un
+// estudiante atento). Solo lo usa el tablero de balance (tests/balance.mjs).
+PESOS.metodico = PESOS.bueno;
+export const PERFILES_JUGADOR = ['bueno', 'agresivo', 'imperio', 'azar'];
+export const PERFILES_BALANCE = PERFILES_JUGADOR.concat(['metodico']);
+// Paso de referencia de cada meta (META_DELTAS del juego) para medir cuánto acerca una opción.
+const PASO_META = { caja:5, ebitda:3, deuda:-5, wacc:-1, razonCorriente:0.3, capitalTrabajo:5, diasInventario:-8,
+  diasCartera:-8, valorInventario:2, confianzaProveedores:8, confianzaBanco:8, reputacion:8, moralEquipo:8 };
 
 // Umbrales de alerta: el jugador prudente triplica el peso de lo que está en peligro.
 function pesoAjustado(perfil, k, estado) {
   const w = PESOS[perfil][k] || 0;
-  if (perfil !== 'bueno' || !estado) return w;
+  if ((perfil !== 'bueno' && perfil !== 'metodico') || !estado) return w;
   const enPeligro =
     (k === 'caja' && estado.caja < 12) ||
     (k === 'razonCorriente' && estado.razonCorriente < 1.1) ||
@@ -36,23 +43,30 @@ function pesoAjustado(perfil, k, estado) {
   return w;
 }
 
-function puntuar(perfil, opcion, estado) {
+function puntuar(perfil, opcion, estado, meta) {
   let s = 0;
   for (const [k, v] of Object.entries(opcion.efectos || {})) if (typeof v === 'number') s += v * pesoAjustado(perfil, k, estado);
   // El jugador prudente también pesa lo que no se ve de inmediato: la deuda diferida es caja
   // que saldrá después, y un evento disparado es una consecuencia incierta que prefiere evitar.
-  if (perfil === 'bueno') {
+  if (perfil === 'metodico' && meta && PASO_META[meta.indicador]) {
+    const v = (opcion.efectos || {})[meta.indicador];
+    // Cada "paso" de meta vale como 6 puntos de puntuación; solo si aún no se ha cumplido.
+    const invertido = PASO_META[meta.indicador] < 0;
+    const falta = invertido ? estado[meta.indicador] > meta.valorObjetivo : estado[meta.indicador] < meta.valorObjetivo;
+    if (typeof v === 'number' && falta) s += 6 * v / Math.abs(PASO_META[meta.indicador]) * (invertido ? -1 : 1);
+  }
+  if (perfil === 'bueno' || perfil === 'metodico') {
     if (opcion.diferir) s -= (opcion.diferir.monto || 0) * pesoAjustado(perfil, 'caja', estado) * 0.8;
     if (opcion.disparar) s -= 2;
   }
   return s;
 }
 
-function elegirOpcion(perfil, opciones, estado, rng) {
+function elegirOpcion(perfil, opciones, estado, rng, meta) {
   if (!PESOS[perfil]) return Math.floor(rng() * opciones.length);
   let mejor = -Infinity, candidatos = [];
   opciones.forEach((o, i) => {
-    const s = Math.round(puntuar(perfil, o, estado) * 1e6) / 1e6;
+    const s = Math.round(puntuar(perfil, o, estado, meta) * 1e6) / 1e6;
     if (s > mejor) { mejor = s; candidatos = [i]; } else if (s === mejor) candidatos.push(i);
   });
   return candidatos[Math.floor(rng() * candidatos.length)];
@@ -71,7 +85,9 @@ function clicables(raiz) {
  * Juega una partida.
  * @returns {{final, turnos, decisiones, traza, errores, apariciones}}
  */
-export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil = 'bueno', dificultad = 'medio', maxPasos = 6000 } = {}) {
+// `sonda` (opcional): código que se evalúa en el juego antes de empezar; `leer`: expresión cuyo
+// valor se devuelve al final como `sonda` (para instrumentar el motor en estudios de balance).
+export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil = 'bueno', dificultad = 'medio', maxPasos = 6000, sonda = null, leer = null } = {}) {
   const j = crearJuego(html, { seed });
   const rng = mulberry32((seed * 2654435761) ^ 0x5bd1e995);
   const doc = j.document;
@@ -82,7 +98,10 @@ export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil 
   j.ev(`(() => { const original = renderChoices; renderChoices = function(c){ __ultimoCaso = c; return original.apply(this, arguments); }; })(); var __ultimoCaso = null;`);
   // Registro de casos mostrados (para la regla de anti-repetición).
   j.ev(`(() => { const original = renderCase; renderCase = function(c){ __casosMostrados.push([c.tipo, c.titulo]); return original.apply(this, arguments); }; })(); var __casosMostrados = [];`);
+  // Registro de metas trimestrales evaluadas por la junta (para el reporte de balance).
+  j.ev(`(() => { const original = metaCumplida; metaCumplida = function(m){ const r = original.apply(this, arguments); __metas.push({indicador:m.indicador, cumplida:!!r, inicial:m.valorInicial, objetivo:m.valorObjetivo, final:state[m.indicador], turno:turnNumber}); return r; }; })(); var __metas = [];`);
 
+  if (sonda) j.ev(sonda);
   const pausa = (ms) => j.avanzar(ms);
   await pausa(100);
   await j.tecla('Escape');
@@ -111,7 +130,7 @@ export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil 
         let lista = caso.choices.slice();
         if (j.ev('investigado') && caso.choiceInformado) lista = lista.concat([caso.choiceInformado]);
         const estado = j.ev('state');
-        const i = elegirOpcion(perfil, lista, estado, rng);
+        const i = elegirOpcion(perfil, lista, estado, rng, j.ev('metaTrimestral'));
         traza.push({
           turno: j.ev('turnNumber'), tipo: caso.tipo, titulo: caso.titulo, opcion: i,
           estado: Object.fromEntries(KPIS.filter((k) => estado[k] != null).map((k) => [k, Math.round(estado[k] * 1000) / 1000])),
@@ -146,6 +165,6 @@ export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil 
     },
     turnos: j.ev('turnNumber'),
     estadoFinal: Object.fromEntries(KPIS.filter((k) => estadoFinal[k] != null).map((k) => [k, Math.round(estadoFinal[k] * 1000) / 1000])),
-    traza, apariciones, errores: j.errores,
+    traza, apariciones, metas: j.ev('__metas'), sonda: leer ? j.ev(leer) : undefined, errores: j.errores,
   };
 }

@@ -95,6 +95,12 @@ tests/                               arnés + pruebas (npm test)
 - `equivalencia.test.mjs`: **opcional** (`EQUIV_REF=ruta.html npm test`). Compara partidas con
   semilla fija entre un HTML de referencia y dist/. Úsala en refactorizaciones que no deben
   cambiar el juego (p. ej. Fase 4): genera la referencia antes del cambio.
+- `balance.mjs` (Fase 3, `npm run balance`; `BAL_N`, `BAL_PERFILES`, `BAL_SECTORES`,
+  `BAL_DIFICULTADES`, `BAL_SALIDA`): tablero de balance en paralelo (sector × dificultad × perfil),
+  con quiebra, turno y causa de quiebra, metas de la junta cumplidas (por indicador) y rangos.
+  Escribe `reportes/` (no se versiona). Añade el perfil `metodico` (= bueno que además persigue la
+  meta trimestral) para medir si las metas son alcanzables. 1.080 partidas ≈ 80 s con 4 hilos.
+  `jugarPartida` acepta `sonda`/`leer` para instrumentar el motor en estudios puntuales.
 - `contenido.mjs` recolecta todos los casos (llama a las constructoras con el estado real de cada
   sector; construye varias veces para detectar opciones con resultado aleatorio).
 - `contenido.test.mjs` (reglas 1–7) y `simulacion.test.mjs` (reglas 8–9, imprime el reporte).
