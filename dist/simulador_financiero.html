@@ -932,8 +932,45 @@
     position:fixed; inset:0; z-index:120;
     background:rgba(5,7,10,0.55);
     -webkit-backdrop-filter:blur(5px); backdrop-filter:blur(5px);
-    display:none; align-items:flex-start; justify-content:center;
+    display:none; flex-direction:column; align-items:center; justify-content:flex-start;
     padding:48px 16px; overflow-y:auto;
+  }
+  /* Franja de indicadores mientras se decide (ui/franja-kpi.js) */
+  .franja-kpi{
+    display:none; width:100%; max-width:760px; margin:-28px 0 14px; padding:8px;
+    position:sticky; top:-40px; z-index:2;
+    grid-template-columns:repeat(auto-fill, minmax(92px, 1fr)); gap:6px;
+    background:rgba(5,7,10,0.92); border:1px solid #333;
+  }
+  .franja-kpi.show{ display:grid; }
+  .franja-item{
+    position:relative; display:flex; flex-direction:column; align-items:center; gap:2px;
+    padding:6px 4px 7px; border:1px solid #2a2a2a; background:#000;
+    font-family:var(--font-ui); transition:border-color .15s ease, background .15s ease, opacity .15s ease;
+  }
+  .franja-label{ font-size:9.5px; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-muted); white-space:nowrap; }
+  .franja-valor{ font-size:13px; font-weight:600; white-space:nowrap; }
+  .franja-item.c-teal .franja-valor{ color:var(--teal); }
+  .franja-item.c-gold .franja-valor{ color:var(--gold); }
+  .franja-item.c-danger .franja-valor{ color:var(--danger); }
+  .franja-item.c-ink .franja-valor{ color:var(--ink); }
+  .franja-item.tier-optimo .franja-valor{ color:var(--teal); }
+  .franja-item.tier-estable .franja-valor{ color:#7FADD9; }
+  .franja-item.tier-riesgo .franja-valor{ color:#E0A93A; }
+  .franja-item.tier-critico .franja-valor{ color:var(--danger); }
+  /* Pista al pasar por una opción: qué toca, no cuánto ni hacia dónde */
+  .franja-kpi:has(.toca, .diferido) .franja-item:not(.toca):not(.diferido){ opacity:0.4; }
+  .franja-item.toca{ border-color:var(--ink); background:#14181f; }
+  .franja-item.toca::after{
+    content:''; position:absolute; top:5px; right:5px; border-radius:50%; background:var(--ink);
+  }
+  .franja-item.leve::after{ width:5px; height:5px; }
+  .franja-item.fuerte::after{ width:9px; height:9px; top:4px; right:4px; box-shadow:0 0 6px rgba(237,230,214,0.6); }
+  .franja-item.diferido{ border-style:dashed; border-color:#D98847; }
+  @media (max-width:640px){
+    .franja-kpi{ position:static; margin:-30px 0 12px; grid-template-columns:repeat(auto-fill, minmax(72px, 1fr)); gap:4px; padding:6px; }
+    .franja-label{ font-size:8.5px; }
+    .franja-valor{ font-size:11.5px; }
   }
   .turn-modal-backdrop.show{ display:flex; }
   #turnModalContent{ width:100%; max-width:560px; }
@@ -1260,6 +1297,7 @@
 </div>
 
 <div class="turn-modal-backdrop" id="turnModalBackdrop">
+  <div class="franja-kpi" id="franjaKpi"></div>
   <div id="turnModalContent"></div>
 </div>
 <div class="turn-fade-overlay" id="turnFadeOverlay">
@@ -6654,6 +6692,7 @@ function openTurnModal(){
 function closeTurnModal(){
   document.getElementById('turnModalBackdrop').classList.remove('show');
   document.getElementById('turnModalContent').innerHTML = '';
+  ocultarFranjaKpi();
   const btn = document.getElementById('evaluarTurnoBtn');
   if(btn) btn.disabled = false;
   if(oficinaDisponible){
@@ -6823,7 +6862,12 @@ function renderChoices(c){
     </button>
   `).join('');
 
+  mostrarFranjaKpi();
   wrap.querySelectorAll('.choice-btn').forEach((btn,idx)=>{
+    btn.addEventListener('mouseenter', ()=>pistaDeOpcion(choices[idx]));
+    btn.addEventListener('focus', ()=>pistaDeOpcion(choices[idx]));
+    btn.addEventListener('mouseleave', limpiarPistaKpi);
+    btn.addEventListener('blur', limpiarPistaKpi);
     btn.addEventListener('click', (ev)=>{
       if(ev.target.closest('.glosario-term')) return;
       selectChoice(c, choices[idx]);
@@ -6832,6 +6876,7 @@ function renderChoices(c){
 }
 
 function selectChoice(c, ch){
+  ocultarFranjaKpi();
   document.querySelectorAll('.choice-btn').forEach((b)=>{ b.disabled = true; b.style.pointerEvents='none'; });
   sonidoConfirmacion();
 
@@ -7003,6 +7048,73 @@ function renderMetaScreen(datos, callbackContinuar){
 // Genera los chips de cambio numérico para CUALQUIER combinación de indicadores —
 // a diferencia de las listas fijas (chipOrder) que ya existían para un par de minijuegos
 // puntuales, esta cubre los 13 indicadores del juego, para reutilizar en la bitácora.
+// Franja de indicadores dentro de la ventana de decisión: el jugador ve su situación mientras
+// decide. Al pasar el cursor (o el foco) por una opción se iluminan los indicadores que esa
+// opción toca, sin decir cuánto ni hacia dónde (como en Reigns): un punto grande si el efecto
+// es fuerte y uno pequeño si es leve. La deuda diferida marca la caja con borde punteado.
+const FRANJA_KPI = [
+  {key:'caja', corto:'Caja'}, {key:'capitalTrabajo', corto:'Cap. trabajo'},
+  {key:'razonCorriente', corto:'Razón cte.'}, {key:'deuda', corto:'Deuda'},
+  {key:'wacc', corto:'WACC'}, {key:'ebitda', corto:'EBITDA'},
+  {key:'diasCartera', corto:'Cartera'}, {key:'diasInventario', corto:'Días inv.'},
+  {key:'valorInventario', corto:'Valor inv.'},
+  {key:'confianzaProveedores', corto:'Proveedores', rel:true}, {key:'confianzaBanco', corto:'Banco', rel:true},
+  {key:'reputacion', corto:'Junta', rel:true}, {key:'moralEquipo', corto:'Moral', rel:true},
+];
+// A partir de este tamaño (en las unidades de cada indicador) el efecto se marca como fuerte.
+const FRANJA_UMBRAL_FUERTE = { caja:8, capitalTrabajo:6, razonCorriente:0.15, deuda:6, wacc:1.5, ebitda:2.5,
+  diasCartera:20, diasInventario:10, valorInventario:5, confianzaProveedores:8, confianzaBanco:8, reputacion:8, moralEquipo:8 };
+
+function fmtFranja(d, v){
+  if(d.rel) return Math.round(v) + '/100';
+  if(['caja','capitalTrabajo','deuda','ebitda','valorInventario'].includes(d.key)){
+    return (v < 0 ? '-' : '') + '$' + Math.abs(v).toFixed(1).replace('.', ',') + ' M';
+  }
+  if(d.key === 'razonCorriente') return v.toFixed(2);
+  if(d.key === 'wacc') return v.toFixed(1) + '%';
+  return Math.round(v) + ' d';
+}
+
+function mostrarFranjaKpi(){
+  const el = document.getElementById('franjaKpi');
+  if(!el) return;
+  const visibles = FRANJA_KPI.filter(d=>{
+    if(state[d.key] == null) return false;
+    if((d.key==='diasInventario' || d.key==='valorInventario') && !sectorActual.tieneInventario) return false;
+    return true;
+  });
+  el.innerHTML = visibles.map(d=>{
+    const v = state[d.key];
+    const color = d.rel ? ('tier-' + statusPill(v).tier) : ('c-' + colorFor(d.key, v));
+    return `<div class="franja-item ${color}" data-franja="${d.key}">
+      <span class="franja-label">${d.corto}</span><span class="franja-valor">${fmtFranja(d, v)}</span>
+    </div>`;
+  }).join('');
+  el.classList.add('show');
+}
+function ocultarFranjaKpi(){
+  const el = document.getElementById('franjaKpi');
+  if(el){ el.classList.remove('show'); el.innerHTML = ''; }
+}
+
+function pistaDeOpcion(ch){
+  limpiarPistaKpi();
+  const efectos = ch.efectos || {};
+  Object.keys(efectos).forEach(k=>{
+    const v = efectos[k];
+    if(typeof v !== 'number' || !v) return;
+    const item = document.querySelector('.franja-item[data-franja="'+k+'"]');
+    if(!item) return;
+    item.classList.add('toca', Math.abs(v) >= (FRANJA_UMBRAL_FUERTE[k] || Infinity) ? 'fuerte' : 'leve');
+  });
+  if(ch.diferir){
+    const caja = document.querySelector('.franja-item[data-franja="caja"]');
+    if(caja) caja.classList.add('diferido');
+  }
+}
+function limpiarPistaKpi(){
+  document.querySelectorAll('.franja-item').forEach(item=>item.classList.remove('toca','fuerte','leve','diferido'));
+}
 function chipsDeEfectos(efectos){
   if(!efectos) return '';
   return Object.keys(efectos).filter(k=>efectos[k]).map(k=>{

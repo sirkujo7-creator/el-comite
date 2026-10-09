@@ -110,7 +110,12 @@ function renderChoices(c){
     </button>
   `).join('');
 
+  mostrarFranjaKpi();
   wrap.querySelectorAll('.choice-btn').forEach((btn,idx)=>{
+    btn.addEventListener('mouseenter', ()=>pistaDeOpcion(choices[idx]));
+    btn.addEventListener('focus', ()=>pistaDeOpcion(choices[idx]));
+    btn.addEventListener('mouseleave', limpiarPistaKpi);
+    btn.addEventListener('blur', limpiarPistaKpi);
     btn.addEventListener('click', (ev)=>{
       if(ev.target.closest('.glosario-term')) return;
       selectChoice(c, choices[idx]);
@@ -119,6 +124,7 @@ function renderChoices(c){
 }
 
 function selectChoice(c, ch){
+  ocultarFranjaKpi();
   document.querySelectorAll('.choice-btn').forEach((b)=>{ b.disabled = true; b.style.pointerEvents='none'; });
   sonidoConfirmacion();
 

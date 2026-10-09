@@ -58,7 +58,7 @@ tests/                               arnés + pruebas (npm test)
 | systems/metas-junta.js | `META_DELTAS`, `META_RANGOS`, `generarNuevaMeta` |
 | systems/priorizacion.js, priorizacion-casos.js | `indicadoresEnAlerta`, `buscarCasoParaIndicador`, `elegirDecisionExtra` |
 | systems/… | persistencia, mandato inicial, logros, glosario, arquetipos, mayor error, título, legado, estadísticas |
-| ui/… | formato, feedback visual, iconos KPI, tensión, render de caso, bitácora, post-mortem, panel CRT, pantallas de inicio, cinemática, pantalla completa |
+| ui/… | formato, feedback visual, iconos KPI, tensión, render de caso, franja de KPI, bitácora, post-mortem, panel CRT, pantallas de inicio, cinemática, pantalla completa |
 | minigames/… | auditoría, mercado volátil, bandeja, fuga de capital, oficina (+ ambiente) |
 | content/universal/… | dilemas, elenco, cadenas profundas, carta meta, karma, cisne negro… |
 | content/sectores/<sector>.js, sectores.js, perfiles.js | `*_CASES`, `*_RANDOM`, `SECTORS`, `PERFILES`, `PERKS` |
@@ -133,6 +133,10 @@ tests/                               arnés + pruebas (npm test)
 - Selección (perfil, ventaja, dificultad): borde dorado y marca cuadrada; al pasar el cursor solo se
   aclara el borde (antes se invertía a blanco). El cambio de cada KPI se resalta en su propio número
   (no hay número flotante encima de la tarjeta); las fichas de relaciones sí lo conservan.
+- Ventana de decisión (oct. 2026, `ui/franja-kpi.js`): franja con todos los indicadores mientras se
+  decide. Al pasar el cursor por una opción se iluminan los que toca, **sin cifra ni dirección**
+  (punto grande = efecto fuerte, según `FRANJA_UMBRAL_FUERTE`; borde punteado ámbar en caja si la
+  opción difiere deuda). Mostrar cuánto o hacia dónde quitaría la decisión al jugador: no hacerlo.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: PNG transparente, grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 

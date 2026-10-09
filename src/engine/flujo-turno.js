@@ -52,6 +52,7 @@ function openTurnModal(){
 function closeTurnModal(){
   document.getElementById('turnModalBackdrop').classList.remove('show');
   document.getElementById('turnModalContent').innerHTML = '';
+  ocultarFranjaKpi();
   const btn = document.getElementById('evaluarTurnoBtn');
   if(btn) btn.disabled = false;
   if(oficinaDisponible){
