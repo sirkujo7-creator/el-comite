@@ -109,12 +109,12 @@ tests/                               arnés + pruebas (npm test)
 - Las cifras de referencia de la regla 8 venían de un arnés anterior con otros perfiles.
   Línea base con este arnés (84 partidas/perfil, dificultad media, mismas semillas):
 
-  | Perfil | Quiebra original/ | Quiebra tras Fase 2 (oct. 2026) |
-  |---|---|---|
-  | bueno | 0 % | 0 % |
-  | agresivo | 27,4 % | 19,0 % (arquetipo Imperio 11,9 %) |
-  | imperio | 34,5 % | 33,3 % |
-  | azar | 35,7 % | 33,3 % |
+  | Perfil | Quiebra original/ | Tras Fase 2 (oct. 2026) | Tras Fase 3, ronda 1 |
+  |---|---|---|---|
+  | bueno | 0 % | 0 % | 0 % (rango S 10,7 → 25 %) |
+  | agresivo | 27,4 % | 19,0 % (arquetipo Imperio 11,9 %) | 21,4 % |
+  | imperio | 34,5 % | 33,3 % | 22,6 % |
+  | azar | 35,7 % | 33,3 % | 23,8 % |
 
   Casos repetidos más de 2 veces por partida: ~50 por perfil → 0.
 
@@ -268,3 +268,27 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
 - 16 casos nuevos para cobertura: 2 universales (cartera, razón corriente), 4 Vita Fit,
   4 Agroverde, 2 Ganadería, 4 Construye Ya (inventario). Mínimo por sector: 4 casos por
   indicador aplicable.
+
+**Fase 3, ronda 1 (oct. 2026)** — medido con `npm run balance` (40 partidas por celda, 3.600 partidas,
+mismas semillas antes/después). Tres cambios aprobados por Juan:
+- A. WACC en equilibrio al arrancar: `state.waccEquilibrioBase` (en `initState`); el motor lo
+  acerca a `waccEquilibrioBase − confianzaBanco × 0,08`. Antes apuntaba a `20 − confianzaBanco × 0,08`,
+  por encima del WACC inicial de todos los sectores: subía ~+0,8 por trimestre jugando bien (y más
+  rápido en Fácil que en Difícil). Ahora la deriva es ~−0,1 y solo responde a la confianza bancaria.
+- B. Penalizaciones sistémicas de `applyEfectos` (razón corriente < 1, deuda ≥ 40, deuda/EBITDA ≥ 4,
+  banco ≤ 35, caja ≤ 8, cartera ≥ 90, inventario vencido, moral baja, medidores de doble filo y
+  consecuencias permanentes de las cadenas) una sola vez por turno (`state.turnoPenalizado`).
+  Antes se aplicaban en cada cambio de indicadores (~2,2 veces por turno).
+- C. Metas de la junta proporcionadas: EBITDA +1,5 (antes +3; el jugador más agresivo lograba
+  +2,4 de mediana por trimestre) y WACC −0,5 con un decimal (antes −1 entero).
+
+  | Dificultad media | Antes | Después |
+  |---|---|---|
+  | Metas cumplidas — metódico / prudente | 19 % / 11 % | 32 % / 19 % |
+  | Metas de EBITDA / WACC cumplidas | 12,7 % / 1,6 % | 26,4 % / 5,3 % |
+  | Quiebra imperio · Construye YA imperio | 34 % · 90 % | 18 % · 48 % |
+  | Quiebra agresivo / azar | 21 % / 32 % | 19 % / 26 % |
+  | Quiebra prudente y metódico (todas las dificultades) | 0–8 % | 0–7 % |
+
+  Pendiente (ronda 2): Ganadería cumple pocas metas (17 % metódico), Moda Urbana quiebra por
+  liquidez con perfil agresivo (48 %), metas de WACC aún difíciles (5 %), salto brusco Media → Difícil.

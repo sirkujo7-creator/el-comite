@@ -68,6 +68,9 @@ function initState(){
     });
   }
   state = Object.assign({obligaciones:[], scheduledEvents:[], turnosSinCapex:0, healthHistory:[]}, ajustado);
+  // El WACC arranca en equilibrio con la confianza bancaria inicial: el motor solo lo mueve
+  // cuando esa confianza cambia (ver aplicarMotorOperativo).
+  if(state.wacc != null && state.confianzaBanco != null) state.waccEquilibrioBase = state.wacc + state.confianzaBanco * 0.08;
   flags = {};
   history = [];
   turnNumber = 0;

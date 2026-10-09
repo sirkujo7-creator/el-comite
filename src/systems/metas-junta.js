@@ -5,7 +5,7 @@ const META_ETIQUETAS = {
   confianzaBanco:'Confianza bancaria', reputacion:'Reputación', moralEquipo:'Moral del equipo'
 };
 const META_DELTAS = {
-  caja:5, ebitda:3, deuda:-5, wacc:-1, razonCorriente:0.3, capitalTrabajo:5,
+  caja:5, ebitda:1.5, deuda:-5, wacc:-0.5, razonCorriente:0.3, capitalTrabajo:5,
   diasInventario:-8, diasCartera:-8, valorInventario:2,
   confianzaProveedores:8, confianzaBanco:8, reputacion:8, moralEquipo:8
 };
@@ -31,7 +31,7 @@ function generarNuevaMeta(){
   const bruto = clamp(valorInicial + (META_DELTAS[indicador]||1), minReal, maxReal);
   // Los objetivos de la junta siempre se fijan en números enteros, sin decimales —
   // nadie exige "$3.256.842" de EBITDA, exige "$3.000.000" o "3 puntos de reputación".
-  const decimales = (indicador==='razonCorriente') ? 1 : 0;
+  const decimales = (indicador==='razonCorriente' || indicador==='wacc') ? 1 : 0;
   const factor = Math.pow(10, decimales);
   metaTrimestral = {
     indicador, valorInicial: Math.round(valorInicial*factor)/factor,
@@ -51,6 +51,7 @@ function metaCumplida(meta){
 function fmtMetaValor(indicador, valor){
   if(valor==null) return '—';
   if(indicador==='razonCorriente') return valor.toFixed(1);
+  if(indicador==='wacc') return valor.toFixed(1) + '%';
   const kd = KPI_DEFS.find(d=>d.key===indicador);
   if(kd && (kd.kind==='money' || kd.kind==='dias')) return kd.fmt(Math.round(valor));
   return Math.round(valor).toString();

@@ -35,7 +35,7 @@ function aplicarMotorOperativo(){
   // (empeorar) es más rápido que bajar (mejorar), igual que en la vida real: ganarte la
   // confianza de un banco toma tiempo; perderla es casi inmediato.
   if(state.wacc != null && state.confianzaBanco != null){
-    const objetivo = 20 - (state.confianzaBanco/100)*8;
+    const objetivo = (state.waccEquilibrioBase != null ? state.waccEquilibrioBase : 20) - (state.confianzaBanco/100)*8;
     const diff = objetivo - state.wacc;
     suma('wacc', clamp(diff * (diff < 0 ? 0.05 : 0.12), -0.35, 0.35));
   }
@@ -145,6 +145,11 @@ function applyEfectos(e, origen){
     }
   }
 
+  // Penalizaciones y consecuencias sistémicas: se aplican UNA vez por turno (en el primer
+  // cambio de indicadores del turno), no en cada decisión, minijuego o deriva pasiva — antes
+  // se acumulaban ~2,2 veces por turno y más en turnos con decisiones extra.
+  if(state.turnoPenalizado === turnNumber) return;
+  state.turnoPenalizado = turnNumber;
   if(state.razonCorriente < 1.0){
     state.wacc = clamp(state.wacc + 2, 5, 35);
     systemicNotes.push("Tu razón corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
