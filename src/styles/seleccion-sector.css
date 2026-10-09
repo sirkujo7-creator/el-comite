@@ -106,3 +106,41 @@
     .portrait{width:48px;}
   }
 
+
+  /* Tarjetas de sector con identidad propia (color --sector en ui/iconos-sector.js) */
+  .sector-card{ display:flex; flex-direction:column; gap:10px; border-left:3px solid var(--sector, #444) !important; }
+  .sector-card:hover{ border-color:var(--sector, #8a8473) !important; background:#101319; }
+  .sector-cabecera{ display:flex; align-items:center; gap:12px; }
+  .sector-card .sector-icon{ margin:0; color:var(--sector, currentColor); flex-shrink:0; }
+  .sector-desc{ margin:0; font-family:var(--font-texto); font-size:13px; line-height:1.55; color:rgba(237,230,214,0.78); }
+  .sector-rasgos{ display:flex; flex-wrap:wrap; gap:6px; }
+  .sector-rasgo{
+    font-family:var(--font-ui); font-size:10px; letter-spacing:.04em; text-transform:uppercase;
+    padding:3px 7px; border:1px solid color-mix(in srgb, var(--sector, #888) 55%, transparent);
+    color:var(--sector, var(--ink-muted));
+  }
+  .sector-cifras{ font-family:var(--font-ui); font-size:11px; color:var(--ink-muted); border-top:1px dashed #2c2c2c; padding-top:8px; margin-top:auto; }
+  .sector-grid{ grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); }
+
+  /* Pantalla de configuración (perfil, ventaja, dificultad) */
+  .volver-btn{
+    background:none; border:none; padding:0; margin:0 0 12px; cursor:pointer;
+    font-family:var(--font-ui); font-size:11.5px; letter-spacing:.04em; color:var(--ink-muted);
+  }
+  .volver-btn:hover{ color:var(--ink); }
+  .perfil-sector{
+    display:flex; align-items:center; gap:10px; margin:0 0 20px; padding:10px 12px;
+    border:1px solid #333; border-left:3px solid var(--sector, var(--gold));
+    font-family:var(--font-ui); font-size:12.5px; color:var(--ink-muted);
+  }
+  .perfil-sector b{ color:var(--ink); }
+  .perfil-sector .sector-icon{ width:24px; height:24px; margin:0; color:var(--sector, currentColor); }
+  .profile-card{ display:flex; flex-direction:column; gap:8px; }
+  .opcion-desc{ margin:0; font-family:var(--font-texto); font-size:12.5px; line-height:1.5; color:rgba(237,230,214,0.72); text-transform:none; letter-spacing:0; font-weight:400; }
+  .bonus-chips{ display:flex; flex-wrap:wrap; gap:5px; margin-top:auto; }
+  .bonus-chip{ font-family:var(--font-ui); font-size:10.5px; font-weight:600; padding:2px 7px; border:1px solid currentColor; }
+  .bonus-chip.sano{ color:var(--teal); }
+  .bonus-chip.malo{ color:var(--danger); }
+  .perk-card{ display:flex; flex-wrap:wrap; align-items:baseline; gap:4px 14px; }
+  .perk-desc{ font-family:var(--font-texto); font-size:12px; color:rgba(237,230,214,0.6); }
+  .perk-candado{ font-weight:400; color:var(--ink-muted); margin-left:6px; }

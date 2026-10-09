@@ -2,6 +2,8 @@ Fuentes incrustadas en el juego. Todas con licencia SIL Open Font License 1.1 (h
 obtenidas de los paquetes @fontsource (subconjunto latino):
 - IBM Plex Mono e IBM Plex Sans — Copyright 2017 IBM Corp.
 - Fraunces — Copyright 2020 The Fraunces Project Authors.
-- Press Start 2P — Copyright 2012 The Press Start 2P Project Authors.
+- comite-pixel.woff2 — versión modificada de Press Start 2P (Copyright 2012 The Press Start 2P Project
+  Authors, Reserved Font Name "Press Start 2P"). Se rehicieron Á É Í Ó Ú (letra a altura completa y
+  tilde visible) y, por la cláusula de nombre reservado de la OFL, se distribuye como "Comite Pixel".
 
 assets/vendor/chart.umd.min.js — Chart.js 4.4.0, licencia MIT (https://www.chartjs.org).

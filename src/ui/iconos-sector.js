@@ -15,6 +15,38 @@ function sectorIcon(id){
   return `<svg class="sector-icon" width="32" height="32" viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="miter" stroke-linecap="square">${inner}</svg>`;
 }
 
+// Color de identidad de cada sector (icono, borde y etiqueta de su tarjeta).
+const SECTOR_COLOR = { vitafit:'#E0685A', technova:'#5C8DBE', agroverde:'#6FAF6A', ganadera:'#C49A6C', construyeya:'#E0A93A', modaurbana:'#B07CC6' };
+// Rasgos operativos del sector, leídos de su configuración: lo que lo hace distinto de jugar.
+function rasgosSector(s){
+  const r = [];
+  if(!s.tieneInventario) r.push('Sin inventario');
+  else if(s.perecedero) r.push('Inventario perecedero');
+  else r.push('Inventario de rotación lenta');
+  if(s.requiereCapex) r.push('Exige mantener equipos');
+  if(s.umbrales) r.push('Umbrales propios');
+  return r;
+}
+function cifrasInicialesSector(s){
+  const k = s.kpiInicial;
+  return `Caja ${fmtMoney(k.caja)} · Deuda ${fmtMoney(k.deuda)} · WACC ${k.wacc.toFixed(1)}%`;
+}
+// Bonificación de un perfil o ventaja en texto corto: "+8 Banco", "−0,5 pts WACC", "+$5 M caja".
+function chipsBonus(bonus){
+  const corto = {caja:'caja', capitalTrabajo:'cap. trabajo', razonCorriente:'razón cte.', deuda:'deuda', ebitda:'EBITDA', wacc:'WACC',
+    confianzaProveedores:'Proveedores', confianzaBanco:'Banco', reputacion:'Junta', moralEquipo:'Moral'};
+  return Object.keys(bonus||{}).map(k=>{
+    const v = bonus[k];
+    const signo = v > 0 ? '+' : '−';
+    const abs = Math.abs(v);
+    let txt;
+    if(['caja','capitalTrabajo','deuda','ebitda'].includes(k)) txt = `${signo}$${String(abs).replace('.', ',')} M ${corto[k]}`;
+    else if(k === 'wacc') txt = `${signo}${String(abs).replace('.', ',')} pts ${corto[k]}`;
+    else txt = `${signo}${String(abs).replace('.', ',')} ${corto[k]||k}`;
+    return `<span class="bonus-chip ${deltaEsSano(k, v)?'sano':'malo'}">${txt}</span>`;
+  }).join('');
+}
+
 const CATEGORIA_LABELS = {
   primario: 'SECTOR PRIMARIO — EXTRACCIÓN Y PRODUCCIÓN DE MATERIA PRIMA',
   secundario: 'SECTOR SECUNDARIO — MANUFACTURA Y TRANSFORMACIÓN',
@@ -42,8 +74,8 @@ function renderSectorSelect(){
 
   document.getElementById('game').innerHTML = `
     <div class="case-card brutal-screen">
-      <h2 class="brutal-title">&gt; SELECCIONE SECTOR OPERATIVO_</h2>
-      <p class="case-context brutal-hint">Pasa el cursor sobre cada tarjeta para ver el detalle.</p>
+      <h2 class="brutal-title">&gt; ELIGE TU SECTOR OPERATIVO_</h2>
+      <p class="case-context brutal-hint">Cada sector tiene su propio riesgo. Elige qué empresa vas a dirigir durante el año fiscal.</p>
       ${CATEGORIA_ORDEN.map(cat=>{
         const sectoresCat = SECTORS.filter(s=>s.categoria===cat);
         if(!sectoresCat.length) return '';
@@ -52,11 +84,17 @@ function renderSectorSelect(){
             <h3 class="categoria-titulo">${CATEGORIA_LABELS[cat]}</h3>
             <div class="sector-grid">
               ${sectoresCat.map(s=>`
-                <button class="sector-card" data-id="${s.id}">
-                  <span class="card-info-icon" data-tip="sector:${s.id}">ⓘ</span>
-                  ${sectorIcon(s.id)}
-                  <div class="sector-name">${s.nombre}</div>
-                  <div class="sector-rubro">${s.rubro}</div>
+                <button class="sector-card" data-id="${s.id}" style="--sector:${SECTOR_COLOR[s.id]||'var(--gold)'}">
+                  <div class="sector-cabecera">
+                    ${sectorIcon(s.id)}
+                    <div>
+                      <div class="sector-name">${s.nombre}</div>
+                      <div class="sector-rubro">${s.rubro}</div>
+                    </div>
+                  </div>
+                  <p class="sector-desc">${s.descripcion}</p>
+                  <div class="sector-rasgos">${rasgosSector(s).map(r=>`<span class="sector-rasgo">${r}</span>`).join('')}</div>
+                  <div class="sector-cifras">${cifrasInicialesSector(s)}</div>
                 </button>
               `).join('')}
             </div>
@@ -100,17 +138,21 @@ function renderProfileSelect(){
   const sectorObj = SECTORS.find(x=>x.id===sectorPendiente);
   g.innerHTML = `
     <div class="case-card brutal-screen">
-      <h2 class="brutal-title">&gt; SELECCIONE PERFIL GERENCIAL_</h2>
+      <button class="volver-btn" id="volverSectorBtn">← Cambiar sector</button>
+      <h2 class="brutal-title">&gt; CONFIGURA TU GESTIÓN_</h2>
+      ${sectorObj ? `<div class="perfil-sector" style="--sector:${SECTOR_COLOR[sectorObj.id]||'var(--gold)'}">${sectorIcon(sectorObj.id)}<span><b>${sectorObj.nombre}</b> · ${sectorObj.rubro}</span></div>` : ''}
       <div class="empresa-nombre-section">
         <div class="brutal-subtitle" style="margin:0 0 8px;">&gt; NOMBRE DE TU EMPRESA (OPCIONAL)_</div>
         <input type="text" class="empresa-nombre-input" id="empresaNombreInput" placeholder="${sectorObj ? sectorObj.nombre : ''}" maxlength="40" value="${nombreEmpresaJugador.replace(/"/g,'&quot;')}">
       </div>
+      <h2 class="brutal-subtitle">&gt; PERFIL GERENCIAL_</h2>
       <div class="profile-grid" id="profileGrid">
         ${PERFILES.map(p=>{
           const sel = p.id===perfilSeleccionado;
           return `<button class="profile-card ${sel?'selected':''}" data-id="${p.id}">
-            <span class="card-info-icon" data-tip="profile:${p.id}">ⓘ</span>
             <div class="profile-name"><span class="sel-marca"></span>${p.nombre}</div>
+            <p class="opcion-desc">${p.descripcion}</p>
+            <div class="bonus-chips">${chipsBonus(p.bonus)}</div>
           </button>`;
         }).join('')}
       </div>
@@ -120,8 +162,8 @@ function renderProfileSelect(){
           const locked = sessionXP < p.xpRequerido;
           const sel = p.id===perkSeleccionado;
           return `<button class="perk-card ${sel?'selected':''} ${locked?'locked':''}" data-id="${p.id}" ${locked?'disabled':''}>
-            <span class="card-info-icon" data-tip="perk:${p.id}">ⓘ</span>
-            <div class="perk-name"><span class="sel-marca"></span>${p.nombre}${locked?` · requiere ${p.xpRequerido} XP (tienes ${sessionXP})`:''}</div>
+            <div class="perk-name"><span class="sel-marca"></span>${p.nombre}${locked?` <span class="perk-candado">🔒 requiere ${p.xpRequerido} XP (tienes ${sessionXP})</span>`:''}</div>
+            <span class="perk-desc">${p.descripcion}</span>
           </button>`;
         }).join('')}
       </div>
@@ -130,14 +172,15 @@ function renderProfileSelect(){
         ${DIFICULTADES.map(d=>{
           const sel = d.id===dificultadSeleccionada;
           return `<button class="profile-card ${sel?'selected':''}" data-id="${d.id}">
-            <span class="card-info-icon" data-tip="dificultad:${d.id}">ⓘ</span>
             <div class="profile-name"><span class="sel-marca"></span>${d.nombre}</div>
+            <p class="opcion-desc">${d.descripcion}</p>
           </button>`;
         }).join('')}
       </div>
       <button class="brutal-confirm-btn" id="confirmarBtn">COMENZAR SIMULACIÓN →</button>
     </div>
   `;
+  document.getElementById('volverSectorBtn').addEventListener('click', renderSectorSelect);
   const nombreInput = document.getElementById('empresaNombreInput');
   if(nombreInput){
     nombreInput.addEventListener('input', ()=>{ nombreEmpresaJugador = nombreInput.value; });

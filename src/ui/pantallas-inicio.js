@@ -49,9 +49,11 @@ function renderLanding(){
   document.getElementById('xpLine').classList.remove('show');
   document.getElementById('game').innerHTML = `
     <div class="case-card landing">
+      <div class="landing-escena"><img src="${COMITE_IMG_BASE64}" alt="" /></div>
       <h1 class="landing-title">El Comité</h1>
       <div class="landing-subtitle">Gestión crítica. Decisión final.</div>
       <button class="landing-inicio-btn" id="inicioBtn">INICIO</button>
+      <div class="landing-pie">${SECTORS.length} sectores · ${MAX_TURNS} turnos · ${Math.floor(MAX_TURNS/5)} juntas directivas</div>
     </div>
   `;
   document.getElementById('inicioBtn').addEventListener('click', renderSectorSelect);

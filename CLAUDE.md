@@ -128,7 +128,8 @@ tests/                               arnés + pruebas (npm test)
 - Inversión se colorea ámbar `#D98847` (no como pérdida).
 - Tipografía (oct. 2026), variables en `styles/fuentes.css`: `--font-ui` IBM Plex Mono (interfaz,
   números, botones, texto del caso), `--font-texto` IBM Plex Sans (párrafos), `--font-narr`
-  Fraunces (titulares y título del caso), `--font-display` Press Start 2P solo en títulos grandes
+  Fraunces (titulares y título del caso), `--font-display` Comite Pixel (Press Start 2P con Á É Í Ó Ú
+  rehechas; la original las dibuja como minúsculas y por licencia no puede llevar su nombre) solo en títulos grandes
   (logotipo, pantallas, sello del resultado, rango final). No usar fuentes nuevas ni nombres sueltos.
 - Selección (perfil, ventaja, dificultad): borde dorado y marca cuadrada; al pasar el cursor solo se
   aclara el borde (antes se invertía a blanco). El cambio de cada KPI se resalta en su propio número
@@ -142,6 +143,10 @@ tests/                               arnés + pruebas (npm test)
   inversión); las cifras cuentan y las relaciones muestran su barra. Sonido según el sello:
   `sonidoResultado('pos'|'neg'|'neu')`; la junta usa la misma voz (`tocarCampana`, parciales
   inarmónicos + eco corto, en lugar de osciladores simples).
+- Pantallas de inicio (oct. 2026): portada con la imagen de la junta saliendo de la oscuridad;
+  sectores con color propio (`SECTOR_COLOR`), descripción, rasgos operativos y cifras iniciales
+  a la vista; configuración con perfil/ventaja/dificultad explicados en la tarjeta (efectos como
+  fichas de color "lo sano") y botón para volver a cambiar de sector. Textos en tuteo.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: PNG transparente, grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
