@@ -69,8 +69,10 @@ function iniciarDrone(){
   droneOsc.connect(droneGain).connect(ctx.destination);
   droneOsc.start();
   droneGain.gain.linearRampToValueAtTime(0.032 * volumenGeneral, ctx.currentTime + 2.5);
+  if(sectorActual) iniciarMusica(sectorActual.id);
 }
 function detenerDrone(){
+  if(musica && musica.estilo !== 'menu') detenerMusica();
   if(!droneOsc) return;
   const ctx = getAudioCtx();
   if(droneGain && ctx){ droneGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.8); }
@@ -86,7 +88,7 @@ function actualizarVolumenEnVivo(){
   if(droneGain){ droneGain.gain.linearRampToValueAtTime(0.032 * volumenGeneral, ctx.currentTime + 0.15); }
   if(droneCriticoGain){ droneCriticoGain.gain.linearRampToValueAtTime(0.02 * volumenGeneral, ctx.currentTime + 0.15); }
   if(murmulloNodes){ murmulloNodes.gain.gain.linearRampToValueAtTime(0.018 * volumenGeneral, ctx.currentTime + 0.15); }
-  if(ambienteMenuGain){ ambienteMenuGain.gain.linearRampToValueAtTime(0.015 * volumenGeneral, ctx.currentTime + 0.15); }
+  actualizarVolumenMusica();
 }
 
 // 4) Tecla de máquina de escribir — tic breve y agudo, tono ligeramente aleatorio
@@ -212,6 +214,7 @@ function actualizarDroneCriticoSegunSalud(){
   if(!state) return;
   const h = healthScore(state);
   if(h <= 25){ iniciarDroneCritico(); } else { detenerDroneCritico(); }
+  actualizarMusicaSegunSalud(h);
 }
 
 // El Comité te observa — dos tonos graves y ligeramente desafinados entre sí, sostenidos,
@@ -446,33 +449,9 @@ function detenerMurmulloOficina(){
 // 10) Ambientación de los menús previos a la partida (portada, selección de sector y de
 // perfil) — una capa suave y curiosa, deliberadamente distinta de la tensión del dron
 // de partida: dos tonos casi idénticos ligeramente desafinados entre sí (130Hz / 130.6Hz)
-let ambienteMenuOscA = null, ambienteMenuOscB = null, ambienteMenuGain = null;
-function iniciarAmbienteMenu(){
-  const ctx = getAudioCtx();
-  if(!ctx || ambienteMenuOscA) return;
-  ambienteMenuOscA = ctx.createOscillator();
-  ambienteMenuOscA.type = 'sine';
-  ambienteMenuOscA.frequency.value = 130;
-  ambienteMenuOscB = ctx.createOscillator();
-  ambienteMenuOscB.type = 'sine';
-  ambienteMenuOscB.frequency.value = 130.6;
-  ambienteMenuGain = ctx.createGain();
-  ambienteMenuGain.gain.value = 0;
-  ambienteMenuOscA.connect(ambienteMenuGain);
-  ambienteMenuOscB.connect(ambienteMenuGain);
-  ambienteMenuGain.connect(ctx.destination);
-  ambienteMenuOscA.start();
-  ambienteMenuOscB.start();
-  ambienteMenuGain.gain.linearRampToValueAtTime(0.015 * volumenGeneral, ctx.currentTime + 2.2);
-}
-function detenerAmbienteMenu(){
-  if(!ambienteMenuOscA) return;
-  const ctx = getAudioCtx();
-  if(ambienteMenuGain && ctx){ ambienteMenuGain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.7); }
-  const a = ambienteMenuOscA, b = ambienteMenuOscB;
-  setTimeout(()=>{ try{ a.stop(); }catch(e){} try{ b.stop(); }catch(e){} }, 800);
-  ambienteMenuOscA = null; ambienteMenuOscB = null; ambienteMenuGain = null;
-}
+// Ambiente del menú: el tema "menu" de la música de fondo (audio/musica.js).
+function iniciarAmbienteMenu(){ iniciarMusica('menu'); }
+function detenerAmbienteMenu(){ if(musica && musica.estilo === 'menu') detenerMusica(); }
 
 // Clic mecánico en CUALQUIER botón de la app (delegado, fase de captura para que nunca falle)
 document.addEventListener('click', (e)=>{

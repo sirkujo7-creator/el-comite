@@ -152,6 +152,12 @@ tests/                               arnés + pruebas (npm test)
   gráficas → bitácora) con `display:contents` y `order`. Fuera de esa media query no se toca nada:
   se comprobó con capturas que el PC queda igual a 1366, 1024 y 760 px.
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
+- Música de fondo (oct. 2026, `audio/musica.js`, opción B elegida por Juan: generada, no grabada).
+  Un estilo por sector + "menu": AgroVerde bambuco 3/4 con guitarra; Ganadería joropo con arpa,
+  cuatro y maracas; Vita Fit pulso de gimnasio; TechNova ambiente electrónico; Construye YA
+  tensión grave; Moda Urbana lo-fi con swing y piano eléctrico. Cuerdas por Karplus-Strong,
+  sala por convolución, humanización de tiempo e intensidad. Arranca con `iniciarDrone` y se
+  oscurece con la salud crítica (`actualizarMusicaSegunSalud`). Volumen base `MUSICA_VOLUMEN`.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
