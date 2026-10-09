@@ -129,6 +129,62 @@ function sonidoConfirmacion(){
   osc.stop(ctx.currentTime + 0.24);
 }
 
+// Voz de campana suave para los resultados: parciales inarmónicos (como una marimba de madera)
+// que decaen a distinto ritmo, filtrados y con un eco corto — suena a instrumento, no a pitido.
+function tocarCampana(ctx, freq, inicio, opts){
+  opts = opts || {};
+  const vol = (opts.vol || 0.2) * volumenGeneral;
+  const dur = opts.dur || 1.4;
+  const filtro = ctx.createBiquadFilter();
+  filtro.type = 'lowpass';
+  filtro.frequency.value = opts.brillo || 2600;
+  const salida = ctx.createGain();
+  salida.gain.value = 1;
+  filtro.connect(salida).connect(ctx.destination);
+  // Eco corto (≈ sala pequeña): retardo con realimentación baja.
+  const eco = ctx.createDelay(1);
+  eco.delayTime.value = 0.13;
+  const realim = ctx.createGain();
+  realim.gain.value = 0.22;
+  const envio = ctx.createGain();
+  envio.gain.value = 0.18;
+  filtro.connect(envio).connect(eco);
+  eco.connect(realim).connect(eco);
+  eco.connect(ctx.destination);
+  [[1, 1, dur], [2.76, 0.32, dur*0.45], [5.4, 0.12, dur*0.22]].forEach(([ratio, amp, d])=>{
+    const osc = ctx.createOscillator();
+    osc.type = 'sine';
+    osc.frequency.value = freq * ratio;
+    osc.detune.value = (Math.random() - 0.5) * 6; // leve imperfección humana
+    const g = ctx.createGain();
+    g.gain.setValueAtTime(0.0001, inicio);
+    g.gain.exponentialRampToValueAtTime(Math.max(0.0001, vol * amp), inicio + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, inicio + d);
+    osc.connect(g).connect(filtro);
+    osc.start(inicio);
+    osc.stop(inicio + d + 0.05);
+  });
+  setTimeout(()=>{ try{ salida.disconnect(); eco.disconnect(); realim.disconnect(); }catch(e){} }, (inicio - ctx.currentTime + dur + 1.5) * 1000);
+}
+
+// Resultado de una decisión: bueno = tercera mayor ascendente y clara; malo = dos notas
+// graves descendentes y apagadas; doble filo = una sola nota media, neutra.
+function sonidoResultado(tipo){
+  const ctx = getAudioCtx();
+  if(!ctx) return;
+  const t = ctx.currentTime + 0.05;
+  if(tipo === 'pos'){
+    tocarCampana(ctx, 523.25, t, {vol:0.16, brillo:3200});        // Do5
+    tocarCampana(ctx, 659.25, t + 0.12, {vol:0.15, brillo:3400}); // Mi5
+    tocarCampana(ctx, 783.99, t + 0.24, {vol:0.12, brillo:3600, dur:1.8}); // Sol5
+  } else if(tipo === 'neg'){
+    tocarCampana(ctx, 233.08, t, {vol:0.22, brillo:900, dur:1.2});        // Si♭3
+    tocarCampana(ctx, 196.00, t + 0.2, {vol:0.24, brillo:700, dur:1.8});  // Sol3
+  } else {
+    tocarCampana(ctx, 392.00, t, {vol:0.16, brillo:1800, dur:1.3});       // Sol4
+  }
+}
+
 // 6) Segunda capa de dron — se enciende sola cuando la salud entra en zona crítica,
 // ligeramente desafinada respecto al dron base (45Hz vs 47Hz) para crear un "batido" incómodo
 let droneCriticoOsc = null, droneCriticoGain = null;
@@ -181,20 +237,9 @@ function sonidoElComiteObserva(){
 function sonidoTimbreJunta(){
   const ctx = getAudioCtx();
   if(!ctx) return;
-  const notas = [392, 330, 262];
-  notas.forEach((freq, i)=>{
-    const osc = ctx.createOscillator();
-    osc.type = 'sine';
-    osc.frequency.value = freq;
-    const gain = ctx.createGain();
-    const start = ctx.currentTime + i*0.22;
-    gain.gain.setValueAtTime(0.0001, start);
-    gain.gain.exponentialRampToValueAtTime(Math.max(0.0001, 0.22 * volumenGeneral), start + 0.03);
-    gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.55);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(start);
-    osc.stop(start + 0.6);
-  });
+  const t = ctx.currentTime + 0.05;
+  [392, 329.63, 261.63].forEach((freq, i)=>tocarCampana(ctx, freq, t + i*0.26, {vol:0.2, brillo:2000, dur:i===2 ? 2.4 : 1.4}));
+  tocarCampana(ctx, 130.81, t + 0.52, {vol:0.12, brillo:600, dur:2.6}); // Do2 grave de fondo
 }
 
 // 8) Firmas sonoras propias para cada uno de los 4 eventos de cultura de oficina

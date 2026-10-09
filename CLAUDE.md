@@ -58,7 +58,7 @@ tests/                               arnés + pruebas (npm test)
 | systems/metas-junta.js | `META_DELTAS`, `META_RANGOS`, `generarNuevaMeta` |
 | systems/priorizacion.js, priorizacion-casos.js | `indicadoresEnAlerta`, `buscarCasoParaIndicador`, `elegirDecisionExtra` |
 | systems/… | persistencia, mandato inicial, logros, glosario, arquetipos, mayor error, título, legado, estadísticas |
-| ui/… | formato, feedback visual, iconos KPI, tensión, render de caso, franja de KPI, bitácora, post-mortem, panel CRT, pantallas de inicio, cinemática, pantalla completa |
+| ui/… | formato, feedback visual, iconos KPI, tensión, render de caso, franja de KPI, resultado (antes → después), bitácora, post-mortem, panel CRT, pantallas de inicio, cinemática, pantalla completa |
 | minigames/… | auditoría, mercado volátil, bandeja, fuga de capital, oficina (+ ambiente) |
 | content/universal/… | dilemas, elenco, cadenas profundas, carta meta, karma, cisne negro… |
 | content/sectores/<sector>.js, sectores.js, perfiles.js | `*_CASES`, `*_RANDOM`, `SECTORS`, `PERFILES`, `PERKS` |
@@ -137,6 +137,11 @@ tests/                               arnés + pruebas (npm test)
   decide. Al pasar el cursor por una opción se iluminan los que toca, **sin cifra ni dirección**
   (punto grande = efecto fuerte, según `FRANJA_UMBRAL_FUERTE`; borde punteado ámbar en caja si la
   opción difiere deuda). Mostrar cuánto o hacia dónde quitaría la decisión al jugador: no hacerlo.
+- Pantalla de resultado (oct. 2026, `ui/resultado-balance.js`): tras decidir, cada indicador que
+  cambió aparece como "antes → después" con el delta en el color de lo sano (ámbar si es
+  inversión); las cifras cuentan y las relaciones muestran su barra. Sonido según el sello:
+  `sonidoResultado('pos'|'neg'|'neu')`; la junta usa la misma voz (`tocarCampana`, parciales
+  inarmónicos + eco corto, en lugar de osciladores simples).
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: PNG transparente, grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 

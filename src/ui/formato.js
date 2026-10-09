@@ -11,6 +11,7 @@ function fmtDelta(v, kind){
   if(kind==='money') return sign+fmtMoney(v);
   if(kind==='dias') return sign+Math.round(v)+"d";
   if(kind==='pct') return sign+v.toFixed(1)+"%";
+  if(kind==='ratio') return sign+v.toFixed(2);
   return sign+(Number.isInteger(v)?v:v.toFixed(1));
 }
 // "Lo sano" de cada indicador: el rango que colorFor pinta en verde. Un cambio es sano si

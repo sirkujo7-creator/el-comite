@@ -125,6 +125,7 @@ function renderChoices(c){
 
 function selectChoice(c, ch){
   ocultarFranjaKpi();
+  const indicadoresAntes = capturarIndicadores();
   document.querySelectorAll('.choice-btn').forEach((b)=>{ b.disabled = true; b.style.pointerEvents='none'; });
   sonidoConfirmacion();
 
@@ -162,35 +163,32 @@ function selectChoice(c, ch){
   const stampText = score > 2 ? 'Decisión que fortalece el balance' : (score < -2 ? 'Costo estructural asumido' : 'Compromiso con doble filo');
 
   const chipOrder = ['caja','capitalTrabajo','razonCorriente','deuda','ebitda','wacc','diasInventario','confianzaProveedores','confianzaBanco','reputacion','moralEquipo'];
-  const chips = chipOrder.filter(k=>efectosAplicados[k]).map(k=>{
-    const val = efectosAplicados[k];
-    const money = (k==='caja'||k==='capitalTrabajo'||k==='deuda'||k==='ebitda');
-    const kind = money?'money':(k==='diasInventario'?'dias':'num');
-    const goodDir = deltaEsSano(k, val);
-    return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val,kind)}</span>`;
-  }).join('');
 
   const explainItems = chipOrder.filter(k=>efectosAplicados[k] && EXPLAIN[k]).map(k=>`<div class="explain-item"><b>${KPI_LABEL[k]}:</b> ${EXPLAIN[k]}</div>`).join('');
   const explainSystemic = systemicNotes.map(n=>`<div class="explain-item">${n}</div>`).join('');
   const explainHtml = explainItems + explainSystemic || '<div class="explain-item">Esta decisión no tuvo un efecto numérico directo sobre tus indicadores.</div>';
 
+  const balanceHtml = balanceDecisionHTML(indicadoresAntes, efectosAplicados);
   renderLog();
-  triggerCurtainSweep(()=>renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, chips, explainHtml));
+  triggerCurtainSweep(()=>renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml));
 }
 
-function renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, chips, explainHtml){
+function renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="result-card ${stampClass} screen-fade-in">
       <div class="result-recordatorio">Elegiste: ${ch.informado ? '🔍 ' : ''}${ch.texto}</div>
       <div class="stamp result-stamp ${stampClass}">${stampText}</div>
       <p class="consequence-text">${ch.consecuencia}</p>
+      ${balanceHtml}
       <button class="explain-toggle" id="explainToggle">ⓘ ¿Por qué tuvo este efecto?</button>
       <div class="explain-panel" id="explainPanel">${explainHtml}</div>
       <div><button class="continue-btn" id="continueBtn">Continuar →</button></div>
     </div>
   `;
 
+  if(balanceHtml) animarBalanceDecision();
+  sonidoResultado(stampClass);
   document.getElementById('explainToggle').addEventListener('click', ()=>{ document.getElementById('explainPanel').classList.toggle('show'); });
   document.getElementById('continueBtn').addEventListener('click', ()=>{
     if(c.tipo === 'junta' && ultimaEvaluacionMeta){
