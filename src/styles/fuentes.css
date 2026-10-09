@@ -1,0 +1,23 @@
+  /* Fuentes incrustadas (licencia SIL OFL 1.1, ver assets/fuentes/LICENCIAS.txt): el juego
+     se ve igual sin conexión. Sistema tipográfico:
+     --font-ui    IBM Plex Mono — interfaz, números, etiquetas y botones
+     --font-texto IBM Plex Sans — párrafos de lectura
+     --font-narr  Fraunces      — titulares y narrativa
+     --font-display Press Start 2P — solo títulos grandes (logotipo, pantallas, rango final) */
+  @font-face{font-family:'IBM Plex Mono'; font-weight:400; font-display:swap; src:url(@asset(fuentes/ibm-plex-mono-latin-400-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Mono'; font-weight:500; font-display:swap; src:url(@asset(fuentes/ibm-plex-mono-latin-500-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Mono'; font-weight:600; font-display:swap; src:url(@asset(fuentes/ibm-plex-mono-latin-600-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Mono'; font-weight:700; font-display:swap; src:url(@asset(fuentes/ibm-plex-mono-latin-700-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Sans'; font-weight:400; font-display:swap; src:url(@asset(fuentes/ibm-plex-sans-latin-400-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Sans'; font-weight:500; font-display:swap; src:url(@asset(fuentes/ibm-plex-sans-latin-500-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Sans'; font-weight:600; font-display:swap; src:url(@asset(fuentes/ibm-plex-sans-latin-600-normal.woff2)) format('woff2');}
+  @font-face{font-family:'IBM Plex Sans'; font-weight:700; font-display:swap; src:url(@asset(fuentes/ibm-plex-sans-latin-700-normal.woff2)) format('woff2');}
+  @font-face{font-family:'Fraunces'; font-style:normal; font-weight:100 900; font-display:swap; src:url(@asset(fuentes/fraunces-latin-wght-normal.woff2)) format('woff2');}
+  @font-face{font-family:'Fraunces'; font-style:italic; font-weight:100 900; font-display:swap; src:url(@asset(fuentes/fraunces-latin-wght-italic.woff2)) format('woff2');}
+  @font-face{font-family:'Press Start 2P'; font-weight:400; font-display:swap; src:url(@asset(fuentes/press-start-2p-latin-400-normal.woff2)) format('woff2');}
+  :root{
+    --font-ui:'IBM Plex Mono', ui-monospace, monospace;
+    --font-texto:'IBM Plex Sans', system-ui, sans-serif;
+    --font-narr:'Fraunces', Georgia, serif;
+    --font-display:'Press Start 2P', 'IBM Plex Mono', monospace;
+  }

@@ -62,7 +62,15 @@ function flashKpiCards(efectos){
     card.classList.add(esInversion ? 'flash-bg-inversion' : esPasivo ? 'flash-bg-pasivo' : (bueno?'flash-bg-good':'flash-bg-bad'));
     setTimeout(()=>card.classList.remove('flash-bg-good','flash-bg-bad','flash-bg-pasivo','flash-bg-inversion'), 800);
     const kd = KPI_DEFS.find(d=>d.key===key);
-    mostrarNumeroFlotante(selector, delta, kd?kd.kind:'num', bueno, esInversion);
+    // Las tarjetas de KPI ya muestran el cambio junto al valor: se resalta ese número en vez
+    // de añadir otro flotante encima. Las fichas de relaciones no tienen número propio.
+    const enLinea = !esRelacional && card.querySelector('.stat-delta');
+    if(enLinea){
+      if(esInversion){ enLinea.classList.remove('up','down'); enLinea.classList.add('inversion'); enLinea.textContent = '↗ ' + enLinea.textContent; }
+      enLinea.classList.remove('pop'); void enLinea.offsetWidth; enLinea.classList.add('pop');
+    } else {
+      mostrarNumeroFlotante(selector, delta, kd?kd.kind:'num', bueno, esInversion);
+    }
   });
 }
 

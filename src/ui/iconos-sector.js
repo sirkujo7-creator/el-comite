@@ -110,7 +110,7 @@ function renderProfileSelect(){
           const sel = p.id===perfilSeleccionado;
           return `<button class="profile-card ${sel?'selected':''}" data-id="${p.id}">
             <span class="card-info-icon" data-tip="profile:${p.id}">ⓘ</span>
-            <div class="profile-name">[${sel?'X':' '}] ${p.nombre}</div>
+            <div class="profile-name"><span class="sel-marca"></span>${p.nombre}</div>
           </button>`;
         }).join('')}
       </div>
@@ -121,7 +121,7 @@ function renderProfileSelect(){
           const sel = p.id===perkSeleccionado;
           return `<button class="perk-card ${sel?'selected':''} ${locked?'locked':''}" data-id="${p.id}" ${locked?'disabled':''}>
             <span class="card-info-icon" data-tip="perk:${p.id}">ⓘ</span>
-            <div class="perk-name">[${sel?'X':' '}] ${p.nombre}${locked?` · requiere ${p.xpRequerido} XP (tienes ${sessionXP})`:''}</div>
+            <div class="perk-name"><span class="sel-marca"></span>${p.nombre}${locked?` · requiere ${p.xpRequerido} XP (tienes ${sessionXP})`:''}</div>
           </button>`;
         }).join('')}
       </div>
@@ -131,7 +131,7 @@ function renderProfileSelect(){
           const sel = d.id===dificultadSeleccionada;
           return `<button class="profile-card ${sel?'selected':''}" data-id="${d.id}">
             <span class="card-info-icon" data-tip="dificultad:${d.id}">ⓘ</span>
-            <div class="profile-name">[${sel?'X':' '}] ${d.nombre}</div>
+            <div class="profile-name"><span class="sel-marca"></span>${d.nombre}</div>
           </button>`;
         }).join('')}
       </div>

@@ -6,7 +6,7 @@ function buildMercadoVolatil(){
   const base = Math.round((0.3 + Math.random()*0.7)*100)/100;
   return {
     tipo:'mercado_volatil',
-    titulo: esDivisa ? 'Volatilidad Cambiaria Repentina' : 'Escasez Súbita de Insumo Crítico',
+    titulo: esDivisa ? 'Volatilidad cambiaria repentina' : 'Escasez Súbita de Insumo Crítico',
     motivoTexto: esDivisa
       ? 'El precio del dólar se dispara sin previo aviso. Necesitas comprar divisas AHORA para cubrir un pago urgente en el exterior.'
       : 'Un proveedor crítico solo tiene inventario disponible por los próximos segundos, a precio spot. Si no compras ya, te quedas sin el insumo.',

@@ -5,7 +5,7 @@
 
   .evaluar-turno-wrap{ text-align:center; margin:4px 0 4px; }
   .evaluar-turno-btn{
-    font-family:'Press Start 2P','IBM Plex Mono',monospace;
+    font-family:var(--font-ui); font-weight:700;
     font-size:13px; line-height:1.9; letter-spacing:.02em;
     color:#20180a; background:linear-gradient(180deg, #E6C77E, var(--gold));
     border:none; border-radius:10px; padding:22px 30px; width:100%; max-width:520px;
@@ -19,9 +19,9 @@
     0%,100%{ box-shadow:0 6px 0 #8a6f2f, 0 10px 24px rgba(0,0,0,0.5); }
     50%{ box-shadow:0 6px 0 #8a6f2f, 0 10px 34px rgba(201,169,97,0.55); }
   }
-  .evaluar-turno-hint{ font-family:'IBM Plex Mono',monospace; font-size:10.5px; color:var(--ink-muted); margin-top:9px; }
+  .evaluar-turno-hint{ font-family:var(--font-ui); font-size:10.5px; color:var(--ink-muted); margin-top:9px; }
   .oficina-ambiente-btn{
-    display:none; margin:14px auto 0; padding:10px 20px; font-family:'IBM Plex Mono',monospace; font-size:12px;
+    display:none; margin:14px auto 0; padding:10px 20px; font-family:var(--font-ui); font-size:12px;
     font-weight:700; background:rgba(201,169,97,0.1); border:2px solid var(--gold); border-radius:22px;
     color:var(--gold); cursor:pointer; animation:oficinaAmbientePulse 1.3s ease-in-out infinite;
   }

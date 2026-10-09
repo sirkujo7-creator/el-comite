@@ -1,11 +1,13 @@
   /* =========================================================
      RESKIN — TABLERO ESTILO REFERENCIA (íconos a color + CRT)
      ========================================================= */
-  h1, .continue-btn, .restart-btn, .invest-btn, .crt-btn, .log-toggle,
-  .log-entry, .log-entry .lcase, .ending-badge, .rank-badge,
-  .titulo-gerencial-nombre, .stamp, .choice-letter{
-    font-family:'Press Start 2P','IBM Plex Mono',monospace !important;
+  h1, .ending-badge, .rank-badge, .titulo-gerencial-nombre, .stamp{
+    font-family:var(--font-display) !important;
     letter-spacing:0 !important;
+  }
+  .continue-btn, .restart-btn, .invest-btn, .crt-btn, .log-toggle,
+  .log-entry, .log-entry .lcase, .choice-letter{
+    font-family:var(--font-ui) !important; letter-spacing:.02em !important;
   }
   h1{ font-size:18px; line-height:1.6; }
   .stamp{ font-size:9px; transform:none; }
@@ -13,14 +15,13 @@
   .ending-badge{ font-size:15px; line-height:1.8; }
   .rank-badge{ font-size:32px; }
   .titulo-gerencial-nombre{ font-size:14px; line-height:1.7; }
-  .choice-letter{ font-size:11px; }
-  .choice-letter{ font-family:'Share Tech Mono', 'Courier New', monospace !important; }
-  .log-entry{ font-size:9px; line-height:2.2; }
-  .log-entry .lcase{ font-size:7.5px; margin-bottom:4px; display:block; }
-  .continue-btn{ font-size:10px; line-height:1.8; padding:14px 16px; border:2px solid #00000055; }
-  .restart-btn{ font-size:9px; line-height:1.8; }
-  .invest-btn{ font-size:8.5px; line-height:1.8; }
-  .crt-btn{ font-size:8px; }
+  .choice-letter{ font-size:13px; font-weight:700; }
+  .log-entry{ font-size:12px; line-height:1.6; }
+  .log-entry .lcase{ font-size:10.5px; font-weight:600; margin-bottom:4px; display:block; }
+  .continue-btn{ font-size:13px; font-weight:700; line-height:1.5; padding:14px 16px; border:2px solid #00000055; }
+  .restart-btn{ font-size:12px; font-weight:700; line-height:1.5; }
+  .invest-btn{ font-size:12px; font-weight:700; line-height:1.5; }
+  .crt-btn{ font-size:11px; font-weight:700; }
   .log-toggle{ font-size:8px; line-height:1.9; }
 
   /* Tarjetas: esquinas redondeadas y sombra suave, como en el tablero de referencia */

@@ -1,6 +1,7 @@
 // Une src/ + assets/ en un solo HTML autocontenido: dist/simulador_financiero.html
 // - Cada línea `<!-- @include ruta -->` de src/index.html se reemplaza por el contenido de src/ruta.
-// - Cada `@asset(ruta)` se reemplaza por la imagen de assets/ruta como data URI base64.
+// - Cada `@asset(ruta)` se reemplaza por el archivo de assets/ruta (imagen o fuente) como data URI base64.
+// - Las librerías de terceros (assets/vendor/) se incluyen tal cual con `<!-- @include ../assets/vendor/… -->`.
 // Sin dependencias: solo Node.
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,12 +11,12 @@ const ROOT = path.dirname(fileURLToPath(import.meta.url));
 const SRC = path.join(ROOT, 'src');
 const ASSETS = path.join(ROOT, 'assets');
 const SALIDA = path.join(ROOT, 'dist', 'simulador_financiero.html');
-const MIME = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg' };
+const MIME = { '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.woff2': 'font/woff2' };
 
 function incrustarAssets(texto) {
   return texto.replace(/@asset\(([^)]+)\)/g, (_, ruta) => {
     const mime = MIME[path.extname(ruta).toLowerCase()];
-    if (!mime) throw new Error(`Tipo de imagen no soportado: ${ruta}`);
+    if (!mime) throw new Error(`Tipo de archivo no soportado: ${ruta}`);
     return `data:${mime};base64,` + fs.readFileSync(path.join(ASSETS, ruta)).toString('base64');
   });
 }

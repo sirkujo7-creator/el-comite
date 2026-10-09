@@ -97,7 +97,7 @@ function generarBalanceDoc(esValido){
   }
 
   return {
-    tipo:'balance', titulo:'Balance Mensual Resumido', kpiFriccion:'confianzaProveedores',
+    tipo:'balance', titulo:'Balance mensual resumido', kpiFriccion:'confianzaProveedores',
     campos:[
       {label:'Ingresos del mes', value:fmtMoney(ingresos), flag:false},
       {label:'Egresos del mes', value:fmtMoney(egresos), flag:false},

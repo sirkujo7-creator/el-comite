@@ -50,7 +50,7 @@ function renderLanding(){
   document.getElementById('game').innerHTML = `
     <div class="case-card landing">
       <h1 class="landing-title">El Comité</h1>
-      <div class="landing-subtitle">Gestión Crítica. Decisión Final.</div>
+      <div class="landing-subtitle">Gestión crítica. Decisión final.</div>
       <button class="landing-inicio-btn" id="inicioBtn">INICIO</button>
     </div>
   `;

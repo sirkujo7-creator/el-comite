@@ -107,7 +107,7 @@ function renderEnding(ending){
       <div class="case-eyebrow" style="justify-content:center">${esCierre ? 'Cierre del año fiscal' : 'Fin del ejercicio'} · ${nombreEmpresaActual()} · turno ${turnNumber-1}</div>
       ${rankHtml}
       <div class="titulo-gerencial">
-        <div class="titulo-gerencial-label">Título Gerencial</div>
+        <div class="titulo-gerencial-label">Título gerencial</div>
         <div class="titulo-gerencial-nombre">${tg.titulo}</div>
         <p class="titulo-gerencial-parrafo">${tg.parrafo}</p>
       </div>

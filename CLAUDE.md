@@ -30,7 +30,8 @@ original/simulador_financiero.html   referencia intacta (NO editar)
 src/index.html                       esqueleto; cada `<!-- @include ruta -->` inserta un archivo de src/
 src/styles/*.css                     14 hojas, en el orden del original
 src/{engine,systems,ui,minigames,audio,content}/*.js   65 fragmentos de un solo <script>
-assets/                              13 imágenes; en el código aparecen como @asset(ruta)
+assets/                              13 imágenes y assets/fuentes/*.woff2; en el código aparecen como @asset(ruta)
+assets/vendor/chart.umd.min.js       Chart.js 4.4.0 incrustado (el juego funciona sin internet)
 build.mjs                            une todo en dist/simulador_financiero.html (sin dependencias)
 dist/simulador_financiero.html       archivo que se entrega a Juan (se versiona)
 tests/                               arnés + pruebas (npm test)
@@ -125,6 +126,13 @@ tests/                               arnés + pruebas (npm test)
   `RANGOS_SANOS` (`ui/formato.js`, `cambioEsSano`/`deltaEsSano`) y se usa en todo lo visual:
   flechas, números de cambio, destellos y fichas. El motor sigue usando `esMejorSiSube`.
 - Inversión se colorea ámbar `#D98847` (no como pérdida).
+- Tipografía (oct. 2026), variables en `styles/fuentes.css`: `--font-ui` IBM Plex Mono (interfaz,
+  números, botones, texto del caso), `--font-texto` IBM Plex Sans (párrafos), `--font-narr`
+  Fraunces (titulares y título del caso), `--font-display` Press Start 2P solo en títulos grandes
+  (logotipo, pantallas, sello del resultado, rango final). No usar fuentes nuevas ni nombres sueltos.
+- Selección (perfil, ventaja, dificultad): borde dorado y marca cuadrada; al pasar el cursor solo se
+  aclara el borde (antes se invertía a blanco). El cambio de cada KPI se resalta en su propio número
+  (no hay número flotante encima de la tarjeta); las fichas de relaciones sí lo conservan.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: PNG transparente, grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 

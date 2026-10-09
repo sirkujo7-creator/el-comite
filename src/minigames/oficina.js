@@ -239,15 +239,15 @@ function resolverDilemaCafe(resultado){
   aplicarYFinalizarEventoOficina('cafeResult', efectos, mensaje, stampClass, stampTexto);
 }
 
-/* ---------- 3) El Cumpleaños Inoportuno (Timer/Estrés) ---------- */
-function buildCumpleInoportuno(){ return {tipo:'cumple_inoportuno', titulo:'El Cumpleaños Inoportuno'}; }
+/* ---------- 3) El cumpleaños inoportuno (Timer/Estrés) ---------- */
+function buildCumpleInoportuno(){ return {tipo:'cumple_inoportuno', titulo:'El cumpleaños inoportuno'}; }
 let cumpleIntervalId = null;
 function renderCumpleInoportuno(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
       <div class="case-eyebrow">🎂 CULTURA DE OFICINA</div>
-      <h2 class="case-title">El Cumpleaños Inoportuno</h2>
+      <h2 class="case-title">El cumpleaños inoportuno</h2>
       <p class="case-context">${contextoOficina('cumple_inoportuno')}</p>
       <progress class="cumple-progress" id="cumpleProgress" max="100" value="100"></progress>
       <div class="oficina-botones">
@@ -349,15 +349,15 @@ function resolverNevera(resultado){
   aplicarYFinalizarEventoOficina('neveraResult', efectos, mensaje, stampClass, stampTexto);
 }
 
-/* ---------- 5) La Impresora Atascada (Secuencia tipo "Simon dice") ---------- */
-function buildImpresoraAtascada(){ return {tipo:'impresora_atascada', titulo:'La Impresora Atascada'}; }
+/* ---------- 5) La impresora atascada (Secuencia tipo "Simon dice") ---------- */
+function buildImpresoraAtascada(){ return {tipo:'impresora_atascada', titulo:'La impresora atascada'}; }
 let impresoraTimeouts = [];
 function renderImpresoraAtascada(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
       <div class="case-eyebrow">🖨️ CULTURA DE OFICINA</div>
-      <h2 class="case-title">La Impresora Atascada</h2>
+      <h2 class="case-title">La impresora atascada</h2>
       <p class="case-context">${contextoOficina('impresora_atascada')}</p>
       <div class="impresora-intro" id="impresoraIntro">
         <button class="oficina-choice-btn" id="impresoraIntentarBtn">A) Intentar arreglarla tú mismo</button>
@@ -483,15 +483,15 @@ function resolverImpresora(resultado){
   aplicarYFinalizarEventoOficina('impresoraResult', efectos, mensaje, stampClass, stampTexto);
 }
 
-/* ---------- 6) La Pantalla Azul (Secuencia de teclas, tipo "Simon dice") ---------- */
-function buildPantallaAzul(){ return {tipo:'pantalla_azul', titulo:'La Pantalla Azul'}; }
+/* ---------- 6) La pantalla azul (Secuencia de teclas, tipo "Simon dice") ---------- */
+function buildPantallaAzul(){ return {tipo:'pantalla_azul', titulo:'La pantalla azul'}; }
 let pantallaAzulTimeouts = [];
 function renderPantallaAzul(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
       <div class="case-eyebrow">🖥️ CULTURA DE OFICINA</div>
-      <h2 class="case-title">La Pantalla Azul</h2>
+      <h2 class="case-title">La pantalla azul</h2>
       <p class="case-context">${contextoOficina('pantalla_azul')}</p>
       <div class="pantalla-intro" id="pantallaIntro">
         <button class="oficina-choice-btn" id="pantallaIntentarBtn">A) Intentar el combo de reinicio de emergencia</button>

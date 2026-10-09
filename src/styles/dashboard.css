@@ -22,10 +22,10 @@
 }
 .stat-icon-row{ justify-content:center !important; margin-bottom:6px; }
 .stat-badge{ background:transparent !important; border-width:1.5px !important; }
-.stat-label{ font-family:'IBM Plex Mono',monospace; text-align:center; width:100%; }
+.stat-label{ font-family:var(--font-ui); text-align:center; width:100%; }
 .stat-value{
-  font-family:'IBM Plex Mono',monospace; justify-content:center; width:100%;
-  text-shadow:0 0 6px currentColor, 0 0 2px currentColor;
+  font-family:var(--font-ui); justify-content:center; width:100%;
+  text-shadow:0 0 10px color-mix(in srgb, currentColor 35%, transparent);
 }
 .stat-info-icon{
   position:absolute; top:8px; right:9px; z-index:2;
@@ -36,7 +36,7 @@
   background:#000 !important;
   border:1px solid #444 !important;
   justify-content:center; text-align:center;
-  font-family:'IBM Plex Mono',monospace; text-transform:uppercase;
+  font-family:var(--font-ui); text-transform:uppercase;
 }
 .rel-chip.tier-optimo{ border-color:var(--teal) !important; }
 .rel-chip.tier-estable{ border-color:#5C8DBE !important; }
@@ -58,6 +58,7 @@
 .ticker{ justify-items:center; }
 .stat{ width:100%; max-width:230px; }
 .relations{ justify-content:center; }
+.relations > .rel-chip{ flex:1 1 0; min-width:190px; max-width:250px; }
 .crt-row{ justify-content:center; }
 .evaluar-turno-wrap{ display:flex; flex-direction:column; align-items:center; }
 .calendar{ text-align:center; }

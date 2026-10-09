@@ -13,7 +13,7 @@
 }
 #introOverlay.intro-hide{ opacity:0; pointer-events:none; }
 #introTextContainer{
-  font-family:'VT323','Silkscreen',monospace; font-size:1.4rem; color:#d4d4d4;
+  font-family:var(--font-ui); font-size:1.4rem; color:#d4d4d4;
   text-shadow:0 0 5px rgba(255,255,255,0.2); line-height:1.6;
   max-width:680px; padding:0 28px; text-align:center; position:relative; z-index:1;
 }
@@ -31,12 +31,12 @@
 #skipIntroBtn{
   position:absolute; bottom:24px; right:28px; z-index:2;
   color:#555; background:none; border:none; font-size:0.8rem; cursor:pointer;
-  font-family:'IBM Plex Mono',monospace; letter-spacing:.05em; transition:color 0.2s ease;
+  font-family:var(--font-ui); letter-spacing:.05em; transition:color 0.2s ease;
 }
 #skipIntroBtn:hover{ color:#39ff6a; }
 #introHint{
   position:absolute; bottom:24px; left:28px; z-index:2;
-  color:#555; font-size:0.8rem; font-family:'IBM Plex Mono',monospace; letter-spacing:.05em;
+  color:#555; font-size:0.8rem; font-family:var(--font-ui); letter-spacing:.05em;
   opacity:0; transition:opacity 0.3s ease;
 }
 #introHint.show{ opacity:1; }

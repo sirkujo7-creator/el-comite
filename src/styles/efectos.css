@@ -21,9 +21,9 @@
   }
   .case-card.transicion-macro::before{top:16px;}
   .case-card.transicion-macro::after{bottom:16px;}
-  .masthead-kicker{font-family:'IBM Plex Mono',monospace; font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--danger); margin:8px 0 16px; font-weight:700;}
-  .masthead-headline{font-family:'Fraunces',serif; font-weight:700; font-style:italic; font-size:clamp(23px,5.6vw,32px); line-height:1.18; color:var(--ink); margin:0 0 16px; letter-spacing:-0.01em; text-shadow:0 2px 24px rgba(201,169,97,0.18);}
+  .masthead-kicker{font-family:var(--font-ui); font-size:10.5px; letter-spacing:.28em; text-transform:uppercase; color:var(--danger); margin:8px 0 16px; font-weight:700;}
+  .masthead-headline{font-family:var(--font-narr); font-weight:700; font-style:italic; font-size:clamp(23px,5.6vw,32px); line-height:1.18; color:var(--ink); margin:0 0 16px; letter-spacing:-0.01em; text-shadow:0 2px 24px rgba(201,169,97,0.18);}
   .masthead-rule{border:none; border-top:1px solid var(--line-strong); width:56%; margin:16px auto;}
-  .masthead-sub{font-family:'IBM Plex Sans',sans-serif; font-size:13px; color:var(--ink-muted); line-height:1.65; max-width:54ch; margin:0 auto 20px; text-align:left;}
-  .masthead-dateline{font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--ink-muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px;}
+  .masthead-sub{font-family:var(--font-texto); font-size:13px; color:var(--ink-muted); line-height:1.65; max-width:54ch; margin:0 auto 20px; text-align:left;}
+  .masthead-dateline{font-family:var(--font-ui); font-size:9px; color:var(--ink-muted); letter-spacing:.1em; text-transform:uppercase; margin-bottom:4px;}
 
