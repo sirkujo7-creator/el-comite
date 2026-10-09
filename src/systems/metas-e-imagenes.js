@@ -5,16 +5,16 @@
    modesta de reputación, enmarcada como retroalimentación, no como castigo severo.
    ========================================================================================= */
 const COMITE_IMG_BASE64 = '@asset(junta-directiva.jpg)';
-const RETRATO_SOFIA_LINDO = '@asset(retratos/sofia-lindo.png)';
-const RETRATO_DON_HIGINIO = '@asset(retratos/don-higinio.png)';
-const RETRATO_CAMILA = '@asset(retratos/camila.png)';
-const RETRATO_DON_RIGO = '@asset(retratos/don-rigo.png)';
-const RETRATO_MARCELA = '@asset(retratos/marcela.png)';
-const RETRATO_ELVIRA = '@asset(retratos/elvira.png)';
-const RETRATO_TETO = '@asset(retratos/teto.png)';
-const RETRATO_AURELIO = '@asset(retratos/aurelio.png)';
-const RETRATO_JAIRO = '@asset(retratos/jairo.png)';
-const RETRATO_TONO = '@asset(retratos/tono.png)';
-const RETRATO_VALENTINA = '@asset(retratos/valentina.png)';
+const RETRATO_SOFIA_LINDO = '@asset(retratos/sofia-lindo.webp)';
+const RETRATO_DON_HIGINIO = '@asset(retratos/don-higinio.webp)';
+const RETRATO_CAMILA = '@asset(retratos/camila.webp)';
+const RETRATO_DON_RIGO = '@asset(retratos/don-rigo.webp)';
+const RETRATO_MARCELA = '@asset(retratos/marcela.webp)';
+const RETRATO_ELVIRA = '@asset(retratos/elvira.webp)';
+const RETRATO_TETO = '@asset(retratos/teto.webp)';
+const RETRATO_AURELIO = '@asset(retratos/aurelio.webp)';
+const RETRATO_JAIRO = '@asset(retratos/jairo.webp)';
+const RETRATO_TONO = '@asset(retratos/tono.webp)';
+const RETRATO_VALENTINA = '@asset(retratos/valentina.webp)';
 let metaTrimestral = null;
 let ultimaEvaluacionMeta = null;

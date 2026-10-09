@@ -30,7 +30,7 @@ original/simulador_financiero.html   referencia intacta (NO editar)
 src/index.html                       esqueleto; cada `<!-- @include ruta -->` inserta un archivo de src/
 src/styles/*.css                     14 hojas, en el orden del original
 src/{engine,systems,ui,minigames,audio,content}/*.js   65 fragmentos de un solo <script>
-assets/                              13 imágenes y assets/fuentes/*.woff2; en el código aparecen como @asset(ruta)
+assets/                              retratos .webp, junta .jpg y fuentes/*.woff2; en el código aparecen como @asset(ruta)
 assets/vendor/chart.umd.min.js       Chart.js 4.4.0 incrustado (el juego funciona sin internet)
 build.mjs                            une todo en dist/simulador_financiero.html (sin dependencias)
 dist/simulador_financiero.html       archivo que se entrega a Juan (se versiona)
@@ -147,8 +147,13 @@ tests/                               arnés + pruebas (npm test)
   sectores con color propio (`SECTOR_COLOR`), descripción, rasgos operativos y cifras iniciales
   a la vista; configuración con perfil/ventaja/dificultad explicados en la tarjeta (efectos como
   fichas de color "lo sano") y botón para volver a cambiar de sector. Textos en tuteo.
+- Celular (oct. 2026, final de `styles/dashboard.css`): por debajo de 720 px el tablero se
+  reordena (relaciones 2×2 → indicadores en dos columnas → botón de turno → calendario →
+  gráficas → bitácora) con `display:contents` y `order`. Fuera de esa media query no se toca nada:
+  se comprobó con capturas que el PC queda igual a 1366, 1024 y 760 px.
+- Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
-- Retratos: PNG transparente, grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
+- Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
 ---
 

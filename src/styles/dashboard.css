@@ -63,3 +63,26 @@
 .evaluar-turno-wrap{ display:flex; flex-direction:column; align-items:center; }
 .calendar{ text-align:center; }
 .cal-row{ justify-content:center; }
+
+/* Celular (≤720 px): primero los indicadores, luego la decisión y al final las gráficas.
+   Solo reordena dentro de esta media query; en PC nada cambia. Los contenedores del tablero se
+   "disuelven" (display:contents) para que sus hijos sean piezas de una sola cuadrícula. */
+@media (max-width:720px){
+  .relations{ display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  .relations > .rel-chip{ min-width:0; max-width:none; padding:6px 8px; font-size:9px; flex-direction:column; gap:5px; }
+  .relations .rel-bar-track{ flex-basis:auto; }
+  .dashboard-grid{ grid-template-columns:1fr 1fr; gap:8px; align-items:stretch; }
+  .dashboard-main, .ticker{ display:contents; }
+  .stat{ max-width:none; padding:9px 8px 8px; }
+  .stat .stat-badge{ transform:scale(.8); margin:-3px 0; }
+  .stat-label{ font-size:9px; }
+  .stat-value{ font-size:14px; }
+  #evaluarTurnoWrap, #calendario, #crtRow, #logToggle, #log{ grid-column:1 / -1; }
+  #tickerLeft > .stat, #tickerRight > .stat{ order:1; }
+  #evaluarTurnoWrap{ order:2; margin-top:4px; }
+  #calendario{ order:3; }
+  #crtRow{ order:4; }
+  #logToggle{ order:5; }
+  #log{ order:6; }
+  .evaluar-turno-btn{ padding:16px 18px; font-size:12px; }
+}
