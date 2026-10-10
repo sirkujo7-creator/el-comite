@@ -91,3 +91,15 @@
     font-family:var(--font-ui); font-size:11px; letter-spacing:.12em; text-transform:uppercase; color:rgba(237,230,214,0.35);
   }
   @media (max-width:640px){ .landing-escena{ margin-bottom:-34px; } }
+
+  /* Mantenimiento de equipos: aviso en la cabecera y etiqueta en las opciones que cuentan */
+  .equipos-line{ display:none; font-family:var(--font-ui); font-size:11.5px; color:var(--ink-muted); margin-top:4px; }
+  .equipos-line.show{ display:block; }
+  .equipos-line.alerta{ color:var(--gold); }
+  .equipos-line.desgaste{ color:var(--danger); }
+  .equipos-line b{ font-weight:700; }
+  .tag-mantenimiento{
+    display:inline-block; margin-left:6px; padding:1px 7px; vertical-align:1px; white-space:nowrap;
+    font-family:var(--font-ui); font-size:10.5px; letter-spacing:.03em;
+    color:#D98847; border:1px solid rgba(217,136,71,0.55);
+  }

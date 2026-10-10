@@ -83,6 +83,19 @@ function aplicarMotorOperativo(){
     }
   }
 
+  // Mantenimiento de equipos (sectores con requiereCapex): al empezar cada turno se revisa el
+  // anterior. Sin ninguna inversión de mantenimiento, suma un turno; al tercero seguido, el
+  // desgaste golpea el EBITDA (-2) y el contador vuelve a cero. Se cuenta por turno real, no por
+  // decisión: juntas, eventos y decisiones extra no aceleran el desgaste.
+  let desgaste = false;
+  if(sectorActual.requiereCapex && history.some(h=>h.turno === turnNumber - 1)){
+    if(state.capexEsteTurno) state.turnosSinCapex = 0;
+    else state.turnosSinCapex = (state.turnosSinCapex||0) + 1;
+    state.capexEsteTurno = false;
+    if(state.turnosSinCapex >= 3){ desgaste = true; state.turnosSinCapex = 0; }
+  }
+  state.desgasteEquiposTurno = desgaste ? turnNumber : (state.desgasteEquiposTurno || 0);
+
   // Moral del equipo: se deteriora un poco si llevas varios turnos sin invertir en la
   // operación — pero, a diferencia de antes, también puede subir sola cuando la empresa
   // está genuinamente sana, la misma lógica pasiva que ya tienen confianza y reputación.
@@ -96,6 +109,7 @@ function aplicarMotorOperativo(){
 
   Object.keys(cambios).forEach(k=>{ cambios[k] = clamp(cambios[k], -MOTOR_OPERATIVO_TOPE, MOTOR_OPERATIVO_TOPE); });
   if(Object.keys(cambios).length) applyEfectos(cambios, 'pasivo');
+  if(desgaste){ state.ebitda -= 2; origenUltimoCambio.ebitda = 'pasivo'; }
 }
 
 // Si un indicador YA está en zona crítica, mejorarlo cuesta más esfuerzo del que una sola

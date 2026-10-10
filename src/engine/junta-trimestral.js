@@ -31,7 +31,7 @@ function buildJuntaTrimestral(){
 
   const pl = `
     <div class="pl-summary">
-      <div class="pl-row"><span class="pl-label">EBITDA generado este trimestre</span><span>${fmtMoney(deltaEbitda)}</span></div>
+      <div class="pl-row"><span class="pl-label">Variación del EBITDA este trimestre</span><span>${fmtMoney(deltaEbitda)}</span></div>
       <div class="pl-row"><span class="pl-label">Variación de caja este trimestre</span><span>${fmtMoney(deltaCaja)}</span></div>
       <div class="pl-row"><span class="pl-label">Caja disponible hoy</span><span>${fmtMoney(state.caja)}</span></div>
       ${metaHtml}

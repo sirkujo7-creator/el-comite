@@ -56,6 +56,26 @@ function fmtMetaValor(indicador, valor){
   if(kd && (kd.kind==='money' || kd.kind==='dias')) return kd.fmt(Math.round(valor));
   return Math.round(valor).toString();
 }
+// Aviso de mantenimiento de equipos en los sectores que lo exigen (Vita Fit, Ganadería).
+function renderEquiposLine(){
+  const el = document.getElementById('equiposLine');
+  if(!el) return;
+  if(!state || !sectorActual || !sectorActual.requiereCapex){ el.className = 'equipos-line'; return; }
+  // Cuenta también el turno recién jugado (el motor lo registra al empezar el siguiente).
+  const jugadoSinCapex = history.some(h=>h.turno === turnNumber) && !state.capexEsteTurno;
+  const n = (state.turnosSinCapex || 0) + (jugadoSinCapex ? 1 : 0);
+  const glosa = '<span class="glosario-term" data-tip="glosario:capex">mantenimiento</span>';
+  if(n >= 3){
+    el.className = 'equipos-line show desgaste';
+    el.innerHTML = `🔧 Equipos: 3 turnos sin ${glosa}. El desgaste golpeará tu <b>EBITDA (-2)</b> al empezar el próximo turno.`;
+  } else if(state.desgasteEquiposTurno === turnNumber && turnNumber > 0 && n <= 1){
+    el.className = 'equipos-line show desgaste';
+    el.innerHTML = `🔧 El desgaste de los equipos ya golpeó tu <b>EBITDA (-2)</b>. Equipos: ${n} de 3 turnos sin ${glosa}.`;
+  } else {
+    el.className = 'equipos-line show' + (n >= 2 ? ' alerta' : '');
+    el.innerHTML = `🔧 Equipos: ${n} de 3 turnos sin ${glosa}` + (n >= 2 ? ' — si en el próximo turno no inviertes, el desgaste golpeará el EBITDA.' : '');
+  }
+}
 function renderMetaJuntaLine(){
   const el = document.getElementById('metaJuntaLine');
   if(!el) return;

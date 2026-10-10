@@ -559,6 +559,18 @@
   }
   @media (max-width:640px){ .landing-escena{ margin-bottom:-34px; } }
 
+  /* Mantenimiento de equipos: aviso en la cabecera y etiqueta en las opciones que cuentan */
+  .equipos-line{ display:none; font-family:var(--font-ui); font-size:11.5px; color:var(--ink-muted); margin-top:4px; }
+  .equipos-line.show{ display:block; }
+  .equipos-line.alerta{ color:var(--gold); }
+  .equipos-line.desgaste{ color:var(--danger); }
+  .equipos-line b{ font-weight:700; }
+  .tag-mantenimiento{
+    display:inline-block; margin-left:6px; padding:1px 7px; vertical-align:1px; white-space:nowrap;
+    font-family:var(--font-ui); font-size:10.5px; letter-spacing:.03em;
+    color:#D98847; border:1px solid rgba(217,136,71,0.55);
+  }
+
   .calendar{border:1px dashed var(--line-strong); border-radius:9px; padding:10px 12px; margin-bottom:18px;}
   .cal-title{font-family:var(--font-ui); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-muted); margin-bottom:8px;}
   .cal-row{display:flex; gap:8px;}
@@ -1323,6 +1335,7 @@
       <p class="subtitle" id="subtitleText">Vas a dirigir las finanzas de una empresa real, con información incompleta, plazos que se vencen cuando menos lo esperas y un mercado que no te va a decir si una jugada es prudente o temeraria.</p>
       <div class="xp-line" id="xpLine"></div>
       <div class="meta-junta-line" id="metaJuntaLine"></div>
+      <div class="equipos-line" id="equiposLine"></div>
     </div>
     <div class="portrait" id="portraitBtn" role="button" tabindex="0" title="Ajustes" aria-label="Abrir ajustes">
       <div class="portrait-ring" id="portraitRing">
@@ -2307,6 +2320,9 @@ function initState(){
   // El WACC arranca en equilibrio con la confianza bancaria inicial: el motor solo lo mueve
   // cuando esa confianza cambia (ver aplicarMotorOperativo).
   if(state.wacc != null && state.confianzaBanco != null) state.waccEquilibrioBase = state.wacc + state.confianzaBanco * 0.08;
+  // Punto de partida del primer trimestre (antes la primera junta comparaba contra cero, o contra
+  // la partida anterior si se jugaba otra en la misma sesión).
+  snapshotTrimestre = {caja: state.caja, ebitda: state.ebitda};
   flags = {};
   history = [];
   turnNumber = 0;
@@ -2567,6 +2583,19 @@ function aplicarMotorOperativo(){
     }
   }
 
+  // Mantenimiento de equipos (sectores con requiereCapex): al empezar cada turno se revisa el
+  // anterior. Sin ninguna inversión de mantenimiento, suma un turno; al tercero seguido, el
+  // desgaste golpea el EBITDA (-2) y el contador vuelve a cero. Se cuenta por turno real, no por
+  // decisión: juntas, eventos y decisiones extra no aceleran el desgaste.
+  let desgaste = false;
+  if(sectorActual.requiereCapex && history.some(h=>h.turno === turnNumber - 1)){
+    if(state.capexEsteTurno) state.turnosSinCapex = 0;
+    else state.turnosSinCapex = (state.turnosSinCapex||0) + 1;
+    state.capexEsteTurno = false;
+    if(state.turnosSinCapex >= 3){ desgaste = true; state.turnosSinCapex = 0; }
+  }
+  state.desgasteEquiposTurno = desgaste ? turnNumber : (state.desgasteEquiposTurno || 0);
+
   // Moral del equipo: se deteriora un poco si llevas varios turnos sin invertir en la
   // operación — pero, a diferencia de antes, también puede subir sola cuando la empresa
   // está genuinamente sana, la misma lógica pasiva que ya tienen confianza y reputación.
@@ -2580,6 +2609,7 @@ function aplicarMotorOperativo(){
 
   Object.keys(cambios).forEach(k=>{ cambios[k] = clamp(cambios[k], -MOTOR_OPERATIVO_TOPE, MOTOR_OPERATIVO_TOPE); });
   if(Object.keys(cambios).length) applyEfectos(cambios, 'pasivo');
+  if(desgaste){ state.ebitda -= 2; origenUltimoCambio.ebitda = 'pasivo'; }
 }
 
 // Si un indicador YA está en zona crítica, mejorarlo cuesta más esfuerzo del que una sola
@@ -3061,6 +3091,26 @@ function fmtMetaValor(indicador, valor){
   if(kd && (kd.kind==='money' || kd.kind==='dias')) return kd.fmt(Math.round(valor));
   return Math.round(valor).toString();
 }
+// Aviso de mantenimiento de equipos en los sectores que lo exigen (Vita Fit, Ganadería).
+function renderEquiposLine(){
+  const el = document.getElementById('equiposLine');
+  if(!el) return;
+  if(!state || !sectorActual || !sectorActual.requiereCapex){ el.className = 'equipos-line'; return; }
+  // Cuenta también el turno recién jugado (el motor lo registra al empezar el siguiente).
+  const jugadoSinCapex = history.some(h=>h.turno === turnNumber) && !state.capexEsteTurno;
+  const n = (state.turnosSinCapex || 0) + (jugadoSinCapex ? 1 : 0);
+  const glosa = '<span class="glosario-term" data-tip="glosario:capex">mantenimiento</span>';
+  if(n >= 3){
+    el.className = 'equipos-line show desgaste';
+    el.innerHTML = `🔧 Equipos: 3 turnos sin ${glosa}. El desgaste golpeará tu <b>EBITDA (-2)</b> al empezar el próximo turno.`;
+  } else if(state.desgasteEquiposTurno === turnNumber && turnNumber > 0 && n <= 1){
+    el.className = 'equipos-line show desgaste';
+    el.innerHTML = `🔧 El desgaste de los equipos ya golpeó tu <b>EBITDA (-2)</b>. Equipos: ${n} de 3 turnos sin ${glosa}.`;
+  } else {
+    el.className = 'equipos-line show' + (n >= 2 ? ' alerta' : '');
+    el.innerHTML = `🔧 Equipos: ${n} de 3 turnos sin ${glosa}` + (n >= 2 ? ' — si en el próximo turno no inviertes, el desgaste golpeará el EBITDA.' : '');
+  }
+}
 function renderMetaJuntaLine(){
   const el = document.getElementById('metaJuntaLine');
   if(!el) return;
@@ -3504,6 +3554,7 @@ function saludTier(){
 function renderTicker(deltas){
   actualizarDroneCriticoSegunSalud();
   renderMetaJuntaLine();
+  renderEquiposLine();
   const defs = KPI_DEFS.filter(d=> (d.key!=='diasInventario' && d.key!=='valorInventario') || sectorActual.tieneInventario);
   const mitad = Math.ceil(defs.length/2);
   const izquierda = defs.slice(0, mitad);
@@ -3837,7 +3888,7 @@ function buildJuntaTrimestral(){
 
   const pl = `
     <div class="pl-summary">
-      <div class="pl-row"><span class="pl-label">EBITDA generado este trimestre</span><span>${fmtMoney(deltaEbitda)}</span></div>
+      <div class="pl-row"><span class="pl-label">Variación del EBITDA este trimestre</span><span>${fmtMoney(deltaEbitda)}</span></div>
       <div class="pl-row"><span class="pl-label">Variación de caja este trimestre</span><span>${fmtMoney(deltaCaja)}</span></div>
       <div class="pl-row"><span class="pl-label">Caja disponible hoy</span><span>${fmtMoney(state.caja)}</span></div>
       ${metaHtml}
@@ -7309,7 +7360,7 @@ function renderChoices(c){
   wrap.innerHTML = choices.map((ch,i)=>`
     <button class="choice-btn ${ch.informado?'informado':''}" data-i="${i}">
       <span class="choice-letter">${ch.informado ? '🔍' : String.fromCharCode(65+i)}</span>
-      <span>${resaltarGlosario(ch.texto)}</span>
+      <span>${resaltarGlosario(ch.texto)}${(ch.capex && sectorActual.requiereCapex) ? ' <span class="tag-mantenimiento" title="Cuenta como inversión en mantenimiento de equipos (CapEx)">🔧 Mantenimiento</span>' : ''}</span>
     </button>
   `).join('');
 
@@ -7346,17 +7397,9 @@ function selectChoice(c, ch){
   }
   evaluarEcoDeDecision(efectosAplicados);
 
-  if(sectorActual.requiereCapex){
-    if(ch.capex){ state.turnosSinCapex = 0; }
-    else {
-      state.turnosSinCapex = (state.turnosSinCapex||0) + 1;
-      if(state.turnosSinCapex >= 3){
-        state.ebitda -= 2;
-        systemicNotes.push("Llevas varios turnos sin invertir en mantenimiento de equipos: el desgaste ya afecta la experiencia del servicio y eso golpea tu <b>EBITDA (-2)</b>.");
-        state.turnosSinCapex = 0;
-      }
-    }
-  }
+  // Mantenimiento (CapEx): la inversión cuenta para el turno en curso; el conteo de turnos sin
+  // mantenimiento y el desgaste se evalúan una vez por turno en aplicarMotorOperativo.
+  if(sectorActual.requiereCapex && ch.capex){ state.turnosSinCapex = 0; state.capexEsteTurno = true; }
 
   history.push({titulo:c.titulo, texto:ch.texto, turno:turnNumber, efectos: efectosAplicados});
   state.healthHistory.push({turno:turnNumber, score:Math.round(healthScore(state)*10)/10, caja:state.caja, ebitda:Math.round(state.ebitda*10)/10, deuda:Math.round(state.deuda*10)/10});
@@ -9748,6 +9791,8 @@ function showChrome(v){
   document.getElementById('tickerRight').style.display = v?'':'none';
   document.getElementById('relations').style.display = v?'':'none';
   document.getElementById('calendario').style.display = v?'':'none';
+  const equipos = document.getElementById('equiposLine');
+  if(equipos) equipos.style.display = v?'':'none';
   document.getElementById('crtRow').style.display = v?'grid':'none';
   document.getElementById('evaluarTurnoWrap').style.display = v?'':'none';
   document.getElementById('logToggle').style.display = v?'':'none';

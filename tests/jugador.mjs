@@ -55,6 +55,8 @@ function puntuar(perfil, opcion, estado, meta) {
     const falta = invertido ? estado[meta.indicador] > meta.valorObjetivo : estado[meta.indicador] < meta.valorObjetivo;
     if (typeof v === 'number' && falta) s += 6 * v / Math.abs(PASO_META[meta.indicador]) * (invertido ? -1 : 1);
   }
+  // El metódico lee el aviso de equipos: con 2 turnos sin mantenimiento, invertir evita el -2 de EBITDA.
+  if (perfil === 'metodico' && opcion.capex && estado.__requiereCapex && (estado.turnosSinCapex || 0) >= 2) s += 3;
   if (perfil === 'bueno' || perfil === 'metodico') {
     if (opcion.diferir) s -= (opcion.diferir.monto || 0) * pesoAjustado(perfil, 'caja', estado) * 0.8;
     if (opcion.disparar) s -= 2;
@@ -129,7 +131,7 @@ export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil 
         const caso = j.ev('__ultimoCaso');
         let lista = caso.choices.slice();
         if (j.ev('investigado') && caso.choiceInformado) lista = lista.concat([caso.choiceInformado]);
-        const estado = j.ev('state');
+        const estado = Object.assign({}, j.ev('state'), { __requiereCapex: j.ev('!!sectorActual.requiereCapex') });
         const i = elegirOpcion(perfil, lista, estado, rng, j.ev('metaTrimestral'));
         traza.push({
           turno: j.ev('turnNumber'), tipo: caso.tipo, titulo: caso.titulo, opcion: i,

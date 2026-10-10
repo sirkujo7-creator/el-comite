@@ -19,6 +19,8 @@ function showChrome(v){
   document.getElementById('tickerRight').style.display = v?'':'none';
   document.getElementById('relations').style.display = v?'':'none';
   document.getElementById('calendario').style.display = v?'':'none';
+  const equipos = document.getElementById('equiposLine');
+  if(equipos) equipos.style.display = v?'':'none';
   document.getElementById('crtRow').style.display = v?'grid':'none';
   document.getElementById('evaluarTurnoWrap').style.display = v?'':'none';
   document.getElementById('logToggle').style.display = v?'':'none';

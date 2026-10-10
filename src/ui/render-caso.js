@@ -106,7 +106,7 @@ function renderChoices(c){
   wrap.innerHTML = choices.map((ch,i)=>`
     <button class="choice-btn ${ch.informado?'informado':''}" data-i="${i}">
       <span class="choice-letter">${ch.informado ? '🔍' : String.fromCharCode(65+i)}</span>
-      <span>${resaltarGlosario(ch.texto)}</span>
+      <span>${resaltarGlosario(ch.texto)}${(ch.capex && sectorActual.requiereCapex) ? ' <span class="tag-mantenimiento" title="Cuenta como inversión en mantenimiento de equipos (CapEx)">🔧 Mantenimiento</span>' : ''}</span>
     </button>
   `).join('');
 
@@ -143,17 +143,9 @@ function selectChoice(c, ch){
   }
   evaluarEcoDeDecision(efectosAplicados);
 
-  if(sectorActual.requiereCapex){
-    if(ch.capex){ state.turnosSinCapex = 0; }
-    else {
-      state.turnosSinCapex = (state.turnosSinCapex||0) + 1;
-      if(state.turnosSinCapex >= 3){
-        state.ebitda -= 2;
-        systemicNotes.push("Llevas varios turnos sin invertir en mantenimiento de equipos: el desgaste ya afecta la experiencia del servicio y eso golpea tu <b>EBITDA (-2)</b>.");
-        state.turnosSinCapex = 0;
-      }
-    }
-  }
+  // Mantenimiento (CapEx): la inversión cuenta para el turno en curso; el conteo de turnos sin
+  // mantenimiento y el desgaste se evalúan una vez por turno en aplicarMotorOperativo.
+  if(sectorActual.requiereCapex && ch.capex){ state.turnosSinCapex = 0; state.capexEsteTurno = true; }
 
   history.push({titulo:c.titulo, texto:ch.texto, turno:turnNumber, efectos: efectosAplicados});
   state.healthHistory.push({turno:turnNumber, score:Math.round(healthScore(state)*10)/10, caja:state.caja, ebitda:Math.round(state.ebitda*10)/10, deuda:Math.round(state.deuda*10)/10});

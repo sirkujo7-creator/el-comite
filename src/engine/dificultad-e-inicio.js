@@ -71,6 +71,9 @@ function initState(){
   // El WACC arranca en equilibrio con la confianza bancaria inicial: el motor solo lo mueve
   // cuando esa confianza cambia (ver aplicarMotorOperativo).
   if(state.wacc != null && state.confianzaBanco != null) state.waccEquilibrioBase = state.wacc + state.confianzaBanco * 0.08;
+  // Punto de partida del primer trimestre (antes la primera junta comparaba contra cero, o contra
+  // la partida anterior si se jugaba otra en la misma sesión).
+  snapshotTrimestre = {caja: state.caja, ebitda: state.ebitda};
   flags = {};
   history = [];
   turnNumber = 0;

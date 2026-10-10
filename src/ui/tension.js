@@ -84,6 +84,7 @@ function saludTier(){
 function renderTicker(deltas){
   actualizarDroneCriticoSegunSalud();
   renderMetaJuntaLine();
+  renderEquiposLine();
   const defs = KPI_DEFS.filter(d=> (d.key!=='diasInventario' && d.key!=='valorInventario') || sectorActual.tieneInventario);
   const mitad = Math.ceil(defs.length/2);
   const izquierda = defs.slice(0, mitad);

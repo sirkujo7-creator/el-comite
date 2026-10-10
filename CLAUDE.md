@@ -164,6 +164,10 @@ tests/                               arnés + pruebas (npm test)
   tensión grave; Moda Urbana lo-fi con swing y piano eléctrico. Cuerdas por Karplus-Strong,
   sala por convolución, humanización de tiempo e intensidad. Arranca con `iniciarDrone` y se
   oscurece con la salud crítica (`actualizarMusicaSegunSalud`). Volumen base `MUSICA_VOLUMEN`.
+- Mantenimiento de equipos (oct. 2026, Vita Fit y Ganadería, `requiereCapex`): las opciones con
+  `capex` llevan la etiqueta "🔧 Mantenimiento" y la cabecera muestra "Equipos: n de 3 turnos sin
+  mantenimiento" (`renderEquiposLine`, cuenta también el turno recién jugado). El conteo es por
+  turno real en `aplicarMotorOperativo` (antes por decisión); al tercer turno seguido, EBITDA −2.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
@@ -290,5 +294,13 @@ mismas semillas antes/después). Tres cambios aprobados por Juan:
   | Quiebra agresivo / azar | 21 % / 32 % | 19 % / 26 % |
   | Quiebra prudente y metódico (todas las dificultades) | 0–8 % | 0–7 % |
 
-  Pendiente (ronda 2): Ganadería cumple pocas metas (17 % metódico), Moda Urbana quiebra por
-  liquidez con perfil agresivo (48 %), metas de WACC aún difíciles (5 %), salto brusco Media → Difícil.
+
+**Fase 3, ronda 2 (oct. 2026)** — aprobada por Juan:
+- D. Mantenimiento visible (etiqueta, aviso en cabecera) y contado por turno real (ver §4).
+- E. El jugador `metodico` valora el mantenimiento cuando el aviso está en 2 de 3 (solo el arnés).
+- Corrección: la primera junta comparaba la caja y el EBITDA del trimestre contra cero (o contra la
+  partida anterior); `initState` ahora toma la foto inicial. "EBITDA generado" → "Variación del EBITDA".
+- Metas cumplidas por el metódico (media): Ganadería 17 → 37 %, Vita Fit 23,5 → 42 %; el resto de
+  sectores, igual. Quiebras sin cambios relevantes (Ganadería agresivo 7,5 → 0 %).
+- Se decidió no tocar: Moda Urbana con perfil agresivo (48 % de quiebra por liquidez: coherente con
+  inventario perecedero y moda rápida) ni el salto Media → Difícil (el prudente sigue en ~1 %).
