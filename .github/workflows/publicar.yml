@@ -1,0 +1,44 @@
+# Publica el juego en GitHub Pages cada vez que se sube un cambio a la rama principal.
+# Enlace: https://sirkujo7-creator.github.io/el-comite/
+# Requisito (una sola vez): Settings → Pages → Build and deployment → Source: "GitHub Actions".
+name: Publicar en la web
+
+on:
+  push:
+    branches: [claude/awesome-pascal-5xc05d]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Construir y probar
+        run: npm test
+      - name: Preparar el sitio
+        run: |
+          mkdir -p sitio
+          cp dist/simulador_financiero.html sitio/index.html
+          cp dist/simulador_financiero.html sitio/simulador_financiero.html
+          touch sitio/.nojekyll
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: sitio
+      - id: despliegue
+        uses: actions/deploy-pages@v4
