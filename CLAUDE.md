@@ -37,6 +37,10 @@ dist/simulador_financiero.html       archivo que se entrega a Juan (se versiona)
 tests/                               arnés + pruebas (npm test)
 ```
 
+- **Publicación web:** https://sirkujo7-creator.github.io/el-comite/ (GitHub Pages, activado por Juan
+  con Source = GitHub Actions). `.github/workflows/publicar.yml` corre `npm test` (Node 22) en cada
+  push a `claude/awesome-pascal-5xc05d` y, solo si pasa, publica `dist/` como `index.html`.
+  Si una prueba falla, la versión publicada no cambia.
 - **Comandos:** `npm run build` (genera dist/) · `npm test` (build + todas las pruebas, ~1 min).
   Variables: `SIM_N` (partidas por perfil, defecto 84), `SIM_DIFICULTAD`, `EQUIV_N`.
 - **Los fragmentos JS NO son módulos ES:** se concatenan en orden dentro de un único `<script>`
