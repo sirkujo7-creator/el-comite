@@ -171,17 +171,28 @@ function closeIntro(){
 
 const skipBtn = document.getElementById('skipIntroBtn');
 if(skipBtn) skipBtn.addEventListener('click', closeIntro);
+// Avanzar la secuencia: si la línea se está escribiendo, la completa; si ya está completa, pasa
+// a la siguiente. Lo hacen la tecla ESPACIO y, en pantallas táctiles, tocar en cualquier parte.
+function avanzarIntro(){
+  if(introCerrada) return;
+  if(introEsperandoEspacio){
+    liberarEsperaEspacio();
+  } else if(introTypingActivo){
+    introCompletarLineaYa = true;
+  }
+}
 document.addEventListener('keydown', (e)=>{
   if(introCerrada) return;
   if(e.key === 'Escape'){ closeIntro(); return; }
   if(e.code === 'Space' || e.key === ' '){
     if(e.preventDefault) e.preventDefault();
-    if(introEsperandoEspacio){
-      liberarEsperaEspacio();
-    } else if(introTypingActivo){
-      introCompletarLineaYa = true;
-    }
+    avanzarIntro();
   }
+});
+const introOverlayEl = document.getElementById('introOverlay');
+if(introOverlayEl) introOverlayEl.addEventListener('click', (e)=>{
+  if(e.target.closest && e.target.closest('#skipIntroBtn')) return;
+  avanzarIntro();
 });
 
 // =========================================================

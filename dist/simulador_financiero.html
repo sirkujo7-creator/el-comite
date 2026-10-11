@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>El Comité — Simulador de Alta Gerencia Financiera</title>
 <meta name="description" content="Simulador de gestión financiera: dirige una empresa colombiana durante un año fiscal y decide con caja, EBITDA, WACC y razón corriente frente a la junta directiva.">
 <meta property="og:title" content="El Comité — Simulador de Alta Gerencia Financiera">
@@ -1128,7 +1128,7 @@
    CINEMÁTICA DE INTRODUCCIÓN — terminal analógica, tipeo letra por letra
    ========================================================= */
 #introOverlay{
-  position:fixed; top:0; left:0; width:100vw; height:100vh; z-index:99999;
+  position:fixed; inset:0; width:100%; height:100vh; height:100dvh; z-index:99999; cursor:pointer;
   background-color:#050505; display:flex; align-items:center; justify-content:center;
   transition:opacity 0.8s ease; overflow:hidden;
 }
@@ -1166,6 +1166,19 @@
   opacity:0; transition:opacity 0.3s ease;
 }
 #introHint.show{ opacity:1; }
+
+/* Textos de la intro según el dispositivo: teclado (PC) o pantalla táctil (celular, tableta). */
+.solo-tactil{ display:none; }
+@media (hover:none) and (pointer:coarse){
+  .solo-teclado{ display:none; }
+  .solo-tactil{ display:inline; }
+  #introHint{ left:0; right:0; text-align:center; bottom:calc(84px + env(safe-area-inset-bottom)); color:#8a8a8a; font-size:0.85rem; }
+  #skipIntroBtn{
+    bottom:calc(24px + env(safe-area-inset-bottom)); right:50%; transform:translateX(50%);
+    padding:12px 22px; border:1px solid #444; color:#a0a0a0; font-size:0.85rem;
+  }
+  #introTextContainer{ font-size:1.15rem; }
+}
 /* =========================================================
    DASHBOARD PRINCIPAL — rediseño brutalista, monocromático,
    sin curvas, estilo "Papers, Please" / terminal de fósforo.
@@ -1328,8 +1341,8 @@
 <body>
 <div id="introOverlay">
   <div id="introTextContainer"></div>
-  <div id="introHint">[ ESPACIO ] CONTINUAR</div>
-  <button id="skipIntroBtn">[ ESC ] OMITIR</button>
+  <div id="introHint"><span class="solo-teclado">[ ESPACIO ] CONTINUAR</span><span class="solo-tactil">TOCA LA PANTALLA PARA CONTINUAR</span></div>
+  <button id="skipIntroBtn"><span class="solo-teclado">[ ESC ] OMITIR</span><span class="solo-tactil">OMITIR ⏭</span></button>
 </div>
 <div class="curtain" id="curtainOverlay"></div>
 <div class="stress-vignette" id="stressVignette"></div>
@@ -10281,17 +10294,28 @@ function closeIntro(){
 
 const skipBtn = document.getElementById('skipIntroBtn');
 if(skipBtn) skipBtn.addEventListener('click', closeIntro);
+// Avanzar la secuencia: si la línea se está escribiendo, la completa; si ya está completa, pasa
+// a la siguiente. Lo hacen la tecla ESPACIO y, en pantallas táctiles, tocar en cualquier parte.
+function avanzarIntro(){
+  if(introCerrada) return;
+  if(introEsperandoEspacio){
+    liberarEsperaEspacio();
+  } else if(introTypingActivo){
+    introCompletarLineaYa = true;
+  }
+}
 document.addEventListener('keydown', (e)=>{
   if(introCerrada) return;
   if(e.key === 'Escape'){ closeIntro(); return; }
   if(e.code === 'Space' || e.key === ' '){
     if(e.preventDefault) e.preventDefault();
-    if(introEsperandoEspacio){
-      liberarEsperaEspacio();
-    } else if(introTypingActivo){
-      introCompletarLineaYa = true;
-    }
+    avanzarIntro();
   }
+});
+const introOverlayEl = document.getElementById('introOverlay');
+if(introOverlayEl) introOverlayEl.addEventListener('click', (e)=>{
+  if(e.target.closest && e.target.closest('#skipIntroBtn')) return;
+  avanzarIntro();
 });
 
 // =========================================================
