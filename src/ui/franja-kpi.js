@@ -18,7 +18,7 @@ const FRANJA_UMBRAL_FUERTE = { caja:8, capitalTrabajo:6, razonCorriente:0.15, de
 function fmtFranja(d, v){
   if(d.rel) return Math.round(v) + '/100';
   if(['caja','capitalTrabajo','deuda','ebitda','valorInventario'].includes(d.key)){
-    return (v < 0 ? '-' : '') + '$' + Math.abs(v).toFixed(1).replace('.', ',') + ' M';
+    return fmtMoneyHTML(v);
   }
   if(d.key === 'razonCorriente') return v.toFixed(2);
   if(d.key === 'wacc') return v.toFixed(1) + '%';

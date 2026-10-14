@@ -6,6 +6,15 @@ function fmtMoney(v){
   const sign = cop < 0 ? "-" : "";
   return sign + "$" + Math.abs(cop).toLocaleString('es-CO');
 }
+// Pesos completos para espacios estrechos: los millones a tamaño normal y el resto atenuado
+// ($54<span>.012.800</span>), para leer la cifra exacta sin perder la lectura rápida.
+function fmtMoneyHTML(v){
+  const txt = fmtMoney(v);
+  const cop = Math.abs(Math.round(v*1000000));
+  if(cop < 1000000) return txt;
+  const i = txt.indexOf('.');
+  return txt.slice(0, i) + '<span class="cifra-resto">' + txt.slice(i) + '</span>';
+}
 function fmtDelta(v, kind){
   const sign = v>0 ? "+" : "";
   if(kind==='money') return sign+fmtMoney(v);

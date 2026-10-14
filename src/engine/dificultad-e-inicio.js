@@ -74,6 +74,8 @@ function initState(){
   // Punto de partida del primer trimestre (antes la primera junta comparaba contra cero, o contra
   // la partida anterior si se jugaba otra en la misma sesión).
   snapshotTrimestre = {caja: state.caja, ebitda: state.ebitda};
+  // Punto de partida de las gráficas del tablero (turno 0), aparte del historial de decisiones.
+  state.puntoInicial = {turno:0, caja: state.caja, ebitda: Math.round(state.ebitda*10)/10, deuda: Math.round(state.deuda*10)/10};
   flags = {};
   history = [];
   turnNumber = 0;

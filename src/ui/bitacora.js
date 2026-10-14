@@ -13,7 +13,17 @@ function renderLog(){
   // solo mantiene actualizado el contador en el boton — la lista real vive en su propia
   // pantalla (renderPantallaBitacora), no aqui, para no seguir ampliando la pagina general.
   const toggleEl = document.getElementById('logToggle');
-  if(toggleEl) toggleEl.textContent = `Ver bitácora de decisiones (${history.length})`;
+  if(toggleEl) toggleEl.textContent = `Ver bitácora completa (${history.length}) →`;
+  // Resumen en el pie del tablero: las dos últimas decisiones con sus dos efectos principales.
+  const resumen = document.getElementById('logResumen');
+  if(resumen){
+    resumen.innerHTML = history.slice(-2).reverse().map(h=>{
+      const efectos = {};
+      Object.keys(h.efectos||{}).filter(k=>h.efectos[k] && typeof h.efectos[k]==='number')
+        .sort((a,b)=>Math.abs(h.efectos[b])-Math.abs(h.efectos[a])).slice(0,2).forEach(k=>efectos[k]=h.efectos[k]);
+      return `<div class="resumen-linea">T${h.turno} · ${h.titulo} ${chipsDeEfectos(efectos)}</div>`;
+    }).join('') || '<div class="resumen-linea vacio">Aún no hay decisiones registradas.</div>';
+  }
 }
 function listaBitacoraHtml(){
   return history.slice().reverse().map(h=>`
@@ -37,6 +47,8 @@ function renderPantallaBitacora(){
 }
 function toggleLog(){
   openTurnModal();
+  const titulo = document.getElementById('ventanaTitulo');
+  if(titulo) titulo.textContent = 'Bitácora de decisiones';
   renderPantallaBitacora();
 }
 

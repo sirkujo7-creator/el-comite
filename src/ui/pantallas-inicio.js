@@ -15,15 +15,13 @@ function activarFadeInOscuro(){
 }
 
 function showChrome(v){
-  document.getElementById('tickerLeft').style.display = v?'':'none';
-  document.getElementById('tickerRight').style.display = v?'':'none';
-  document.getElementById('relations').style.display = v?'':'none';
-  document.getElementById('calendario').style.display = v?'':'none';
-  const equipos = document.getElementById('equiposLine');
-  if(equipos) equipos.style.display = v?'':'none';
+  // Tablero "Sala de mando": la clase en-partida activa su distribución (styles/sala-de-mando.css).
+  document.body.classList.toggle('en-partida', !!v);
+  ['tickerLeft','calendario','tableroLado','tableroPie','anioFiscal'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.style.display = v?'':'none';
+  });
   document.getElementById('crtRow').style.display = v?'grid':'none';
-  document.getElementById('evaluarTurnoWrap').style.display = v?'':'none';
-  document.getElementById('logToggle').style.display = v?'':'none';
   if(!v){
     document.getElementById('log').classList.remove('show');
     const wrap = document.querySelector('.wrap');

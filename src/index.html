@@ -28,8 +28,8 @@
 <!-- @include styles/transicion.css -->
 <!-- @include styles/impresion.css -->
 <!-- @include styles/cinematica.css -->
-<!-- @include styles/dashboard.css -->
 <!-- @include styles/ajustes.css -->
+<!-- @include styles/sala-de-mando.css -->
 </style>
 </head>
 <body>
@@ -46,11 +46,12 @@
     <div class="header-text">
       <div class="eyebrow">Simulador · Alta Gerencia Financiera</div>
       <h1>El Comité</h1>
+      <span class="empresa-chip" id="empresaChip"></span>
       <p class="subtitle" id="subtitleText">Vas a dirigir las finanzas de una empresa real, con información incompleta, plazos que se vencen cuando menos lo esperas y un mercado que no te va a decir si una jugada es prudente o temeraria.</p>
       <div class="xp-line" id="xpLine"></div>
       <div class="meta-junta-line" id="metaJuntaLine"></div>
-      <div class="equipos-line" id="equiposLine"></div>
     </div>
+    <div class="anio-fiscal" id="anioFiscal"></div>
     <div class="portrait" id="portraitBtn" role="button" tabindex="0" title="Ajustes" aria-label="Abrir ajustes">
       <div class="portrait-ring" id="portraitRing">
         <img class="portrait-img" src="@asset(retrato-ajustes.webp)" alt="El Comité" />
@@ -89,15 +90,14 @@
     </div>
   </div>
 
-  <div class="relations" id="relations" style="display:none"></div>
   <div class="dashboard-grid">
     <div class="ticker" id="tickerLeft" style="display:none"></div>
     <div class="dashboard-main">
       <div class="crt-row" id="crtRow" style="display:none">
         <div class="crt-screen">
-          <div class="crt-scanlines"></div>
           <div class="crt-header">
-            <span class="crt-title">Flujo de Caja Histórico</span>
+            <span class="crt-title">Flujo de caja</span>
+            <span class="crt-sub" id="cajaSub">millones · zona crítica bajo $5 M</span>
             <div class="crt-controls">
               <button class="crt-btn" id="cajaZoomBtn">Zoom: Todo</button>
               <button class="crt-btn" id="cajaPeriodoBtn">Periodo: Todo</button>
@@ -106,9 +106,9 @@
           <div class="crt-canvas-wrap" id="chartCajaWrap"><canvas id="chartCajaCanvas"></canvas></div>
         </div>
         <div class="crt-screen">
-          <div class="crt-scanlines"></div>
           <div class="crt-header">
-            <span class="crt-title">EBITDA vs. Endeudamiento</span>
+            <span class="crt-title">EBITDA vs. deuda</span>
+            <span class="crt-sub" id="ratioDeudaEbitda"></span>
             <div class="crt-controls">
               <button class="crt-btn" id="edZoomBtn">Zoom: Todo</button>
               <button class="crt-btn" id="edPeriodoBtn">Periodo: Todo</button>
@@ -117,24 +117,41 @@
           <div class="crt-canvas-wrap" id="chartEdWrap"><canvas id="chartEdCanvas"></canvas></div>
         </div>
       </div>
-      <div class="evaluar-turno-wrap" id="evaluarTurnoWrap" style="display:none">
-        <button class="evaluar-turno-btn" id="evaluarTurnoBtn">EVALUAR SIGUIENTE TURNO</button>
-        <div class="evaluar-turno-hint">Abre el siguiente caso, evento o decisión en una ventana centrada</div>
-        <button class="oficina-ambiente-btn" id="oficinaAmbienteBtn">🏢 Situación en la oficina</button>
-      </div>
       <div class="calendar" id="calendario" style="display:none"></div>
-      <button class="log-toggle" id="logToggle" style="display:none">Ver bitácora de decisiones (0)</button>
+    </div>
+    <aside class="tablero-lado" id="tableroLado" style="display:none">
+      <div class="relations" id="relations"></div>
+      <div class="equipos-line" id="equiposLine"></div>
+      <div class="meta-panel" id="metaPanel"></div>
+    </aside>
+    <div class="tablero-pie" id="tableroPie" style="display:none">
+      <div class="evaluar-turno-wrap" id="evaluarTurnoWrap">
+        <button class="evaluar-turno-btn" id="evaluarTurnoBtn">EVALUAR SIGUIENTE TURNO</button>
+        <div class="evaluar-turno-hint">Abre el siguiente caso, evento o decisión en una ventana</div>
+      </div>
+      <div class="bitacora-resumen">
+        <div class="pie-titulo">Bitácora</div>
+        <div id="logResumen"></div>
+        <button class="log-toggle" id="logToggle">Ver bitácora de decisiones (0)</button>
+      </div>
+      <button class="oficina-ambiente-btn" id="oficinaAmbienteBtn">
+        <span class="oficina-punto"></span><span class="oficina-ico">🏢</span>
+        <span class="oficina-txt"><b>Situación en la oficina</b><small class="oficina-on">Hay revuelo en la oficina… ¿intervienes?</small><small class="oficina-off">Todo en calma por ahora.</small></span>
+        <span class="oficina-ver">VER →</span>
+      </button>
       <div class="log" id="log"></div>
     </div>
-    <div class="ticker" id="tickerRight" style="display:none"></div>
   </div>
 
   <div id="game"></div>
 </div>
 
 <div class="turn-modal-backdrop" id="turnModalBackdrop">
-  <div class="franja-kpi" id="franjaKpi"></div>
-  <div id="turnModalContent"></div>
+  <div class="ventana" id="ventanaTurno">
+    <div class="ventana-barra"><span id="ventanaTitulo">Ventana de decisión</span><i>■ ■ ■</i></div>
+    <div class="franja-kpi" id="franjaKpi"></div>
+    <div id="turnModalContent"></div>
+  </div>
 </div>
 <div class="turn-fade-overlay" id="turnFadeOverlay">
   <div class="turn-fade-text" id="turnFadeText">CALCULANDO IMPACTO — TURNO 1...</div>

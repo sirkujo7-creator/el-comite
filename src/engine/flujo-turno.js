@@ -38,6 +38,8 @@ function nextTurn(){
 
 function openTurnModal(){
   document.getElementById('turnModalBackdrop').classList.add('show');
+  const titulo = document.getElementById('ventanaTitulo');
+  if(titulo) titulo.textContent = (oficinaEsAmbiente ? 'Situación en la oficina' : 'Ventana de decisión') + ' · turno ' + Math.max(turnNumber, 1);
   const btn = document.getElementById('evaluarTurnoBtn');
   if(btn) btn.disabled = true;
   const ofBtn = document.getElementById('oficinaAmbienteBtn');

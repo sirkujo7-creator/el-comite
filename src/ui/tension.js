@@ -51,7 +51,7 @@ function flashKpiCards(efectos){
     const delta = efectos[key];
     if(!delta) return;
     const esRelacional = ['confianzaProveedores','confianzaBanco','reputacion','moralEquipo'].includes(key);
-    const selector = esRelacional ? '.rel-chip[data-tip="'+key+'"]' : '.stat[data-kpi="'+key+'"]';
+    const selector = esRelacional ? '.rel-anillo[data-tip="'+key+'"]' : '.kpi-card[data-kpi="'+key+'"]';
     const card = document.querySelector(selector);
     if(!card) return;
     const bueno = deltaEsSano(key, delta);
@@ -81,21 +81,71 @@ function saludTier(){
   return 'neutral';
 }
 
+// Tablero "Sala de mando": mosaico de indicadores (orden y nombres cortos propios), anillos de
+// relaciones, año fiscal, meta de la junta y resumen de la bitácora.
+const TABLERO_KPI = [
+  {key:'caja', corto:'Caja'}, {key:'razonCorriente', corto:'Razón cte.'},
+  {key:'deuda', corto:'Endeudamiento'}, {key:'wacc', corto:'WACC'},
+  {key:'ebitda', corto:'EBITDA'}, {key:'capitalTrabajo', corto:'Capital trab.'},
+  {key:'diasCartera', corto:'Días cartera'}, {key:'diasInventario', corto:'Días inv.'},
+  {key:'valorInventario', corto:'Valor de inventario'}
+];
+const ESTADO_POR_COLOR = {teal:'sano', gold:'alerta', danger:'malo', ink:'neutro'};
+function iconoKpiLinea(key){
+  const glyph = KPI_ICON_GLYPH[key];
+  return glyph ? `<svg class="kpi-ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${glyph}</svg>` : '';
+}
+function valorKpiHTML(d, val){
+  if(d.kind === 'money') return fmtMoneyHTML(val);
+  if(d.kind === 'dias') return Math.round(val) + '<span class="cifra-resto"> días</span>';
+  return d.fmt(val);
+}
+// Achica la cifra solo si no cabe en su tarjeta (p. ej. más de $100.000.000).
+function ajustarCifrasKpi(){
+  document.querySelectorAll('.kpi-valor').forEach(el=>{
+    el.style.fontSize = '';
+    if(!el.scrollWidth || !el.clientWidth) return;
+    let f = 23;
+    while(f > 13 && el.scrollWidth > el.clientWidth){ f--; el.style.fontSize = f + 'px'; }
+  });
+}
+const anilloAnterior = {};
+function relAnillo(label, val, key, warnTxt){
+  const pill = statusPill(val);
+  const v = clamp(Math.round(val), 0, 100);
+  const desde = anilloAnterior[key] != null ? anilloAnterior[key] : v;
+  anilloAnterior[key] = v;
+  return `<div class="rel-anillo tier-${pill.tier}" data-tip="${key}" title="${KPI_LABEL[key]||label}: ${pill.label.toLowerCase()}">
+    <svg viewBox="0 0 100 100"><circle class="anillo-pista" cx="50" cy="50" r="42"/><circle class="anillo-valor" cx="50" cy="50" r="42" pathLength="100" style="stroke-dasharray:${desde} 100" data-hasta="${v}"/></svg>
+    <b>${v}</b>
+    <span class="rel-nombre">${label} ${tendenciaHTML(key)}</span>
+    ${pill.tier==='critico'?`<span class="rel-warn">⚠ ${warnTxt}</span>`:''}
+  </div>`;
+}
+function renderAnioFiscal(){
+  const el = document.getElementById('anioFiscal');
+  if(!el) return;
+  let seg = '';
+  for(let i=1;i<=MAX_TURNS;i++) seg += `<i class="${i<=turnNumber?'h':''} ${i%5===0?'j':''}"></i>`;
+  el.innerHTML = `<span class="anio-l">Año fiscal · turno ${Math.max(turnNumber,0)} de ${MAX_TURNS}</span><span class="anio-seg" title="Las marcas altas son las juntas directivas">${seg}</span>`;
+  const chip = document.getElementById('empresaChip');
+  if(chip) chip.textContent = nombreEmpresaActual();
+}
+
 function renderTicker(deltas){
   actualizarDroneCriticoSegunSalud();
   renderMetaJuntaLine();
   renderEquiposLine();
-  const defs = KPI_DEFS.filter(d=> (d.key!=='diasInventario' && d.key!=='valorInventario') || sectorActual.tieneInventario);
-  const mitad = Math.ceil(defs.length/2);
-  const izquierda = defs.slice(0, mitad);
-  const derecha = defs.slice(mitad);
+  renderMetaPanel();
+  renderAnioFiscal();
+  const defs = TABLERO_KPI.map(t=>Object.assign({}, KPI_DEFS.find(d=>d.key===t.key), {corto:t.corto}))
+    .filter(d=> (d.key!=='diasInventario' && d.key!=='valorInventario') || sectorActual.tieneInventario);
 
-  function renderMitad(lista, targetId){
-    const el = document.getElementById(targetId);
-    if(!el) return;
+  const el = document.getElementById('tickerLeft');
+  if(el){
     el.className = 'ticker salud-' + saludTier();
-    el.innerHTML = lista.map(d=>{
-      const val = d.key === 'cce' ? calcularCCE() : state[d.key];
+    el.innerHTML = defs.map(d=>{
+      const val = state[d.key];
       const delta = deltas ? deltas[d.key] : 0;
       let deltaHtml = '';
       let flashClass = '';
@@ -104,30 +154,29 @@ function renderTicker(deltas){
         deltaHtml = `<span class="stat-delta show ${goodDir?'up':'down'}">${fmtDelta(delta, d.kind)}</span>`;
         flashClass = delta > 0 ? 'flash-up' : 'flash-down';
       }
-      const c = colorFor(d.key,val);
-      return `<div class="stat" data-kpi="${d.key}">
-        <div class="stat-icon-row">
-          ${pixelIcon(d.key, 32)}
-          <span class="stat-info-icon ${flashClass}" data-tip="${d.key}">ⓘ</span>
-        </div>
-        <div class="stat-label">${d.label} ${tendenciaHTML(d.key)}</div>
-        <div class="stat-value ${flashClass}" style="color:${c==='ink'?'var(--ink)':'var(--'+c+')'}">${d.fmt(val)}${deltaHtml}</div>
+      const tendencia = tendenciaHTML(d.key);
+      const estado = ESTADO_POR_COLOR[colorFor(d.key,val)] || 'neutro';
+      return `<div class="kpi-card ${estado}" data-kpi="${d.key}">
+        <div class="kpi-cab">${iconoKpiLinea(d.key)}<span class="kpi-label">${d.corto}</span><span class="stat-info-icon ${flashClass}" data-tip="${d.key}">ⓘ</span></div>
+        <div class="kpi-valor ${flashClass}">${valorKpiHTML(d, val)}</div>
+        <div class="kpi-sub">${deltaHtml}${tendencia}${(!deltaHtml && !tendencia) ? '<span class="kpi-estable">= estable</span>' : ''}</div>
       </div>`;
     }).join('');
+    ajustarCifrasKpi();
   }
-  renderMitad(izquierda, 'tickerLeft');
-  renderMitad(derecha, 'tickerRight');
 
   const rel = document.getElementById('relations');
-  let chips = relChip('Proveedores', state.confianzaProveedores, 'confianzaProveedores', 'riesgo de corte de suministro')
-    + relChip('Relación bancaria', state.confianzaBanco, 'confianzaBanco', 'riesgo de corte de crédito')
-    + relChip('Junta directiva', state.reputacion, 'reputacion', 'riesgo de destitución');
+  let anillos = relAnillo('Proveedores', state.confianzaProveedores, 'confianzaProveedores', 'riesgo de corte de suministro')
+    + relAnillo('Banco', state.confianzaBanco, 'confianzaBanco', 'riesgo de corte de crédito')
+    + relAnillo('Junta', state.reputacion, 'reputacion', 'riesgo de destitución');
   if(state.moralEquipo!=null){
-    chips += relChip('Moral del equipo', state.moralEquipo, 'moralEquipo', 'riesgo de fuga de talento');
+    anillos += relAnillo('Moral', state.moralEquipo, 'moralEquipo', 'riesgo de fuga de talento');
   }
-  rel.innerHTML = chips;
+  rel.innerHTML = `<div class="panel-titulo">Relaciones</div><div class="rel-anillos">${anillos}</div>`;
+  setTimeout(()=>rel.querySelectorAll('.anillo-valor').forEach(c=>{ c.style.strokeDasharray = c.getAttribute('data-hasta') + ' 100'; }), 40);
   renderCalendario();
   renderPortrait();
+  renderLog();
   if(document.getElementById('crtRow').style.display !== 'none'){ renderChartCaja(); renderChartEd(); }
   actualizarVineta();
 }
@@ -148,9 +197,9 @@ function renderCalendario(){
   el.innerHTML = `
     <div class="cal-title">Calendario de vencimientos</div>
     <div class="cal-row">
-      <div class="cal-bucket ${buckets.b30.length?'due':''}"><span class="cal-label">0–30 días</span><span class="cal-amt">${buckets.b30.length?fmtMoney(sum(buckets.b30)):'—'}</span></div>
-      <div class="cal-bucket"><span class="cal-label">31–60 días</span><span class="cal-amt">${buckets.b60.length?fmtMoney(sum(buckets.b60)):'—'}</span></div>
-      <div class="cal-bucket"><span class="cal-label">61–90 días</span><span class="cal-amt">${buckets.b90.length?fmtMoney(sum(buckets.b90)):'—'}</span></div>
+      <div class="cal-bucket ${buckets.b30.length?'due':''}"><span class="cal-label">0–30 días</span><span class="cal-amt">${buckets.b30.length?fmtMoneyHTML(sum(buckets.b30)):'—'}</span></div>
+      <div class="cal-bucket"><span class="cal-label">31–60 días</span><span class="cal-amt">${buckets.b60.length?fmtMoneyHTML(sum(buckets.b60)):'—'}</span></div>
+      <div class="cal-bucket"><span class="cal-label">61–90 días</span><span class="cal-amt">${buckets.b90.length?fmtMoneyHTML(sum(buckets.b90)):'—'}</span></div>
     </div>
   `;
 }

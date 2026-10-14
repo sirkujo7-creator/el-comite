@@ -80,7 +80,24 @@ function renderMetaJuntaLine(){
   const el = document.getElementById('metaJuntaLine');
   if(!el) return;
   if(!metaTrimestral){ el.classList.remove('show'); return; }
-  el.textContent = `Meta de la junta: ${META_ETIQUETAS[metaTrimestral.indicador]||metaTrimestral.indicador} hacia ${fmtMetaValor(metaTrimestral.indicador, metaTrimestral.valorObjetivo)} para el turno ${metaTrimestral.turnoLimite}`;
+  el.textContent = `Meta de la junta · ${META_ETIQUETAS[metaTrimestral.indicador]||metaTrimestral.indicador} → ${fmtMetaValor(metaTrimestral.indicador, metaTrimestral.valorObjetivo)}`;
   el.classList.add('show');
+}
+// Panel lateral del tablero: dónde está hoy el indicador de la meta, cuánto falta y cuándo se evalúa.
+function renderMetaPanel(){
+  const el = document.getElementById('metaPanel');
+  if(!el) return;
+  if(!metaTrimestral || !state || state[metaTrimestral.indicador]==null){ el.classList.remove('show'); el.innerHTML = ''; return; }
+  const m = metaTrimestral, actual = state[m.indicador];
+  const recorrido = m.valorObjetivo - m.valorInicial;
+  // Misma regla que metaCumplida, sin llamarla: esa función es la evaluación de la junta.
+  const cumplida = META_INVERTIDOS.includes(m.indicador) ? actual <= m.valorObjetivo : actual >= m.valorObjetivo;
+  const avance = recorrido ? clamp((actual - m.valorInicial) / recorrido, 0, 1) : (cumplida ? 1 : 0);
+  const faltan = m.turnoLimite - turnNumber;
+  el.className = 'meta-panel show' + (cumplida ? ' cumplida' : '');
+  el.innerHTML = `<div class="panel-titulo">Meta de la junta</div>
+    <div class="meta-fila"><span>${META_ETIQUETAS[m.indicador]||m.indicador} hoy <b>${fmtMetaValor(m.indicador, actual)}</b></span><span>objetivo <b>${fmtMetaValor(m.indicador, m.valorObjetivo)}</b></span></div>
+    <div class="meta-barra"><i style="width:${Math.round(avance*100)}%"></i></div>
+    <div class="meta-pie">${cumplida ? '✓ Hoy la cumplirías · ' : ''}${faltan > 0 ? `Faltan ${faltan} turno${faltan===1?'':'s'} · se evalúa en el turno ${m.turnoLimite}` : `Se evalúa en este turno`}</div>`;
 }
 

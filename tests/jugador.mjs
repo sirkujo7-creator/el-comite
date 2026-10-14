@@ -167,6 +167,6 @@ export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil 
     },
     turnos: j.ev('turnNumber'),
     estadoFinal: Object.fromEntries(KPIS.filter((k) => estadoFinal[k] != null).map((k) => [k, Math.round(estadoFinal[k] * 1000) / 1000])),
-    traza, apariciones, metas: j.ev('__metas'), sonda: leer ? j.ev(leer) : undefined, errores: j.errores,
+    traza, apariciones, metas: JSON.parse(j.ev('JSON.stringify(__metas)')), sonda: leer ? j.ev(leer) : undefined, errores: j.errores,
   };
 }

@@ -28,7 +28,7 @@ El juego ya no se edita en un solo HTML. **Se edita `src/` y se genera `dist/`.*
 ```
 original/simulador_financiero.html   referencia intacta (NO editar)
 src/index.html                       esqueleto; cada `<!-- @include ruta -->` inserta un archivo de src/
-src/styles/*.css                     14 hojas, en el orden del original
+src/styles/*.css                     hojas en orden de cascada; sala-de-mando.css (tablero y ventana) va al final
 src/{engine,systems,ui,minigames,audio,content}/*.js   65 fragmentos de un solo <script>
 assets/                              retratos .webp, junta .jpg y fuentes/*.woff2; en el código aparecen como @asset(ruta)
 assets/vendor/chart.umd.min.js       Chart.js 4.4.0 incrustado (el juego funciona sin internet)
@@ -157,10 +157,22 @@ tests/                               arnés + pruebas (npm test)
   sectores con color propio (`SECTOR_COLOR`), descripción, rasgos operativos y cifras iniciales
   a la vista; configuración con perfil/ventaja/dificultad explicados en la tarjeta (efectos como
   fichas de color "lo sano") y botón para volver a cambiar de sector. Textos en tuteo.
-- Celular (oct. 2026, final de `styles/dashboard.css`): por debajo de 720 px el tablero se
-  reordena (relaciones 2×2 → indicadores en dos columnas → botón de turno → calendario →
-  gráficas → bitácora) con `display:contents` y `order`. Fuera de esa media query no se toca nada:
-  se comprobó con capturas que el PC queda igual a 1366, 1024 y 760 px.
+- Estética "Sala de mando" (oct. 2026, elegida por Juan entre varias maquetas; `styles/sala-de-mando.css`,
+  reemplaza a dashboard.css). Fondo oscuro, bordes hueso y sombras duras del color del estado
+  (verde `--sm-sano`, ámbar `--sm-alerta`, rojo `--sm-malo` con franja de peligro). Solo se activa con
+  `body.en-partida` (lo pone `showChrome`): inicio e informe final no cambian. Distribución: cabecera
+  (logotipo, empresa, meta, año fiscal con las juntas marcadas) → indicadores en mosaico de 2 columnas |
+  gráficas + calendario | anillos de relaciones, mantenimiento y panel de la meta → pie con botón de
+  turno, resumen de bitácora y tarjeta "Situación en la oficina" (siempre visible; se enciende cuando
+  hay evento). Pesos completos con los millones grandes y el resto atenuado (`fmtMoneyHTML`); la cifra
+  se achica sola si no cabe. Gráficas: caja con degradado, zona crítica bajo $5 M y la mayor caída
+  marcada; EBITDA en barras con el color de lo sano + deuda en línea y razón deuda/EBITDA. Las
+  decisiones se abren en una ventana (`.ventana`, borde ámbar, sin borde blanco) sobre el tablero
+  difuminado, con la franja de indicadores dentro. Capa CRT suave (líneas finas). Plan acordado:
+  1) estilo ✅, 2) efectos del turno, 3) alarma, junta y finales, 4) sonidos sincronizados y celular;
+  video a Juan antes de publicar cada etapa.
+- Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón
+  de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
 - Música de fondo (oct. 2026, `audio/musica.js`, opción B elegida por Juan: generada, no grabada).
   Un estilo por sector + "menu": AgroVerde bambuco 3/4 con guitarra; Ganadería joropo con arpa,
