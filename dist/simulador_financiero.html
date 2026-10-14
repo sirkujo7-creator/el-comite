@@ -1579,6 +1579,120 @@ body.en-partida .oficina-ambiente-btn.show:hover{ transform:translate(-2px,-2px)
   .ventana .case-title{ font-size:24px; }
   .turn-modal-backdrop{ padding:34px 8px; }
 }
+
+/* =========================================================
+   EFECTOS DEL TURNO (etapa 2, ui/efectos-turno.js) — suaves a propósito
+   ========================================================= */
+/* Grano y barrido de luz sobre la capa CRT */
+body.en-partida::after{
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(rgba(0,0,0,.075) 0 1px,transparent 1px 3px),
+    radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.4) 100%);
+  animation:smGrano .5s steps(1) infinite;
+}
+@keyframes smGrano{ 25%{ background-position:-60px 30px,0 0,0 0; } 50%{ background-position:40px -90px,0 0,0 0; } 75%{ background-position:-120px -30px,0 0,0 0; } }
+body.en-partida::before{
+  content:''; position:fixed; left:0; right:0; top:-140px; height:140px; z-index:199; pointer-events:none;
+  background:linear-gradient(transparent,rgba(236,230,216,.022),transparent); animation:smBarrido 7s linear infinite;
+}
+@keyframes smBarrido{ to{ top:100%; } }
+
+/* Encendido en cascada de los paneles */
+body.en-partida .apagado{ opacity:0; }
+body.en-partida .enciende{ animation:smEnciende .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes smEnciende{
+  0%{ opacity:0; transform:scaleY(.03) scaleX(.5); filter:brightness(3); }
+  40%{ opacity:1; transform:scaleY(.03) scaleX(1); filter:brightness(2.4); }
+  55%{ opacity:.6; } 70%{ opacity:1; transform:scaleY(1.03); filter:brightness(1.3); }
+  100%{ transform:none; filter:none; }
+}
+body.en-partida h1.enciende{ animation-name:smEnciendeLogo; }
+@keyframes smEnciendeLogo{ 0%{ opacity:0; filter:brightness(3); } 50%{ opacity:1; } 100%{ filter:none; } }
+
+/* La ventana se enciende como un monitor */
+.turn-modal-backdrop.show .ventana{ animation:smVentanaOn .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes smVentanaOn{
+  0%{ transform:scaleY(.02) scaleX(.3); filter:brightness(4); opacity:0; }
+  35%{ transform:scaleY(.02) scaleX(1); opacity:1; }
+  70%{ transform:scaleY(1.03); } 100%{ transform:none; filter:none; }
+}
+.ventana #turnModalContent.fade-in-oscuro{ animation-duration:.8s; }
+.ventana.sacude{ animation:smSacude .4s linear; }
+@keyframes smSacude{ 0%,100%{ translate:0 0; } 20%{ translate:-7px 4px; } 40%{ translate:6px -4px; } 60%{ translate:-4px 3px; } 80%{ translate:2px -2px; } }
+
+/* Sello al confirmar */
+.sello-orden{
+  position:absolute; left:50%; top:50%; z-index:5; pointer-events:none; white-space:nowrap;
+  font:900 40px var(--font-ui); letter-spacing:.06em; color:var(--sm-alerta);
+  border:6px solid var(--sm-alerta); padding:6px 22px; background:rgba(12,14,17,.9);
+  box-shadow:0 0 26px rgba(255,176,0,.3); opacity:0;
+  animation:smGolpe .4s cubic-bezier(.3,1.6,.5,1) forwards, smDesvanece .3s ease-in .65s forwards;
+}
+@keyframes smGolpe{
+  0%{ opacity:0; transform:translate(-50%,-50%) rotate(-9deg) scale(3); }
+  60%{ opacity:1; transform:translate(-50%,-50%) rotate(-9deg) scale(.92); }
+  100%{ opacity:1; transform:translate(-50%,-50%) rotate(-9deg) scale(1); }
+}
+@keyframes smDesvanece{ from{ opacity:1; transform:translate(-50%,-50%) rotate(-9deg) scale(1); } to{ opacity:0; transform:translate(-50%,-50%) rotate(-9deg) scale(1.08); } }
+.destello-pantalla{ position:fixed; inset:0; z-index:250; background:#fff; opacity:0; pointer-events:none; }
+.destello-pantalla.on{ animation:smDestello .3s ease-out; }
+@keyframes smDestello{ 0%{ opacity:.35; } 100%{ opacity:0; } }
+
+/* Opciones: destello RGB del texto y barra de carga al pasar el cursor */
+.ventana .choice-btn{ position:relative; }
+.ventana .choice-btn:hover > span:last-child{ animation:smRgb .3s steps(2) 1; }
+@keyframes smRgb{
+  0%{ text-shadow:-2px 0 rgba(255,45,85,.7),2px 0 rgba(0,229,255,.7); }
+  50%{ text-shadow:1px 0 rgba(255,45,85,.6),-1px 0 rgba(0,229,255,.6); }
+  100%{ text-shadow:none; }
+}
+.ventana .choice-btn::after{ content:''; position:absolute; left:0; bottom:-1px; height:3px; width:0; background:var(--sm-alerta); }
+.ventana .choice-btn:hover::after{ animation:smCarga .5s ease-out forwards; }
+@keyframes smCarga{ to{ width:100%; } }
+.ventana .choice-btn:disabled::after{ display:none; }
+
+/* Mira sobre los indicadores que toca la opción */
+.ventana .franja-item::before{
+  content:''; position:absolute; inset:-5px; pointer-events:none; opacity:0; transform:scale(1.5);
+  transition:opacity .25s, transform .25s cubic-bezier(.2,.9,.2,1.3);
+  background:
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 0/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 0/2px 9px,
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 0/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 0/2px 9px,
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 100%/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 100%/2px 9px,
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 100%/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 100%/2px 9px;
+  background-repeat:no-repeat;
+}
+.ventana .franja-item.toca::before{ opacity:1; transform:scale(1); }
+
+/* Impacto en el tablero: partículas y cifra que salta */
+.px-particula{ position:fixed; width:4px; height:4px; z-index:210; pointer-events:none; border-radius:1px; }
+.salto-delta{
+  position:fixed; z-index:211; pointer-events:none; white-space:nowrap;
+  font:900 16px var(--font-ui); text-shadow:0 0 8px currentColor,2px 2px 0 #000; translate:-100% 0;
+  background:rgba(12,14,17,.85); padding:1px 5px;
+  animation:smSaltoSube 1.3s ease-out forwards;
+}
+.salto-delta.baja{ animation-name:smSaltoBaja; }
+@keyframes smSaltoSube{ 0%{ opacity:0; transform:scale(.6); } 25%{ opacity:1; transform:translateY(-6px) scale(1.1); } 75%{ opacity:1; transform:translateY(-12px); } 100%{ opacity:0; transform:translateY(-20px); } }
+@keyframes smSaltoBaja{ 0%{ opacity:0; transform:scale(.6); } 25%{ opacity:1; transform:translateY(-4px) scale(1.1); } 75%{ opacity:1; transform:translateY(2px); } 100%{ opacity:0; transform:translateY(8px); } }
+
+/* Botón de turno listo: parpadeo de máquina recreativa */
+body.en-partida .evaluar-turno-btn:not(:disabled):not(.btn-informe){ animation:smInsert 1.1s steps(1) infinite; }
+@keyframes smInsert{ 50%{ background:#5ff0b1; } }
+
+/* "Calculando impacto": barra de bloques */
+.turn-fade-barra{ display:none; }
+body.en-partida .turn-fade-overlay{ flex-direction:column; gap:14px; background:#07080a; }
+body.en-partida .turn-fade-barra{ display:block; width:min(320px,70vw); height:14px; border:2px solid var(--sm-borde); padding:2px; }
+body.en-partida .turn-fade-barra i{ display:block; height:100%; width:0; background:repeating-linear-gradient(90deg,var(--sm-alerta) 0 10px,transparent 10px 13px); }
+body.en-partida .turn-fade-overlay.show .turn-fade-barra i{ animation:smCarga .9s steps(12) forwards; }
+body.en-partida .turn-fade-text{ color:var(--sm-alerta); letter-spacing:.14em; }
+
+@media (prefers-reduced-motion:reduce){
+  body.en-partida::after, body.en-partida::before, .turn-modal-backdrop.show .ventana,
+  body.en-partida .evaluar-turno-btn:not(:disabled), .kpi-card.malo::before{ animation:none !important; }
+}
 </style>
 </head>
 <body>
@@ -1704,7 +1818,9 @@ body.en-partida .oficina-ambiente-btn.show:hover{ transform:translate(-2px,-2px)
 </div>
 <div class="turn-fade-overlay" id="turnFadeOverlay">
   <div class="turn-fade-text" id="turnFadeText">CALCULANDO IMPACTO — TURNO 1...</div>
+  <div class="turn-fade-barra"><i></i></div>
 </div>
+<div class="destello-pantalla" id="destelloPantalla"></div>
 
 <script>
 /* =========================================================
@@ -3839,6 +3955,7 @@ function flashKpiCards(efectos){
     void card.offsetWidth;
     card.classList.add(esInversion ? 'flash-bg-inversion' : esPasivo ? 'flash-bg-pasivo' : (bueno?'flash-bg-good':'flash-bg-bad'));
     setTimeout(()=>card.classList.remove('flash-bg-good','flash-bg-bad','flash-bg-pasivo','flash-bg-inversion'), 800);
+    impactoEnTarjeta(card, key, delta, esInversion ? 'inversion' : (bueno ? 'bueno' : 'malo'), esRelacional);
     const kd = KPI_DEFS.find(d=>d.key===key);
     // Las tarjetas de KPI ya muestran el cambio junto al valor: se resalta ese número en vez
     // de añadir otro flotante encima. Las fichas de relaciones no tienen número propio.
@@ -7691,6 +7808,7 @@ function renderCase(c){
   `;
 
   renderChoices(c);
+  descifrarTitulo(g.querySelector('.case-title'));
 
   if(c.investigacion){
     document.getElementById('investBtn').addEventListener('click', ()=>{
@@ -7741,6 +7859,7 @@ function selectChoice(c, ch){
   const indicadoresAntes = capturarIndicadores();
   document.querySelectorAll('.choice-btn').forEach((b)=>{ b.disabled = true; b.style.pointerEvents='none'; });
   sonidoConfirmacion();
+  selloOrdenEjecutada();
 
   // Cada decisión pesa más de lo que pesaba antes, y no siempre pesa exactamente igual —
   // la misma elección no da siempre el mismo resultado numérico exacto (inspirado en Reigns).
@@ -7775,7 +7894,8 @@ function selectChoice(c, ch){
 
   const balanceHtml = balanceDecisionHTML(indicadoresAntes, efectosAplicados);
   renderLog();
-  triggerCurtainSweep(()=>renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml));
+  // El sello "ORDEN EJECUTADA" se ve sobre el caso antes de pasar al resultado.
+  setTimeout(()=>triggerCurtainSweep(()=>renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml)), 520);
 }
 
 function renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml){
@@ -8018,6 +8138,141 @@ function animarBalanceDecision(){
   };
   requestAnimationFrame(paso);
   setTimeout(()=>barras.forEach(el=>{ el.style.width = el.dataset.hasta + '%'; }), 60);
+}
+/* =========================================================
+   EFECTOS DEL TURNO — "Sala de mando", etapa 2 (oct. 2026)
+   Encendido del tablero, título que se descifra, sello "ORDEN EJECUTADA", y el impacto de la
+   decisión sobre las tarjetas (partículas, cifra que salta y cuenta). Solo visual: nada de esto
+   toca el estado del juego. Usa su propio azar (azarVisual) para no consumir Math.random, que
+   decide los casos y los resultados (las partidas con semilla deben seguir siendo idénticas).
+   ========================================================= */
+let semillaVisual = 20261014;
+function azarVisual(){
+  semillaVisual = (semillaVisual * 1103515245 + 12345) % 2147483648;
+  return semillaVisual / 2147483648;
+}
+function ahoraVisual(){ return (typeof performance !== 'undefined' && performance.now) ? performance.now() : Date.now(); }
+function reducirMovimiento(){
+  try{ return !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches); }catch(e){ return false; }
+}
+
+// Los paneles del tablero se encienden en cascada, como monitores de una sala de control.
+function encenderTablero(){
+  if(reducirMovimiento()) return;
+  setTimeout(()=>{
+    const paneles = [].concat(
+      Array.from(document.querySelectorAll('.header-text h1, .header-text .empresa-chip, .header-text .meta-junta-line, .anio-fiscal')),
+      Array.from(document.querySelectorAll('.kpi-card')),
+      Array.from(document.querySelectorAll('.crt-screen')),
+      [document.getElementById('calendario'), document.getElementById('relations'),
+       document.getElementById('equiposLine'), document.getElementById('metaPanel'),
+       document.getElementById('evaluarTurnoWrap'), document.querySelector('.bitacora-resumen'),
+       document.getElementById('oficinaAmbienteBtn')]
+    ).filter(Boolean);
+    paneles.forEach(p=>{ p.classList.remove('enciende'); p.classList.add('apagado'); });
+    paneles.forEach((p,i)=>setTimeout(()=>{ p.classList.remove('apagado'); p.classList.add('enciende'); }, 80 + i*45));
+    setTimeout(()=>paneles.forEach(p=>p.classList.remove('enciende')), 80 + paneles.length*45 + 700);
+  }, 30);
+}
+
+// El título del caso aparece "descifrándose" de izquierda a derecha.
+function descifrarTitulo(el){
+  if(!el || reducirMovimiento()) return;
+  const original = el.innerHTML, texto = el.textContent;
+  if(!texto || (el.children && el.children.length)) return;
+  const signos = '▓▒░#$%&@01';
+  const dur = 800, t0 = ahoraVisual();
+  const paso = ()=>{
+    if(!el.isConnected && el.isConnected !== undefined) return;
+    const k = Math.min(1, (ahoraVisual() - t0) / dur), n = Math.floor(texto.length * k);
+    if(k >= 1){ el.innerHTML = original; return; }
+    let resto = '';
+    for(let i=n;i<texto.length;i++) resto += texto[i] === ' ' ? ' ' : signos[Math.floor(azarVisual()*signos.length)];
+    el.textContent = texto.slice(0, n) + resto;
+    requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}
+
+// Sello al confirmar una decisión: golpe, sacudida de la ventana y destello breve.
+function selloOrdenEjecutada(){
+  const ventana = document.getElementById('ventanaTurno');
+  if(!ventana) return;
+  const viejo = ventana.querySelector('.sello-orden');
+  if(viejo && viejo.parentNode) viejo.parentNode.removeChild(viejo);
+  const sello = document.createElement('div');
+  sello.className = 'sello-orden';
+  sello.textContent = 'ORDEN EJECUTADA';
+  ventana.appendChild(sello);
+  ventana.classList.remove('sacude'); void ventana.offsetWidth; ventana.classList.add('sacude');
+  const destello = document.getElementById('destelloPantalla');
+  if(destello){ destello.classList.remove('on'); void destello.offsetWidth; destello.classList.add('on'); }
+  setTimeout(()=>{ ventana.classList.remove('sacude'); }, 450);
+  setTimeout(()=>{ if(sello.parentNode) sello.parentNode.removeChild(sello); }, 1000);
+}
+
+// Partículas de píxel que salen de una tarjeta: suben si el cambio es sano, caen si no.
+function particulasDesde(el, color, sube, n){
+  if(!el || !el.getBoundingClientRect || reducirMovimiento()) return;
+  const r = el.getBoundingClientRect();
+  if(!r.width) return;
+  for(let i=0;i<(n||16);i++){
+    const p = document.createElement('i');
+    p.className = 'px-particula';
+    p.style.background = color; p.style.boxShadow = '0 0 6px ' + color;
+    p.style.left = (r.left + r.width*(0.2 + azarVisual()*0.6)) + 'px';
+    p.style.top = (r.top + r.height*0.5) + 'px';
+    document.body.appendChild(p);
+    let x = 0, y = 0, v = 0;
+    const vx = (azarVisual() - 0.5) * 5;
+    let vy = sube ? -(3 + azarVisual()*4) : (1 + azarVisual()*2);
+    const mover = ()=>{
+      v++; x += vx; y += vy; vy += sube ? 0.12 : 0.25;
+      p.style.transform = `translate(${x}px,${y}px)`; p.style.opacity = String(1 - v/50);
+      if(v < 50) requestAnimationFrame(mover); else if(p.parentNode) p.parentNode.removeChild(p);
+    };
+    requestAnimationFrame(mover);
+  }
+}
+// La cifra del cambio salta sobre la tarjeta y se desvanece.
+function saltoJuntoA(el, texto, color, sube){
+  if(!el || !el.getBoundingClientRect || reducirMovimiento()) return;
+  const r = el.getBoundingClientRect();
+  if(!r.width) return;
+  const s = document.createElement('div');
+  s.className = 'salto-delta ' + (sube ? 'sube' : 'baja');
+  s.textContent = texto; s.style.color = color;
+  // Dentro de la propia tarjeta, arriba a la derecha (al lado taparía la tarjeta vecina).
+  s.style.left = (r.right - 12) + 'px';
+  s.style.top = (r.top + 4) + 'px';
+  document.body.appendChild(s);
+  setTimeout(()=>{ if(s.parentNode) s.parentNode.removeChild(s); }, 1400);
+}
+// La cifra de la tarjeta cuenta desde el valor anterior hasta el nuevo.
+function contarCifraKpi(card, key, delta){
+  const el = card && card.querySelector('.kpi-valor');
+  const d = KPI_DEFS.find(k=>k.key===key);
+  if(!el || !d || !delta || reducirMovimiento()) return;
+  const hasta = state[key], desde = hasta - delta, dur = 900, t0 = ahoraVisual();
+  const final = el.innerHTML;
+  const paso = ()=>{
+    const k = Math.min(1, (ahoraVisual() - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    if(k >= 1){ el.innerHTML = final; return; }
+    el.innerHTML = valorKpiHTML(d, desde + (hasta - desde) * e);
+    requestAnimationFrame(paso);
+  };
+  requestAnimationFrame(paso);
+}
+const COLOR_IMPACTO = { bueno:'#3ddc97', malo:'#ff5a46', inversion:'#D98847' };
+// Se llama desde flashKpiCards por cada indicador que cambió con la decisión.
+function impactoEnTarjeta(card, key, delta, tipo, esRelacional){
+  const color = COLOR_IMPACTO[tipo] || COLOR_IMPACTO.bueno;
+  const sube = tipo === 'bueno';
+  particulasDesde(card, color, sube, esRelacional ? 10 : 16);
+  if(esRelacional) return;
+  const kd = KPI_DEFS.find(k=>k.key===key);
+  saltoJuntoA(card, (tipo==='inversion' ? '↗ ' : '') + fmtDelta(delta, kd ? kd.kind : 'num'), color, sube);
+  contarCifraKpi(card, key, delta);
 }
 function chipsDeEfectos(efectos){
   if(!efectos) return '';
@@ -10219,6 +10474,8 @@ function activarFadeInOscuro(){
 function showChrome(v){
   // Tablero "Sala de mando": la clase en-partida activa su distribución (styles/sala-de-mando.css).
   document.body.classList.toggle('en-partida', !!v);
+  if(v && !document.body.classList.contains('tablero-encendido')){ document.body.classList.add('tablero-encendido'); encenderTablero(); }
+  if(!v) document.body.classList.remove('tablero-encendido');
   ['tickerLeft','calendario','tableroLado','tableroPie','anioFiscal'].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.style.display = v?'':'none';

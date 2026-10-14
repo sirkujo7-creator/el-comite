@@ -17,6 +17,8 @@ function activarFadeInOscuro(){
 function showChrome(v){
   // Tablero "Sala de mando": la clase en-partida activa su distribución (styles/sala-de-mando.css).
   document.body.classList.toggle('en-partida', !!v);
+  if(v && !document.body.classList.contains('tablero-encendido')){ document.body.classList.add('tablero-encendido'); encenderTablero(); }
+  if(!v) document.body.classList.remove('tablero-encendido');
   ['tickerLeft','calendario','tableroLado','tableroPie','anioFiscal'].forEach(id=>{
     const el = document.getElementById(id);
     if(el) el.style.display = v?'':'none';

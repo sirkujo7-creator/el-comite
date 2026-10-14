@@ -169,8 +169,16 @@ tests/                               arnés + pruebas (npm test)
   marcada; EBITDA en barras con el color de lo sano + deuda en línea y razón deuda/EBITDA. Las
   decisiones se abren en una ventana (`.ventana`, borde ámbar, sin borde blanco) sobre el tablero
   difuminado, con la franja de indicadores dentro. Capa CRT suave (líneas finas). Plan acordado:
-  1) estilo ✅, 2) efectos del turno, 3) alarma, junta y finales, 4) sonidos sincronizados y celular;
+  1) estilo ✅, 2) efectos del turno ✅, 3) alarma, junta y finales, 4) sonidos sincronizados y celular;
   video a Juan antes de publicar cada etapa.
+- Efectos del turno (etapa 2, `ui/efectos-turno.js` + final de sala-de-mando.css): encendido en
+  cascada del tablero al empezar, ventana que se enciende como monitor, título del caso que se
+  descifra, destello RGB y barra de carga al pasar por una opción, mira ámbar en la franja, sello
+  "ORDEN EJECUTADA" con sacudida (el resultado se muestra 0,5 s después), barra de bloques en
+  "Calculando impacto" e impacto en las tarjetas (partículas, cifra que salta sobre la etiqueta y
+  valor que cuenta). Grano y barrido de luz suaves. Usan `azarVisual()`, nunca `Math.random`: las
+  partidas con semilla siguen idénticas (comprobado con `EQUIV_REF`). Respetan
+  `prefers-reduced-motion`.
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.

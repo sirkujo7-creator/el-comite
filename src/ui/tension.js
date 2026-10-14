@@ -61,6 +61,7 @@ function flashKpiCards(efectos){
     void card.offsetWidth;
     card.classList.add(esInversion ? 'flash-bg-inversion' : esPasivo ? 'flash-bg-pasivo' : (bueno?'flash-bg-good':'flash-bg-bad'));
     setTimeout(()=>card.classList.remove('flash-bg-good','flash-bg-bad','flash-bg-pasivo','flash-bg-inversion'), 800);
+    impactoEnTarjeta(card, key, delta, esInversion ? 'inversion' : (bueno ? 'bueno' : 'malo'), esRelacional);
     const kd = KPI_DEFS.find(d=>d.key===key);
     // Las tarjetas de KPI ya muestran el cambio junto al valor: se resalta ese número en vez
     // de añadir otro flotante encima. Las fichas de relaciones no tienen número propio.

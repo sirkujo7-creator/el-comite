@@ -329,3 +329,117 @@ body.en-partida .oficina-ambiente-btn.show:hover{ transform:translate(-2px,-2px)
   .ventana .case-title{ font-size:24px; }
   .turn-modal-backdrop{ padding:34px 8px; }
 }
+
+/* =========================================================
+   EFECTOS DEL TURNO (etapa 2, ui/efectos-turno.js) — suaves a propósito
+   ========================================================= */
+/* Grano y barrido de luz sobre la capa CRT */
+body.en-partida::after{
+  background:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23g)'/%3E%3C/svg%3E"),
+    repeating-linear-gradient(rgba(0,0,0,.075) 0 1px,transparent 1px 3px),
+    radial-gradient(ellipse at 50% 50%,transparent 62%,rgba(0,0,0,.4) 100%);
+  animation:smGrano .5s steps(1) infinite;
+}
+@keyframes smGrano{ 25%{ background-position:-60px 30px,0 0,0 0; } 50%{ background-position:40px -90px,0 0,0 0; } 75%{ background-position:-120px -30px,0 0,0 0; } }
+body.en-partida::before{
+  content:''; position:fixed; left:0; right:0; top:-140px; height:140px; z-index:199; pointer-events:none;
+  background:linear-gradient(transparent,rgba(236,230,216,.022),transparent); animation:smBarrido 7s linear infinite;
+}
+@keyframes smBarrido{ to{ top:100%; } }
+
+/* Encendido en cascada de los paneles */
+body.en-partida .apagado{ opacity:0; }
+body.en-partida .enciende{ animation:smEnciende .5s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes smEnciende{
+  0%{ opacity:0; transform:scaleY(.03) scaleX(.5); filter:brightness(3); }
+  40%{ opacity:1; transform:scaleY(.03) scaleX(1); filter:brightness(2.4); }
+  55%{ opacity:.6; } 70%{ opacity:1; transform:scaleY(1.03); filter:brightness(1.3); }
+  100%{ transform:none; filter:none; }
+}
+body.en-partida h1.enciende{ animation-name:smEnciendeLogo; }
+@keyframes smEnciendeLogo{ 0%{ opacity:0; filter:brightness(3); } 50%{ opacity:1; } 100%{ filter:none; } }
+
+/* La ventana se enciende como un monitor */
+.turn-modal-backdrop.show .ventana{ animation:smVentanaOn .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes smVentanaOn{
+  0%{ transform:scaleY(.02) scaleX(.3); filter:brightness(4); opacity:0; }
+  35%{ transform:scaleY(.02) scaleX(1); opacity:1; }
+  70%{ transform:scaleY(1.03); } 100%{ transform:none; filter:none; }
+}
+.ventana #turnModalContent.fade-in-oscuro{ animation-duration:.8s; }
+.ventana.sacude{ animation:smSacude .4s linear; }
+@keyframes smSacude{ 0%,100%{ translate:0 0; } 20%{ translate:-7px 4px; } 40%{ translate:6px -4px; } 60%{ translate:-4px 3px; } 80%{ translate:2px -2px; } }
+
+/* Sello al confirmar */
+.sello-orden{
+  position:absolute; left:50%; top:50%; z-index:5; pointer-events:none; white-space:nowrap;
+  font:900 40px var(--font-ui); letter-spacing:.06em; color:var(--sm-alerta);
+  border:6px solid var(--sm-alerta); padding:6px 22px; background:rgba(12,14,17,.9);
+  box-shadow:0 0 26px rgba(255,176,0,.3); opacity:0;
+  animation:smGolpe .4s cubic-bezier(.3,1.6,.5,1) forwards, smDesvanece .3s ease-in .65s forwards;
+}
+@keyframes smGolpe{
+  0%{ opacity:0; transform:translate(-50%,-50%) rotate(-9deg) scale(3); }
+  60%{ opacity:1; transform:translate(-50%,-50%) rotate(-9deg) scale(.92); }
+  100%{ opacity:1; transform:translate(-50%,-50%) rotate(-9deg) scale(1); }
+}
+@keyframes smDesvanece{ from{ opacity:1; transform:translate(-50%,-50%) rotate(-9deg) scale(1); } to{ opacity:0; transform:translate(-50%,-50%) rotate(-9deg) scale(1.08); } }
+.destello-pantalla{ position:fixed; inset:0; z-index:250; background:#fff; opacity:0; pointer-events:none; }
+.destello-pantalla.on{ animation:smDestello .3s ease-out; }
+@keyframes smDestello{ 0%{ opacity:.35; } 100%{ opacity:0; } }
+
+/* Opciones: destello RGB del texto y barra de carga al pasar el cursor */
+.ventana .choice-btn{ position:relative; }
+.ventana .choice-btn:hover > span:last-child{ animation:smRgb .3s steps(2) 1; }
+@keyframes smRgb{
+  0%{ text-shadow:-2px 0 rgba(255,45,85,.7),2px 0 rgba(0,229,255,.7); }
+  50%{ text-shadow:1px 0 rgba(255,45,85,.6),-1px 0 rgba(0,229,255,.6); }
+  100%{ text-shadow:none; }
+}
+.ventana .choice-btn::after{ content:''; position:absolute; left:0; bottom:-1px; height:3px; width:0; background:var(--sm-alerta); }
+.ventana .choice-btn:hover::after{ animation:smCarga .5s ease-out forwards; }
+@keyframes smCarga{ to{ width:100%; } }
+.ventana .choice-btn:disabled::after{ display:none; }
+
+/* Mira sobre los indicadores que toca la opción */
+.ventana .franja-item::before{
+  content:''; position:absolute; inset:-5px; pointer-events:none; opacity:0; transform:scale(1.5);
+  transition:opacity .25s, transform .25s cubic-bezier(.2,.9,.2,1.3);
+  background:
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 0/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 0/2px 9px,
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 0/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 0/2px 9px,
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 100%/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 0 100%/2px 9px,
+    linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 100%/9px 2px, linear-gradient(var(--sm-alerta),var(--sm-alerta)) 100% 100%/2px 9px;
+  background-repeat:no-repeat;
+}
+.ventana .franja-item.toca::before{ opacity:1; transform:scale(1); }
+
+/* Impacto en el tablero: partículas y cifra que salta */
+.px-particula{ position:fixed; width:4px; height:4px; z-index:210; pointer-events:none; border-radius:1px; }
+.salto-delta{
+  position:fixed; z-index:211; pointer-events:none; white-space:nowrap;
+  font:900 16px var(--font-ui); text-shadow:0 0 8px currentColor,2px 2px 0 #000; translate:-100% 0;
+  background:rgba(12,14,17,.85); padding:1px 5px;
+  animation:smSaltoSube 1.3s ease-out forwards;
+}
+.salto-delta.baja{ animation-name:smSaltoBaja; }
+@keyframes smSaltoSube{ 0%{ opacity:0; transform:scale(.6); } 25%{ opacity:1; transform:translateY(-6px) scale(1.1); } 75%{ opacity:1; transform:translateY(-12px); } 100%{ opacity:0; transform:translateY(-20px); } }
+@keyframes smSaltoBaja{ 0%{ opacity:0; transform:scale(.6); } 25%{ opacity:1; transform:translateY(-4px) scale(1.1); } 75%{ opacity:1; transform:translateY(2px); } 100%{ opacity:0; transform:translateY(8px); } }
+
+/* Botón de turno listo: parpadeo de máquina recreativa */
+body.en-partida .evaluar-turno-btn:not(:disabled):not(.btn-informe){ animation:smInsert 1.1s steps(1) infinite; }
+@keyframes smInsert{ 50%{ background:#5ff0b1; } }
+
+/* "Calculando impacto": barra de bloques */
+.turn-fade-barra{ display:none; }
+body.en-partida .turn-fade-overlay{ flex-direction:column; gap:14px; background:#07080a; }
+body.en-partida .turn-fade-barra{ display:block; width:min(320px,70vw); height:14px; border:2px solid var(--sm-borde); padding:2px; }
+body.en-partida .turn-fade-barra i{ display:block; height:100%; width:0; background:repeating-linear-gradient(90deg,var(--sm-alerta) 0 10px,transparent 10px 13px); }
+body.en-partida .turn-fade-overlay.show .turn-fade-barra i{ animation:smCarga .9s steps(12) forwards; }
+body.en-partida .turn-fade-text{ color:var(--sm-alerta); letter-spacing:.14em; }
+
+@media (prefers-reduced-motion:reduce){
+  body.en-partida::after, body.en-partida::before, .turn-modal-backdrop.show .ventana,
+  body.en-partida .evaluar-turno-btn:not(:disabled), .kpi-card.malo::before{ animation:none !important; }
+}

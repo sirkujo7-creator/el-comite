@@ -78,6 +78,7 @@ function renderCase(c){
   `;
 
   renderChoices(c);
+  descifrarTitulo(g.querySelector('.case-title'));
 
   if(c.investigacion){
     document.getElementById('investBtn').addEventListener('click', ()=>{
@@ -128,6 +129,7 @@ function selectChoice(c, ch){
   const indicadoresAntes = capturarIndicadores();
   document.querySelectorAll('.choice-btn').forEach((b)=>{ b.disabled = true; b.style.pointerEvents='none'; });
   sonidoConfirmacion();
+  selloOrdenEjecutada();
 
   // Cada decisión pesa más de lo que pesaba antes, y no siempre pesa exactamente igual —
   // la misma elección no da siempre el mismo resultado numérico exacto (inspirado en Reigns).
@@ -162,7 +164,8 @@ function selectChoice(c, ch){
 
   const balanceHtml = balanceDecisionHTML(indicadoresAntes, efectosAplicados);
   renderLog();
-  triggerCurtainSweep(()=>renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml));
+  // El sello "ORDEN EJECUTADA" se ve sobre el caso antes de pasar al resultado.
+  setTimeout(()=>triggerCurtainSweep(()=>renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml)), 520);
 }
 
 function renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, balanceHtml, explainHtml){
