@@ -169,7 +169,7 @@ tests/                               arnés + pruebas (npm test)
   marcada; EBITDA en barras con el color de lo sano + deuda en línea y razón deuda/EBITDA. Las
   decisiones se abren en una ventana (`.ventana`, borde ámbar, sin borde blanco) sobre el tablero
   difuminado, con la franja de indicadores dentro. Capa CRT suave (líneas finas). Plan acordado:
-  1) estilo ✅, 2) efectos del turno ✅, 3) alarma, junta y finales, 4) sonidos sincronizados y celular;
+  1) estilo ✅, 2) efectos del turno ✅, 3) alarma, junta y finales ✅, 4) sonidos sincronizados y celular;
   video a Juan antes de publicar cada etapa.
 - Efectos del turno (etapa 2, `ui/efectos-turno.js` + final de sala-de-mando.css): encendido en
   cascada del tablero al empezar, ventana que se enciende como monitor, título del caso que se
@@ -179,6 +179,15 @@ tests/                               arnés + pruebas (npm test)
   valor que cuenta). Grano y barrido de luz suaves. Usan `azarVisual()`, nunca `Math.random`: las
   partidas con semilla siguen idénticas (comprobado con `EQUIV_REF`). Respetan
   `prefers-reduced-motion`.
+- Alarma, junta y finales (etapa 3, `ui/efectos-finales.js`): en el tablero la viñeta roja de
+  pantalla completa se reemplazó por un marco que late y una cinta inferior con los motivos
+  (`nivelAlarma`: caja ≤ 5, razón corriente < 1, WACC ≥ 20, deuda ≥ 45, EBITDA ≤ 0, relación en
+  crítico, inventario ≥ 90 días) más una interferencia breve cada 7 s; tensión (caja ≤ 15 o WACC ≥ 16)
+  = marco ámbar suave. La junta pinta la ventana de dorado ("cierre del trimestre n de 4") y su
+  evaluación lleva el sello META CUMPLIDA / NO CUMPLIDA. "COMBO ×n" en el resultado tras 2+ sellos
+  positivos seguidos. Quiebra: grietas, sacudida y apagón de monitor antes del informe; informe con
+  "MISIÓN FALLIDA". Cierre: "MISIÓN CUMPLIDA" y lluvia de monedas (más cuanto mejor el rango).
+  El informe final usa la misma estética (`body.informe-final`, solo en pantalla; imprimir no cambia).
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.

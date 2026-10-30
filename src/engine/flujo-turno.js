@@ -39,6 +39,7 @@ function nextTurn(){
 function openTurnModal(){
   document.getElementById('turnModalBackdrop').classList.add('show');
   const titulo = document.getElementById('ventanaTitulo');
+  prepararVentanaJunta(null);
   if(titulo) titulo.textContent = (oficinaEsAmbiente ? 'Situación en la oficina' : 'Ventana de decisión') + ' · turno ' + Math.max(turnNumber, 1);
   const btn = document.getElementById('evaluarTurnoBtn');
   if(btn) btn.disabled = true;
@@ -81,6 +82,7 @@ function resetEvaluarTurnoBtn(){
 function mostrarInformeFinal(ending){
   showChrome(false);
   renderEnding(ending);
+  festejarFinal(ending);
 }
 function calculandoImpactoYAvanzar(callbackDespues, shouldShake, efectosParaFlash){
   const overlay = document.getElementById('turnFadeOverlay');

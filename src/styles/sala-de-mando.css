@@ -377,7 +377,7 @@ body.en-partida h1.enciende{ animation-name:smEnciendeLogo; }
   font:900 40px var(--font-ui); letter-spacing:.06em; color:var(--sm-alerta);
   border:6px solid var(--sm-alerta); padding:6px 22px; background:rgba(12,14,17,.9);
   box-shadow:0 0 26px rgba(255,176,0,.3); opacity:0;
-  animation:smGolpe .4s cubic-bezier(.3,1.6,.5,1) forwards, smDesvanece .3s ease-in .65s forwards;
+  animation:smGolpe .4s cubic-bezier(.3,1.6,.5,1) forwards, smDesvanece .25s ease-in .42s forwards;
 }
 @keyframes smGolpe{
   0%{ opacity:0; transform:translate(-50%,-50%) rotate(-9deg) scale(3); }
@@ -442,4 +442,137 @@ body.en-partida .turn-fade-text{ color:var(--sm-alerta); letter-spacing:.14em; }
 @media (prefers-reduced-motion:reduce){
   body.en-partida::after, body.en-partida::before, .turn-modal-backdrop.show .ventana,
   body.en-partida .evaluar-turno-btn:not(:disabled), .kpi-card.malo::before{ animation:none !important; }
+}
+
+/* =========================================================
+   ALARMA, JUNTA Y FINALES (etapa 3, ui/efectos-finales.js)
+   ========================================================= */
+/* En el tablero, la viñeta roja de pantalla completa se cambia por un marco y una cinta */
+body.en-partida .stress-vignette{ display:none; }
+.alarma-marco{ display:none; position:fixed; inset:0; z-index:198; pointer-events:none; }
+body.tension .alarma-marco{ display:block; box-shadow:inset 0 0 0 2px rgba(255,176,0,.45), inset 0 0 40px rgba(255,176,0,.10); }
+body.alarma .alarma-marco{ display:block; animation:smMarcoAlarma 1.2s ease-in-out infinite; }
+@keyframes smMarcoAlarma{
+  0%,100%{ box-shadow:inset 0 0 0 3px rgba(255,90,70,.55), inset 0 0 50px rgba(255,90,70,.18); }
+  50%{ box-shadow:inset 0 0 0 4px rgba(255,90,70,.95), inset 0 0 90px rgba(255,90,70,.34); }
+}
+.alarma-cinta{ display:none; }
+body.alarma .alarma-cinta{
+  display:block; position:absolute; left:0; right:0; bottom:0; height:24px; overflow:hidden;
+  background:var(--sm-malo); color:var(--sm-fondo); border-top:2px solid var(--sm-borde);
+}
+.alarma-cinta span{
+  display:inline-block; white-space:nowrap; padding-left:100%; line-height:22px;
+  font:800 11.5px var(--font-ui); letter-spacing:.12em; animation:smCinta 26s linear infinite;
+}
+@keyframes smCinta{ to{ transform:translateX(-100%); } }
+body.en-partida.alarma{ padding-bottom:56px; }
+/* Parpadeo de interferencia cada pocos segundos mientras dura la alarma */
+body.alarma .wrap{ animation:smInterferencia 7s steps(1) infinite; }
+@keyframes smInterferencia{
+  0%,93%,100%{ transform:none; filter:none; }
+  94%{ transform:translateX(-4px) skewX(-1deg); filter:hue-rotate(-20deg) saturate(1.6); }
+  95.5%{ transform:translateX(3px); filter:none; }
+  97%{ transform:translateX(-2px) skewX(.6deg); filter:brightness(1.3); }
+}
+
+/* Junta directiva: la ventana pasa a dorado */
+.ventana.modo-junta{ border-color:#e8c25a; box-shadow:0 0 0 1px #000,0 40px 90px rgba(0,0,0,.75),0 0 70px rgba(232,194,90,.22); }
+.ventana.modo-junta .ventana-barra{ background:#e8c25a; color:var(--sm-fondo); border-bottom-color:#e8c25a; }
+.veredicto-meta{
+  display:inline-block; margin:2px auto 14px; padding:6px 18px; transform:rotate(-4deg);
+  font:900 28px var(--font-ui); letter-spacing:.08em; border:5px solid currentColor; background:rgba(12,14,17,.85);
+  animation:smVeredicto .45s cubic-bezier(.3,1.6,.5,1) .5s both;
+}
+.veredicto-meta.ok{ color:var(--sm-sano); box-shadow:0 0 26px rgba(61,220,151,.3); }
+.veredicto-meta.no{ color:var(--sm-malo); box-shadow:0 0 26px rgba(255,90,70,.3); }
+@keyframes smVeredicto{ 0%{ opacity:0; transform:rotate(-4deg) scale(3); } 60%{ opacity:1; transform:rotate(-4deg) scale(.92); } 100%{ opacity:1; transform:rotate(-4deg) scale(1); } }
+
+/* Combo de decisiones positivas seguidas */
+.combo-decisiones{
+  display:inline-block; margin:-4px 0 12px; padding:3px 10px; font:400 13px var(--font-display);
+  color:var(--sm-fondo); background:var(--sm-sano); box-shadow:3px 3px 0 var(--sm-borde);
+  animation:smCombo .5s cubic-bezier(.3,1.8,.5,1) .3s both;
+}
+@keyframes smCombo{ 0%{ opacity:0; transform:scale(.3) rotate(8deg); } 100%{ opacity:1; transform:scale(1) rotate(-2deg); } }
+
+/* Capa de efectos de pantalla completa */
+.efecto-capa{ position:fixed; inset:0; z-index:320; pointer-events:none; overflow:hidden; }
+.efecto-capa.quiebra{ animation:smRojo .9s ease-out; }
+@keyframes smRojo{ 0%{ background:rgba(255,90,70,.45); } 100%{ background:transparent; } }
+.grietas{ position:absolute; inset:0; width:100%; height:100%; }
+.grietas polyline{
+  fill:none; stroke:#f4efe4; stroke-width:2.2; stroke-linejoin:bevel; filter:drop-shadow(0 0 3px rgba(255,255,255,.7));
+  stroke-dasharray:1200; stroke-dashoffset:1200; animation:smGrieta .5s ease-out forwards;
+}
+@keyframes smGrieta{ to{ stroke-dashoffset:0; } }
+body.apagon .wrap{ animation:smApagon .8s cubic-bezier(.6,0,.4,1) forwards; }
+@keyframes smApagon{
+  0%{ transform:none; filter:none; }
+  45%{ transform:scaleY(.006); filter:brightness(5); }
+  100%{ transform:scaleY(.006) scaleX(0); filter:brightness(5); opacity:0; }
+}
+.cartel-mision{
+  position:absolute; left:50%; top:42%; transform:translate(-50%,-50%); white-space:nowrap;
+  font:400 46px var(--font-display); padding:16px 26px; background:rgba(12,14,17,.88);
+  border:4px solid currentColor; animation:smCartel 2.6s ease-in-out forwards;
+}
+.cartel-mision.ok{ color:var(--sm-sano); text-shadow:4px 4px 0 #0a3d27; box-shadow:0 0 40px rgba(61,220,151,.35); }
+.cartel-mision.no{ color:var(--sm-malo); text-shadow:3px 0 rgba(0,229,255,.5),-3px 0 rgba(255,45,85,.6); box-shadow:0 0 40px rgba(255,90,70,.35); }
+@keyframes smCartel{
+  0%{ opacity:0; transform:translate(-50%,-50%) scale(2.4); }
+  14%{ opacity:1; transform:translate(-50%,-50%) scale(.95); }
+  20%,78%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+  100%{ opacity:0; transform:translate(-50%,-50%) scale(1.06); }
+}
+.moneda{
+  position:absolute; top:-30px; width:18px; height:18px; border-radius:50%;
+  background:#ffcc33; border:3px solid #b8860b; box-shadow:0 0 8px rgba(255,204,51,.6);
+  animation-name:smCaer, smGirar; animation-timing-function:linear, ease-in-out;
+  animation-iteration-count:1, infinite; animation-fill-mode:forwards, none;
+}
+.moneda::after{ content:'$'; position:absolute; inset:0; display:grid; place-items:center; font:900 9px var(--font-ui); color:#8a6210; }
+@keyframes smCaer{ to{ transform:translateY(calc(100vh + 60px)); } }
+@keyframes smGirar{ 50%{ scale:.2 1; } }
+
+/* Informe final con la misma estética (solo en pantalla; la impresión conserva su hoja) */
+@media screen{
+  body.informe-final{
+    background-color:var(--sm-fondo);
+    background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
+    background-size:28px 28px;
+  }
+  body.informe-final .eyebrow, body.informe-final .subtitle, body.informe-final .meta-junta-line{ display:none !important; }
+  body.informe-final h1{
+    display:inline-block; font-family:var(--font-narr) !important; font-weight:900; font-size:26px; line-height:1.15;
+    background:var(--sm-borde); color:var(--sm-fondo); padding:2px 12px 3px; box-shadow:5px 5px 0 var(--sm-malo); transform:rotate(-1.5deg);
+  }
+  body.informe-final .ending-card{
+    max-width:980px; margin:0 auto; background:var(--sm-panel); border:2px solid var(--sm-borde);
+    border-radius:0 !important; box-shadow:8px 8px 0 var(--sm-neutro) !important; padding:30px 28px;
+  }
+  body.informe-final.victoria .ending-card{ box-shadow:8px 8px 0 var(--sm-sano) !important; }
+  body.informe-final.derrota .ending-card{ box-shadow:8px 8px 0 var(--sm-malo) !important; }
+  body.informe-final.derrota .ending-card::before{
+    content:''; position:absolute; left:0; right:0; top:0; height:6px;
+    background:repeating-linear-gradient(-45deg,var(--sm-malo) 0 8px,var(--sm-panel) 8px 16px);
+  }
+  body.informe-final .rank-badge{ font-size:46px; text-shadow:4px 4px 0 rgba(0,0,0,.6); }
+  body.informe-final .ending-badge{ font-size:18px; }
+  body.informe-final .committee-box, body.informe-final .logros-box, body.informe-final .chart-box,
+  body.informe-final .titulo-gerencial{ border-radius:0 !important; box-shadow:none !important; }
+  body.informe-final .committee-box{ background:var(--sm-panel2); border-left-width:4px; }
+  body.informe-final .titulo-gerencial{ background:rgba(255,176,0,.04); border:2px dashed var(--sm-alerta); }
+  body.informe-final .chart-box{ background:#121418; border:2px solid var(--sm-neutro); }
+  body.informe-final .val-num{ font-family:var(--font-ui); font-weight:800; font-size:20px; color:var(--sm-alerta); }
+  body.informe-final .restart-btn{
+    border-radius:0 !important; border:2px solid var(--sm-borde); color:var(--sm-borde); background:var(--sm-panel2);
+    box-shadow:4px 4px 0 var(--sm-neutro); text-transform:uppercase; letter-spacing:.06em !important;
+  }
+  body.informe-final .restart-btn:hover{ border-color:var(--sm-alerta); color:var(--sm-alerta); transform:translate(-2px,-2px); }
+  body.informe-final .restart-btn.primary{ background:var(--sm-sano); color:var(--sm-fondo); box-shadow:4px 4px 0 var(--sm-borde); }
+  body.informe-final .restart-btn.primary:hover{ color:var(--sm-fondo); background:#5ff0b1; }
+}
+@media (prefers-reduced-motion:reduce){
+  body.alarma .wrap, body.alarma .alarma-marco, .alarma-cinta span{ animation:none !important; }
 }

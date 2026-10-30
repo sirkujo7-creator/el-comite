@@ -17,6 +17,7 @@ function reducirMovimiento(){
 
 // Los paneles del tablero se encienden en cascada, como monitores de una sala de control.
 function encenderTablero(){
+  reiniciarCombo();
   if(reducirMovimiento()) return;
   setTimeout(()=>{
     const paneles = [].concat(
@@ -67,7 +68,7 @@ function selloOrdenEjecutada(){
   const destello = document.getElementById('destelloPantalla');
   if(destello){ destello.classList.remove('on'); void destello.offsetWidth; destello.classList.add('on'); }
   setTimeout(()=>{ ventana.classList.remove('sacude'); }, 450);
-  setTimeout(()=>{ if(sello.parentNode) sello.parentNode.removeChild(sello); }, 1000);
+  setTimeout(()=>{ if(sello.parentNode) sello.parentNode.removeChild(sello); }, 720);
 }
 
 // Partículas de píxel que salen de una tarjeta: suben si el cambio es sano, caen si no.

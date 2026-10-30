@@ -9,9 +9,11 @@ document.getElementById('evaluarTurnoBtn').addEventListener('click', ()=>{
   if(pendingEndingResult){
     const ending = pendingEndingResult;
     pendingEndingResult = null;
-    reproducirSecuencia(GUION_INFORME_FINAL, ()=>{
+    const informe = ()=>reproducirSecuencia(GUION_INFORME_FINAL, ()=>{
       mostrarInformeFinal(ending);
     });
+    // La quiebra se anuncia con grietas y apagón antes del informe.
+    if(ending.tipoFinal === 'derrota') secuenciaQuiebra(informe); else informe();
     return;
   }
   nextTurn();

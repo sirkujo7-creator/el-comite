@@ -78,6 +78,7 @@ function renderCase(c){
   `;
 
   renderChoices(c);
+  prepararVentanaJunta(c);
   descifrarTitulo(g.querySelector('.case-title'));
 
   if(c.investigacion){
@@ -174,6 +175,7 @@ function renderResultScreen(c, ch, efectosAplicados, stampClass, stampText, bala
     <div class="result-card ${stampClass} screen-fade-in">
       <div class="result-recordatorio">Elegiste: ${ch.informado ? '🔍 ' : ''}${ch.texto}</div>
       <div class="stamp result-stamp ${stampClass}">${stampText}</div>
+      ${comboHTML(stampClass)}
       <p class="consequence-text">${ch.consecuencia}</p>
       ${balanceHtml}
       <button class="explain-toggle" id="explainToggle">ⓘ ¿Por qué tuvo este efecto?</button>
@@ -278,6 +280,7 @@ function renderMetaScreen(datos, callbackContinuar){
     <div class="result-card meta-screen screen-fade-in">
       <img class="meta-screen-img" src="${COMITE_IMG_BASE64}" alt="La Junta Directiva de El Comité" />
       <div class="result-recordatorio">EL COMITÉ SE REÚNE</div>
+      ${veredictoMetaHTML(datos)}
       <p class="consequence-text">${texto}</p>
       ${mandatoHtml}
       <div><button class="continue-btn" id="metaContinueBtn">Continuar →</button></div>

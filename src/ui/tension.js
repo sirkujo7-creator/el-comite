@@ -3,8 +3,11 @@
    ========================================================= */
 function actualizarVineta(){
   const vig = document.getElementById('stressVignette');
+  actualizarAlarma();
   if(!vig || !sectorActual) return;
   vig.classList.remove('stress-high','stress-critical');
+  // Fuera del tablero (informe final, pantallas de inicio) no hay viñeta de estrés.
+  if(!document.body.classList.contains('en-partida')) return;
   const cajaCritica = state.caja <= 5;
   const cajaBaja = state.caja <= 15;
   const waccCritico = state.wacc >= 20;

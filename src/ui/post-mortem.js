@@ -24,7 +24,7 @@ function renderDeathChartJS(){
   const scores = pts.map(p=>p.score);
   const cajas = pts.map(p=>p.caja);
   const lastScore = scores[scores.length-1];
-  const lineColor = lastScore < 20 ? cssVar('--danger') : (lastScore > 70 ? cssVar('--teal') : cssVar('--gold'));
+  const lineColor = lastScore < 20 ? SALA.malo : (lastScore > 70 ? SALA.sano : SALA.alerta);
   deathChartInstance = new Chart(canvas.getContext('2d'), {
     type:'line',
     data:{
@@ -38,7 +38,7 @@ function renderDeathChartJS(){
         pointRadius:3,
         pointHoverRadius:6,
         pointBackgroundColor:lineColor,
-        pointBorderColor:cssVar('--bg-panel'),
+        pointBorderColor:'#0c0e11',
         tension:0.3,
         fill:true
       }]
@@ -49,17 +49,17 @@ function renderDeathChartJS(){
       animation:{duration:1200, easing:'easeOutQuart'},
       interaction:{mode:'index', intersect:false},
       scales:{
-        x:{grid:{color:cssVar('--line')}, ticks:{color:cssVar('--ink-muted'), font:{family:"'IBM Plex Mono', monospace", size:9}, maxRotation:0, autoSkip:true, maxTicksLimit:7}},
-        y:{grid:{color:cssVar('--line')}, ticks:{color:cssVar('--ink-muted'), font:{family:"'IBM Plex Mono', monospace", size:9}}}
+        x:{grid:{color:SALA.rejilla}, ticks:{color:SALA.texto, font:{family:"'IBM Plex Mono', monospace", size:9}, maxRotation:0, autoSkip:true, maxTicksLimit:7}},
+        y:{grid:{color:SALA.rejilla}, ticks:{color:SALA.texto, font:{family:"'IBM Plex Mono', monospace", size:9}}}
       },
       plugins:{
         legend:{display:false},
         tooltip:{
-          backgroundColor:cssVar('--bg-raised'),
-          titleColor:cssVar('--gold'),
-          bodyColor:cssVar('--ink'),
-          borderColor:cssVar('--gold'),
-          borderWidth:1,
+          backgroundColor:'#0c0e11',
+          titleColor:SALA.alerta,
+          bodyColor:SALA.hueso,
+          borderColor:SALA.hueso,
+          borderWidth:2, cornerRadius:0,
           padding:10,
           titleFont:{family:"'IBM Plex Mono', monospace", size:11},
           bodyFont:{family:"'IBM Plex Sans', sans-serif", size:12},
