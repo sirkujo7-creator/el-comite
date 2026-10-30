@@ -18,6 +18,7 @@ function reducirMovimiento(){
 // Los paneles del tablero se encienden en cascada, como monitores de una sala de control.
 function encenderTablero(){
   reiniciarCombo();
+  sonidoEncendidoTablero();
   if(reducirMovimiento()) return;
   setTimeout(()=>{
     const paneles = [].concat(
@@ -41,6 +42,7 @@ function descifrarTitulo(el){
   const original = el.innerHTML, texto = el.textContent;
   if(!texto || (el.children && el.children.length)) return;
   const signos = '▓▒░#$%&@01';
+  sonidoDescifrar();
   const dur = 800, t0 = ahoraVisual();
   const paso = ()=>{
     if(!el.isConnected && el.isConnected !== undefined) return;
@@ -63,6 +65,7 @@ function selloOrdenEjecutada(){
   const sello = document.createElement('div');
   sello.className = 'sello-orden';
   sello.textContent = 'ORDEN EJECUTADA';
+  sonidoSello();
   ventana.appendChild(sello);
   ventana.classList.remove('sacude'); void ventana.offsetWidth; ventana.classList.add('sacude');
   const destello = document.getElementById('destelloPantalla');
@@ -127,6 +130,7 @@ const COLOR_IMPACTO = { bueno:'#3ddc97', malo:'#ff5a46', inversion:'#D98847' };
 // Se llama desde flashKpiCards por cada indicador que cambió con la decisión.
 function impactoEnTarjeta(card, key, delta, tipo, esRelacional){
   const color = COLOR_IMPACTO[tipo] || COLOR_IMPACTO.bueno;
+  sonidoImpacto(tipo);
   const sube = tipo === 'bueno';
   particulasDesde(card, color, sube, esRelacional ? 10 : 16);
   if(esRelacional) return;

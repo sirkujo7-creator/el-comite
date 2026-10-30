@@ -114,7 +114,7 @@ function renderChoices(c){
 
   mostrarFranjaKpi();
   wrap.querySelectorAll('.choice-btn').forEach((btn,idx)=>{
-    btn.addEventListener('mouseenter', ()=>pistaDeOpcion(choices[idx]));
+    btn.addEventListener('mouseenter', ()=>{ pistaDeOpcion(choices[idx]); sonidoOpcion(idx); });
     btn.addEventListener('focus', ()=>pistaDeOpcion(choices[idx]));
     btn.addEventListener('mouseleave', limpiarPistaKpi);
     btn.addEventListener('blur', limpiarPistaKpi);

@@ -37,7 +37,9 @@ function nextTurn(){
 }
 
 function openTurnModal(){
-  document.getElementById('turnModalBackdrop').classList.add('show');
+  const backdrop = document.getElementById('turnModalBackdrop');
+  if(!backdrop.classList.contains('show')) sonidoVentana();
+  backdrop.classList.add('show');
   const titulo = document.getElementById('ventanaTitulo');
   prepararVentanaJunta(null);
   if(titulo) titulo.textContent = (oficinaEsAmbiente ? 'Situación en la oficina' : 'Ventana de decisión') + ' · turno ' + Math.max(turnNumber, 1);
@@ -89,6 +91,7 @@ function calculandoImpactoYAvanzar(callbackDespues, shouldShake, efectosParaFlas
   const text = document.getElementById('turnFadeText');
   if(text) text.textContent = 'CALCULANDO IMPACTO — TURNO ' + turnNumber + '...';
   if(overlay) overlay.classList.add('show');
+  sonidoCalculando();
   setTimeout(()=>{
     if(callbackDespues) callbackDespues();
     setTimeout(()=>{

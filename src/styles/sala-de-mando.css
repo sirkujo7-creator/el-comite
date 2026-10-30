@@ -576,3 +576,28 @@ body.apagon .wrap{ animation:smApagon .8s cubic-bezier(.6,0,.4,1) forwards; }
 @media (prefers-reduced-motion:reduce){
   body.alarma .wrap, body.alarma .alarma-marco, .alarma-cinta span{ animation:none !important; }
 }
+
+/* =========================================================
+   CELULAR — ajuste fino de efectos y pantallas (etapa 4)
+   ========================================================= */
+@media (max-width:720px){
+  .sello-orden{ font-size:clamp(20px,7vw,40px); border-width:4px; padding:4px 12px; }
+  .cartel-mision{ font-size:clamp(14px,5vw,46px); padding:10px 12px; border-width:3px; }
+  .veredicto-meta{ font-size:clamp(18px,6vw,28px); border-width:4px; }
+  .combo-decisiones{ font-size:11px; }
+  .salto-delta{ font-size:13px; }
+  body.alarma .alarma-cinta{ height:20px; } .alarma-cinta span{ line-height:18px; font-size:10px; }
+  .ventana-barra{ font-size:9.5px; letter-spacing:.08em; padding:5px 8px; }
+  .ventana-barra i{ display:none; }
+  .ventana .case-eyebrow{ font-size:9.5px; }
+  .ventana .choice-btn{ padding:11px 12px; }
+  .ventana .choice-letter{ flex:0 0 26px; width:26px; height:26px; }
+  body.informe-final{ padding:12px 10px 32px; }
+  body.informe-final .ending-card{ padding:20px 14px; box-shadow:5px 5px 0 var(--sm-neutro) !important; }
+  body.informe-final.victoria .ending-card{ box-shadow:5px 5px 0 var(--sm-sano) !important; }
+  body.informe-final.derrota .ending-card{ box-shadow:5px 5px 0 var(--sm-malo) !important; }
+  body.informe-final .rank-badge{ font-size:32px; }
+  body.informe-final .ending-badge{ font-size:14px; line-height:1.6; }
+  body.informe-final .ending-btns{ display:flex; flex-direction:column; gap:10px; }
+  body.informe-final .restart-btn{ width:100%; }
+}

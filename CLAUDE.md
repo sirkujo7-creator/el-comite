@@ -169,7 +169,7 @@ tests/                               arnés + pruebas (npm test)
   marcada; EBITDA en barras con el color de lo sano + deuda en línea y razón deuda/EBITDA. Las
   decisiones se abren en una ventana (`.ventana`, borde ámbar, sin borde blanco) sobre el tablero
   difuminado, con la franja de indicadores dentro. Capa CRT suave (líneas finas). Plan acordado:
-  1) estilo ✅, 2) efectos del turno ✅, 3) alarma, junta y finales ✅, 4) sonidos sincronizados y celular;
+  1) estilo ✅, 2) efectos del turno ✅, 3) alarma, junta y finales ✅, 4) sonidos sincronizados y celular ✅;
   video a Juan antes de publicar cada etapa.
 - Efectos del turno (etapa 2, `ui/efectos-turno.js` + final de sala-de-mando.css): encendido en
   cascada del tablero al empezar, ventana que se enciende como monitor, título del caso que se
@@ -188,8 +188,16 @@ tests/                               arnés + pruebas (npm test)
   positivos seguidos. Quiebra: grietas, sacudida y apagón de monitor antes del informe; informe con
   "MISIÓN FALLIDA". Cierre: "MISIÓN CUMPLIDA" y lluvia de monedas (más cuanto mejor el rango).
   El informe final usa la misma estética (`body.informe-final`, solo en pantalla; imprimir no cambia).
+- Sonidos de la Sala de mando (etapa 4, `audio/sonidos-sala.js`): cada efecto tiene su sonido
+  sincronizado — encendido, ventana, título descifrado, clic suave al pasar por opciones, golpe del
+  sello (cuando toca la ventana), bips de "Calculando impacto" (uno por bloque), impacto en las
+  tarjetas (un sonido por decisión según lo que predomine + tic del conteo), sirena al ENTRAR en
+  alarma (no en bucle), mazo y fanfarria/golpe en el veredicto de la junta, arpegio del combo,
+  vidrio y apagón en la quiebra, fanfarria con monedas o caída al final. Volúmenes medidos: efectos
+  de fondo 0,05–0,2 de pico, eventos 0,3–0,4 (como el resultado y la junta). Usan `azarVisual()`.
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
+  Carteles, sello y veredicto se ajustan al ancho (`clamp` con vw); el informe final empieza arriba.
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
 - Música de fondo (oct. 2026, `audio/musica.js`, opción B elegida por Juan: generada, no grabada).
   Un estilo por sector + "menu": AgroVerde bambuco 3/4 con guitarra; Ganadería joropo con arpa,

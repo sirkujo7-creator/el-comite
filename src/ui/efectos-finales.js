@@ -28,7 +28,9 @@ function nivelAlarma(){
 function actualizarAlarma(){
   const enPartida = document.body.classList.contains('en-partida');
   const a = enPartida ? nivelAlarma() : {nivel:null, motivos:[]};
+  const yaEnAlarma = document.body.classList.contains('alarma');
   document.body.classList.toggle('alarma', a.nivel === 'critico');
+  if(a.nivel === 'critico' && !yaEnAlarma) sonidoAlarma();
   document.body.classList.toggle('tension', a.nivel === 'tension');
   const texto = document.getElementById('alarmaTexto');
   if(texto && a.nivel === 'critico'){
@@ -59,6 +61,7 @@ function prepararVentanaJunta(c){
 }
 function veredictoMetaHTML(datos){
   if(!datos || !datos.metaAnterior) return '';
+  sonidoVeredicto(!!datos.cumplida);
   return datos.cumplida
     ? '<div class="veredicto-meta ok">META CUMPLIDA</div>'
     : '<div class="veredicto-meta no">META NO CUMPLIDA</div>';
@@ -69,6 +72,7 @@ let comboDecisiones = 0;
 function reiniciarCombo(){ comboDecisiones = 0; }
 function comboHTML(stampClass){
   comboDecisiones = stampClass === 'pos' ? comboDecisiones + 1 : 0;
+  if(comboDecisiones >= 2) sonidoCombo(comboDecisiones);
   return comboDecisiones >= 2 ? `<div class="combo-decisiones">COMBO ×${comboDecisiones}</div>` : '';
 }
 
@@ -88,6 +92,7 @@ function grietasSVG(){
 function secuenciaQuiebra(alTerminar){
   const capa = document.getElementById('efectoCapa');
   if(!capa || reducirMovimiento()){ alTerminar(); return; }
+  sonidoQuiebra();
   capa.innerHTML = grietasSVG();
   capa.className = 'efecto-capa quiebra';
   activarShakeSiAplica(true);
@@ -124,11 +129,16 @@ function lluviaMonedas(cantidad){
 function festejarFinal(ending){
   document.body.classList.remove('apagon');
   document.body.classList.add('informe-final', ending.tipoFinal === 'cierre' ? 'victoria' : 'derrota');
+  // El informe empieza arriba (en el celular el tablero podía haber quedado desplazado).
+  try{ window.scrollTo(0, 0); }catch(e){}
   if(ending.tipoFinal === 'cierre'){
+    const monedas = {S:90, A:60, B:35, C:15}[ending.rango] || 20;
     cartelMision('MISIÓN CUMPLIDA', 'ok');
-    lluviaMonedas({S:90, A:60, B:35, C:15}[ending.rango] || 20);
+    lluviaMonedas(monedas);
+    sonidoFinal(true, monedas);
   } else {
     cartelMision('MISIÓN FALLIDA', 'no');
+    sonidoFinal(false, 0);
   }
 }
 function limpiarFinal(){
