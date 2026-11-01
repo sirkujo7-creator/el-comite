@@ -65,7 +65,7 @@ function renderPantallaCarrera(){
 function renderEnding(ending){
   const g = document.getElementById('game');
   const esCierre = ending.tipoFinal === 'cierre';
-  const xpGanado = 10 + turnNumber + (esCierre ? {S:40,A:25,B:12,C:5}[ending.rango] : 0);
+  const xpGanado = 10 + turnNumber + (esCierre ? ({S:40,A:25,B:12,C:5,D:0}[ending.rango] || 0) : 0);
   sessionXP += xpGanado;
   historialPartidas.unshift({
     fecha: new Date().toLocaleDateString('es-CO'),
@@ -90,6 +90,7 @@ function renderEnding(ending){
   const tg = tituloGerencial();
   const recordPersonal = detectarRecordPersonal(ending);
   const rankHtml = esCierre ? `
+    <div class="veredicto-rango ${VEREDICTO_RANGO[ending.rango] || ''}">${VEREDICTO_TEXTO[VEREDICTO_RANGO[ending.rango]] || ''}</div>
     <div class="rank-badge" style="color:${rankColor}">Rango ${ending.rango}</div>
     <div class="ending-badge" style="${ending.esFinalOculto?'color:var(--evento);':''}">${ending.badge}${ending.esFinalOculto ? ' <span style="font-size:11px; opacity:0.7;">· final oculto descubierto</span>' : ''}</div>
     ${ending.arquetipo ? `<div class="arquetipo-badge">${ending.arquetipo.nombre}</div><p class="arquetipo-desc">${ending.arquetipo.desc}</p>` : ''}

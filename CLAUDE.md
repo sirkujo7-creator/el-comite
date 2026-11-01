@@ -230,6 +230,10 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   anterior (legado), espejo y corbata (perfil), la imagen de la junta. Informe: calendario tachado,
   sala de juntas a puerta cerrada, la curva real de caja de la partida, el veredicto ante la junta.
   Entran con destello, se acercan despacio, viñeta y grano.
+- Escala de rangos (nov. 2026, decisión de Juan): S y A = victoria ("MISIÓN CUMPLIDA" y monedas),
+  B = resultado regular ("AÑO A MEDIAS", sin fiesta), C y D = desastre ("DESASTRE"; la quiebra sigue
+  siendo "MISIÓN FALLIDA"). Nuevo rango D (`cierreAnioFiscal`): la empresa vale menos del 40 % de su
+  valor inicial. `VEREDICTO_RANGO` lo traduce y el informe lo muestra sobre el rango.
 - Cinemáticas en silencio absoluto (`silencioCinematica`): música, drones y tecleo callan mientras
   dura la secuencia.
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón

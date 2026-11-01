@@ -27,6 +27,9 @@ function detectarArquetipo(){
   return null;
 }
 
+// Cómo se lee cada rango (decisión de Juan, nov. 2026): S y A se ganan, B es regular, C y D son un desastre.
+const VEREDICTO_RANGO = { S:'victoria', A:'victoria', B:'regular', C:'desastre', D:'desastre' };
+const VEREDICTO_TEXTO = { victoria:'Victoria', regular:'Resultado regular', desastre:'Desastre' };
 function cierreAnioFiscal(){
   const val = Math.round((state.ebitda*4 - state.deuda)*10)/10;
   const ini = sectorActual.kpiInicial;
@@ -42,9 +45,12 @@ function cierreAnioFiscal(){
   } else if(ratio>=0.7){
     rango='B'; badge='Resultado mixto'; color='neu';
     desc="Sobreviviste el año fiscal completo sin destruir ni crear demasiado valor. Algunas decisiones fueron sólidas, otras reactivas — el balance final quedó prácticamente donde empezó.";
-  } else {
-    rango='C'; badge='Valor destruido'; color='neu';
+  } else if(ratio>=0.4){
+    rango='C'; badge='Valor destruido'; color='neg';
     desc="Sobreviviste los 20 turnos sin quebrar, pero la empresa vale menos de lo que valía al empezar el año fiscal. Sobrevivir no es lo mismo que gerenciar bien.";
+  } else {
+    rango='D'; badge='Empresa en ruinas'; color='neg';
+    desc="La empresa sigue abierta, pero vale menos de la mitad de lo que valía al empezar: el EBITDA ya no sostiene la deuda. Técnicamente no quebraste; en la práctica, la junta ya está buscando a tu reemplazo.";
   }
 
   let esFinalOculto = false;

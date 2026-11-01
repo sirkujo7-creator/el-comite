@@ -129,19 +129,25 @@ function lluviaMonedas(cantidad){
 }
 function festejarFinal(ending){
   document.body.classList.remove('apagon');
-  document.body.classList.add('informe-final', ending.tipoFinal === 'cierre' ? 'victoria' : 'derrota');
+  // Victoria (S, A): misión cumplida y monedas. Regular (B): sin fiesta. Desastre (C, D) o quiebra: misión fallida.
+  const veredicto = ending.tipoFinal === 'cierre' ? (VEREDICTO_RANGO[ending.rango] || 'regular') : 'quiebra';
+  const clase = veredicto === 'victoria' ? 'victoria' : veredicto === 'regular' ? 'regular' : 'derrota';
+  document.body.classList.add('informe-final', clase);
   // El informe empieza arriba (en el celular el tablero podía haber quedado desplazado).
   try{ window.scrollTo(0, 0); }catch(e){}
-  if(ending.tipoFinal === 'cierre'){
-    const monedas = {S:90, A:60, B:35, C:15}[ending.rango] || 20;
+  if(veredicto === 'victoria'){
+    const monedas = {S:90, A:60}[ending.rango] || 40;
     cartelMision('MISIÓN CUMPLIDA', 'ok');
     lluviaMonedas(monedas);
     sonidoFinal(true, monedas);
+  } else if(veredicto === 'regular'){
+    cartelMision('AÑO A MEDIAS', 'medio');
+    sonidoResultado('neu');
   } else {
-    cartelMision('MISIÓN FALLIDA', 'no');
+    cartelMision(veredicto === 'quiebra' ? 'MISIÓN FALLIDA' : 'DESASTRE', 'no');
     sonidoFinal(false, 0);
   }
 }
 function limpiarFinal(){
-  document.body.classList.remove('informe-final', 'victoria', 'derrota', 'apagon', 'alarma', 'tension');
+  document.body.classList.remove('informe-final', 'victoria', 'regular', 'derrota', 'apagon', 'alarma', 'tension');
 }

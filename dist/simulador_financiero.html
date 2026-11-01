@@ -1957,6 +1957,17 @@ body.apagon .wrap{ animation:smApagon .8s cubic-bezier(.6,0,.4,1) forwards; }
 @media (max-width:720px){
   .ventana .oficina-botones, .ventana .impresora-intro, .ventana .pantalla-intro{ grid-template-columns:1fr; }
 }
+
+/* Escala de rangos (nov. 2026): S/A victoria, B regular, C/D desastre */
+.cartel-mision.medio{ color:var(--sm-alerta); text-shadow:3px 3px 0 #5a3d00; box-shadow:0 0 40px rgba(255,176,0,.3); }
+@media screen{
+  body.informe-final.regular .ending-card{ box-shadow:8px 8px 0 var(--sm-alerta) !important; }
+  .veredicto-rango{ display:inline-block; margin:2px 0 6px; padding:4px 12px; font:900 12px var(--font-ui); letter-spacing:.16em; text-transform:uppercase; color:var(--sm-fondo); }
+  .veredicto-rango.victoria{ background:var(--sm-sano); }
+  .veredicto-rango.regular{ background:var(--sm-alerta); }
+  .veredicto-rango.desastre{ background:var(--sm-malo); }
+}
+@media (max-width:720px){ body.informe-final.regular .ending-card{ box-shadow:5px 5px 0 var(--sm-alerta) !important; } }
 </style>
 </head>
 <body>
@@ -4945,6 +4956,9 @@ function detectarArquetipo(){
   return null;
 }
 
+// Cómo se lee cada rango (decisión de Juan, nov. 2026): S y A se ganan, B es regular, C y D son un desastre.
+const VEREDICTO_RANGO = { S:'victoria', A:'victoria', B:'regular', C:'desastre', D:'desastre' };
+const VEREDICTO_TEXTO = { victoria:'Victoria', regular:'Resultado regular', desastre:'Desastre' };
 function cierreAnioFiscal(){
   const val = Math.round((state.ebitda*4 - state.deuda)*10)/10;
   const ini = sectorActual.kpiInicial;
@@ -4960,9 +4974,12 @@ function cierreAnioFiscal(){
   } else if(ratio>=0.7){
     rango='B'; badge='Resultado mixto'; color='neu';
     desc="Sobreviviste el año fiscal completo sin destruir ni crear demasiado valor. Algunas decisiones fueron sólidas, otras reactivas — el balance final quedó prácticamente donde empezó.";
-  } else {
-    rango='C'; badge='Valor destruido'; color='neu';
+  } else if(ratio>=0.4){
+    rango='C'; badge='Valor destruido'; color='neg';
     desc="Sobreviviste los 20 turnos sin quebrar, pero la empresa vale menos de lo que valía al empezar el año fiscal. Sobrevivir no es lo mismo que gerenciar bien.";
+  } else {
+    rango='D'; badge='Empresa en ruinas'; color='neg';
+    desc="La empresa sigue abierta, pero vale menos de la mitad de lo que valía al empezar: el EBITDA ya no sostiene la deuda. Técnicamente no quebraste; en la práctica, la junta ya está buscando a tu reemplazo.";
   }
 
   let esFinalOculto = false;
@@ -9192,21 +9209,27 @@ function lluviaMonedas(cantidad){
 }
 function festejarFinal(ending){
   document.body.classList.remove('apagon');
-  document.body.classList.add('informe-final', ending.tipoFinal === 'cierre' ? 'victoria' : 'derrota');
+  // Victoria (S, A): misión cumplida y monedas. Regular (B): sin fiesta. Desastre (C, D) o quiebra: misión fallida.
+  const veredicto = ending.tipoFinal === 'cierre' ? (VEREDICTO_RANGO[ending.rango] || 'regular') : 'quiebra';
+  const clase = veredicto === 'victoria' ? 'victoria' : veredicto === 'regular' ? 'regular' : 'derrota';
+  document.body.classList.add('informe-final', clase);
   // El informe empieza arriba (en el celular el tablero podía haber quedado desplazado).
   try{ window.scrollTo(0, 0); }catch(e){}
-  if(ending.tipoFinal === 'cierre'){
-    const monedas = {S:90, A:60, B:35, C:15}[ending.rango] || 20;
+  if(veredicto === 'victoria'){
+    const monedas = {S:90, A:60}[ending.rango] || 40;
     cartelMision('MISIÓN CUMPLIDA', 'ok');
     lluviaMonedas(monedas);
     sonidoFinal(true, monedas);
+  } else if(veredicto === 'regular'){
+    cartelMision('AÑO A MEDIAS', 'medio');
+    sonidoResultado('neu');
   } else {
-    cartelMision('MISIÓN FALLIDA', 'no');
+    cartelMision(veredicto === 'quiebra' ? 'MISIÓN FALLIDA' : 'DESASTRE', 'no');
     sonidoFinal(false, 0);
   }
 }
 function limpiarFinal(){
-  document.body.classList.remove('informe-final', 'victoria', 'derrota', 'apagon', 'alarma', 'tension');
+  document.body.classList.remove('informe-final', 'victoria', 'regular', 'derrota', 'apagon', 'alarma', 'tension');
 }
 function chipsDeEfectos(efectos){
   if(!efectos) return '';
@@ -9762,7 +9785,7 @@ function renderPantallaCarrera(){
 function renderEnding(ending){
   const g = document.getElementById('game');
   const esCierre = ending.tipoFinal === 'cierre';
-  const xpGanado = 10 + turnNumber + (esCierre ? {S:40,A:25,B:12,C:5}[ending.rango] : 0);
+  const xpGanado = 10 + turnNumber + (esCierre ? ({S:40,A:25,B:12,C:5,D:0}[ending.rango] || 0) : 0);
   sessionXP += xpGanado;
   historialPartidas.unshift({
     fecha: new Date().toLocaleDateString('es-CO'),
@@ -9787,6 +9810,7 @@ function renderEnding(ending){
   const tg = tituloGerencial();
   const recordPersonal = detectarRecordPersonal(ending);
   const rankHtml = esCierre ? `
+    <div class="veredicto-rango ${VEREDICTO_RANGO[ending.rango] || ''}">${VEREDICTO_TEXTO[VEREDICTO_RANGO[ending.rango]] || ''}</div>
     <div class="rank-badge" style="color:${rankColor}">Rango ${ending.rango}</div>
     <div class="ending-badge" style="${ending.esFinalOculto?'color:var(--evento);':''}">${ending.badge}${ending.esFinalOculto ? ' <span style="font-size:11px; opacity:0.7;">· final oculto descubierto</span>' : ''}</div>
     ${ending.arquetipo ? `<div class="arquetipo-badge">${ending.arquetipo.nombre}</div><p class="arquetipo-desc">${ending.arquetipo.desc}</p>` : ''}

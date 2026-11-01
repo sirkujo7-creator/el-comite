@@ -672,3 +672,14 @@ body.apagon .wrap{ animation:smApagon .8s cubic-bezier(.6,0,.4,1) forwards; }
 @media (max-width:720px){
   .ventana .oficina-botones, .ventana .impresora-intro, .ventana .pantalla-intro{ grid-template-columns:1fr; }
 }
+
+/* Escala de rangos (nov. 2026): S/A victoria, B regular, C/D desastre */
+.cartel-mision.medio{ color:var(--sm-alerta); text-shadow:3px 3px 0 #5a3d00; box-shadow:0 0 40px rgba(255,176,0,.3); }
+@media screen{
+  body.informe-final.regular .ending-card{ box-shadow:8px 8px 0 var(--sm-alerta) !important; }
+  .veredicto-rango{ display:inline-block; margin:2px 0 6px; padding:4px 12px; font:900 12px var(--font-ui); letter-spacing:.16em; text-transform:uppercase; color:var(--sm-fondo); }
+  .veredicto-rango.victoria{ background:var(--sm-sano); }
+  .veredicto-rango.regular{ background:var(--sm-alerta); }
+  .veredicto-rango.desastre{ background:var(--sm-malo); }
+}
+@media (max-width:720px){ body.informe-final.regular .ending-card{ box-shadow:5px 5px 0 var(--sm-alerta) !important; } }
