@@ -5,7 +5,8 @@
    lento, viñeta y grano: styles/cinematica.css). Sin imagen, la cinemática es solo texto.
    Nov. 2026: se retiraron las ilustraciones SVG (a Juan no le gustaron). Las nuevas las genera
    Juan en Canva con los textos de docs/escenas-canva.md; al llegar, se agregan a assets/escenas/
-   y aquí, una línea por escena:  cuarto: '@asset(escenas/cuarto.webp)',
+   y aquí, una línea por escena: la clave y el archivo con la marca de recurso del build (arroba
+   asset entre paréntesis, ver build.mjs), p. ej. cuarto → assets/escenas/cuarto.webp.
    ========================================================= */
 const ESCENAS_IMAGENES = {
 };
