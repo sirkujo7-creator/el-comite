@@ -222,6 +222,14 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   teclas físicas en los juegos de memoria (un tono por destello), una pantalla azul de verdad. Al
   resolver se ocultan los controles y el resultado es el de una decisión: sello, consecuencia,
   "antes → después" y `sonidoResultado`. Ignorar el robo de la nevera ya no es gratis (moral −1).
+- Flashbacks en las cinemáticas (nov. 2026, `ui/escenas-cinematica.js`): cada frase puede llevar una
+  `escena` (SVG plano en la paleta de la sala, sin archivos) con la silueta del protagonista
+  (`siluetaProtagonista`: de pie, sentado o de espaldas, con filo de luz). Intro: cuarto sin pagar,
+  saldo $0, carta de desalojo, la ciudad, los números, la torre del imperio, la terminal. Inicio de
+  partida: terminal, fachada de la empresa (color del sector y su nombre), retrato de la gestión
+  anterior (legado), espejo y corbata (perfil), la imagen de la junta. Informe: calendario tachado,
+  sala de juntas a puerta cerrada, la curva real de caja de la partida, el veredicto ante la junta.
+  Entran con destello, se acercan despacio, viñeta y grano.
 - Cinemáticas en silencio absoluto (`silencioCinematica`): música, drones y tecleo callan mientras
   dura la secuencia.
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón

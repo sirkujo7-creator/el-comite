@@ -2,13 +2,13 @@
    CINEMÁTICA DE INTRODUCCIÓN — motor de narrativa por secuencia
    ========================================================= */
 const introScript = [
-  { text: "Lugar: Habitación sin pagar.", speed: 60 },
-  { text: "Estado: Desempleado. Saldo en caja: $0.00.", speed: 55 },
-  { text: "Día 143. La carta de desalojo pasó por debajo de la puerta.", speed: 50 },
-  { text: "El sistema no te va a salvar.", speed: 75 },
-  { text: "Pero entiendes los números. Entiendes el riesgo.", speed: 55 },
-  { text: "Si vas a caer... será intentando construir un imperio.", speed: 70 },
-  { text: "INICIANDO TERMINAL DE EL COMITÉ...", speed: 45 }
+  { text: "Lugar: Habitación sin pagar.", speed: 60, escena:'cuarto' },
+  { text: "Estado: Desempleado. Saldo en caja: $0.00.", speed: 55, escena:'saldo' },
+  { text: "Día 143. La carta de desalojo pasó por debajo de la puerta.", speed: 50, escena:'desalojo' },
+  { text: "El sistema no te va a salvar.", speed: 75, escena:'ciudad' },
+  { text: "Pero entiendes los números. Entiendes el riesgo.", speed: 55, escena:'numeros' },
+  { text: "Si vas a caer... será intentando construir un imperio.", speed: 70, escena:'imperio' },
+  { text: "INICIANDO TERMINAL DE EL COMITÉ...", speed: 45, escena:'terminal' }
 ];
 
 // Guion de la transición al INICIAR (o reiniciar) una partida
@@ -17,32 +17,32 @@ function guionInicioPartida(sector, perfil){
   const perfilTexto = (perfil && perfil.nombre) ? perfil.nombre : PERFILES[0].nombre;
   const legado = sector ? legadosEmpresariales[sector.id] : null;
   const lineas = [
-    { text: "ACCEDIENDO A LA TERMINAL DE EL COMITÉ...", speed: 30 },
-    { text: "EMPRESA: " + nombreEmpresaActual().toUpperCase(), speed: 35 },
-    { text: "SECTOR: " + rubroTexto.toUpperCase(), speed: 30 }
+    { text: "ACCEDIENDO A LA TERMINAL DE EL COMITÉ...", speed: 30, escena:'terminal' },
+    { text: "EMPRESA: " + nombreEmpresaActual().toUpperCase(), speed: 35, escena:'empresa' },
+    { text: "SECTOR: " + rubroTexto.toUpperCase(), speed: 30, escena:'empresa' }
   ];
   if(legado && !legado.quebrada && legado.generacion>=2){
-    lineas.push({ text: "GENERACIÓN " + legado.generacion + " — HEREDAS LA EMPRESA DE LA GESTIÓN ANTERIOR (RANGO " + (legado.ultimoRango||'—') + ")", speed: 28 });
+    lineas.push({ text: "GENERACIÓN " + legado.generacion + " — HEREDAS LA EMPRESA DE LA GESTIÓN ANTERIOR (RANGO " + (legado.ultimoRango||'—') + ")", speed: 28, escena:'legado' });
   } else if(legado && legado.quebrada){
-    lineas.push({ text: "AVISO: LA GESTIÓN ANTERIOR DE ESTA EMPRESA TERMINÓ EN QUIEBRA. EMPIEZAS DESDE CERO.", speed: 28 });
+    lineas.push({ text: "AVISO: LA GESTIÓN ANTERIOR DE ESTA EMPRESA TERMINÓ EN QUIEBRA. EMPIEZAS DESDE CERO.", speed: 28, escena:'legado' });
   }
   const otrosLegados = sector ? legadosActivosDeOtrosSectores(sector.id) : [];
   if(otrosLegados.length){
     const otro = otrosLegados[Math.floor(Math.random()*otrosLegados.length)];
     const nombreOtroSector = (SECTORS.find(s=>s.id===otro.id)||{}).rubro || otro.id;
-    lineas.push({ text: "MIENTRAS TANTO, TU GESTIÓN EN " + nombreOtroSector.toUpperCase() + " SIGUE EN PIE (GENERACIÓN " + otro.generacion + ")", speed: 26 });
+    lineas.push({ text: "MIENTRAS TANTO, TU GESTIÓN EN " + nombreOtroSector.toUpperCase() + " SIGUE EN PIE (GENERACIÓN " + otro.generacion + ")", speed: 26, escena:'legado' });
   }
-  lineas.push({ text: "PERFIL GERENCIAL: " + perfilTexto.toUpperCase(), speed: 35 });
-  lineas.push({ text: "LA JUNTA YA ESTÁ ESPERANDO TU PRIMERA DECISIÓN...", speed: 30 });
+  lineas.push({ text: "PERFIL GERENCIAL: " + perfilTexto.toUpperCase(), speed: 35, escena:'perfil' });
+  lineas.push({ text: "LA JUNTA YA ESTÁ ESPERANDO TU PRIMERA DECISIÓN...", speed: 30, escena:'junta' });
   return lineas;
 }
 
 // Guion de la transición al GENERAR EL INFORME FINAL
 const GUION_INFORME_FINAL = [
-  { text: "CERRANDO EL AÑO FISCAL...", speed: 35 },
-  { text: "LA JUNTA SE REÚNE A PUERTA CERRADA...", speed: 30 },
-  { text: "COMPILANDO TU GESTIÓN, TURNO POR TURNO...", speed: 28 },
-  { text: "GENERANDO VEREDICTO FINAL...", speed: 32 }
+  { text: "CERRANDO EL AÑO FISCAL...", speed: 35, escena:'calendario' },
+  { text: "LA JUNTA SE REÚNE A PUERTA CERRADA...", speed: 30, escena:'puerta' },
+  { text: "COMPILANDO TU GESTIÓN, TURNO POR TURNO...", speed: 28, escena:'gestion' },
+  { text: "GENERANDO VEREDICTO FINAL...", speed: 32, escena:'veredicto' }
 ];
 
 let introCerrada = false;
@@ -134,6 +134,7 @@ async function reproducirSecuencia(guion, callback){
   if(overlay){ overlay.classList.remove('intro-hide'); overlay.style.display = 'flex'; }
   for(const linea of guion){
     if(introCerrada) break;
+    mostrarEscenaCinematica(linea.escena);
     await tipearLinea(linea.text, linea.speed);
     if(introCerrada) break;
     // La oración queda fija en pantalla hasta que el jugador presione ESPACIO
@@ -155,6 +156,7 @@ function closeIntro(){
   cancelarEsperaActual();
   liberarEsperaEspacio();
   silencioCinematica(false);
+  setTimeout(()=>mostrarEscenaCinematica(null), 800);
   const overlay = document.getElementById('introOverlay');
   // Ejecutar el callback de inmediato, mientras el overlay sigue 100% opaco: así el contenido
   // de la siguiente pantalla ya está listo y renderizado ANTES de que el negro empiece a
