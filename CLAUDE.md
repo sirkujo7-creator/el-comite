@@ -375,3 +375,18 @@ mismas semillas antes/después). Tres cambios aprobados por Juan:
   sectores, igual. Quiebras sin cambios relevantes (Ganadería agresivo 7,5 → 0 %).
 - Se decidió no tocar: Moda Urbana con perfil agresivo (48 % de quiebra por liquidez: coherente con
   inventario perecedero y moda rápida) ni el salto Media → Difícil (el prudente sigue en ~1 %).
+
+**Opciones de respuesta: piloto en Ganadería (nov. 2026)** — aprobado por Juan ("hay opciones tan
+inviables que da risa elegirlas y una evidentemente buena"). Medición inicial en los 220 casos (todos
+con 4 opciones, 144 partidas con 4 perfiles): en el 55 % los 4 perfiles eligen la misma opción y el
+56 % de las opciones no la elige nadie. Criterio: 3 opciones por caso, las tres defendibles por un
+gerente real, cada una con su costo; se quitan relleno ("consultar al contador", "pedir evidencia"),
+opciones casi idénticas y las de solo pérdida; se conservan las trampas tentadoras (venta informal,
+desviar una línea de crédito). La ventana muestra 3 opciones en una fila. Ganadería (21 casos propios,
+`node tests/estudio-opciones.mjs <html> src/content/sectores/ganadera.js ganadera`, 20 partidas por
+perfil): favorita unánime 22 → 18 %, opciones que nadie elige 56 → 39 %. "Financiamiento para ampliar
+el hato" regalaba liquidez (+$14 M de caja y capital de trabajo además de la deuda, aunque el dinero se
+iba en las vacas); ahora la compra suma hato y EBITDA y la deuda pesa. Efecto: quiebra del perfil
+agresivo en Ganadería 3 → 8 de 20 (en el reporte general, agresivo 21,4 → 25 %), porque el motor
+trata toda la deuda como si fuera de corto plazo en la deriva de la razón corriente. Pendiente de
+decisión de Juan.

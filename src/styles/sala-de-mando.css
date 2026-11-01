@@ -281,6 +281,8 @@ body.en-partida .oficina-ambiente-btn.show:hover{ transform:translate(-2px,-2px)
 .ventana .continue-btn:active{ transform:translate(3px,3px); box-shadow:1px 1px 0 #0a3d27; }
 @media (min-width:900px){
   .ventana .choices{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  /* Tres opciones (casos ya revisados): una fila de tres, sin una opción sola abajo */
+  .ventana .choices:has(> .choice-btn:nth-child(3):last-child){ grid-template-columns:repeat(3, 1fr); }
   .ventana .choices .choice-btn{ margin:0; height:100%; }
 }
 
