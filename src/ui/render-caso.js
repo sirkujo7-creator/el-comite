@@ -108,7 +108,7 @@ function renderChoices(c){
   wrap.innerHTML = choices.map((ch,i)=>`
     <button class="choice-btn ${ch.informado?'informado':''}" data-i="${i}">
       <span class="choice-letter">${ch.informado ? '🔍' : String.fromCharCode(65+i)}</span>
-      <span>${resaltarGlosario(ch.texto)}${(ch.capex && sectorActual.requiereCapex) ? ' <span class="tag-mantenimiento" title="Cuenta como inversión en mantenimiento de equipos (CapEx)">🔧 Mantenimiento</span>' : ''}</span>
+      <span>${resaltarGlosario(ch.texto)}${(ch.capex && sectorActual.requiereCapex) ? ' <span class="tag-mantenimiento" title="Cuenta como inversión en mantenimiento de equipos (CapEx)">🔧 Mantenimiento</span>' : ''}${ch.plazo === 'largo' ? ' <span class="tag-mantenimiento tag-largo-plazo" title="Deuda de largo plazo: no aprieta la liquidez de corto plazo, pero sigue siendo deuda">🏦 Largo plazo</span>' : ''}</span>
     </button>
   `).join('');
 
@@ -138,7 +138,7 @@ function selectChoice(c, ch){
   // la misma elección no da siempre el mismo resultado numérico exacto (inspirado en Reigns).
   const efectosAplicados = amplificarEImpredecir(ch.efectos);
 
-  applyEfectos(efectosAplicados);
+  applyEfectos(efectosAplicados, undefined, {plazoLargo: ch.plazo === 'largo'});
   if(ch.setFlags) Object.assign(flags, ch.setFlags);
   if(ch.diferir){
     state.obligaciones.push({monto: ch.diferir.monto, vence: turnNumber + ch.diferir.turnos, motivo: ch.diferir.motivo, tipo: ch.diferir.tipo, pagada:false});

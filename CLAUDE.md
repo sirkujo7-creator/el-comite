@@ -413,3 +413,21 @@ iba en las vacas); ahora la compra suma hato y EBITDA y la deuda pesa. Efecto: q
 agresivo en Ganadería 3 → 8 de 20 (en el reporte general, agresivo 21,4 → 25 %), porque el motor
 trata toda la deuda como si fuera de corto plazo en la deriva de la razón corriente. Pendiente de
 decisión de Juan.
+
+**Dificultad por decisiones (nov. 2026, en curso)** — Juan: "que menos del 45 % de las partidas se ganen
+en Normal, por las decisiones según el caso y no por la opción evidentemente mejor". Ganar = rango S o A.
+Metas propuestas en Normal: jugador cuidadoso (metódico) 40–45 %, agresivo 15–20 %, azar < 10 %.
+- Motor: deuda de largo plazo (`state.deudaLargoPlazo`, opción con `plazo:'largo'`, etiqueta 🏦 en la
+  ventana). No baja de golpe la razón corriente y en la deriva del motor pesa solo su cuota cercana (25 %);
+  se amortiza en proporción. 26 créditos de inversión etiquetados. Medido: casi no cambia la dificultad.
+- `content/universal/contexto.js`: `CONTEXTO.liquidezBaja`, `apalancado`, `bancoAmigo`, `equipoCansado`,
+  `proveedoresTensos`, `juntaDesconfia`, `reputacionAlta`, `equiposGastados` y `si(cond, a, b)`.
+  Ganadería: sus 21 casos rinden distinto según la situación (efectos y consecuencia); los casos
+  principales ahora son constructoras `(s,f)=>({...})`. Regla 2 se mantiene también en estados extremos.
+- Línea base antes (10 partidas por sector y perfil, Normal): victoria metódico 75 %, prudente 70 %,
+  agresivo 60 %, azar 25 %. Muy desparejo por sector: en TechNova, AgroVerde y Moda Urbana el cuidadoso
+  gana casi siempre; en Vita Fit y Ganadería el prudente suele terminar en D (descuida el mantenimiento).
+- Ganadería con contexto (20 por perfil): metódico 45 %, agresivo 70 %, azar 10 %. El agresivo sigue
+  ganando porque el rango se calcula con valor = EBITDA×4 − deuda: crecer a cualquier costo siempre paga.
+  Pendiente de decisión de Juan: valorar como EBITDA × múltiplo según WACC − deuda + ½ caja (−15 % si la
+  razón corriente < 1); con los mismos finales: metódico 60 %, agresivo 47 %, azar 13 %.

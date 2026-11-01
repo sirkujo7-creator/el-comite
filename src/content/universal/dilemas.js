@@ -260,7 +260,7 @@ const ETHICAL_DILEMMA_POOL = [
        consecuencia:"Es una inversión fuerte hoy que no se paga sola de inmediato, pero abre una puerta comercial que hoy tienes cerrada por completo."},
       {texto:"Posponer la certificación hasta tener más liquidez disponible.", efectos:{reputacion:-0.5},
        consecuencia:"Proteges tu caja actual, aunque cada trimestre que pasa es un trimestre más en el que esos clientes potenciales siguen sin considerarte."},
-      {texto:"Buscar un crédito específico para financiar el proceso de certificación.", efectos:{caja:5, deuda:6, wacc:0.2},
+      {texto:"Buscar un crédito específico para financiar el proceso de certificación.", plazo:'largo', efectos:{caja:5, deuda:6, wacc:0.2},
        consecuencia:"Consigues el dinero sin tocar tu caja actual, a cambio de una nueva obligación financiera que vas a cargar mientras la certificación empieza a dar frutos."},
       {texto:"Buscar una certificación local más económica y menos reconocida como paso intermedio.", efectos:{caja:-2, reputacion:2},
        consecuencia:"Un paso más barato y más rápido, aunque no abre las mismas puertas que la certificación internacional completa."}
@@ -342,7 +342,7 @@ const ETHICAL_DILEMMA_POOL = [
     choices:[
       {texto:"Comprarlo de contado, usando caja disponible.", efectos:{caja:-9, capitalTrabajo:-4},
        consecuencia:"El activo queda completamente tuyo sin ninguna cuota futura, a cambio de un golpe fuerte e inmediato a tu liquidez."},
-      {texto:"Tomarlo en leasing financiero, pagando cuotas mensuales durante los próximos periodos.", efectos:{caja:-1, deuda:9, wacc:0.2},
+      {texto:"Tomarlo en leasing financiero, pagando cuotas mensuales durante los próximos periodos.", plazo:'largo', efectos:{caja:-1, deuda:9, wacc:0.2},
        consecuencia:"Conservas tu caja disponible para otras necesidades, a cambio de una obligación financiera que se extiende varios periodos."},
       {texto:"Posponer la renovación del activo hasta el próximo periodo de presupuesto.", efectos:{ebitda:-2},
        consecuencia:"Ahorras el gasto hoy, aunque seguir operando con un activo que necesitaba renovarse ya está pasando una pequeña factura en eficiencia."},
@@ -758,7 +758,7 @@ const ETHICAL_DILEMMA_POOL = [
     tipo:'random', titulo:"Varias obligaciones de corto plazo vencen el mismo mes",
     contexto:`Por cómo se fueron firmando los créditos y las facturas de proveedores, varias obligaciones de corto plazo vencen en el mismo mes. Tu razón corriente está en ${s.razonCorriente.toFixed(2)} y el banco la mira de cerca.`,
     choices:[
-      {texto:"Refinanciar parte de las obligaciones a largo plazo con el banco.", efectos:{razonCorriente:0.25, wacc:0.4, deuda:2},
+      {texto:"Refinanciar parte de las obligaciones a largo plazo con el banco.", plazo:'largo', efectos:{razonCorriente:0.25, wacc:0.4, deuda:2},
        consecuencia:"Al pasar deuda de corto a largo plazo, tu razón corriente mejora de golpe, aunque pagarás más intereses durante más tiempo."},
       {texto:"Vender un activo no estratégico para cubrir los vencimientos.", efectos:{caja:4, razonCorriente:0.2, ebitda:-1},
        consecuencia:"Conviertes un activo inmóvil en liquidez, aunque ese activo aportaba algo a la operación."},

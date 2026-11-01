@@ -25,16 +25,16 @@ const VITAFIT_CASES = [
   investigacion:{costo:1, boton:"Pedir al banco una simulación de escenarios de tasa ($1M)",
     reporte:"Los analistas del banco proyectan la tasa de intervención en un rango de <b>9.5% – 10.5%</b> para el cierre del semestre, frente al <b>8.75%</b> actual."},
   choices:[
-    {texto:"Tomar crédito bancario a tasa fija por $15M.", efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15},
+    {texto:"Tomar crédito bancario a tasa fija por $15M.", plazo:'largo', efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15},
      consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
-    {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
+    {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", plazo:'largo', efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República."},
     {texto:"Ceder 20% de participación a un inversionista ángel por el mismo monto.", efectos:{caja:15, capitalTrabajo:15, wacc:1},
      consecuencia:"No agregas deuda ni intereses, pero cediste una porción real de las utilidades y del control futuro de Vita Fit. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
-    {texto:"Combinar: tomar solo $8M en crédito fijo y buscar un pequeño inversionista para el resto.", efectos:{caja:15, deuda:8, wacc:0.6, capitalTrabajo:15},
+    {texto:"Combinar: tomar solo $8M en crédito fijo y buscar un pequeño inversionista para el resto.", plazo:'largo', efectos:{caja:15, deuda:8, wacc:0.6, capitalTrabajo:15},
      consecuencia:"Divides el riesgo entre deuda y capital propio — una estructura mixta, más compleja de gestionar pero más resiliente ante un solo tipo de choque. Eso sí, la parte de capital propio encarece tu costo de capital promedio."}
   ],
-  choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
+  choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", plazo:'largo', efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
     consecuencia:"Con el rango proyectado en mano, decides que un punto porcentual de subida es un riesgo real y te blindas parcialmente frente a él."}
 },
 { tipo:'caso', titulo:"El proveedor ofrece un descuento",
@@ -85,7 +85,7 @@ const VITAFIT_CASES = [
     {texto:"Vender la sucursal al precio ofrecido.", efectos:{caja:10, ebitda:-2, capitalTrabajo:3}, consecuencia:"Obtienes liquidez inmediata importante, aunque pierdes la sucursal que más aportaba a tu operación recurrente."},
     {texto:"Rechazar la oferta y conservar la sucursal como motor principal del negocio.", efectos:{capitalTrabajo:-1}, consecuencia:"Mantienes tu flujo de caja recurrente intacto, aunque renuncias a una inyección de liquidez que ya no vas a tener disponible este año."},
     {texto:"Negociar vender solo una participación minoritaria de esa sucursal, no el control total.", efectos:{caja:4, ebitda:-0.5}, consecuencia:"Consigues liquidez parcial sin perder el control operativo de tu sucursal más importante."},
-    {texto:"Usar la oferta como argumento para conseguir mejores condiciones de un banco, sin vender nada.", efectos:{deuda:8, caja:8, wacc:-0.3}, consecuencia:"Consigues financiamiento en mejores condiciones al mostrar el respaldo de una oferta real, sin ceder la sucursal."}
+    {texto:"Usar la oferta como argumento para conseguir mejores condiciones de un banco, sin vender nada.", plazo:'largo', efectos:{deuda:8, caja:8, wacc:-0.3}, consecuencia:"Consigues financiamiento en mejores condiciones al mostrar el respaldo de una oferta real, sin ceder la sucursal."}
   ],
   choiceInformado:{texto:"Con la sobrevaloración del 12% confirmada, vender la sucursal sin dudarlo.", efectos:{caja:11, ebitda:-2, capitalTrabajo:3},
     consecuencia:"Cuando una fuente independiente confirma que te pagan por encima del valor razonable de mercado, rechazar la oferta es difícil de justificar."}

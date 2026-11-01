@@ -24,16 +24,16 @@ const TECHNOVA_CASES = [
   investigacion:{costo:1, boton:"Pedir al banco una simulación de escenarios de tasa ($1M)",
     reporte:"Los analistas del banco proyectan la tasa de intervención en un rango de <b>9.5% – 10.5%</b> para el cierre del semestre, frente al <b>8.75%</b> actual."},
   choices:[
-    {texto:"Tomar crédito bancario a tasa fija por $15M.", efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15},
+    {texto:"Tomar crédito bancario a tasa fija por $15M.", plazo:'largo', efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15},
      consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
-    {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
+    {texto:"Tomar crédito bancario a tasa variable por $15M, más barata hoy.", plazo:'largo', efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República."},
     {texto:"Levantar una ronda de inversión ángel, cediendo 20% de la empresa.", efectos:{caja:15, capitalTrabajo:15, wacc:1},
      consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades y del control futuro de TechNova. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
-    {texto:"Tomar venture debt: deuda respaldada por tus inversionistas actuales, con warrants a favor de ellos.", efectos:{caja:12, deuda:12, wacc:0.8, capitalTrabajo:12},
+    {texto:"Tomar venture debt: deuda respaldada por tus inversionistas actuales, con warrants a favor de ellos.", plazo:'largo', efectos:{caja:12, deuda:12, wacc:0.8, capitalTrabajo:12},
      consecuencia:"Cuesta un poco más que un crédito tradicional y cede pequeñas opciones futuras, pero no diluye tu control operativo hoy."}
   ],
-  choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
+  choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", plazo:'largo', efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
     consecuencia:"Con el rango proyectado en mano, decides que un punto porcentual de subida es un riesgo real y te blindas parcialmente frente a él."}
 },
 { tipo:'caso', titulo:"Fuga de un desarrollador clave",

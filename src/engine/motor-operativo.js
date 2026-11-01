@@ -42,7 +42,10 @@ function aplicarMotorOperativo(){
 
   // Razón corriente: el mismo empuje de siempre, pero deteriorarse pesa más que mejorar.
   if(state.razonCorriente != null && state.caja != null && state.deuda != null){
-    const empuje = ((state.caja - 22) * 0.006) - ((state.deuda - 18) * 0.004);
+    // Solo la deuda de corto plazo aprieta la liquidez; de la de largo plazo pesa su cuota cercana (25 %).
+    const lp = Math.min(state.deudaLargoPlazo || 0, state.deuda);
+    const deudaQueAprieta = state.deuda - lp + lp * 0.25;
+    const empuje = ((state.caja - 22) * 0.006) - ((deudaQueAprieta - 18) * 0.004);
     suma('razonCorriente', clamp(empuje * (empuje < 0 ? 1.3 : 0.7), -0.06, 0.06));
   }
 
@@ -124,7 +127,10 @@ function ajustarDeltaSiCritico(key, delta){
   const mejora = esMejorSiSube(key) ? delta > 0 : delta < 0;
   return mejora ? delta * 0.4 : delta;
 }
-function applyEfectos(e, origen){
+// `opciones.plazoLargo`: la deuda que suma esta decisión es de largo plazo (crédito de inversión,
+// leasing, crédito agropecuario): no entra en el pasivo corriente, así que no baja de golpe la razón
+// corriente y en la deriva del motor pesa solo su cuota cercana (ver aplicarMotorOperativo).
+function applyEfectos(e, origen, opciones){
   systemicNotes = [];
   origenUltimoCambio = {};
   if(!e) return;
@@ -133,7 +139,13 @@ function applyEfectos(e, origen){
   if(e.caja) state.caja += ajustarDeltaSiCritico('caja', e.caja);
   if(e.capitalTrabajo) state.capitalTrabajo += ajustarDeltaSiCritico('capitalTrabajo', e.capitalTrabajo);
   if(e.razonCorriente) state.razonCorriente = clamp(state.razonCorriente + ajustarDeltaSiCritico('razonCorriente', e.razonCorriente), 0, 5);
-  if(e.deuda) state.deuda = Math.max(0, state.deuda + ajustarDeltaSiCritico('deuda', e.deuda));
+  if(e.deuda){
+    const antes = state.deuda;
+    state.deuda = Math.max(0, state.deuda + ajustarDeltaSiCritico('deuda', e.deuda));
+    const lp = state.deudaLargoPlazo || 0;
+    if(state.deuda > antes && opciones && opciones.plazoLargo) state.deudaLargoPlazo = lp + (state.deuda - antes);
+    else if(state.deuda < antes && lp > 0) state.deudaLargoPlazo = antes > 0 ? lp * state.deuda / antes : 0; // se amortiza en proporción
+  }
   if(e.ebitda) state.ebitda += ajustarDeltaSiCritico('ebitda', e.ebitda);
   if(e.wacc) state.wacc = clamp(state.wacc + ajustarDeltaSiCritico('wacc', e.wacc), 5, 35);
   if(e.diasInventario && state.diasInventario!=null) state.diasInventario = Math.max(0, state.diasInventario + ajustarDeltaSiCritico('diasInventario', e.diasInventario));
@@ -152,7 +164,7 @@ function applyEfectos(e, origen){
   if(e.razonCorriente === undefined){
     let arrastre = 0;
     if(e.caja) arrastre += e.caja * 0.012;
-    if(e.deuda) arrastre -= e.deuda * 0.010;
+    if(e.deuda && !(opciones && opciones.plazoLargo && e.deuda > 0)) arrastre -= e.deuda * 0.010;
     if(e.capitalTrabajo) arrastre += e.capitalTrabajo * 0.015;
     if(arrastre !== 0){
       state.razonCorriente = clamp(Math.round((state.razonCorriente + arrastre)*100)/100, 0.1, 5);

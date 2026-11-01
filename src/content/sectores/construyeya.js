@@ -20,13 +20,13 @@ const CONSTRUYEYA_CASES = [
   investigacion:{costo:1, boton:"Pedir al banco una simulación de escenarios de tasa ($1M)",
     reporte:"Los analistas proyectan la tasa de intervención en un rango de <b>9.5% – 10.5%</b> para el cierre del semestre, frente al <b>8.75%</b> actual."},
   choices:[
-    {texto:"Tomar crédito constructor a tasa fija por $15M.", efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15}, consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
-    {texto:"Tomar crédito constructor a tasa variable, más barata hoy.", efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
+    {texto:"Tomar crédito constructor a tasa fija por $15M.", plazo:'largo', efectos:{caja:15, deuda:15, wacc:0.5, capitalTrabajo:15}, consecuencia:"Tu apalancamiento sube, pero la cuota no cambiará así suban las tasas del mercado."},
+    {texto:"Tomar crédito constructor a tasa variable, más barata hoy.", plazo:'largo', efectos:{caja:15, deuda:15, wacc:-0.3, capitalTrabajo:15}, setFlags:{deudaVariable:true},
      consecuencia:"Consigues una tasa inicial más baja, pero tu costo de capital queda atado a lo que haga el Banco de la República — especialmente riesgoso en un sector con ciclos largos."},
     {texto:"Ceder 20% del proyecto a un fondo inmobiliario a cambio del mismo monto.", efectos:{caja:15, capitalTrabajo:15, wacc:1}, consecuencia:"No agregas deuda, pero cediste una porción real de las utilidades futuras del proyecto. Y ese socio espera un retorno más alto que el de un banco: tu costo de capital sube."},
-    {texto:"Usar el lote sin desarrollar como garantía para un crédito con mejor tasa.", efectos:{caja:14, deuda:14, wacc:0.1, capitalTrabajo:14}, consecuencia:"La garantía adicional te consigue una tasa más favorable, aunque ese activo queda comprometido mientras dure el crédito."}
+    {texto:"Usar el lote sin desarrollar como garantía para un crédito con mejor tasa.", plazo:'largo', efectos:{caja:14, deuda:14, wacc:0.1, capitalTrabajo:14}, consecuencia:"La garantía adicional te consigue una tasa más favorable, aunque ese activo queda comprometido mientras dure el crédito."}
   ],
-  choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
+  choiceInformado:{texto:"Tomar solo $12M a tasa fija, exponiendo menos capital del que el banco ofrece.", plazo:'largo', efectos:{caja:12, deuda:12, wacc:0.3, capitalTrabajo:12, confianzaBanco:5},
     consecuencia:"Con el rango proyectado en mano, decides que un punto porcentual de subida es un riesgo real y te blindas parcialmente frente a él."}
 },
 { tipo:'caso', titulo:"Sube el precio del acero y el cemento",

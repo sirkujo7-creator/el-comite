@@ -112,7 +112,7 @@ const TIPOS = ['caso', 'karma', 'calendario', 'macro', 'random', 'meta_comite', 
 const LIMITES = { caja: 25, capitalTrabajo: 20, razonCorriente: 0.5, deuda: 20, ebitda: 8, wacc: 5,
   diasInventario: 35, diasCartera: 90, valorInventario: 15, confianzaProveedores: 20, confianzaBanco: 40,
   reputacion: 20, moralEquipo: 20 };
-const CLAVES_OPCION = ['texto', 'efectos', 'consecuencia', 'diferir', 'setFlags', 'disparar', 'capex', 'informado', '__aleatorio'];
+const CLAVES_OPCION = ['texto', 'efectos', 'consecuencia', 'diferir', 'setFlags', 'disparar', 'capex', 'informado', '__aleatorio', 'plazo'];
 const textoValido = (t) => typeof t === 'string' && t.trim().length >= 8;
 
 test('esquema — campos obligatorios, tipos y rangos de efectos', () => {

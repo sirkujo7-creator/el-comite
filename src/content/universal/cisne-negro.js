@@ -6,7 +6,7 @@ const BLACK_SWAN_POOL = [
     contexto:`Justo cuando tu gestión parecía sólida, estalla una crisis financiera internacional. Los bancos restringen crédito en todo el sistema y el costo del dinero se dispara para todo el mercado, ${nombreEmpresaActual()} incluido.`,
     choices:[
       {texto:"Congelar toda inversión y atrincherarte en liquidez.", efectos:{caja:2, ebitda:-2, wacc:0.5}, consecuencia:"Frenas en seco cualquier apuesta nueva. Sobrevives al shock sin crecer, pero tampoco retrocedes de forma dramática."},
-      {texto:"Aprovechar que tus indicadores están sanos para tomar deuda barata antes de que suba más.", efectos:{caja:8, deuda:8, wacc:0.8}, consecuencia:"Te apalancas justo antes de que el crédito se encarezca aún más para todo el mercado — una apuesta audaz en medio de la tormenta."},
+      {texto:"Aprovechar que tus indicadores están sanos para tomar deuda barata antes de que suba más.", plazo:'largo', efectos:{caja:8, deuda:8, wacc:0.8}, consecuencia:"Te apalancas justo antes de que el crédito se encarezca aún más para todo el mercado — una apuesta audaz en medio de la tormenta."},
       {texto:"Renegociar preventivamente condiciones con banco y proveedores antes de que ellos te llamen a ti.", efectos:{wacc:-0.3, confianzaBanco:5, confianzaProveedores:5, caja:-3}, consecuencia:"Llegar primero a la mesa de negociación, en vez de esperar a que te busquen, te deja en mejor posición que a la mayoría de tus pares del sector."},
       {texto:"Recortar de forma preventiva y agresiva para blindar el balance.", efectos:{ebitda:5, reputacion:-6, confianzaProveedores:-6}, consecuencia:"Proteges los números duros, aunque el recorte preventivo — sin que la crisis te haya tocado todavía directamente — no cae bien puertas adentro."}
     ]}),
