@@ -69,7 +69,7 @@ function iniciarDrone(){
   droneOsc.connect(droneGain).connect(ctx.destination);
   droneOsc.start();
   droneGain.gain.linearRampToValueAtTime(0.032 * volumenGeneral, ctx.currentTime + 2.5);
-  if(sectorActual) iniciarMusica(sectorActual.id);
+  if(sectorActual){ iniciarMusica('partida'); if(musica) musica.sector = sectorActual.id; }
 }
 function detenerDrone(){
   if(musica && musica.estilo !== 'menu') detenerMusica();

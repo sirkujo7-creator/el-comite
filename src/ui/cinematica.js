@@ -232,4 +232,17 @@ if(volumeSlider){
     actualizarVolumenEnVivo();
   });
 }
+// Volumen de la música por separado (se recuerda en este navegador).
+const musicaSlider = document.getElementById('musicaSlider');
+const musicaValue = document.getElementById('musicaValue');
+if(musicaSlider){
+  musicaSlider.value = String(Math.round(volumenMusica * 100));
+  if(musicaValue) musicaValue.textContent = musicaSlider.value + '%';
+  musicaSlider.addEventListener('input', ()=>{
+    volumenMusica = parseInt(musicaSlider.value, 10) / 100;
+    if(musicaValue) musicaValue.textContent = musicaSlider.value + '%';
+    try{ window.localStorage.setItem('elcomite_volumen_musica', String(volumenMusica)); }catch(e){}
+    actualizarVolumenMusica();
+  });
+}
 

@@ -220,12 +220,18 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
   Carteles, sello y veredicto se ajustan al ancho (`clamp` con vw); el informe final empieza arriba.
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
-- Música de fondo (oct. 2026, `audio/musica.js`, opción B elegida por Juan: generada, no grabada).
-  Un estilo por sector + "menu": AgroVerde bambuco 3/4 con guitarra; Ganadería joropo con arpa,
-  cuatro y maracas; Vita Fit pulso de gimnasio; TechNova ambiente electrónico; Construye YA
-  tensión grave; Moda Urbana lo-fi con swing y piano eléctrico. Cuerdas por Karplus-Strong,
-  sala por convolución, humanización de tiempo e intensidad. Arranca con `iniciarDrone` y se
-  oscurece con la salud crítica (`actualizarMusicaSegunSalud`). Volumen base `MUSICA_VOLUMEN`.
+- Música de fondo (`audio/musica.js`, generada, no grabada). Menú: el comité en penumbra.
+  **Partida (nov. 2026)**: Juan descartó los géneros alegres por sector (bambuco, joropo, lo-fi…)
+  porque "sonaba a música de tienda". Ahora es una banda sonora de tensión en Re menor, sin melodía
+  protagonista, que reacciona al estado de la empresa con el mismo `nivelAlarma` del tablero:
+  calma (casi silencio, colchón grave, tictac de reloj, nota suelta), tensión (el reloj se vuelve
+  latido: pulso en corcheas, bombo suave, segunda menor que roza) y alarma (racimo disonante,
+  pulso rápido, latido doble, trémolo agudo); el tempo sube 56 → 68 → 84. En la junta la música
+  calla y queda la sala con el reloj (`musicaJunta`). Cada sector conserva solo un gesto lejano
+  cada 4 compases (`COLOR_SECTOR`: cuatro llanero, guitarra campesina, eco electrónico, bombo de
+  gimnasio tras la pared, golpe de obra, acorde de piano eléctrico). Ajustes tiene volumen de
+  música aparte (`volumenMusica`, se recuerda en el navegador). Volumen medido: calma y tensión
+  algo por debajo de la música anterior (RMS 0,007 frente a 0,009); alarma, igual.
 - Mantenimiento de equipos (oct. 2026, Vita Fit y Ganadería, `requiereCapex`): las opciones con
   `capex` llevan la etiqueta "🔧 Mantenimiento" y la cabecera muestra "Equipos: n de 3 turnos sin
   mantenimiento" (`renderEquiposLine`, cuenta también el turno recién jugado). El conteo es por

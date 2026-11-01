@@ -1906,6 +1906,14 @@ body.apagon .wrap{ animation:smApagon .8s cubic-bezier(.6,0,.4,1) forwards; }
         </div>
       </div>
 
+      <div class="settings-section">
+        <div class="settings-label">MÚSICA</div>
+        <div class="settings-slider-wrap">
+          <input type="range" min="0" max="100" value="100" class="settings-slider" id="musicaSlider">
+          <div class="settings-slider-value" id="musicaValue">100%</div>
+        </div>
+      </div>
+
       <div class="settings-section settings-buttons" id="settingsButtonsRow">
         <button class="brutal-confirm-btn settings-action-btn" id="settingsFullscreenBtn">PANTALLA COMPLETA</button>
         <button class="brutal-confirm-btn settings-action-btn" id="settingsCarreraBtn">VER MI CARRERA</button>
@@ -2107,7 +2115,7 @@ function iniciarDrone(){
   droneOsc.connect(droneGain).connect(ctx.destination);
   droneOsc.start();
   droneGain.gain.linearRampToValueAtTime(0.032 * volumenGeneral, ctx.currentTime + 2.5);
-  if(sectorActual) iniciarMusica(sectorActual.id);
+  if(sectorActual){ iniciarMusica('partida'); if(musica) musica.sector = sectorActual.id; }
 }
 function detenerDrone(){
   if(musica && musica.estilo !== 'menu') detenerMusica();
@@ -2498,8 +2506,11 @@ document.addEventListener('click', (e)=>{
 }, true);
 
 /* =========================================================================================
-   MÚSICA DE FONDO POR SECTOR — generada en vivo con Web Audio, sin archivos
-   Cada sector tiene un estilo propio (tempo, compás, tonalidad, progresión e instrumentos).
+   MÚSICA DE FONDO — generada en vivo con Web Audio, sin archivos
+   Menú: el comité en penumbra. Partida (nov. 2026): banda sonora de tensión que reacciona al
+   estado de la empresa (calma → tensión → alarma) y calla en la junta; cada sector conserva
+   solo un color lejano (COLOR_SECTOR). Antes cada sector tenía un género alegre propio
+   (bambuco, joropo, lo-fi…); Juan lo descartó porque sonaba "a música de tienda".
    Los instrumentos buscan sonar acústicos y no "de pitido":
    - cuerda pulsada (guitarra, arpa llanera, cuatro) con síntesis Karplus-Strong;
    - marimba/campana de madera (parciales inarmónicos);
@@ -2511,6 +2522,9 @@ document.addEventListener('click', (e)=>{
    con variación aleatoria, así que la música no se repite exactamente.
    ========================================================================================= */
 const MUSICA_VOLUMEN = 0.16;
+// Volumen propio de la música (Ajustes), aparte del volumen general de los efectos.
+let volumenMusica = (()=>{ try{ const v = parseFloat(window.localStorage.getItem('elcomite_volumen_musica')); return isNaN(v) ? 1 : v; }catch(e){ return 1; } })();
+function nivelVolumenMusica(){ return MUSICA_VOLUMEN * volumenGeneral * volumenMusica; }
 let musica = null; // { ctx, bus, estilo, compas, inicio, timer }
 
 function midiAFrec(m){ return 440 * Math.pow(2, (m - 69) / 12); }
@@ -2681,87 +2695,78 @@ const MUSICA_ESTILOS = {
       bajo(ctx, bus, ac.raiz, humano(t), 0.5, b * 3.5);
       if(Math.random() < 0.7) marimba(ctx, bus, ac.notas[Math.floor(Math.random()*ac.notas.length)] + 12, humano(t + b * (1 + Math.floor(Math.random()*3))), azar(0.4, 0.6), {vol:0.16, dur:2});
     } },
-  // AgroVerde: bambuco campesino en 3/4 (Sol mayor), guitarra pulsada y tiple, maraca suave.
-  agroverde: { bpm:96, tiempos:3, acordes:[acordeM(43,55,59,62), acordeM(48,55,60,64), acordeM(50,54,57,62), acordeM(43,55,59,62), acordeM(40,55,59,64), acordeM(48,55,60,64), acordeM(50,54,57,62), acordeM(50,54,57,60)],
-    compas(ctx, bus, t, n, ac, b){
-      bajo(ctx, bus, ac.raiz, humano(t, 6), 0.75, b * 1.6);
-      const arpegio = [ac.notas[0], ac.notas[1], ac.notas[2], ac.notas[1], ac.notas[2] + 12, ac.notas[1]];
-      arpegio.forEach((m, i)=>cuerda(ctx, bus, m, humano(t + i * b / 2, 9), azar(0.55, 0.85), {vol:0.42, brillo:0.5, pan:-0.25}));
-      if(n % 2 === 1) [ac.notas[0] + 12, ac.notas[2] + 12].forEach((m, i)=>marimba(ctx, bus, m, humano(t + b * (1 + i)), azar(0.5, 0.7), {vol:0.13}));
-      for(let i = 0; i < 6; i++) if(i % 2 === 1 || Math.random() < 0.3) maraca(ctx, bus, humano(t + i * b / 2, 6), i % 2 ? 0.8 : 0.4, {vol:0.06});
-    } },
-  // Ganadera Los Llanos: joropo llanero (Re mayor, 3/4 vivo), arpa en corcheas, bajo sincopado,
-  // cuatro rasgueado y maracas constantes.
-  ganadera: { bpm:126, tiempos:3, acordes:[acordeM(38,62,66,69), acordeM(45,61,64,69), acordeM(38,62,66,69), acordeM(45,61,64,67), acordeM(43,62,67,71), acordeM(45,61,64,69), acordeM(38,62,66,69), acordeM(45,61,64,67)],
-    compas(ctx, bus, t, n, ac, b){
-      bajo(ctx, bus, ac.raiz, humano(t, 5), 0.85, b * 0.9);
-      bajo(ctx, bus, ac.raiz + 7, humano(t + b * 1.5, 5), 0.6, b * 0.9);
-      const sube = n % 2 === 0;
-      const arpa = sube ? [ac.notas[0], ac.notas[1], ac.notas[2], ac.notas[0] + 12, ac.notas[1] + 12, ac.notas[2] + 12]
-                        : [ac.notas[2] + 12, ac.notas[1] + 12, ac.notas[0] + 12, ac.notas[2], ac.notas[1], ac.notas[0]];
-      arpa.forEach((m, i)=>cuerda(ctx, bus, m, humano(t + i * b / 2, 7), azar(0.55, 0.9), {vol:0.36, brillo:0.75, sostener:0.994, pan:0.3, dur:1.1}));
-      [1, 2].forEach(k=>ac.notas.forEach((m, j)=>cuerda(ctx, bus, m - 12, humano(t + b * k + j * 0.012, 4), 0.5, {vol:0.16, brillo:0.4, dur:0.35, pan:-0.3})));
-      for(let i = 0; i < 6; i++) maraca(ctx, bus, humano(t + i * b / 2, 5), i % 2 === 0 ? 0.9 : 0.55, {vol:0.07, dur:0.06});
-    } },
-  // Vita Fit: pulso de gimnasio contenido (Mi menor), bombo, shaker en semicorcheas, bajo en
-  // corcheas y arpegio de cuerda brillante.
-  vitafit: { bpm:108, tiempos:4, acordes:[acordeM(40,52,55,59), acordeM(36,52,55,60), acordeM(43,55,59,62), acordeM(38,54,57,62)],
-    compas(ctx, bus, t, n, ac, b){
-      [0, 2].forEach(k=>bombo(ctx, bus, t + k * b, 0.8));
-      if(n % 4 === 3) bombo(ctx, bus, t + 3.5 * b, 0.5);
-      for(let i = 0; i < 8; i++) bajo(ctx, bus, ac.raiz + (i % 4 === 3 ? 12 : 0), humano(t + i * b / 2, 4), i % 2 ? 0.55 : 0.75, b * 0.45);
-      for(let i = 0; i < 16; i++) if(Math.random() < 0.85) maraca(ctx, bus, humano(t + i * b / 4, 4), i % 4 === 2 ? 0.9 : 0.45, {vol:0.045, frec:8000, dur:0.04});
-      const arp = [ac.notas[0] + 12, ac.notas[2] + 12, ac.notas[1] + 12, ac.notas[2] + 12];
-      for(let i = 0; i < 8; i++) cuerda(ctx, bus, arp[i % 4], humano(t + i * b / 2, 5), azar(0.4, 0.6), {vol:0.22, brillo:0.8, dur:0.6, pan:(i % 2 ? 0.35 : -0.35)});
-      colchon(ctx, bus, ac.notas, t, b * 4, {vol:0.018, corte:1400});
-    } },
-  // TechNova: ambiente electrónico (Re dórico), arpegio de marimba en semicorcheas con eco,
-  // colchón amplio y sub bajo.
-  technova: { bpm:92, tiempos:4, acordes:[acordeM(38,57,60,64,65), acordeM(43,59,62,65), acordeM(45,57,60,64), acordeM(41,57,60,64)],
-    compas(ctx, bus, t, n, ac, b){
-      colchon(ctx, bus, ac.notas, t, b * 4, {vol:0.026, corte:1100, onda:'triangle'});
-      bajo(ctx, bus, ac.raiz, humano(t, 3), 0.7, b * 1.8);
-      bajo(ctx, bus, ac.raiz, humano(t + b * 2.5, 3), 0.5, b * 1.2);
-      const arp = ac.notas.concat([ac.notas[1] + 12]);
-      for(let i = 0; i < 16; i++){
-        if(Math.random() < 0.18) continue;
-        const m = arp[(i * 3 + n) % arp.length] + (i >= 8 && n % 2 ? 12 : 0);
-        marimba(ctx, bus, m, humano(t + i * b / 4, 3), azar(0.35, 0.65), {vol:0.11, dur:0.7});
-      }
-      for(let i = 0; i < 4; i++) maraca(ctx, bus, humano(t + i * b + b / 2, 3), 0.6, {vol:0.035, frec:9500, dur:0.03});
-    } },
-  // Construye YA: tensión de obra (Do menor), pulso grave en negras, colchón oscuro y un golpe
-  // metálico lejano de vez en cuando.
-  construyeya: { bpm:74, tiempos:4, acordes:[acordeM(36,55,60,63), acordeM(32,56,60,63), acordeM(29,56,60,65), acordeM(31,55,59,62)],
-    compas(ctx, bus, t, n, ac, b){
-      colchon(ctx, bus, ac.notas, t, b * 4, {vol:0.032, corte:650});
-      for(let i = 0; i < 4; i++) bajo(ctx, bus, ac.raiz, humano(t + i * b, 4), i === 0 ? 0.9 : 0.55, b * 0.8);
-      bombo(ctx, bus, t, 0.6);
-      const motivo = [ac.notas[0], ac.notas[1], ac.notas[0], ac.notas[2]];
-      motivo.forEach((m, i)=>{ if(Math.random() < 0.75) marimba(ctx, bus, m - 12, humano(t + b * (i + 0.5)), azar(0.45, 0.7), {vol:0.16, dur:1}); });
-      if(n % 4 === 2) marimba(ctx, bus, ac.notas[2] + 24, humano(t + b * 3.25), 0.5, {vol:0.06, dur:2.4});
-      for(let i = 0; i < 8; i++) if(i % 2) maraca(ctx, bus, humano(t + i * b / 2, 6), 0.5, {vol:0.03, frec:3500, dur:0.09});
-    } },
-  // Moda Urbana: lo-fi con swing (Fa mayor, acordes de séptima), piano eléctrico, bajo,
-  // bombo, escobilla en 2 y 4.
-  modaurbana: { bpm:84, tiempos:4, swing:0.62, acordes:[acordeM(41,57,60,64,67), acordeM(40,55,59,62,67), acordeM(38,57,60,64,65), acordeM(36,55,59,64,67)],
-    compas(ctx, bus, t, n, ac, b, sw){
-      const ocho = (i)=>t + Math.floor(i / 2) * b + (i % 2 ? b * sw : 0);
-      ac.notas.forEach((m, j)=>rhodes(ctx, bus, m, humano(t + j * 0.015, 6), azar(0.6, 0.8), b * 1.4));
-      ac.notas.slice(1).forEach((m, j)=>rhodes(ctx, bus, m, humano(ocho(3) + j * 0.012, 6), azar(0.4, 0.55), b * 0.9));
-      bajo(ctx, bus, ac.raiz, humano(t, 5), 0.8, b * 1.4);
-      bajo(ctx, bus, ac.raiz + 7, humano(ocho(5), 5), 0.6, b * 0.6);
-      bajo(ctx, bus, ac.raiz + (n % 2 ? 10 : 12), humano(ocho(7), 5), 0.5, b * 0.5);
-      bombo(ctx, bus, t, 0.75); bombo(ctx, bus, ocho(5), 0.5);
-      [1, 3].forEach(k=>maraca(ctx, bus, humano(t + k * b, 5), 0.9, {vol:0.08, frec:2200, dur:0.16}));
-      for(let i = 0; i < 8; i++) maraca(ctx, bus, humano(ocho(i), 5), i % 2 ? 0.5 : 0.8, {vol:0.035, frec:7500, dur:0.04});
-    } },
+  // Partida (nov. 2026, reemplaza los estilos alegres por sector, que sonaban "de tienda"):
+  // banda sonora de tensión, sin melodía protagonista, en Re menor. Reacciona al estado de la
+  // empresa (musica.nivel: calma / tension / alarma, ver actualizarMusicaSegunPartida) y calla
+  // durante la junta (musica.junta). Cada sector conserva solo un color lejano (COLOR_SECTOR).
+  partida: { bpm:56, tiempos:4, acordes:[acordeM(38,50,53,57,64), acordeM(34,50,53,58,62), acordeM(31,50,55,58,62), acordeM(33,52,57,60,64)],
+    compas(ctx, bus, t, n, ac, b){ compasPartida(ctx, bus, t, n, b); } },
+};
+// Tempo por nivel: el pulso se acelera con el riesgo.
+const PARTIDA_BPM = { calma:56, tension:68, alarma:84 };
+// Dm(add9) → B♭maj7 → Gm(add9) → Am: dos compases por acorde, ciclo de 8 compases.
+const PARTIDA_ACORDES = MUSICA_ESTILOS.partida.acordes;
+// Tictac de reloj de pared: la sala espera.
+function reloj(ctx, bus, t, vel){
+  maraca(ctx, bus, t, vel, {vol:0.05, frec:2600, dur:0.03});
+}
+// Un compás de la partida según el nivel.
+function compasPartida(ctx, bus, t, n, b){
+  const nivel = (musica && musica.nivel) || 'calma';
+  const ac = PARTIDA_ACORDES[Math.floor(n / 2) % PARTIDA_ACORDES.length];
+  const cambio = n % 2 === 0;
+  // Junta: solo la sala y el reloj; la música se calla para que pese el veredicto.
+  if(musica && musica.junta){
+    colchon(ctx, bus, [ac.notas[0], ac.notas[2]], t, b * 4, {vol:0.012, corte:380, onda:'triangle'});
+    for(let i = 0; i < 4; i++) reloj(ctx, bus, t + i * b, i % 2 ? 0.5 : 0.7);
+    return;
+  }
+  if(nivel === 'calma'){
+    colchon(ctx, bus, ac.notas.slice(0, 3), t, b * 4, {vol:0.02, corte:520, onda:'triangle'});
+    if(cambio) bajo(ctx, bus, ac.raiz, humano(t), 0.45, b * 7);
+    for(let i = 0; i < 4; i++) reloj(ctx, bus, t + i * b, i % 2 ? 0.35 : 0.5);
+    // Una nota suelta, aguda y lejana, de vez en cuando.
+    if(Math.random() < 0.55){
+      const escala = [ac.notas[1], ac.notas[2], ac.notas[3] || ac.notas[2]];
+      marimba(ctx, bus, escala[Math.floor(Math.random()*escala.length)] + 12, humano(t + b * (1 + Math.floor(Math.random()*3)), 20), azar(0.3, 0.45), {vol:0.1, dur:3});
+    }
+  } else if(nivel === 'tension'){
+    colchon(ctx, bus, ac.notas.slice(0, 4), t, b * 4, {vol:0.026, corte:820});
+    // Pulso grave en corcheas, acentuado en cada tiempo: el reloj se vuelve latido.
+    for(let i = 0; i < 8; i++) bajo(ctx, bus, ac.raiz + 12, humano(t + i * b / 2, 3), i % 2 ? 0.28 : 0.45, b * 0.42);
+    bombo(ctx, bus, t, 0.45);
+    for(let i = 0; i < 4; i++) reloj(ctx, bus, t + i * b, 0.6);
+    // Segunda menor que roza, cada cuatro compases.
+    if(n % 4 === 3){ marimba(ctx, bus, ac.notas[2] + 12, humano(t + b * 2), 0.45, {vol:0.09, dur:2.5}); marimba(ctx, bus, ac.notas[2] + 13, humano(t + b * 2.05), 0.4, {vol:0.07, dur:2.5}); }
+  } else {
+    // Alarma: racimo disonante, pulso rápido, latido doble y un trémolo agudo.
+    colchon(ctx, bus, ac.notas.slice(0, 3).concat([ac.notas[0] + 1]), t, b * 4, {vol:0.03, corte:1300});
+    for(let i = 0; i < 8; i++) bajo(ctx, bus, ac.raiz + 12, humano(t + i * b / 2, 2), i % 2 ? 0.4 : 0.6, b * 0.4);
+    [0, 2].forEach(k=>{ bombo(ctx, bus, t + k * b, 0.7); bombo(ctx, bus, t + k * b + 0.2, 0.45); });
+    for(let i = 0; i < 16; i++) marimba(ctx, bus, ac.notas[2] + 24 + (i % 2), t + i * b / 4, 0.3, {vol:0.025, dur:0.25});
+  }
+  // Color del sector: un gesto lejano cada cuatro compases (no en alarma).
+  if(nivel !== 'alarma' && n % 4 === 1 && musica && COLOR_SECTOR[musica.sector]) COLOR_SECTOR[musica.sector](ctx, bus, t, ac, b);
+}
+const COLOR_SECTOR = {
+  // Cuatro llanero rasgueado a lo lejos.
+  ganadera:(ctx, bus, t, ac, b)=>[0, 0.5, 1].forEach(k=>ac.notas.slice(0, 3).forEach((m, j)=>cuerda(ctx, bus, m + 12, humano(t + b * (1 + k) + j * 0.014, 4), 0.4, {vol:0.1, brillo:0.45, dur:0.4, pan:0.4}))),
+  // Guitarra campesina: cuatro notas arpegiadas.
+  agroverde:(ctx, bus, t, ac, b)=>[0, 1, 2, 1].forEach((j, i)=>cuerda(ctx, bus, ac.notas[j] + 12, humano(t + b * (1 + i * 0.5), 8), 0.45, {vol:0.14, brillo:0.4, pan:-0.3})),
+  // Eco electrónico.
+  technova:(ctx, bus, t, ac, b)=>[0, 2, 1, 3, 2, 0].forEach((j, i)=>marimba(ctx, bus, (ac.notas[j] || ac.notas[0]) + 12, t + b + i * b / 4, 0.4 - i * 0.05, {vol:0.06, dur:0.8})),
+  // Gimnasio al otro lado de la pared: bombo apagado.
+  vitafit:(ctx, bus, t, ac, b)=>[0, 1, 2, 3].forEach(k=>bombo(ctx, bus, t + k * b, 0.25)),
+  // Obra: un golpe metálico agudo y otro grave.
+  construyeya:(ctx, bus, t, ac, b)=>{ marimba(ctx, bus, ac.notas[2] + 24, t + b * 1.5, 0.4, {vol:0.06, dur:2.4}); marimba(ctx, bus, ac.raiz, t + b * 1.5, 0.5, {vol:0.12, dur:1.5}); },
+  // Moda: un solo acorde de piano eléctrico, lejano.
+  modaurbana:(ctx, bus, t, ac, b)=>ac.notas.slice(1).forEach((m, j)=>rhodes(ctx, bus, m, humano(t + b * 2 + j * 0.02, 6), 0.35, b * 2))
 };
 
 // Agenda el compás n del estilo a partir del tiempo t. Devuelve la duración del compás.
 function musicaProgramarCompas(ctx, bus, estiloId, t, n){
   const e = MUSICA_ESTILOS[estiloId];
-  const b = 60 / e.bpm;
+  const b = 60 / (estiloId === 'partida' ? PARTIDA_BPM[(musica && musica.nivel) || 'calma'] : e.bpm);
   const acorde = e.acordes[n % e.acordes.length];
   e.compas(ctx, bus, t, n, acorde, b, e.swing || 0.5);
   return b * e.tiempos;
@@ -2774,8 +2779,8 @@ function iniciarMusica(estiloId){
   if(musica && musica.estilo === estiloId) return;
   detenerMusica();
   const bus = musicaConstruirBus(ctx);
-  bus.maestro.gain.linearRampToValueAtTime(MUSICA_VOLUMEN * volumenGeneral, ctx.currentTime + 3);
-  const m = { ctx, bus, estilo:estiloId, compas:0, siguiente:ctx.currentTime + 0.3, timer:null };
+  bus.maestro.gain.linearRampToValueAtTime(nivelVolumenMusica(), ctx.currentTime + 3);
+  const m = { ctx, bus, estilo:estiloId, compas:0, siguiente:ctx.currentTime + 0.3, timer:null, nivel:'calma', junta:false, sector:null };
   const programar = ()=>{
     while(m.siguiente < ctx.currentTime + 1.2){
       m.siguiente += musicaProgramarCompas(ctx, bus, estiloId, m.siguiente, m.compas++);
@@ -2797,13 +2802,23 @@ function detenerMusica(){
 }
 function actualizarVolumenMusica(){
   if(!musica) return;
-  musica.bus.maestro.gain.linearRampToValueAtTime(MUSICA_VOLUMEN * volumenGeneral, musica.ctx.currentTime + 0.15);
+  musica.bus.maestro.gain.linearRampToValueAtTime(nivelVolumenMusica(), musica.ctx.currentTime + 0.15);
 }
-// Con la empresa en zona crítica la música se oscurece (se cierra el filtro); al recuperarse, se abre.
+// Música de partida: el nivel (calma / tensión / alarma) sigue al de la alarma del tablero
+// (nivelAlarma, ui/efectos-finales.js) y cambia en el compás siguiente.
 function actualizarMusicaSegunSalud(h){
-  if(!musica) return;
-  const corte = h <= 25 ? 1100 : h <= 45 ? 3000 : 9000;
-  musica.bus.filtro.frequency.setTargetAtTime(corte, musica.ctx.currentTime, 1.2);
+  if(!musica || musica.estilo !== 'partida') return;
+  const a = nivelAlarma();
+  musica.nivel = a.nivel === 'critico' ? 'alarma' : a.nivel === 'tension' ? 'tension' : 'calma';
+}
+// Durante la junta la música se calla: queda la sala y el reloj.
+function musicaJunta(activa){
+  if(!musica || musica.estilo !== 'partida' || musica.junta === !!activa) return;
+  musica.junta = !!activa;
+  // Lo ya agendado (hasta un compás) se atenúa enseguida en vez de esperar al siguiente.
+  const g = musica.bus.maestro.gain, t = musica.ctx.currentTime;
+  g.cancelScheduledValues(t); g.setValueAtTime(g.value, t);
+  g.linearRampToValueAtTime(nivelVolumenMusica() * (activa ? 0.45 : 1), t + (activa ? 0.8 : 2.5));
 }
 /* =========================================================================================
    SONIDOS DE LA SALA DE MANDO — etapa 4 (oct. 2026)
@@ -8185,6 +8200,7 @@ function openTurnModal(){
   }
 }
 function closeTurnModal(){
+  musicaJunta(false);
   document.getElementById('turnModalBackdrop').classList.remove('show');
   document.getElementById('turnModalContent').innerHTML = '';
   ocultarFranjaKpi();
@@ -8853,6 +8869,7 @@ function prepararVentanaJunta(c){
   if(!ventana) return;
   const eraJunta = ventana.classList.contains('modo-junta');
   ventana.classList.toggle('modo-junta', !!c && c.tipo === 'junta');
+  musicaJunta(!!c && c.tipo === 'junta');
   if(c && c.tipo !== 'junta' && eraJunta){
     // Tras la junta puede seguir otro caso en la misma ventana: vuelve el título normal.
     const titulo = document.getElementById('ventanaTitulo');
@@ -11702,6 +11719,19 @@ if(volumeSlider){
     volumenGeneral = parseInt(volumeSlider.value, 10) / 100;
     if(volumeValue) volumeValue.textContent = volumeSlider.value + '%';
     actualizarVolumenEnVivo();
+  });
+}
+// Volumen de la música por separado (se recuerda en este navegador).
+const musicaSlider = document.getElementById('musicaSlider');
+const musicaValue = document.getElementById('musicaValue');
+if(musicaSlider){
+  musicaSlider.value = String(Math.round(volumenMusica * 100));
+  if(musicaValue) musicaValue.textContent = musicaSlider.value + '%';
+  musicaSlider.addEventListener('input', ()=>{
+    volumenMusica = parseInt(musicaSlider.value, 10) / 100;
+    if(musicaValue) musicaValue.textContent = musicaSlider.value + '%';
+    try{ window.localStorage.setItem('elcomite_volumen_musica', String(volumenMusica)); }catch(e){}
+    actualizarVolumenMusica();
   });
 }
 

@@ -48,6 +48,7 @@ function prepararVentanaJunta(c){
   if(!ventana) return;
   const eraJunta = ventana.classList.contains('modo-junta');
   ventana.classList.toggle('modo-junta', !!c && c.tipo === 'junta');
+  musicaJunta(!!c && c.tipo === 'junta');
   if(c && c.tipo !== 'junta' && eraJunta){
     // Tras la junta puede seguir otro caso en la misma ventana: vuelve el título normal.
     const titulo = document.getElementById('ventanaTitulo');
