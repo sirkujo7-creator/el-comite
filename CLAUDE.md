@@ -269,6 +269,9 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
 - **Explicar antes de cualquier cambio arquitectónico grande** y esperar su visto bueno.
 - **Proponer opciones**, no asumir. Trabajar paso a paso.
 - Cuando diga "no hagas nada aún", solo informar.
+- **Cambios visuales o creativos grandes (imágenes, estética, música): primero muestras, luego aplicar.**
+  Nov. 2026: se aplicaron los flashbacks SVG de las cinemáticas sin mostrarlos antes y a Juan no le
+  gustaron. Quiere las imágenes hechas con Canva. Regla: mostrar la propuesta y esperar su visto bueno.
 - Valora hacer las cosas bien sobre hacerlas rápido.
 - Al terminar: resumen breve de qué cambió y qué se verificó (números de simulación cuando aplique).
 
