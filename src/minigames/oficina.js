@@ -3,28 +3,27 @@
    ========================================================================================= */
 let oficinaEsAmbiente = false;
 function aplicarYFinalizarEventoOficina(resultElId, efectos, mensaje, stampClass, stampTexto){
+  const indicadoresAntes = capturarIndicadores();
   applyEfectos(efectos);
   history.push({titulo: oficinaEsAmbiente?'Situación en la Oficina':'Cultura de Oficina', texto:mensaje, turno:turnNumber, efectos});
   state.healthHistory.push({turno:turnNumber, score:Math.round(healthScore(state)*10)/10, caja:state.caja, ebitda:Math.round(state.ebitda*10)/10, deuda:Math.round(state.deuda*10)/10});
   renderTicker(efectos);
 
-  const chipOrder = ['caja','ebitda','moralEquipo','reputacion'];
-  const chips = chipOrder.filter(k=>efectos[k]).map(k=>{
-    const val = efectos[k];
-    const money = (k==='caja'||k==='ebitda');
-    const goodDir = deltaEsSano(k, val);
-    return `<span class="delta-chip ${goodDir?'up':'down'}">${KPI_LABEL[k]||k} ${fmtDelta(val, money?'money':'num')}</span>`;
-  }).join('');
-
   const resultBox = document.getElementById(resultElId);
   if(resultBox){
+    // Mismo resultado que una decisión normal: sello, consecuencia y "antes → después".
+    const balance = balanceDecisionHTML(indicadoresAntes, efectos);
     resultBox.innerHTML = `
-      <div class="stamp ${stampClass}">${stampTexto || 'DECISIÓN TOMADA'}</div>
+      <div class="stamp result-stamp ${stampClass}">${stampTexto || 'DECISIÓN TOMADA'}</div>
       <p class="consequence-text">${mensaje}</p>
-      <div class="deltas">${chips || '<span class="delta-chip up">Sin efectos netos</span>'}</div>
+      ${balance || '<p class="oficina-sin-efecto">Sin efecto en los indicadores.</p>'}
       <button class="continue-btn" id="oficinaContinueBtn">Continuar →</button>
     `;
     resultBox.classList.add('show');
+    const tarjeta = resultBox.closest ? resultBox.closest('.oficina-card') : null;
+    if(tarjeta) tarjeta.classList.add('resuelta');
+    if(balance) animarBalanceDecision();
+    sonidoResultado(stampClass);
     const eraAmbiente = oficinaEsAmbiente;
     oficinaEsAmbiente = false;
     document.getElementById('oficinaContinueBtn').addEventListener('click', ()=>{
@@ -127,7 +126,7 @@ function renderClimaCaos(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">🌡️ CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">🌡️ EN LA OFICINA</div>
       <h2 class="case-title">La Climatización del Caos</h2>
       <p class="case-context">${contextoOficina('clima_caos')} El termostato de la oficina se ha convertido en un campo de batalla, y todos te miran a ti.</p>
       <div class="clima-dial-wrap">
@@ -166,7 +165,7 @@ function renderDilemaCafe(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">☕ CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">☕ EN LA OFICINA</div>
       <h2 class="case-title">El Dilema del Café</h2>
       <p class="case-context">${contextoOficina('dilema_cafe')}</p>
       <div class="cafe-clicker-box">
@@ -246,7 +245,7 @@ function renderCumpleInoportuno(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">🎂 CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">🎂 EN LA OFICINA</div>
       <h2 class="case-title">El cumpleaños inoportuno</h2>
       <p class="case-context">${contextoOficina('cumple_inoportuno')}</p>
       <progress class="cumple-progress" id="cumpleProgress" max="100" value="100"></progress>
@@ -312,7 +311,7 @@ function renderGuerraNevera(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">🥪 CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">🥪 EN LA OFICINA</div>
       <h2 class="case-title">Guerra de la Nevera</h2>
       <p class="case-context">${contextoOficina('guerra_nevera')} Te entregan la "grabación" de la cámara de seguridad rota de la cocina.</p>
       <div class="nevera-camara" id="neveraCamara">
@@ -338,9 +337,9 @@ function resolverNevera(resultado){
 
   let efectos, mensaje, stampClass, stampTexto;
   if(resultado === 'A'){
-    efectos = {};
+    efectos = {moralEquipo:-1};
     stampClass='neu'; stampTexto='SIN PRESUPUESTO PARA DRAMAS';
-    mensaje = "No hay presupuesto para dramas de sándwiches. El misterio del almuerzo robado queda oficialmente sin resolver.";
+    mensaje = "No hay presupuesto para dramas de sándwiches. El misterio del almuerzo robado queda oficialmente sin resolver, y en la cocina se comenta que a nadie arriba le importa.";
   } else {
     efectos = {caja:-0.15, moralEquipo:4};
     stampClass='pos'; stampTexto='PARANOIA ACTIVADA';
@@ -356,7 +355,7 @@ function renderImpresoraAtascada(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">🖨️ CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">🖨️ EN LA OFICINA</div>
       <h2 class="case-title">La impresora atascada</h2>
       <p class="case-context">${contextoOficina('impresora_atascada')}</p>
       <div class="impresora-intro" id="impresoraIntro">
@@ -423,7 +422,7 @@ function renderImpresoraAtascada(c){
       }
       const dir = secuencia[i];
       const btn = document.querySelector('.impresora-flecha[data-dir="'+dir+'"]');
-      if(btn) btn.classList.add('flash');
+      if(btn){ btn.classList.add('flash'); sonidoMemoria(i); }
       const t1 = setTimeout(()=>{
         if(btn) btn.classList.remove('flash');
         i++;
@@ -490,7 +489,7 @@ function renderPantallaAzul(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">🖥️ CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">🖥️ EN LA OFICINA</div>
       <h2 class="case-title">La pantalla azul</h2>
       <p class="case-context">${contextoOficina('pantalla_azul')}</p>
       <div class="pantalla-intro" id="pantallaIntro">
@@ -557,7 +556,7 @@ function renderPantallaAzul(c){
       }
       const tec = secuencia[i];
       const btn = document.querySelector('.pantalla-tecla[data-t="'+tec+'"]');
-      if(btn) btn.classList.add('flash');
+      if(btn){ btn.classList.add('flash'); sonidoMemoria(i); }
       const t1 = setTimeout(()=>{
         if(btn) btn.classList.remove('flash');
         i++;
@@ -625,7 +624,7 @@ function renderCorreoTodos(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">📧 CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">📧 EN LA OFICINA</div>
       <h2 class="case-title">El Correo Enviado a "Todos"</h2>
       <p class="case-context">${contextoOficina('correo_todos')}</p>
       <div class="cafe-progreso-wrap"><div class="cafe-progreso-fill" id="correoTimerFill"></div></div>
@@ -699,7 +698,7 @@ function renderEncuestaClima(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">📋 CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">📋 EN LA OFICINA</div>
       <h2 class="case-title">La Encuesta de Clima Laboral Obligatoria</h2>
       <p class="case-context">${contextoOficina('encuesta_clima')}</p>
       <div class="encuesta-pregunta">
@@ -766,7 +765,7 @@ function renderApagon(c){
   const g = document.getElementById('turnModalContent');
   g.innerHTML = `
     <div class="case-card oficina-card screen-fade-in">
-      <div class="case-eyebrow">🔌 CULTURA DE OFICINA</div>
+      <div class="case-eyebrow">🔌 EN LA OFICINA</div>
       <h2 class="case-title">El Apagón de 10 Minutos</h2>
       <p class="case-context">${contextoOficina('apagon')}</p>
       <div class="impresora-instruccion">La planta de respaldo solo alcanza para <b>2</b> de estos 4. Elige rápido:</div>

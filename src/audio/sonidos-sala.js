@@ -167,3 +167,20 @@ function sonidoFinal(victoria, monedas){
     ruidoSala(ctx, t, 0.5, {vol:0.15, filtro:'bandpass', corte:3000, caida:1});
   }
 }
+// Juegos de memoria de la oficina (impresora, pantalla azul): un tono por destello, de una
+// escala fija para que la secuencia también se pueda recordar de oído.
+function sonidoMemoria(i){
+  if(!sonidosActivos()) return;
+  const ctx = getAudioCtx();
+  tonoSala(ctx, [523.25, 659.25, 783.99, 1046.5][i % 4], ctx.currentTime + 0.01, 0.3, {tipo:'square', vol:0.06, filtro:'lowpass', corte:2600});
+}
+// Botones de la oficina: el mismo clic suave al pasar por encima que las opciones de un caso,
+// y un golpe de tecla al pulsar las flechas o teclas de los juegos de memoria.
+document.addEventListener('mouseover', (e)=>{
+  const b = e.target && e.target.closest ? e.target.closest('.oficina-choice-btn:not(:disabled)') : null;
+  if(b && !(e.relatedTarget && b.contains && b.contains(e.relatedTarget))) sonidoOpcion(Array.from(b.parentNode.children).indexOf(b));
+});
+document.addEventListener('click', (e)=>{
+  const t = e.target && e.target.closest ? e.target.closest('.impresora-flecha, .pantalla-tecla') : null;
+  if(t && !t.disabled && sonidosActivos()){ const ctx = getAudioCtx(); ruidoSala(ctx, ctx.currentTime + 0.005, 0.04, {vol:0.25, filtro:'bandpass', corte:2400, q:2}); }
+});

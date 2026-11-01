@@ -216,6 +216,14 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   alarma (no en bucle), mazo y fanfarria/golpe en el veredicto de la junta, arpegio del combo,
   vidrio y apagón en la quiebra, fanfarria con monedas o caída al final. Volúmenes medidos: efectos
   de fondo 0,05–0,2 de pico, eventos 0,3–0,4 (como el resultado y la junta). Usan `azarVisual()`.
+- Situación en la oficina (nov. 2026, minigames/oficina.js + final de sala-de-mando.css): los 9
+  eventos usan la estética de la sala — botones como las opciones de un caso (clic suave al pasar),
+  deslizadores de riel frío→caliente, barras de tiempo en bloques, cámara de seguridad verde con REC,
+  teclas físicas en los juegos de memoria (un tono por destello), una pantalla azul de verdad. Al
+  resolver se ocultan los controles y el resultado es el de una decisión: sello, consecuencia,
+  "antes → después" y `sonidoResultado`. Ignorar el robo de la nevera ya no es gratis (moral −1).
+- Cinemáticas en silencio absoluto (`silencioCinematica`): música, drones y tecleo callan mientras
+  dura la secuencia.
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
   Carteles, sello y veredicto se ajustan al ancho (`clamp` con vw); el informe final empieza arriba.
