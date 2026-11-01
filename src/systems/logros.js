@@ -5,11 +5,11 @@
    final igual que el final oculto — no se eligen antes, no cambian cómo jugás, solo
    reconocen lo que ya hiciste.
    ========================================================================================= */
-let contadorDecisionesExtra = 0;
-let contadorInvestigaciones = 0;
-let deudaMaximaAlcanzada = 0;
-let rachaMetasCumplidas = 0;
-let rachaMetasCumplidasMax = 0;
+// contadorDecisionesExtra: vive en el expediente `partida` (engine/estado-global.js)
+// contadorInvestigaciones: vive en el expediente `partida` (engine/estado-global.js)
+// deudaMaximaAlcanzada: vive en el expediente `partida` (engine/estado-global.js)
+// rachaMetasCumplidas: vive en el expediente `partida` (engine/estado-global.js)
+// rachaMetasCumplidasMax: vive en el expediente `partida` (engine/estado-global.js)
 
 const LOGROS_DEFINIDOS = [
   { id:'cero_alertas', titulo:'Cero Alertas',

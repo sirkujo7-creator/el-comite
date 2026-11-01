@@ -5,7 +5,7 @@
    una versión atenuada de cómo la dejaste, decayendo hacia el punto de partida del sector en
    vez de copiarse exacta, para que la herencia sea un eco real, no una ventaja mecánica.
    ========================================================================================= */
-let legadoActivo = null;
+// legadoActivo: vive en el expediente `partida` (engine/estado-global.js)
 function actualizarLegadoEmpresarial(ending){
   const id = sectorActual.id;
   if(ending.tipoFinal === 'cierre'){

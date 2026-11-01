@@ -4,6 +4,7 @@
 const TRANSITION_TYPES = ['macro','random'];
 
 function nextTurn(){
+  guardarPartidaEnCurso(); // tablero en reposo: el turno anterior quedó completo
   investigado = false;
   flags.decisionExtraUsadaEsteTurno = false;
   const next = resolveTurn();
@@ -65,9 +66,10 @@ function closeTurnModal(){
     if(ofBtn) ofBtn.classList.add('show');
   }
 }
-let pendingEndingResult = null;
+// pendingEndingResult: vive en el expediente `partida` (engine/estado-global.js)
 function prepararFinDePartida(endingObj){
   pendingEndingResult = endingObj;
+  borrarPartidaGuardada(); // el año fiscal terminó: ya no hay nada que continuar
   detenerOficinaAmbiente();
   const btn = document.getElementById('evaluarTurnoBtn');
   if(btn){
@@ -98,6 +100,7 @@ function calculandoImpactoYAvanzar(callbackDespues, shouldShake, efectosParaFlas
       if(overlay) overlay.classList.remove('show');
       renderTicker(efectosParaFlash);
       flashKpiCards(efectosParaFlash);
+      guardarPartidaEnCurso();
       activarShakeSiAplica(shouldShake);
       if(tendenciaCajaNegativa()) sonidoAlertaCaja();
     }, 30);

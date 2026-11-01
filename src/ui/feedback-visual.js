@@ -4,9 +4,9 @@
    cambio (decisión propia vs. algo automático como el motor operativo o el doble filo) para
    poder distinguirlos con un color distinto.
    ========================================================================================= */
-let kpiHistorial = {};
-let origenUltimoCambio = {};
-let rachaIndicador = {};
+// kpiHistorial: vive en el expediente `partida` (engine/estado-global.js)
+// origenUltimoCambio: vive en el expediente `partida` (engine/estado-global.js)
+// rachaIndicador: vive en el expediente `partida` (engine/estado-global.js)
 const TODOS_LOS_KPIS_VISUALES = ['caja','capitalTrabajo','razonCorriente','deuda','ebitda','wacc','diasInventario','diasCartera','valorInventario','confianzaProveedores','confianzaBanco','reputacion','moralEquipo'];
 function esMejorSiSube(key){
   return !['deuda','wacc','diasInventario','diasCartera'].includes(key);

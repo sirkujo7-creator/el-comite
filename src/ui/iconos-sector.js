@@ -212,6 +212,7 @@ function reiniciarPartidaActual(){
   reproducirSecuencia(guionInicioPartida(sectorActual, perfilActual), ()=>{
     resetEvaluarTurnoBtn();
     initState();
+    guardarPartidaEnCurso();
     showChrome(true);
     activarFadeInOscuro();
     document.getElementById('game').innerHTML = '';
@@ -234,6 +235,7 @@ function confirmarInicio(){
     document.getElementById('xpLine').classList.remove('show');
     resetEvaluarTurnoBtn();
     initState();
+    guardarPartidaEnCurso();
     document.getElementById('game').innerHTML = '';
     renderTicker(null);
     programarProximaOficinaAmbiente();

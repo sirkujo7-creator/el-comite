@@ -16,5 +16,5 @@ const RETRATO_AURELIO = '@asset(retratos/aurelio.webp)';
 const RETRATO_JAIRO = '@asset(retratos/jairo.webp)';
 const RETRATO_TONO = '@asset(retratos/tono.webp)';
 const RETRATO_VALENTINA = '@asset(retratos/valentina.webp)';
-let metaTrimestral = null;
-let ultimaEvaluacionMeta = null;
+// metaTrimestral: vive en el expediente `partida` (engine/estado-global.js)
+// ultimaEvaluacionMeta: vive en el expediente `partida` (engine/estado-global.js)

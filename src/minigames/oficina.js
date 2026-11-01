@@ -872,7 +872,7 @@ function pickEventoOficinaPonderadoBruto(){
 }
 // Bloqueo de repetición: un evento que ya salió no puede volver a salir hasta que hayan
 // pasado otros 2 eventos distintos — evita que la misma situación se sienta repetitiva.
-let historialOficinaReciente = [];
+// historialOficinaReciente: vive en el expediente `partida` (engine/estado-global.js)
 function pickEventoOficinaPonderado(){
   let elegido, intentos = 0;
   do {

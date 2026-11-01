@@ -30,7 +30,7 @@ function elegirDeBagPriorizado(bag){
 // Se recuerdan todos los títulos mostrados en la partida (se reinicia en initState) para que
 // la búsqueda por indicador nunca repita un caso ya visto: si un indicador pasa muchos turnos
 // en crítico y solo hay pocos casos que lo toquen, mejor no forzar nada que repetir.
-let historialTitulosRecientes = [];
+// historialTitulosRecientes: vive en el expediente `partida` (engine/estado-global.js)
 function registrarTituloReciente(titulo){
   if(!titulo) return;
   historialTitulosRecientes.push(titulo);

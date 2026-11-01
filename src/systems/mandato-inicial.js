@@ -4,7 +4,7 @@
    fiscal completo. Convierte cada partida en una misión concreta desde el turno 1, no solo
    en un sandbox de supervivencia.
    ========================================================================================= */
-let mandatoInicial = null;
+// mandatoInicial: vive en el expediente `partida` (engine/estado-global.js)
 const MANDATOS_INICIALES = [
   { id:'crecimiento', titulo:'Crecimiento agresivo',
     desc:'La junta espera que multipliques el valor de la empresa por al menos 2 antes de que termine el año fiscal.',

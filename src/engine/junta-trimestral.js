@@ -1,7 +1,7 @@
 /* =========================================================
    JUNTA TRIMESTRAL — cierre cada 5 turnos
    ========================================================= */
-let snapshotTrimestre = {caja:0, ebitda:0};
+// snapshotTrimestre: vive en el expediente `partida` (engine/estado-global.js)
 function buildJuntaTrimestral(){
   const deltaCaja = Math.round((state.caja - snapshotTrimestre.caja)*10)/10;
   const deltaEbitda = Math.round((state.ebitda - snapshotTrimestre.ebitda)*10)/10;

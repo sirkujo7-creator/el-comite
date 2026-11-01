@@ -67,8 +67,26 @@ tests/                               arnés + pruebas (npm test)
 | content/universal/… | dilemas, elenco, cadenas profundas, carta meta, karma, cisne negro… |
 | content/sectores/<sector>.js, sectores.js, perfiles.js | `*_CASES`, `*_RANDOM`, `SECTORS`, `PERFILES`, `PERKS` |
 
-### Estado global
-`state`, `flags`, `history`, `turnNumber`, `currentCase`, `randomBag`, `mainQueue`, `sectorActual`, `perfilActual`, `perkActual`, `dificultadSeleccionada`, `legadosEmpresariales`, `metaTrimestral`, `mandatoInicial`. Todo es global mutable: **es la principal deuda técnica**.
+### Estado de la partida (Fase 4, nov. 2026)
+Todo lo que pertenece a UNA partida vive en un solo objeto, `partida` (`engine/estado-global.js`,
+lista en `CAMPOS_PARTIDA`: `state`, `flags`, `history`, `turnNumber`, `mainQueue`, `randomBag`,
+`sectorActual`, `perfilActual`, `perkActual`, `metaTrimestral`, `mandatoInicial`, contadores de
+logros, rachas, anti-repetición…). `initState` crea un expediente nuevo con `nuevaPartida()`
+(solo conserva sector, perfil y ventaja), así que nada de la partida anterior queda suelto.
+Cada campo sigue disponible con su nombre de siempre como acceso directo a `partida.<campo>`
+(propiedad de `globalThis`): **no volver a declarar esos nombres con let/var** — la prueba
+`guardado.test.mjs` lo detecta. Fuera del expediente quedan solo cosas de la sesión o de la
+interfaz: `sessionXP`, `historialPartidas`, `legadosEmpresariales`, `dificultadSeleccionada`,
+`nombreEmpresaJugador`, selecciones de las pantallas de inicio, audio y temporizadores.
+
+**Continuar partida** (`systems/guardado-partida.js`, clave `elcomite_partida_v1`): el expediente
+se guarda en localStorage con el tablero en reposo (al empezar la partida, al empezar cada turno
+y tras "Calculando impacto") y se borra al terminar el año fiscal. Casos, eventos, sectores y
+perfiles se guardan como referencia a su lugar en el contenido (`caso:vitafit:3`,
+`fn:eventoHuelgaSindical`); una huella del contenido descarta guardados de otra versión de los
+casos. La portada muestra "CONTINUAR PARTIDA · empresa · turno n de 20" y "NUEVA PARTIDA".
+Salir al inicio desde Ajustes conserva la partida hasta el último turno terminado (un turno a
+medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
 
 ---
 
@@ -105,6 +123,9 @@ tests/                               arnés + pruebas (npm test)
   Escribe `reportes/` (no se versiona). Añade el perfil `metodico` (= bueno que además persigue la
   meta trimestral) para medir si las metas son alcanzables. 1.080 partidas ≈ 80 s con 4 hilos.
   `jugarPartida` acepta `sonda`/`leer` para instrumentar el motor en estudios puntuales.
+- `guardado.test.mjs` (Fase 4): ningún let/var tapa un campo del expediente; en 4 sectores, una
+  partida cortada en el turno 8 se guarda sin referencias perdidas, se retoma en otro juego
+  idéntica, se juega hasta el final y su guardado se borra.
 - `contenido.mjs` recolecta todos los casos (llama a las constructoras con el estado real de cada
   sector; construye varias veces para detectar opciones con resultado aleatorio).
 - `contenido.test.mjs` (reglas 1–7) y `simulacion.test.mjs` (reglas 8–9, imprime el reporte).
@@ -276,7 +297,10 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
 - Ajustes de balance solo con evidencia antes/después.
 
 ### Fase 4 — Producto
-- Reducir estado global (objeto de partida único), guardado más robusto, posible despliegue web y modo docente (resultados exportables para clase).
+- ✅ Estado de la partida en un solo expediente y "continuar partida" (nov. 2026).
+- ✅ Despliegue web (GitHub Pages).
+- Pendiente: modo docente (resultados exportables para clase). Juan pidió dejarlo para después;
+  el expediente ya permite exportar una partida completa.
 
 ---
 

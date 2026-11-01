@@ -50,15 +50,19 @@ function renderLanding(){
   iniciarAmbienteMenu();
   document.getElementById('subtitleText').innerHTML = "Información incompleta. Plazos que vencen. Un mercado que no avisa.";
   document.getElementById('xpLine').classList.remove('show');
+  const resumen = resumenPartidaGuardada();
   document.getElementById('game').innerHTML = `
     <div class="case-card landing">
       <div class="landing-escena"><img src="${COMITE_IMG_BASE64}" alt="" /></div>
       <h1 class="landing-title">El Comité</h1>
       <div class="landing-subtitle">Gestión crítica. Decisión final.</div>
-      <button class="landing-inicio-btn" id="inicioBtn">INICIO</button>
+      ${resumen ? `<button class="landing-continuar-btn" id="continuarBtn">CONTINUAR PARTIDA<small>${resumen.empresa} · turno ${resumen.turno} de ${MAX_TURNS}</small></button>` : ''}
+      <button class="landing-inicio-btn" id="inicioBtn">${resumen ? 'NUEVA PARTIDA' : 'INICIO'}</button>
+      ${resumen ? '<div class="landing-aviso">Empezar una nueva reemplaza la partida guardada.</div>' : ''}
       <div class="landing-pie">${SECTORS.length} sectores · ${MAX_TURNS} turnos · ${Math.floor(MAX_TURNS/5)} juntas directivas</div>
     </div>
   `;
   document.getElementById('inicioBtn').addEventListener('click', renderSectorSelect);
+  if(resumen) document.getElementById('continuarBtn').addEventListener('click', continuarPartidaGuardada);
 }
 

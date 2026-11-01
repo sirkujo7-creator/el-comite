@@ -52,6 +52,8 @@ function aplicarDificultadYVariabilidad(base, dificultad){
 }
 
 function initState(){
+  // Expediente nuevo: solo se conserva lo elegido antes de empezar; nada de la partida anterior.
+  partida = nuevaPartida({sectorActual, perfilActual, perkActual});
   const base = JSON.parse(JSON.stringify(sectorActual.kpiInicial));
   const ajustado = aplicarDificultadYVariabilidad(base, dificultadSeleccionada);
   if(perfilActual && perfilActual.bonus){
