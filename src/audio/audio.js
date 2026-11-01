@@ -68,7 +68,7 @@ function iniciarDrone(){
   droneGain.gain.value = 0;
   droneOsc.connect(droneGain).connect(ctx.destination);
   droneOsc.start();
-  droneGain.gain.linearRampToValueAtTime(0.032 * volumenGeneral, ctx.currentTime + 2.5);
+  droneGain.gain.linearRampToValueAtTime(cinematicaEnCurso ? 0 : 0.032 * volumenGeneral, ctx.currentTime + 2.5);
   if(sectorActual){ iniciarMusica('partida'); if(musica) musica.sector = sectorActual.id; }
 }
 function detenerDrone(){
@@ -80,7 +80,22 @@ function detenerDrone(){
   setTimeout(()=>{ try{ oscRef.stop(); }catch(e){} }, 900);
   droneOsc = null; droneGain = null;
 }
+// Silencio absoluto durante las cinemáticas (pedido de Juan, nov. 2026): música, drones y
+// tecleo callan mientras corre la secuencia y vuelven al cerrarla.
+let cinematicaEnCurso = false;
+function silencioCinematica(activo){
+  cinematicaEnCurso = !!activo;
+  const ctx = audioCtx;
+  if(!ctx) return;
+  const t = ctx.currentTime;
+  const apagar = (param, valor)=>{ if(!param) return; param.cancelScheduledValues(t); param.setValueAtTime(param.value, t); param.linearRampToValueAtTime(valor, t + (activo ? 0.4 : 1.2)); };
+  apagar(musica && musica.bus.maestro.gain, activo ? 0 : nivelVolumenMusica());
+  apagar(droneGain && droneGain.gain, activo ? 0 : 0.032 * volumenGeneral);
+  apagar(droneCriticoGain && droneCriticoGain.gain, activo ? 0 : 0.02 * volumenGeneral);
+  apagar(murmulloNodes && murmulloNodes.gain.gain, activo ? 0 : 0.018 * volumenGeneral);
+}
 function actualizarVolumenEnVivo(){
+  if(cinematicaEnCurso) return;
   // Actualiza en vivo TODAS las capas de sonido de larga duración (los sonidos
   // instantáneos ya toman volumenGeneral en el momento en que se disparan).
   const ctx = getAudioCtx();
@@ -93,6 +108,7 @@ function actualizarVolumenEnVivo(){
 
 // 4) Tecla de máquina de escribir — tic breve y agudo, tono ligeramente aleatorio
 function sonidoTecla(){
+  if(cinematicaEnCurso) return;
   const ctx = getAudioCtx();
   if(!ctx) return;
   const dur = 0.03;

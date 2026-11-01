@@ -129,6 +129,7 @@ let onSecuenciaCompleta = null;
 async function reproducirSecuencia(guion, callback){
   onSecuenciaCompleta = callback;
   introCerrada = false;
+  silencioCinematica(true);
   const overlay = document.getElementById('introOverlay');
   if(overlay){ overlay.classList.remove('intro-hide'); overlay.style.display = 'flex'; }
   for(const linea of guion){
@@ -153,6 +154,7 @@ function closeIntro(){
   introCerrada = true;
   cancelarEsperaActual();
   liberarEsperaEspacio();
+  silencioCinematica(false);
   const overlay = document.getElementById('introOverlay');
   // Ejecutar el callback de inmediato, mientras el overlay sigue 100% opaco: así el contenido
   // de la siguiente pantalla ya está listo y renderizado ANTES de que el negro empiece a

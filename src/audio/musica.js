@@ -204,7 +204,7 @@ function iniciarMusica(estiloId){
   if(musica && musica.estilo === estiloId) return;
   detenerMusica();
   const bus = musicaConstruirBus(ctx);
-  bus.maestro.gain.linearRampToValueAtTime(nivelVolumenMusica(), ctx.currentTime + 3);
+  bus.maestro.gain.linearRampToValueAtTime(cinematicaEnCurso ? 0 : nivelVolumenMusica(), ctx.currentTime + 3);
   const m = { ctx, bus, estilo:estiloId, compas:0, siguiente:ctx.currentTime + 0.3, timer:null, nivel:'calma', junta:false, sector:null };
   const programar = ()=>{
     while(m.siguiente < ctx.currentTime + 1.2){
@@ -226,7 +226,7 @@ function detenerMusica(){
   setTimeout(()=>{ try{ m.bus.maestro.disconnect(); }catch(e){} }, 1800);
 }
 function actualizarVolumenMusica(){
-  if(!musica) return;
+  if(!musica || cinematicaEnCurso) return;
   musica.bus.maestro.gain.linearRampToValueAtTime(nivelVolumenMusica(), musica.ctx.currentTime + 0.15);
 }
 // Música de partida: el nivel (calma / tensión / alarma) sigue al de la alarma del tablero
