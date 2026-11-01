@@ -113,6 +113,7 @@ function renderChoices(c){
   `).join('');
 
   mostrarFranjaKpi();
+  musicaDecision(true);
   wrap.querySelectorAll('.choice-btn').forEach((btn,idx)=>{
     btn.addEventListener('mouseenter', ()=>{ pistaDeOpcion(choices[idx]); sonidoOpcion(idx); });
     btn.addEventListener('focus', ()=>pistaDeOpcion(choices[idx]));
@@ -127,6 +128,7 @@ function renderChoices(c){
 
 function selectChoice(c, ch){
   ocultarFranjaKpi();
+  musicaDecision(false);
   const indicadoresAntes = capturarIndicadores();
   document.querySelectorAll('.choice-btn').forEach((b)=>{ b.disabled = true; b.style.pointerEvents='none'; });
   sonidoConfirmacion();

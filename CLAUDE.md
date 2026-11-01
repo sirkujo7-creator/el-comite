@@ -220,18 +220,21 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
   Carteles, sello y veredicto se ajustan al ancho (`clamp` con vw); el informe final empieza arriba.
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
-- Música de fondo (`audio/musica.js`, generada, no grabada). Menú: el comité en penumbra.
-  **Partida (nov. 2026)**: Juan descartó los géneros alegres por sector (bambuco, joropo, lo-fi…)
-  porque "sonaba a música de tienda". Ahora es una banda sonora de tensión en Re menor, sin melodía
-  protagonista, que reacciona al estado de la empresa con el mismo `nivelAlarma` del tablero:
-  calma (casi silencio, colchón grave, tictac de reloj, nota suelta), tensión (el reloj se vuelve
-  latido: pulso en corcheas, bombo suave, segunda menor que roza) y alarma (racimo disonante,
-  pulso rápido, latido doble, trémolo agudo); el tempo sube 56 → 68 → 84. En la junta la música
-  calla y queda la sala con el reloj (`musicaJunta`). Cada sector conserva solo un gesto lejano
-  cada 4 compases (`COLOR_SECTOR`: cuatro llanero, guitarra campesina, eco electrónico, bombo de
-  gimnasio tras la pared, golpe de obra, acorde de piano eléctrico). Ajustes tiene volumen de
-  música aparte (`volumenMusica`, se recuerda en el navegador). Volumen medido: calma y tensión
-  algo por debajo de la música anterior (RMS 0,007 frente a 0,009); alarma, igual.
+- Música de fondo (`audio/musica.js` + `audio/piano.js`, generada, no grabada). Menú: el comité en
+  penumbra. **Partida (nov. 2026): la "Sonata de la junta"**, piano solo a la manera de la Claro de
+  luna de Beethoven, en do sostenido menor, con el tema de El Comité (ritmo con puntillo). Fases
+  (`faseSonata`): calma = Adagio (octava grave, tresillos, tema); tensión = Più mosso (semicorcheas,
+  bajo en cada tiempo, tema en octavas); alarma = Presto agitato a la manera del tercer movimiento
+  (olas de semicorcheas de tres octavas, dos acordes secos en fortissimo, octavas martilladas);
+  ventana de decisión (`musicaDecision`, salvo en alarma) = trémolo grave y una nota que insiste
+  sobre una séptima disminuida que no resuelve; junta (`musicaJunta`) = octavas graves aisladas.
+  Tempos 60 / 72 / 150 / 64 / 50. El nivel sigue a `nivelAlarma`. El piano se sintetiza nota a nota
+  (parciales inarmónicos, 2–3 cuerdas desafinadas, doble decaimiento, martillo) en un Worker desde el
+  menú (`precalentarPiano`): ~93 notas en ~6 s, sin pausas en el hilo principal. No usa Math.random.
+  Historia: primero un género alegre por sector (descartado: "música de tienda"), luego una banda de
+  tensión sintética (descartada: demasiado suave y sin carácter); Juan eligió el piano entre muestras
+  (A sintetizador, B thriller con piano, C orquestal, y la prueba clásica). Ajustes tiene volumen de
+  música aparte (`volumenMusica`). Volumen base `MUSICA_VOLUMEN` 0,14.
 - Mantenimiento de equipos (oct. 2026, Vita Fit y Ganadería, `requiereCapex`): las opciones con
   `capex` llevan la etiqueta "🔧 Mantenimiento" y la cabecera muestra "Equipos: n de 3 turnos sin
   mantenimiento" (`renderEquiposLine`, cuenta también el turno recién jugado). El conteo es por

@@ -57,6 +57,7 @@ function openTurnModal(){
 }
 function closeTurnModal(){
   musicaJunta(false);
+  musicaDecision(false);
   document.getElementById('turnModalBackdrop').classList.remove('show');
   document.getElementById('turnModalContent').innerHTML = '';
   ocultarFranjaKpi();

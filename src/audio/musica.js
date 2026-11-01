@@ -1,20 +1,13 @@
 /* =========================================================================================
    MÚSICA DE FONDO — generada en vivo con Web Audio, sin archivos
-   Menú: el comité en penumbra. Partida (nov. 2026): banda sonora de tensión que reacciona al
-   estado de la empresa (calma → tensión → alarma) y calla en la junta; cada sector conserva
-   solo un color lejano (COLOR_SECTOR). Antes cada sector tenía un género alegre propio
-   (bambuco, joropo, lo-fi…); Juan lo descartó porque sonaba "a música de tienda".
-   Los instrumentos buscan sonar acústicos y no "de pitido":
-   - cuerda pulsada (guitarra, arpa llanera, cuatro) con síntesis Karplus-Strong;
-   - marimba/campana de madera (parciales inarmónicos);
-   - piano eléctrico (FM suave), colchón de cuerdas (sierras desafinadas y filtradas);
-   - percusión de ruido filtrado (maracas, escobilla) y bombo suave.
-   Todo pasa por una sala (reverberación por convolución) y una humanización leve: cada nota
-   se adelanta o atrasa unos milisegundos y cambia de intensidad, y los patrones varían.
-   El programador agenda un compás por adelantado; los compases son deterministas en forma pero
-   con variación aleatoria, así que la música no se repite exactamente.
+   Menú: el comité en penumbra (colchón, bajo y marimba). Partida (nov. 2026): la "Sonata de la
+   junta", piano solo a la manera de la Claro de luna (audio/piano.js), que cambia de fase con el
+   estado de la empresa (calma → tensión → alarma), mientras se elige una opción y en la junta.
+   Historia: primero cada sector tuvo un género alegre (bambuco, joropo, lo-fi…), que Juan descartó
+   por sonar "a música de tienda"; luego una banda de tensión sintética, demasiado suave y sin
+   carácter; Juan eligió el piano clásico entre varias muestras.
    ========================================================================================= */
-const MUSICA_VOLUMEN = 0.16;
+const MUSICA_VOLUMEN = 0.14;
 // Volumen propio de la música (Ajustes), aparte del volumen general de los efectos.
 let volumenMusica = (()=>{ try{ const v = parseFloat(window.localStorage.getItem('elcomite_volumen_musica')); return isNaN(v) ? 1 : v; }catch(e){ return 1; } })();
 function nivelVolumenMusica(){ return MUSICA_VOLUMEN * volumenGeneral * volumenMusica; }
@@ -188,78 +181,16 @@ const MUSICA_ESTILOS = {
       bajo(ctx, bus, ac.raiz, humano(t), 0.5, b * 3.5);
       if(Math.random() < 0.7) marimba(ctx, bus, ac.notas[Math.floor(Math.random()*ac.notas.length)] + 12, humano(t + b * (1 + Math.floor(Math.random()*3))), azar(0.4, 0.6), {vol:0.16, dur:2});
     } },
-  // Partida (nov. 2026, reemplaza los estilos alegres por sector, que sonaban "de tienda"):
-  // banda sonora de tensión, sin melodía protagonista, en Re menor. Reacciona al estado de la
-  // empresa (musica.nivel: calma / tension / alarma, ver actualizarMusicaSegunPartida) y calla
-  // durante la junta (musica.junta). Cada sector conserva solo un color lejano (COLOR_SECTOR).
-  partida: { bpm:56, tiempos:4, acordes:[acordeM(38,50,53,57,64), acordeM(34,50,53,58,62), acordeM(31,50,55,58,62), acordeM(33,52,57,60,64)],
-    compas(ctx, bus, t, n, ac, b){ compasPartida(ctx, bus, t, n, b); } },
-};
-// Tempo por nivel: el pulso se acelera con el riesgo.
-const PARTIDA_BPM = { calma:56, tension:68, alarma:84 };
-// Dm(add9) → B♭maj7 → Gm(add9) → Am: dos compases por acorde, ciclo de 8 compases.
-const PARTIDA_ACORDES = MUSICA_ESTILOS.partida.acordes;
-// Tictac de reloj de pared: la sala espera.
-function reloj(ctx, bus, t, vel){
-  maraca(ctx, bus, t, vel, {vol:0.05, frec:2600, dur:0.03});
-}
-// Un compás de la partida según el nivel.
-function compasPartida(ctx, bus, t, n, b){
-  const nivel = (musica && musica.nivel) || 'calma';
-  const ac = PARTIDA_ACORDES[Math.floor(n / 2) % PARTIDA_ACORDES.length];
-  const cambio = n % 2 === 0;
-  // Junta: solo la sala y el reloj; la música se calla para que pese el veredicto.
-  if(musica && musica.junta){
-    colchon(ctx, bus, [ac.notas[0], ac.notas[2]], t, b * 4, {vol:0.012, corte:380, onda:'triangle'});
-    for(let i = 0; i < 4; i++) reloj(ctx, bus, t + i * b, i % 2 ? 0.5 : 0.7);
-    return;
-  }
-  if(nivel === 'calma'){
-    colchon(ctx, bus, ac.notas.slice(0, 3), t, b * 4, {vol:0.02, corte:520, onda:'triangle'});
-    if(cambio) bajo(ctx, bus, ac.raiz, humano(t), 0.45, b * 7);
-    for(let i = 0; i < 4; i++) reloj(ctx, bus, t + i * b, i % 2 ? 0.35 : 0.5);
-    // Una nota suelta, aguda y lejana, de vez en cuando.
-    if(Math.random() < 0.55){
-      const escala = [ac.notas[1], ac.notas[2], ac.notas[3] || ac.notas[2]];
-      marimba(ctx, bus, escala[Math.floor(Math.random()*escala.length)] + 12, humano(t + b * (1 + Math.floor(Math.random()*3)), 20), azar(0.3, 0.45), {vol:0.1, dur:3});
-    }
-  } else if(nivel === 'tension'){
-    colchon(ctx, bus, ac.notas.slice(0, 4), t, b * 4, {vol:0.026, corte:820});
-    // Pulso grave en corcheas, acentuado en cada tiempo: el reloj se vuelve latido.
-    for(let i = 0; i < 8; i++) bajo(ctx, bus, ac.raiz + 12, humano(t + i * b / 2, 3), i % 2 ? 0.28 : 0.45, b * 0.42);
-    bombo(ctx, bus, t, 0.45);
-    for(let i = 0; i < 4; i++) reloj(ctx, bus, t + i * b, 0.6);
-    // Segunda menor que roza, cada cuatro compases.
-    if(n % 4 === 3){ marimba(ctx, bus, ac.notas[2] + 12, humano(t + b * 2), 0.45, {vol:0.09, dur:2.5}); marimba(ctx, bus, ac.notas[2] + 13, humano(t + b * 2.05), 0.4, {vol:0.07, dur:2.5}); }
-  } else {
-    // Alarma: racimo disonante, pulso rápido, latido doble y un trémolo agudo.
-    colchon(ctx, bus, ac.notas.slice(0, 3).concat([ac.notas[0] + 1]), t, b * 4, {vol:0.03, corte:1300});
-    for(let i = 0; i < 8; i++) bajo(ctx, bus, ac.raiz + 12, humano(t + i * b / 2, 2), i % 2 ? 0.4 : 0.6, b * 0.4);
-    [0, 2].forEach(k=>{ bombo(ctx, bus, t + k * b, 0.7); bombo(ctx, bus, t + k * b + 0.2, 0.45); });
-    for(let i = 0; i < 16; i++) marimba(ctx, bus, ac.notas[2] + 24 + (i % 2), t + i * b / 4, 0.3, {vol:0.025, dur:0.25});
-  }
-  // Color del sector: un gesto lejano cada cuatro compases (no en alarma).
-  if(nivel !== 'alarma' && n % 4 === 1 && musica && COLOR_SECTOR[musica.sector]) COLOR_SECTOR[musica.sector](ctx, bus, t, ac, b);
-}
-const COLOR_SECTOR = {
-  // Cuatro llanero rasgueado a lo lejos.
-  ganadera:(ctx, bus, t, ac, b)=>[0, 0.5, 1].forEach(k=>ac.notas.slice(0, 3).forEach((m, j)=>cuerda(ctx, bus, m + 12, humano(t + b * (1 + k) + j * 0.014, 4), 0.4, {vol:0.1, brillo:0.45, dur:0.4, pan:0.4}))),
-  // Guitarra campesina: cuatro notas arpegiadas.
-  agroverde:(ctx, bus, t, ac, b)=>[0, 1, 2, 1].forEach((j, i)=>cuerda(ctx, bus, ac.notas[j] + 12, humano(t + b * (1 + i * 0.5), 8), 0.45, {vol:0.14, brillo:0.4, pan:-0.3})),
-  // Eco electrónico.
-  technova:(ctx, bus, t, ac, b)=>[0, 2, 1, 3, 2, 0].forEach((j, i)=>marimba(ctx, bus, (ac.notas[j] || ac.notas[0]) + 12, t + b + i * b / 4, 0.4 - i * 0.05, {vol:0.06, dur:0.8})),
-  // Gimnasio al otro lado de la pared: bombo apagado.
-  vitafit:(ctx, bus, t, ac, b)=>[0, 1, 2, 3].forEach(k=>bombo(ctx, bus, t + k * b, 0.25)),
-  // Obra: un golpe metálico agudo y otro grave.
-  construyeya:(ctx, bus, t, ac, b)=>{ marimba(ctx, bus, ac.notas[2] + 24, t + b * 1.5, 0.4, {vol:0.06, dur:2.4}); marimba(ctx, bus, ac.raiz, t + b * 1.5, 0.5, {vol:0.12, dur:1.5}); },
-  // Moda: un solo acorde de piano eléctrico, lejano.
-  modaurbana:(ctx, bus, t, ac, b)=>ac.notas.slice(1).forEach((m, j)=>rhodes(ctx, bus, m, humano(t + b * 2 + j * 0.02, 6), 0.35, b * 2))
+  // Partida: la "Sonata de la junta", piano solo (audio/piano.js). El compás depende de la fase
+  // (calma, tensión, alarma, ventana de decisión o junta) y su tempo también.
+  partida: { bpm:60, tiempos:4, acordes:[acordeM(37,49)],
+    compas(ctx, bus, t, n, ac, b){ compasSonata(ctx, bus, t, n, b, faseSonata()); } },
 };
 
 // Agenda el compás n del estilo a partir del tiempo t. Devuelve la duración del compás.
 function musicaProgramarCompas(ctx, bus, estiloId, t, n){
   const e = MUSICA_ESTILOS[estiloId];
-  const b = 60 / (estiloId === 'partida' ? PARTIDA_BPM[(musica && musica.nivel) || 'calma'] : e.bpm);
+  const b = 60 / (estiloId === 'partida' ? TEMPO_SONATA[faseSonata()] : e.bpm);
   const acorde = e.acordes[n % e.acordes.length];
   e.compas(ctx, bus, t, n, acorde, b, e.swing || 0.5);
   return b * e.tiempos;
@@ -269,6 +200,7 @@ function musicaProgramarCompas(ctx, bus, estiloId, t, n){
 function iniciarMusica(estiloId){
   const ctx = getAudioCtx();
   if(!ctx || !MUSICA_ESTILOS[estiloId]) return;
+  precalentarPiano(); // el piano de la partida se calcula en segundo plano desde el menú
   if(musica && musica.estilo === estiloId) return;
   detenerMusica();
   const bus = musicaConstruirBus(ctx);
@@ -304,12 +236,18 @@ function actualizarMusicaSegunSalud(h){
   const a = nivelAlarma();
   musica.nivel = a.nivel === 'critico' ? 'alarma' : a.nivel === 'tension' ? 'tension' : 'calma';
 }
-// Durante la junta la música se calla: queda la sala y el reloj.
+// Durante la junta la sonata se reduce a octavas graves aisladas: la sala espera.
 function musicaJunta(activa){
   if(!musica || musica.estilo !== 'partida' || musica.junta === !!activa) return;
   musica.junta = !!activa;
   // Lo ya agendado (hasta un compás) se atenúa enseguida en vez de esperar al siguiente.
   const g = musica.bus.maestro.gain, t = musica.ctx.currentTime;
   g.cancelScheduledValues(t); g.setValueAtTime(g.value, t);
-  g.linearRampToValueAtTime(nivelVolumenMusica() * (activa ? 0.45 : 1), t + (activa ? 0.8 : 2.5));
+  g.linearRampToValueAtTime(nivelVolumenMusica() * (activa ? 0.7 : 1), t + (activa ? 0.8 : 2.5));
+}
+
+// Mientras el jugador elige una opción suena el pasaje de decisión (salvo en alarma).
+function musicaDecision(activa){
+  if(!musica || musica.estilo !== 'partida') return;
+  musica.decision = !!activa;
 }
