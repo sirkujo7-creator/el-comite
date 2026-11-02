@@ -434,3 +434,14 @@ Metas propuestas en Normal: jugador cuidadoso (metódico) 40–45 %, agresivo 15
   ganando porque el rango se calcula con valor = EBITDA×4 − deuda: crecer a cualquier costo siempre paga.
   Pendiente de decisión de Juan: valorar como EBITDA × múltiplo según WACC − deuda + ½ caja (−15 % si la
   razón corriente < 1); con los mismos finales: metódico 60 %, agresivo 47 %, azar 13 %.
+
+**TechNova con 3 opciones y contexto (nov. 2026)** — Juan pidió seguir sector por sector, sin mostrar
+ejemplos antes. 16 casos propios (6 principales, nómina, renta, 8 eventos; los macro compartidos no) y el
+karma "Fuga de cerebros" pasan a 3 opciones con efectos según el contexto (liquidez/burn rate, moral,
+apalancamiento, banco, junta, reputación). "Financiamiento para escalar" ya no regala liquidez: el dinero
+se va en contrataciones (+$8 M de caja y EBITDA +1,2 en vez de +$15 M). El maquillaje contable tienta
+menos al prudente (banco +8, WACC −0,5). Medido (20 partidas por perfil, mismas semillas):
+favorita unánime 54 → 29 %, opciones que nadie elige 52 → 26 %; victoria metódico 100 → 95 %,
+prudente 100 → 90 %, agresivo 90 → 60 % (quiebra 10 → 40 %), azar 30 → 45 %. Las victorias casi no bajan
+porque el valor inicial de TechNova es muy bajo (EBITDA×4 − deuda = $4 M): lo resuelve la fórmula de
+valoración pendiente, no el contenido. Sigue: AgroVerde.
