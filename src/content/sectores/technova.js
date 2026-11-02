@@ -55,7 +55,7 @@ const TECHNOVA_CASES = [
      consecuencia:"Condicionas la retención a resultados concretos, lo cual protege tu caja si el desempeño no acompaña." + si(CONTEXTO.equipoCansado(s), ' Pero un equipo agotado no cree en metas: se queda a medias y el ritmo cae.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae la renovación de clientes pequeños",
+(s,f)=>({ tipo:'caso', titulo:"Cae la renovación de clientes pequeños", impactoAutomatico:{ebitda:-1.5},
   contexto:"Una ola de cancelaciones golpea tu segmento de clientes pequeños: representan poco ingreso individual, pero en conjunto pesan en tu EBITDA.",
   choices:[
     {texto:"Recortar el equipo de soporte para bajar costos.",

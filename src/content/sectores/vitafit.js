@@ -55,7 +55,7 @@ const VITAFIT_CASES = [
      consecuencia:"El proveedor acepta 7% a cambio de exclusividad y de pedidos mínimos: ahora dependes más de esa única relación." + si(CONTEXTO.proveedoresTensos(s), ' La relación venía tensa: el proveedor solo concede el 6%.', '') + si(CONTEXTO.inventarioPesado(s), ' Y con la bodega llena, los pedidos mínimos se acumulan.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Llega la recesión",
+(s,f)=>({ tipo:'caso', titulo:"Llega la recesión", impactoAutomatico:{ebitda:-2.5},
   contexto:"Una desaceleración golpea al sector fitness: tu EBITDA cae por menos inscripciones y menos gasto discrecional en suplementos.",
   choices:[
     {texto:"Recortar personal para bajar costos fijos de inmediato.",

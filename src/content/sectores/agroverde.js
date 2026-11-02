@@ -55,7 +55,7 @@ const AGROVERDE_CASES = [
      consecuencia:"Es una apuesta de mediano plazo: reduces tu vulnerabilidad futura, aunque el cambio de variedad no rinde beneficio inmediato." + si(CONTEXTO.equipoCansado(s), ' Las cuadrillas, agotadas, cargan con la resiembra.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae el precio internacional del commodity",
+(s,f)=>({ tipo:'caso', titulo:"Cae el precio internacional del commodity", impactoAutomatico:{ebitda:-2},
   contexto:"El precio internacional cae 20% por sobreoferta global. El ingreso proyectado de la próxima exportación se reduce de forma directa.",
   choices:[
     {texto:"Recortar personal de campo.",

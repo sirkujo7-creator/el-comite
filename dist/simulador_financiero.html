@@ -3745,7 +3745,7 @@ function aplicarMotorOperativo(){
   let eficiencia = 0;
   if(state.diasCartera != null){
     const uCart = umbralSector('diasCartera');
-    if(state.diasCartera < uCart.sanoMax - 25) eficiencia += 0.06; else if(state.diasCartera > uCart.sanoMax + 10) eficiencia -= 0.16;
+    if(state.diasCartera < uCart.sanoMax * 0.58) eficiencia += 0.06; else if(state.diasCartera > uCart.sanoMax + 10) eficiencia -= 0.16;
   }
   if(sectorActual.tieneInventario && state.diasInventario != null){
     const uI = umbralSector('diasInventario');
@@ -4320,22 +4320,24 @@ function fmtMetaValor(indicador, valor){
 // Mantenimiento desde el tablero (nov. 2026, opción A aprobada por Juan): entre turnos, el jugador
 // puede pagar el mantenimiento de los equipos sin esperar a que un caso lo ofrezca. Cuenta como
 // una opción con `capex` del turno recién jugado. Una vez por turno.
-const COSTO_MANTENIMIENTO = 3;
+const COSTO_MANTENIMIENTO_BASE = 3;
+// Costo propio de cada empresa (SECTORS[].costoMantenimiento): proporcional a lo que genera su operación.
+function costoMantenimiento(){ return (sectorActual && sectorActual.costoMantenimiento) || COSTO_MANTENIMIENTO_BASE; }
 function puedeHacerMantenimiento(){
   if(!state || !sectorActual || !sectorActual.requiereCapex || pendingEndingResult) return false;
   if(!history.some(h=>h.turno === turnNumber)) return false; // aún no se ha jugado ningún turno
   if(state.capexEsteTurno) return false;
   const modal = document.getElementById('turnModalBackdrop');
   if(modal && modal.classList.contains('show')) return false;
-  return state.caja >= COSTO_MANTENIMIENTO;
+  return state.caja >= costoMantenimiento();
 }
 function hacerMantenimiento(){
   if(!puedeHacerMantenimiento()) return;
-  state.caja -= COSTO_MANTENIMIENTO;
+  state.caja -= costoMantenimiento();
   state.turnosSinCapex = 0;
   state.capexEsteTurno = true;
-  renderTicker({caja:-COSTO_MANTENIMIENTO});
-  flashKpiCards({caja:-COSTO_MANTENIMIENTO});
+  renderTicker({caja:-costoMantenimiento()});
+  flashKpiCards({caja:-costoMantenimiento()});
   guardarPartidaEnCurso();
 }
 // Aviso de mantenimiento de equipos en los sectores que lo exigen (Vita Fit, Ganadería).
@@ -4362,8 +4364,8 @@ function renderEquiposLine(){
   if(state.capexEsteTurno && jugado){
     el.innerHTML += `<button class="mant-btn hecho" id="mantenimientoBtn" disabled>✔ Mantenimiento al día este turno</button>`;
   } else if(jugado){
-    const alcanza = state.caja >= COSTO_MANTENIMIENTO;
-    el.innerHTML += `<button class="mant-btn" id="mantenimientoBtn"${alcanza ? '' : ' disabled'}>🔧 Hacer mantenimiento · $${COSTO_MANTENIMIENTO} M</button>`
+    const alcanza = state.caja >= costoMantenimiento();
+    el.innerHTML += `<button class="mant-btn" id="mantenimientoBtn"${alcanza ? '' : ' disabled'}>🔧 Hacer mantenimiento · $${String(costoMantenimiento()).replace(".", ",")} M</button>`
       + (alcanza ? '' : '<span class="mant-nota">No te alcanza la caja.</span>');
   }
 }
@@ -9925,7 +9927,7 @@ const VITAFIT_CASES = [
      consecuencia:"El proveedor acepta 7% a cambio de exclusividad y de pedidos mínimos: ahora dependes más de esa única relación." + si(CONTEXTO.proveedoresTensos(s), ' La relación venía tensa: el proveedor solo concede el 6%.', '') + si(CONTEXTO.inventarioPesado(s), ' Y con la bodega llena, los pedidos mínimos se acumulan.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Llega la recesión",
+(s,f)=>({ tipo:'caso', titulo:"Llega la recesión", impactoAutomatico:{ebitda:-2.5},
   contexto:"Una desaceleración golpea al sector fitness: tu EBITDA cae por menos inscripciones y menos gasto discrecional en suplementos.",
   choices:[
     {texto:"Recortar personal para bajar costos fijos de inmediato.",
@@ -10183,7 +10185,7 @@ const TECHNOVA_CASES = [
      consecuencia:"Condicionas la retención a resultados concretos, lo cual protege tu caja si el desempeño no acompaña." + si(CONTEXTO.equipoCansado(s), ' Pero un equipo agotado no cree en metas: se queda a medias y el ritmo cae.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae la renovación de clientes pequeños",
+(s,f)=>({ tipo:'caso', titulo:"Cae la renovación de clientes pequeños", impactoAutomatico:{ebitda:-1.5},
   contexto:"Una ola de cancelaciones golpea tu segmento de clientes pequeños: representan poco ingreso individual, pero en conjunto pesan en tu EBITDA.",
   choices:[
     {texto:"Recortar el equipo de soporte para bajar costos.",
@@ -10394,7 +10396,7 @@ const AGROVERDE_CASES = [
      consecuencia:"Es una apuesta de mediano plazo: reduces tu vulnerabilidad futura, aunque el cambio de variedad no rinde beneficio inmediato." + si(CONTEXTO.equipoCansado(s), ' Las cuadrillas, agotadas, cargan con la resiembra.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae el precio internacional del commodity",
+(s,f)=>({ tipo:'caso', titulo:"Cae el precio internacional del commodity", impactoAutomatico:{ebitda:-2},
   contexto:"El precio internacional cae 20% por sobreoferta global. El ingreso proyectado de la próxima exportación se reduce de forma directa.",
   choices:[
     {texto:"Recortar personal de campo.",
@@ -10863,7 +10865,7 @@ const CONSTRUYEYA_CASES = [
      consecuencia:"El rediseño cuesta ingeniería y algo de capital de trabajo, pero reduce tu exposición al precio del insumo en este proyecto." + si(CONTEXTO.equipoCansado(s), ' Con el equipo agotado, el rediseño se demora y el ahorro no alcanza a notarse.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae la demanda por alza en tasas hipotecarias",
+(s,f)=>({ tipo:'caso', titulo:"Cae la demanda por alza en tasas hipotecarias", impactoAutomatico:{ebitda:-2.5},
   contexto:"El Banco de la República sube tasas y el crédito hipotecario se encarece: las ventas de apartamentos caen de forma notoria este trimestre.",
   choices:[
     {texto:"Recortar personal y cuadrillas de obra para bajar costos fijos.",
@@ -11125,7 +11127,7 @@ const MODAURBANA_CASES = [
      consecuencia:"Atraes a un segmento dispuesto a pagar más por origen y sostenibilidad, aunque es un mercado más pequeño y vendes menos." + si(CONTEXTO.proveedoresTensos(s), ' Tus maquiladoras locales, que se sentían relegadas, lo agradecen.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae la demanda de temporada",
+(s,f)=>({ tipo:'caso', titulo:"Cae la demanda de temporada", impactoAutomatico:{ebitda:-2},
   contexto:"Un cambio de clima atípico reduce la demanda de la colección de temporada: las ventas caen justo en las semanas de mayor rotación esperada.",
   choices:[
     {texto:"Recortar personal de tienda para bajar costos fijos.",
@@ -11376,6 +11378,7 @@ const SECTORS = [
     tieneInventario:true, requiereCapex:true, perecedero:true,
     // La leche fresca no se almacena: pocos días de inventario es lo sano. Lo peligroso es la
     // leche represada (días altos), no quedarse "corto" como en el comercio.
+    costoMantenimiento:1.5,
     umbrales:{ diasInventario:{ sanoMax:15, peligro:25, derrota:40, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." },
                diasCartera:{ sanoMax:40, peligro:70 } },
     kpiInicial:{caja:36, capitalTrabajo:26, razonCorriente:1.5, deuda:17, ebitda:7.5, wacc:13.5, diasInventario:6, diasCartera:32, valorInventario:9, confianzaProveedores:66, confianzaBanco:58, reputacion:60, moralEquipo:60},

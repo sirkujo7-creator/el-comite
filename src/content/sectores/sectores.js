@@ -51,6 +51,7 @@ const SECTORS = [
     tieneInventario:true, requiereCapex:true, perecedero:true,
     // La leche fresca no se almacena: pocos días de inventario es lo sano. Lo peligroso es la
     // leche represada (días altos), no quedarse "corto" como en el comercio.
+    costoMantenimiento:1.5,
     umbrales:{ diasInventario:{ sanoMax:15, peligro:25, derrota:40, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." },
                diasCartera:{ sanoMax:40, peligro:70 } },
     kpiInicial:{caja:36, capitalTrabajo:26, razonCorriente:1.5, deuda:17, ebitda:7.5, wacc:13.5, diasInventario:6, diasCartera:32, valorInventario:9, confianzaProveedores:66, confianzaBanco:58, reputacion:60, moralEquipo:60},

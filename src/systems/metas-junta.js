@@ -59,22 +59,24 @@ function fmtMetaValor(indicador, valor){
 // Mantenimiento desde el tablero (nov. 2026, opción A aprobada por Juan): entre turnos, el jugador
 // puede pagar el mantenimiento de los equipos sin esperar a que un caso lo ofrezca. Cuenta como
 // una opción con `capex` del turno recién jugado. Una vez por turno.
-const COSTO_MANTENIMIENTO = 3;
+const COSTO_MANTENIMIENTO_BASE = 3;
+// Costo propio de cada empresa (SECTORS[].costoMantenimiento): proporcional a lo que genera su operación.
+function costoMantenimiento(){ return (sectorActual && sectorActual.costoMantenimiento) || COSTO_MANTENIMIENTO_BASE; }
 function puedeHacerMantenimiento(){
   if(!state || !sectorActual || !sectorActual.requiereCapex || pendingEndingResult) return false;
   if(!history.some(h=>h.turno === turnNumber)) return false; // aún no se ha jugado ningún turno
   if(state.capexEsteTurno) return false;
   const modal = document.getElementById('turnModalBackdrop');
   if(modal && modal.classList.contains('show')) return false;
-  return state.caja >= COSTO_MANTENIMIENTO;
+  return state.caja >= costoMantenimiento();
 }
 function hacerMantenimiento(){
   if(!puedeHacerMantenimiento()) return;
-  state.caja -= COSTO_MANTENIMIENTO;
+  state.caja -= costoMantenimiento();
   state.turnosSinCapex = 0;
   state.capexEsteTurno = true;
-  renderTicker({caja:-COSTO_MANTENIMIENTO});
-  flashKpiCards({caja:-COSTO_MANTENIMIENTO});
+  renderTicker({caja:-costoMantenimiento()});
+  flashKpiCards({caja:-costoMantenimiento()});
   guardarPartidaEnCurso();
 }
 // Aviso de mantenimiento de equipos en los sectores que lo exigen (Vita Fit, Ganadería).
@@ -101,8 +103,8 @@ function renderEquiposLine(){
   if(state.capexEsteTurno && jugado){
     el.innerHTML += `<button class="mant-btn hecho" id="mantenimientoBtn" disabled>✔ Mantenimiento al día este turno</button>`;
   } else if(jugado){
-    const alcanza = state.caja >= COSTO_MANTENIMIENTO;
-    el.innerHTML += `<button class="mant-btn" id="mantenimientoBtn"${alcanza ? '' : ' disabled'}>🔧 Hacer mantenimiento · $${COSTO_MANTENIMIENTO} M</button>`
+    const alcanza = state.caja >= costoMantenimiento();
+    el.innerHTML += `<button class="mant-btn" id="mantenimientoBtn"${alcanza ? '' : ' disabled'}>🔧 Hacer mantenimiento · $${String(costoMantenimiento()).replace(".", ",")} M</button>`
       + (alcanza ? '' : '<span class="mant-nota">No te alcanza la caja.</span>');
   }
 }

@@ -55,7 +55,7 @@ const CONSTRUYEYA_CASES = [
      consecuencia:"El rediseño cuesta ingeniería y algo de capital de trabajo, pero reduce tu exposición al precio del insumo en este proyecto." + si(CONTEXTO.equipoCansado(s), ' Con el equipo agotado, el rediseño se demora y el ahorro no alcanza a notarse.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae la demanda por alza en tasas hipotecarias",
+(s,f)=>({ tipo:'caso', titulo:"Cae la demanda por alza en tasas hipotecarias", impactoAutomatico:{ebitda:-2.5},
   contexto:"El Banco de la República sube tasas y el crédito hipotecario se encarece: las ventas de apartamentos caen de forma notoria este trimestre.",
   choices:[
     {texto:"Recortar personal y cuadrillas de obra para bajar costos fijos.",

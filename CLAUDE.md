@@ -517,3 +517,17 @@ dominada por "ofrecer garantía") y la junta trimestral. Ya no queda ningún cas
 agresivo 10 %, azar 12 %. Construye YA y Moda Urbana quedaron más fáciles con límites más holgados.
 Ganadería: el cuidadoso quiebra ~15–20 % por liquidez al final del año; ya pasaba antes de este cambio
 (no es por los umbrales ni por el botón de mantenimiento). Pendiente de investigar.
+
+**Dificultad por empresa, ronda 1 (nov. 2026)** — Juan aprobó la fórmula de valoración (regla 3) y pidió
+seguir con la dificultad. Tres correcciones, medidas con 20 partidas por sector y perfil (Normal):
+- Ganadería: el mantenimiento costaba $3 M cada 3 turnos (~$18 M al año) contra ~$9 M de caja que genera
+  su EBITDA (el motor convierte EBITDA × 0,04 por turno). `SECTORS[].costoMantenimiento` (Ganadería
+  $1,5 M; Vita Fit sigue en $3 M, genera más). Cuidadoso en Ganadería: 25 → 40 %, quiebra 20 → 10 %.
+- Las crisis de demanda subían el EBITDA (solo ofrecían recortes): ahora llevan `impactoAutomatico`
+  (Vita Fit −2,5, Construye −2,5, AgroVerde −2, Moda −2, TechNova −1,5).
+- Motor: el premio de eficiencia por cobrar rápido quedó en "sanoMax − 25" al pasar a umbrales por
+  empresa y Construye YA lo recibía desde el turno 1; ahora es cartera < 58 % de lo normal (≈ 35 días,
+  como antes, en las demás).
+Victoria: cuidadoso 47 → 43 % (Vita Fit 40, TechNova 25, AgroVerde 35, Ganadería 40, Construye 70,
+Moda 45), prudente 32 %, agresivo 10 %, azar 9 %. Construye YA sigue alto: su cuidadoso prepaga deuda en
+cada junta ($25 M → ~0) con la caja grande con que arranca. Pendiente de decisión de Juan.

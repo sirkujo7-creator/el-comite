@@ -55,7 +55,7 @@ const MODAURBANA_CASES = [
      consecuencia:"Atraes a un segmento dispuesto a pagar más por origen y sostenibilidad, aunque es un mercado más pequeño y vendes menos." + si(CONTEXTO.proveedoresTensos(s), ' Tus maquiladoras locales, que se sentían relegadas, lo agradecen.', '')}
   ]
 }),
-(s,f)=>({ tipo:'caso', titulo:"Cae la demanda de temporada",
+(s,f)=>({ tipo:'caso', titulo:"Cae la demanda de temporada", impactoAutomatico:{ebitda:-2},
   contexto:"Un cambio de clima atípico reduce la demanda de la colección de temporada: las ventas caen justo en las semanas de mayor rotación esperada.",
   choices:[
     {texto:"Recortar personal de tienda para bajar costos fijos.",

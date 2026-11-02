@@ -61,7 +61,7 @@ function aplicarMotorOperativo(){
   let eficiencia = 0;
   if(state.diasCartera != null){
     const uCart = umbralSector('diasCartera');
-    if(state.diasCartera < uCart.sanoMax - 25) eficiencia += 0.06; else if(state.diasCartera > uCart.sanoMax + 10) eficiencia -= 0.16;
+    if(state.diasCartera < uCart.sanoMax * 0.58) eficiencia += 0.06; else if(state.diasCartera > uCart.sanoMax + 10) eficiencia -= 0.16;
   }
   if(sectorActual.tieneInventario && state.diasInventario != null){
     const uI = umbralSector('diasInventario');
