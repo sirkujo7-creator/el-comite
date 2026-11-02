@@ -355,6 +355,14 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
   sigue contando "más es mejor" (perder valor = costo).
 - La copia del HTML en el Proyecto de claude.ai puede estar desactualizada frente a la última versión entregada.
 
+- **Revisar umbrales por empresa (pedido de Juan, nov. 2026: "no todo debe estar estandarizado").**
+  Hoy varios límites del motor son iguales para los 6 sectores aunque cada negocio es distinto. Primer
+  caso detectado: la derrota por inventario obsoleto a los 100 días (`engine/finales.js`) — Construye YA
+  arranca con 80 (los apartamentos tardan en venderse) y dos decisiones en un turno lo hunden; Ganadería
+  tiene 6. Revisar también: alarma de inventario ≥ 90, deriva de inventario > 55 días
+  (`motor-operativo.js`), cartera ≥ 90, umbrales de `nivelAlarma`, `RANGOS_SANOS` y `CONTEXTO`.
+  Propuesta: umbrales en `SECTORS[].umbrales` (ya existe para Ganadería) y que motor y finales los lean.
+
 ## 8. Historial de cambios de contenido y balance
 
 **Fase 2 (oct. 2026)** — ver commits para el detalle:

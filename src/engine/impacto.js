@@ -124,8 +124,14 @@ function evaluarEcoDeDecision(efectos){
   if(!pool) return;
 
   if(Math.random() < 0.4){
+    // Anti-repetición (regla 9): solo ecos que no hayan salido en la partida ni estén ya en espera.
+    const disponibles = pool.filter(build=>{
+      if(state.scheduledEvents.some(e=>e.build === build && !e.consumido)) return false;
+      try{ return !historialTitulosRecientes.includes(build(state, flags).titulo); }catch(e){ return true; }
+    });
+    if(!disponibles.length) return;
     const turnosDelay = 3 + Math.floor(Math.random()*4); // entre 3 y 6 turnos despues
-    state.scheduledEvents.push({turno: turnNumber + turnosDelay, build: pick(pool), consumido:false});
+    state.scheduledEvents.push({turno: turnNumber + turnosDelay, build: pick(disponibles), consumido:false});
   }
 }
 
