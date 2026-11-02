@@ -69,10 +69,9 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Un inspector de obra encuentra una irregularidad menor",
         contexto:"Durante una visita rutinaria, un inspector municipal encuentra una irregularidad menor en los planos de una de tus obras en curso — nada que ponga en riesgo la estructura, pero sí un papeleo que no coincide del todo.",
         choices:[
-          {texto:"Corregir el papeleo de inmediato y pagar el ajuste que pida.", efectos:{caja:-3, reputacion:2}, consecuencia:"La corrección rápida y sin drama es exactamente lo que un inspector espera ver de un constructor serio."},
-          {texto:"Discutir el hallazgo, argumentando que es un tecnicismo sin importancia real.", efectos:{reputacion:-3, caja:1}, consecuencia:"Ahorras el ajuste inmediato, pero el inspector queda con la sensación de que no tomas en serio sus observaciones."},
-          {texto:"Ofrecer resolverlo puertas adentro, sin escalarlo formalmente.", efectos:{caja:-2, reputacion:-2}, consecuencia:"La solución informal funciona esta vez, aunque no es el tipo de precedente que quieres que se sepa."},
-          {texto:"Contratar una auditoría externa de todos tus proyectos activos antes de que vuelva a pasar.", efectos:{caja:-4, reputacion:5}, consecuencia:"El costo es mayor hoy, pero resolver la causa de raíz vale más que corregir un solo hallazgo aislado."}
+          {texto:"Corregir el papeleo de inmediato y pagar el ajuste que pida.", efectos:{caja:-3, reputacion:2, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.08, 0)}, consecuencia:"La corrección rápida y sin drama es exactamente lo que un inspector espera ver de un constructor serio."},
+          {texto:"Discutir el hallazgo, argumentando que es un tecnicismo sin importancia real.", efectos:{reputacion:si(CONTEXTO.juntaDesconfia(s), -6, -3), caja:si(CONTEXTO.reputacionAlta(s), 0, -1), ebitda:0.3}, consecuencia:"Ahorras el ajuste inmediato, pero el inspector queda con la sensación de que no tomas en serio sus observaciones." + si(CONTEXTO.reputacionAlta(s), ' Tu historial te da credibilidad: el inspector cede.', ' Sin historial que te respalde, termina imponiendo una multa menor.')},
+          {texto:"Contratar una auditoría externa de todos tus proyectos activos antes de que vuelva a pasar.", efectos:{caja:-4, reputacion:5, wacc:-0.1, moralEquipo:si(CONTEXTO.equipoCansado(s), -3, 0)}, consecuencia:"El costo es mayor hoy, pero resolver la causa de raíz vale más que corregir un solo hallazgo." + si(CONTEXTO.equipoCansado(s), ' El equipo, agotado, carga con el papeleo de la auditoría.', '')}
         ]})
     }] },
   { id:'modaurbana', emoji:'👗', nombre:'Moda Urbana', rubro:'Retail de ropa y confección', categoria:'secundario',

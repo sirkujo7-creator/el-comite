@@ -23,9 +23,16 @@ const CONTEXTO = {
   reputacionAlta: (s)=> s.reputacion >= 65,
   // Equipos sin mantenimiento hace dos turnos o más (Vita Fit, Ganadería).
   equiposGastados: (s)=> (s.turnosSinCapex || 0) >= 2,
-  // Inventario que rota lento: 30 % más días que al empezar (cada sector tiene su nivel normal).
-  inventarioPesado: (s)=> s.diasInventario != null &&
-    s.diasInventario >= ((typeof sectorActual !== 'undefined' && sectorActual && sectorActual.kpiInicial.diasInventario) || 50) * 1.3,
+  // Inventario que rota lento: 30 % más días que al empezar (cada sector tiene su nivel normal),
+  // o el umbral de alerta propio del sector (Ganadería). Nunca por encima de 90: a los 100 días
+  // la partida se pierde por inventario obsoleto (engine/finales.js).
+  inventarioPesado: (s)=> {
+    if(s.diasInventario == null) return false;
+    const sec = (typeof sectorActual !== 'undefined' && sectorActual) || null;
+    const alerta = sec && sec.umbrales && sec.umbrales.diasInventario && sec.umbrales.diasInventario.alerta;
+    const base = (sec && sec.kpiInicial.diasInventario) || 50;
+    return s.diasInventario >= (alerta || Math.min(base * 1.3, 90));
+  },
   // Cartera lenta: los clientes tardan en pagar.
   carteraLenta: (s)=> s.diasCartera != null && s.diasCartera >= 60
 };
