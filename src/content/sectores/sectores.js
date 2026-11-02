@@ -86,10 +86,9 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Una marca de fast fashion copia tu diseño estrella",
         contexto:"Tu prenda más vendida de la temporada aparece, casi idéntica, en el catálogo de una cadena internacional de fast fashion — a una fracción de tu precio. Tus clientes empiezan a preguntarte qué vas a hacer al respecto.",
         choices:[
-          {texto:"Iniciar un proceso legal formal contra la marca.", efectos:{caja:-5, reputacion:4, ebitda:1}, consecuencia:"El proceso es costoso y lento, pero defender tu diseño públicamente refuerza tu credibilidad como marca original. Y la demanda frena la venta de la copia en los canales formales."},
-          {texto:"Ignorarlo y seguir enfocado en tu propio trabajo.", efectos:{reputacion:-2}, consecuencia:"Sin ninguna respuesta visible, algunos clientes interpretan el silencio como resignación."},
-          {texto:"Denunciarlo públicamente en redes sociales, sin acción legal.", efectos:{reputacion:5, caja:-1}, consecuencia:"La denuncia pública resuena con tu comunidad — no resuelve el problema legal, pero sí gana simpatía inmediata."},
-          {texto:"Lanzar rápido una versión mejorada del diseño original para diferenciarte.", efectos:{caja:-3, ebitda:2, reputacion:2}, consecuencia:"Responder con innovación, no solo con indignación, es la jugada que mejor conecta con quienes ya te seguían."}
+          {texto:"Iniciar un proceso legal formal contra la marca.", efectos:{caja:-5, reputacion:4, ebitda:1, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.1, 0)}, consecuencia:"El proceso es costoso y lento, pero defender tu diseño públicamente refuerza tu credibilidad como marca original. Y la demanda frena la venta de la copia en los canales formales." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, los honorarios pesan.', '')},
+          {texto:"Denunciarlo públicamente en redes sociales, sin acción legal.", efectos:{reputacion:si(CONTEXTO.juntaDesconfia(s), 2, 5), caja:-1, ebitda:-0.5}, consecuencia:"La denuncia pública resuena con tu comunidad — no resuelve el problema legal ni frena la copia, pero gana simpatía inmediata." + si(CONTEXTO.juntaDesconfia(s), ' La junta lo ve como un berrinche en redes.', '')},
+          {texto:"Lanzar rápido una versión mejorada del diseño original para diferenciarte.", efectos:{caja:-3, ebitda:si(CONTEXTO.equipoCansado(s), 0.5, 2), reputacion:2, diasInventario:4}, consecuencia:"Responder con innovación, no solo con indignación, conecta con quienes ya te seguían, aunque sumas otra referencia a la bodega." + si(CONTEXTO.equipoCansado(s), ' Con el equipo agotado, la versión nueva sale a medias.', '')}
         ]})
     }] }
 ];
