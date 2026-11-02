@@ -485,3 +485,13 @@ EBITDA cada 3 turnos sin `capex`) casi no se puede evitar porque pocas decisione
 esa mecánica, Vita Fit pasa a 100 % de victorias. Bajar el umbral de A rinde poco (×1,1: cuidadoso 36 %,
 azar 13 %). Juan eligió la opción A: botón de mantenimiento en el tablero ($3 M, ver §4). Cuidadoso:
 Vita Fit 25 → 35 %, Ganadería 5 → 20 % (sus desastres en esos sectores 40–45 → 0 %); media ~33 %.
+
+**Dilemas compartidos con 3 opciones y contexto (nov. 2026)** — los 56 de `content/universal/dilemas.js`
+(salen en todas las empresas). Herramienta: script que quita una opción por caso y aplica cambios solo
+dentro de ese caso (se quitaron las de solo pérdida —"no hacer nada", "ignorar"— y las casi repetidas).
+Los ecos de decisiones duras o generosas (`evaluarEcoDeDecision`) ya no se repiten en una partida.
+Victoria (20 partidas por sector y perfil, Normal): cuidadoso 33 → 40 % (Vita Fit 45, TechNova 25,
+AgroVerde 65, Ganadería 25, Construye 25, Moda 55), prudente 21 %, agresivo 15 %, azar 12 %.
+Faltan con 4 opciones: elenco (10), elenco-indicadores (5), cadenas profundas (12), cadena de
+reestructuración (8), karma (3), cisne negro (2), carta meta, escándalo diferido, eventos ramificados (2),
+Toño (2), macro y ecos (6, `engine/impacto.js`).
