@@ -265,6 +265,9 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   `capex` llevan la etiqueta "🔧 Mantenimiento" y la cabecera muestra "Equipos: n de 3 turnos sin
   mantenimiento" (`renderEquiposLine`, cuenta también el turno recién jugado). El conteo es por
   turno real en `aplicarMotorOperativo` (antes por decisión); al tercer turno seguido, EBITDA −2.
+  Nov. 2026 (opción A de Juan): botón "🔧 Hacer mantenimiento · $3 M" en el aviso de equipos del tablero
+  (`hacerMantenimiento`, `COSTO_MANTENIMIENTO`, systems/metas-junta.js). Entre turnos, una vez por turno,
+  cuenta como una opción con `capex` del turno recién jugado. El metódico del arnés lo usa con 2 de 3.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
@@ -472,4 +475,5 @@ Victoria con la regla 3 (20 partidas por sector y perfil, Normal):
 El cuidadoso queda bajo la meta (40–45 %) sobre todo por Vita Fit y Ganadería: el mantenimiento (−2 de
 EBITDA cada 3 turnos sin `capex`) casi no se puede evitar porque pocas decisiones lo ofrecen. Probado: sin
 esa mecánica, Vita Fit pasa a 100 % de victorias. Bajar el umbral de A rinde poco (×1,1: cuidadoso 36 %,
-azar 13 %). Pendiente de decisión de Juan: cómo hacer evitable el mantenimiento.
+azar 13 %). Juan eligió la opción A: botón de mantenimiento en el tablero ($3 M, ver §4). Cuidadoso:
+Vita Fit 25 → 35 %, Ganadería 5 → 20 % (sus desastres en esos sectores 40–45 → 0 %); media ~33 %.

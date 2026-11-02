@@ -161,6 +161,16 @@ body.en-partida .equipos-line.show{
 body.en-partida .equipos-line.show.alerta{ background:var(--sm-alerta); color:var(--sm-fondo); box-shadow:5px 5px 0 var(--sm-borde); }
 body.en-partida .equipos-line.show.desgaste{ background:var(--sm-malo); color:var(--sm-fondo); box-shadow:5px 5px 0 var(--sm-borde); }
 body.en-partida .equipos-line .glosario-term{ color:inherit; }
+body.en-partida .equipos-line .mant-btn{
+  display:block; width:100%; margin-top:9px; padding:8px 10px; text-align:left; cursor:pointer;
+  font:700 12px var(--font-ui); background:var(--sm-fondo); color:var(--sm-borde);
+  border:2px solid var(--sm-borde); box-shadow:3px 3px 0 var(--sm-neutro); transition:border-color .15s, transform .1s;
+}
+body.en-partida .equipos-line .mant-btn:hover:not(:disabled){ border-color:var(--sm-alerta); color:var(--sm-alerta); }
+body.en-partida .equipos-line .mant-btn:active:not(:disabled){ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--sm-neutro); }
+body.en-partida .equipos-line .mant-btn:disabled{ cursor:default; opacity:.6; }
+body.en-partida .equipos-line .mant-btn.hecho{ opacity:1; color:var(--sm-sano); border-color:var(--sm-sano); }
+body.en-partida .equipos-line .mant-nota{ display:block; margin-top:4px; font:600 10.5px var(--font-ui); }
 
 .meta-panel{ display:none; }
 .meta-panel.show{ display:block; background:var(--sm-panel); border:2px solid var(--sm-borde); box-shadow:5px 5px 0 var(--sm-neutro); padding:12px 14px; }

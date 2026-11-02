@@ -5,6 +5,9 @@ document.getElementById('cajaZoomBtn').addEventListener('click', ()=>{ cajaZoom 
 document.getElementById('cajaPeriodoBtn').addEventListener('click', ()=>{ cajaPeriodo = cycleNext(cajaPeriodo, PERIODO_CYCLE); document.getElementById('cajaPeriodoBtn').textContent = 'Periodo: '+PERIODO_LABEL[cajaPeriodo]; renderChartCaja(); });
 document.getElementById('edZoomBtn').addEventListener('click', ()=>{ edZoom = cycleNext(edZoom, ZOOM_CYCLE); document.getElementById('edZoomBtn').textContent = 'Zoom: '+ZOOM_LABEL[edZoom]; renderChartEd(); });
 document.getElementById('edPeriodoBtn').addEventListener('click', ()=>{ edPeriodo = cycleNext(edPeriodo, PERIODO_CYCLE); document.getElementById('edPeriodoBtn').textContent = 'Periodo: '+PERIODO_LABEL[edPeriodo]; renderChartEd(); });
+document.getElementById('equiposLine').addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id === 'mantenimientoBtn') hacerMantenimiento();
+});
 document.getElementById('evaluarTurnoBtn').addEventListener('click', ()=>{
   if(pendingEndingResult){
     const ending = pendingEndingResult;

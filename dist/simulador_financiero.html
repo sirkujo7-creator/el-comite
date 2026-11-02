@@ -1446,6 +1446,16 @@ body.en-partida .equipos-line.show{
 body.en-partida .equipos-line.show.alerta{ background:var(--sm-alerta); color:var(--sm-fondo); box-shadow:5px 5px 0 var(--sm-borde); }
 body.en-partida .equipos-line.show.desgaste{ background:var(--sm-malo); color:var(--sm-fondo); box-shadow:5px 5px 0 var(--sm-borde); }
 body.en-partida .equipos-line .glosario-term{ color:inherit; }
+body.en-partida .equipos-line .mant-btn{
+  display:block; width:100%; margin-top:9px; padding:8px 10px; text-align:left; cursor:pointer;
+  font:700 12px var(--font-ui); background:var(--sm-fondo); color:var(--sm-borde);
+  border:2px solid var(--sm-borde); box-shadow:3px 3px 0 var(--sm-neutro); transition:border-color .15s, transform .1s;
+}
+body.en-partida .equipos-line .mant-btn:hover:not(:disabled){ border-color:var(--sm-alerta); color:var(--sm-alerta); }
+body.en-partida .equipos-line .mant-btn:active:not(:disabled){ transform:translate(2px,2px); box-shadow:1px 1px 0 var(--sm-neutro); }
+body.en-partida .equipos-line .mant-btn:disabled{ cursor:default; opacity:.6; }
+body.en-partida .equipos-line .mant-btn.hecho{ opacity:1; color:var(--sm-sano); border-color:var(--sm-sano); }
+body.en-partida .equipos-line .mant-nota{ display:block; margin-top:4px; font:600 10.5px var(--font-ui); }
 
 .meta-panel{ display:none; }
 .meta-panel.show{ display:block; background:var(--sm-panel); border:2px solid var(--sm-borde); box-shadow:5px 5px 0 var(--sm-neutro); padding:12px 14px; }
@@ -4287,6 +4297,27 @@ function fmtMetaValor(indicador, valor){
   if(kd && (kd.kind==='money' || kd.kind==='dias')) return kd.fmt(Math.round(valor));
   return Math.round(valor).toString();
 }
+// Mantenimiento desde el tablero (nov. 2026, opción A aprobada por Juan): entre turnos, el jugador
+// puede pagar el mantenimiento de los equipos sin esperar a que un caso lo ofrezca. Cuenta como
+// una opción con `capex` del turno recién jugado. Una vez por turno.
+const COSTO_MANTENIMIENTO = 3;
+function puedeHacerMantenimiento(){
+  if(!state || !sectorActual || !sectorActual.requiereCapex || pendingEndingResult) return false;
+  if(!history.some(h=>h.turno === turnNumber)) return false; // aún no se ha jugado ningún turno
+  if(state.capexEsteTurno) return false;
+  const modal = document.getElementById('turnModalBackdrop');
+  if(modal && modal.classList.contains('show')) return false;
+  return state.caja >= COSTO_MANTENIMIENTO;
+}
+function hacerMantenimiento(){
+  if(!puedeHacerMantenimiento()) return;
+  state.caja -= COSTO_MANTENIMIENTO;
+  state.turnosSinCapex = 0;
+  state.capexEsteTurno = true;
+  renderTicker({caja:-COSTO_MANTENIMIENTO});
+  flashKpiCards({caja:-COSTO_MANTENIMIENTO});
+  guardarPartidaEnCurso();
+}
 // Aviso de mantenimiento de equipos en los sectores que lo exigen (Vita Fit, Ganadería).
 function renderEquiposLine(){
   const el = document.getElementById('equiposLine');
@@ -4305,6 +4336,15 @@ function renderEquiposLine(){
   } else {
     el.className = 'equipos-line show' + (n >= 2 ? ' alerta' : '');
     el.innerHTML = `🔧 Equipos: ${n} de 3 turnos sin ${glosa}` + (n >= 2 ? ' — si en el próximo turno no inviertes, el desgaste golpeará el EBITDA.' : '');
+  }
+  // Botón para pagarlo ya (inicio.js escucha el clic en el contenedor).
+  const jugado = history.some(h=>h.turno === turnNumber);
+  if(state.capexEsteTurno && jugado){
+    el.innerHTML += `<button class="mant-btn hecho" id="mantenimientoBtn" disabled>✔ Mantenimiento al día este turno</button>`;
+  } else if(jugado){
+    const alcanza = state.caja >= COSTO_MANTENIMIENTO;
+    el.innerHTML += `<button class="mant-btn" id="mantenimientoBtn"${alcanza ? '' : ' disabled'}>🔧 Hacer mantenimiento · $${COSTO_MANTENIMIENTO} M</button>`
+      + (alcanza ? '' : '<span class="mant-nota">No te alcanza la caja.</span>');
   }
 }
 function renderMetaJuntaLine(){
@@ -11864,6 +11904,9 @@ document.getElementById('cajaZoomBtn').addEventListener('click', ()=>{ cajaZoom 
 document.getElementById('cajaPeriodoBtn').addEventListener('click', ()=>{ cajaPeriodo = cycleNext(cajaPeriodo, PERIODO_CYCLE); document.getElementById('cajaPeriodoBtn').textContent = 'Periodo: '+PERIODO_LABEL[cajaPeriodo]; renderChartCaja(); });
 document.getElementById('edZoomBtn').addEventListener('click', ()=>{ edZoom = cycleNext(edZoom, ZOOM_CYCLE); document.getElementById('edZoomBtn').textContent = 'Zoom: '+ZOOM_LABEL[edZoom]; renderChartEd(); });
 document.getElementById('edPeriodoBtn').addEventListener('click', ()=>{ edPeriodo = cycleNext(edPeriodo, PERIODO_CYCLE); document.getElementById('edPeriodoBtn').textContent = 'Periodo: '+PERIODO_LABEL[edPeriodo]; renderChartEd(); });
+document.getElementById('equiposLine').addEventListener('click', (ev)=>{
+  if(ev.target && ev.target.id === 'mantenimientoBtn') hacerMantenimiento();
+});
 document.getElementById('evaluarTurnoBtn').addEventListener('click', ()=>{
   if(pendingEndingResult){
     const ending = pendingEndingResult;

@@ -144,7 +144,10 @@ export async function jugarPartida(html, { seed = 1, sector = 'vitafit', perfil 
       }
     } else {
       const ev = doc.getElementById('evaluarTurnoBtn');
-      if (ev && !ev.disabled) objetivo = ev;
+      // El metódico lee el aviso de equipos: con 2 de 3 turnos sin mantenimiento, lo paga desde el tablero.
+      const mant = doc.getElementById('mantenimientoBtn');
+      if (perfil === 'metodico' && mant && !mant.disabled && j.ev('puedeHacerMantenimiento() && (state.turnosSinCapex||0) + 1 >= 2')) objetivo = mant;
+      else if (ev && !ev.disabled) objetivo = ev;
     }
     // Tras cada clic se espera más que la transición "Calculando impacto" (1.000 ms), como haría
     // una persona: volver a pulsar un botón ya pulsado encolaría cierres de modal duplicados.
