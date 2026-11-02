@@ -64,11 +64,17 @@ function resaltarGlosario(texto){
   return partes.join('');
 }
 
+// "en este sector: 60–120 días; desde 140 es peligroso" (umbrales propios de la empresa).
+function textoRangoSector(key){
+  const u = umbralSector(key);
+  const sano = u.sanoMin != null ? `${u.sanoMin}–${u.sanoMax} días` : `hasta ${u.sanoMax} días`;
+  return `en ${sectorActual.nombre}, ${sano}; desde ${u.peligro} días es peligroso` + (u.derrota ? ` y a los ${u.derrota} la empresa colapsa.` : '.');
+}
 function getTooltipHTML(key){
   if(KPI_INFO[key]){
     const info = KPI_INFO[key];
     const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
-    const rango = (u && u.rango) || info.rango;
+    const rango = (u && u.rango) || (u ? textoRangoSector(key) : info.rango);
     return `<b>${KPI_LABEL[key]||key}</b>${info.def}<div class="rango">Rango saludable: ${rango}</div>`;
   }
   if(key.indexOf('sector:')===0){

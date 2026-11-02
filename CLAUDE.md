@@ -361,7 +361,14 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
   arranca con 80 (los apartamentos tardan en venderse) y dos decisiones en un turno lo hunden; Ganadería
   tiene 6. Revisar también: alarma de inventario ≥ 90, deriva de inventario > 55 días
   (`motor-operativo.js`), cartera ≥ 90, umbrales de `nivelAlarma`, `RANGOS_SANOS` y `CONTEXTO`.
-  Propuesta: umbrales en `SECTORS[].umbrales` (ya existe para Ganadería) y que motor y finales los lean.
+  ✅ Hecho (nov. 2026, valores aprobados por Juan): `SECTORS[].umbrales.diasInventario` {sanoMin, sanoMax,
+  peligro, derrota} y `diasCartera` {sanoMax, peligro}; `umbralSector(key)` (ui/formato.js) los combina con
+  `UMBRALES_BASE`. Los leen la derrota por inventario, la deriva del motor (eficiencia, pérdida de valor,
+  castigos), la alarma, los colores del tablero, el glosario ("en Construye YA, 60–120 días…"),
+  `CONTEXTO.inventarioPesado/carteraLenta` y la tarjeta del sector. Inventario normal / peligro / derrota:
+  Vita Fit y AgroVerde 25–55 / 75 / 110; Ganadería ≤15 / 25 / 40; Construye YA 60–120 / 140 / 180;
+  Moda Urbana 35–75 / 90 / 120. Cartera normal / peligro: Vita Fit 45/75, Ganadería 40/70, Construye 90/120,
+  resto 60/90. Pendiente: deuda de Construye YA relativa al EBITDA (segunda ronda).
 
 ## 8. Historial de cambios de contenido y balance
 
@@ -504,3 +511,9 @@ dominada por "ofrecer garantía") y la junta trimestral. Ya no queda ningún cas
   sensible (4 veces por partida): con WACC −0,6 el cuidadoso ganaba 62 %; con +0,1, 26 %.
 - Victoria (20 partidas por sector y perfil, Normal): cuidadoso 39 % (Vita Fit 40, TechNova 35, AgroVerde
   45, Ganadería 20, Construye 55, Moda 40), prudente 33 %, agresivo 13 %, azar 7 %.
+
+**Umbrales por empresa (nov. 2026)** — victoria (20 por sector y perfil, Normal): cuidadoso 39 → 47 %
+(Vita Fit 40, TechNova 35, AgroVerde 45, Ganadería 25, Construye 55 → 75, Moda 40 → 60), prudente 38 %,
+agresivo 10 %, azar 12 %. Construye YA y Moda Urbana quedaron más fáciles con límites más holgados.
+Ganadería: el cuidadoso quiebra ~15–20 % por liquidez al final del año; ya pasaba antes de este cambio
+(no es por los umbrales ni por el botón de mantenimiento). Pendiente de investigar.

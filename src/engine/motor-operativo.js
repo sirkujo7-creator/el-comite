@@ -51,18 +51,21 @@ function aplicarMotorOperativo(){
 
   if(sectorActual.tieneInventario && state.diasInventario != null){
     // Inventario que rota mal (muchos días) erosiona su propio valor con el tiempo.
-    if(state.valorInventario != null && state.diasInventario > 55){
-      suma('valorInventario', -Math.min(0.6, (state.diasInventario - 55) * 0.02));
+    const uInv = umbralSector('diasInventario');
+    if(state.valorInventario != null && state.diasInventario > uInv.sanoMax){
+      suma('valorInventario', -Math.min(0.6, (state.diasInventario - uInv.sanoMax) * 0.02));
     }
   }
 
   // EBITDA: la ineficiencia de capital de trabajo pesa más de lo que premia la eficiencia.
   let eficiencia = 0;
   if(state.diasCartera != null){
-    if(state.diasCartera < 35) eficiencia += 0.06; else if(state.diasCartera > 70) eficiencia -= 0.16;
+    const uCart = umbralSector('diasCartera');
+    if(state.diasCartera < uCart.sanoMax - 25) eficiencia += 0.06; else if(state.diasCartera > uCart.sanoMax + 10) eficiencia -= 0.16;
   }
   if(sectorActual.tieneInventario && state.diasInventario != null){
-    if(state.diasInventario < 30) eficiencia += 0.04; else if(state.diasInventario > 55) eficiencia -= 0.11;
+    const uI = umbralSector('diasInventario');
+    if(state.diasInventario < (uI.sanoMin != null ? uI.sanoMin + 5 : uI.sanoMax * 0.5)) eficiencia += 0.04; else if(state.diasInventario > uI.sanoMax) eficiencia -= 0.11;
   }
   if(eficiencia !== 0) suma('ebitda', eficiencia);
 
@@ -198,15 +201,15 @@ function applyEfectos(e, origen, opciones){
     state.confianzaProveedores = clamp(state.confianzaProveedores - 2, 0, 100);
     systemicNotes.push("Con la caja en niveles críticos, tus proveedores empiezan a sentir el riesgo de no cobrar y se ponen más exigentes (<b>Confianza de proveedores -2</b>).");
   }
-  if(state.diasCartera >= 90){
+  if(state.diasCartera >= umbralSector('diasCartera').peligro){
     state.wacc = clamp(state.wacc + 0.2, 5, 35);
-    systemicNotes.push("Tu cartera lleva más de 90 días en promedio sin cobrarse: el mercado empieza a tratar esa cartera como un riesgo de crédito más, no como un activo líquido.");
+    systemicNotes.push(`Tu cartera lleva más de ${umbralSector('diasCartera').peligro} días en promedio sin cobrarse — demasiado para tu negocio: el mercado empieza a tratar esa cartera como un riesgo de crédito más, no como un activo líquido.`);
   }
-  if(sectorActual.perecedero && state.diasInventario!=null && state.diasInventario >= 70){
+  if(sectorActual.perecedero && state.diasInventario!=null && state.diasInventario >= umbralSector('diasInventario').peligro){
     state.ebitda -= 3;
     systemicNotes.push("Tu inventario perecedero lleva demasiados días en bodega: una parte se dañó o quedó fuera de temporada, y la pérdida se registra directo contra el <b>EBITDA (-3)</b>.");
   }
-  if(!sectorActual.perecedero && sectorActual.tieneInventario && state.diasInventario!=null && state.diasInventario >= 75){
+  if(!sectorActual.perecedero && sectorActual.tieneInventario && state.diasInventario!=null && state.diasInventario >= umbralSector('diasInventario').peligro){
     state.ebitda -= 1;
     systemicNotes.push("Tu inventario lleva demasiado tiempo sin rotar: los costos de almacenamiento y el riesgo de obsolescencia ya están pesando sobre tu <b>EBITDA (-1)</b>.");
   }

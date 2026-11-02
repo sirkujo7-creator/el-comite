@@ -35,9 +35,22 @@ const RANGOS_SANOS = {
   valorInventario:{min:25, max:25},
   confianzaProveedores:{min:70}, confianzaBanco:{min:70}, reputacion:{min:70}, moralEquipo:{min:70}
 };
+// Umbrales de días de inventario y de cartera: cada empresa tiene su ciclo (nov. 2026, aprobado por
+// Juan: "no todo debe estar estandarizado"). sanoMin–sanoMax = lo normal del negocio; peligro = alarma,
+// rojo y castigo del motor; derrota = la partida se pierde por inventario obsoleto.
+const UMBRALES_BASE = {
+  diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 },
+  diasCartera:{ sanoMax:60, peligro:90 }
+};
+function umbralSector(key){
+  const base = UMBRALES_BASE[key];
+  const u = (typeof sectorActual !== 'undefined' && sectorActual && sectorActual.umbrales && sectorActual.umbrales[key]) || null;
+  if(!base && !u) return null;
+  return Object.assign({}, base, u, u && u.sanoMin === undefined && base && u.sanoMax !== undefined ? {sanoMin:undefined} : {});
+}
 function rangoSano(key){
-  const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
-  if(u) return {max:u.alerta};
+  const u = umbralSector(key);
+  if(u) return {min:u.sanoMin, max:u.sanoMax};
   return RANGOS_SANOS[key] || {min:-Infinity};
 }
 // ¿Pasar de `antes` a `despues` acerca el indicador a lo sano?
@@ -61,8 +74,12 @@ function deltaEsSano(key, delta){
 
 function colorFor(key, v){
   // Umbrales propios del sector (solo por arriba): p. ej. Ganadería, donde pocos días de inventario es lo sano.
-  const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
-  if(u) return v>=u.peligro ? 'danger' : v>=u.alerta ? 'gold' : 'teal';
+  const u = (key === 'diasInventario' || key === 'diasCartera') ? umbralSector(key) : null;
+  if(u){
+    if(v >= u.peligro || (u.sanoMin != null && v < u.sanoMin * 0.6)) return 'danger';
+    if(v > u.sanoMax || (u.sanoMin != null && v < u.sanoMin)) return 'gold';
+    return 'teal';
+  }
   const t = {
     caja: v<=5?'danger':v<=15?'gold':'teal',
     capitalTrabajo: v<0?'danger':v<10?'gold':'teal',

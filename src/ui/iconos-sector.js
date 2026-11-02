@@ -24,7 +24,10 @@ function rasgosSector(s){
   else if(s.perecedero) r.push('Inventario perecedero');
   else r.push('Inventario de rotación lenta');
   if(s.requiereCapex) r.push('Exige mantener equipos');
-  if(s.umbrales) r.push('Umbrales propios');
+  const inv = s.umbrales && s.umbrales.diasInventario;
+  if(s.tieneInventario && inv) r.push('Inventario sano: ' + (inv.sanoMin != null ? `${inv.sanoMin}–${inv.sanoMax}` : `hasta ${inv.sanoMax}`) + ' días');
+  const cart = s.umbrales && s.umbrales.diasCartera;
+  if(cart) r.push(`Cartera sana: hasta ${cart.sanoMax} días`);
   return r;
 }
 function cifrasInicialesSector(s){

@@ -12,7 +12,7 @@ function checkForcedEndingInterno(){
     desc:"El banco cierra por completo tu acceso a cualquier línea de crédito o refinanciación. Sin margen de maniobra financiera, cualquier imprevisto que llegue ahora ya no tiene con qué cubrirse."};
   if(state.reputacion <= 15) return {tipoFinal:'derrota', badge:"Destitución por la junta", color:'neg',
     desc:"Tu caja puede estar en verde, pero tomaste decisiones tan despiadadas o tan opacas — recortes sin contemplación, cifras maquilladas, promesas rotas — que la junta directiva decide destituirte por destruir el valor intangible de la marca. Los números no lo son todo."};
-  if(sectorActual.tieneInventario && state.diasInventario >= 100) return {tipoFinal:'derrota', badge:"Insolvencia técnica por inventario obsoleto", color:'neg',
+  if(sectorActual.tieneInventario && state.diasInventario >= umbralSector('diasInventario').derrota) return {tipoFinal:'derrota', badge:"Insolvencia técnica por inventario obsoleto", color:'neg',
     desc:`Tu inventario tarda ${Math.round(state.diasInventario)} días en convertirse en venta. Tienes activos en bodega, no en caja: en el papel no estás en quiebra, pero no puedes pagar nada con estantería.`};
   if(state.deuda >= 55 && state.wacc >= 20) return {tipoFinal:'derrota', badge:"Sobreendeudamiento crítico", color:'neg',
     desc:`Tu endeudamiento llegó a ${fmtMoney(state.deuda)} con un WACC de ${state.wacc.toFixed(1)}%. Cada peso nuevo que consigues cuesta más que el anterior: quedaste atrapado en una espiral de costo de capital creciente.`};

@@ -20,7 +20,7 @@ function nivelAlarma(){
    ['reputacion','Respaldo de la junta'],['moralEquipo','Moral del equipo']].forEach(([k,n])=>{
     if(state[k] != null && statusPill(state[k]).tier === 'critico') criticos.push(n + ' en riesgo crítico');
   });
-  if(sectorActual.tieneInventario && state.diasInventario >= 90) criticos.push('Inventario a punto de volverse obsoleto');
+  if(sectorActual.tieneInventario && state.diasInventario >= umbralSector('diasInventario').peligro) criticos.push('Inventario a punto de volverse obsoleto');
   if(criticos.length) return {nivel:'critico', motivos:criticos};
   if(state.caja <= 15 || state.wacc >= 16) return {nivel:'tension', motivos:[]};
   return {nivel:null, motivos:[]};
