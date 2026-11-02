@@ -11,10 +11,9 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Una influencer local te etiqueta en una publicación viral",
         contexto:"Una influencer de fitness con cientos de miles de seguidores publica una rutina grabada en tu gimnasio, etiquetándote sin que se lo hayas pedido. Las inscripciones empiezan a repuntar de inmediato, y ella te escribe ofreciendo una colaboración paga.",
         choices:[
-          {texto:"Aceptar la colaboración paga y ampliar la campaña con ella.", efectos:{caja:-4, reputacion:6, ebitda:2}, consecuencia:"El impulso orgánico se convierte en una estrategia sostenida, aunque el costo de la colaboración se siente de inmediato."},
-          {texto:"Agradecerle públicamente sin pagar nada, dejando que el momento orgánico se apague solo.", efectos:{reputacion:-1}, consecuencia:"El momento viral se desvanece más rápido de lo que llegó — sin inversión detrás, el impulso no se sostiene."},
-          {texto:"Invitarla a una sesión gratuita a cambio de contenido, sin pago en efectivo.", efectos:{caja:-1, reputacion:4}, consecuencia:"Un punto medio razonable: extiendes el momento sin comprometer tanta caja como una colaboración paga completa."},
-          {texto:"Aprovechar el momento para subir precios de membresía antes de que se enfríe.", efectos:{caja:3, ebitda:2, reputacion:-3}, consecuencia:"Capitalizas la demanda mientras dura, aunque algunos nuevos interesados sienten que les cobraste la ola justo cuando llegaban."}
+          {texto:"Aceptar la colaboración paga y ampliar la campaña con ella.", efectos:{caja:-4, reputacion:6, ebitda:si(CONTEXTO.equiposGastados(s), 0.5, 2)}, consecuencia:"El impulso orgánico se convierte en una estrategia sostenida, aunque el costo de la colaboración se siente de inmediato." + si(CONTEXTO.equiposGastados(s), ' Pero los nuevos socios encuentran máquinas gastadas y muchos no renuevan.', '')},
+          {texto:"Invitarla a una sesión gratuita a cambio de contenido, sin pago en efectivo.", efectos:{caja:-1, reputacion:4, ebitda:0.5}, consecuencia:"Extiendes el momento sin comprometer tanta caja como una colaboración paga, aunque el efecto dura menos."},
+          {texto:"Aprovechar el momento para subir precios de membresía antes de que se enfríe.", efectos:{caja:3, ebitda:2, reputacion:si(CONTEXTO.juntaDesconfia(s), -6, -3)}, consecuencia:"Capitalizas la demanda mientras dura, aunque algunos nuevos interesados sienten que les cobraste la ola justo cuando llegaban." + si(CONTEXTO.juntaDesconfia(s), ' La junta, que ya dudaba, lo lee como oportunismo.', '')}
         ]})
     }] },
   { id:'technova', emoji:'💻', nombre:'TechNova', rubro:'Software B2B / SaaS', categoria:'terciario',
@@ -56,10 +55,9 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Un programa de televisión quiere grabar en tu finca",
         contexto:"Un programa regional sobre el campo colombiano te contacta: quieren grabar un episodio completo mostrando tu operación lechera como ejemplo de buenas prácticas. La exposición sería enorme, pero implica abrir la finca por varios días.",
         choices:[
-          {texto:"Aceptar la grabación completa, con acceso total a la operación.", efectos:{caja:-2, reputacion:8}, consecuencia:"La exposición completa tiene un costo logístico real, pero el resultado en reputación es de los más altos que vas a conseguir."},
-          {texto:"Rechazar la propuesta, prefiriendo mantener bajo perfil.", efectos:{reputacion:-1}, consecuencia:"Evitas la exposición, aunque una oportunidad de esa visibilidad no vuelve a tocar la puerta todos los años."},
-          {texto:"Aceptar, pero limitar el acceso a solo una parte de la operación.", efectos:{caja:-1, reputacion:4}, consecuencia:"Un punto medio que reduce la exposición y el costo, sin perder del todo la oportunidad."},
-          {texto:"Aceptar y aprovechar la grabación para promocionar directamente tus productos en cámara.", efectos:{caja:-2, reputacion:5, ebitda:1}, consecuencia:"Conviertes la exposición en algo comercialmente útil, no solo en imagen — aunque se siente menos genuino en pantalla."}
+          {texto:"Aceptar la grabación completa, con acceso total a la operación.", efectos:{caja:-2, reputacion:si(CONTEXTO.equipoCansado(s), 2.5, 8), moralEquipo:si(CONTEXTO.equipoCansado(s), -3, 2)}, consecuencia:"La exposición completa tiene un costo logístico real, pero muestra la finca tal como es." + si(CONTEXTO.equipoCansado(s), ' Con el equipo agotado, la cámara capta descuido en el manejo y el episodio sale tibio.', ' El equipo, orgulloso, luce su trabajo.')},
+          {texto:"Aceptar, pero limitar el acceso a solo una parte de la operación.", efectos:{caja:-1, reputacion:4, ebitda:-0.2}, consecuencia:"Un punto medio que reduce la exposición y el costo, aunque se pierden días de trabajo en la zona grabada."},
+          {texto:"Aceptar y aprovechar la grabación para promocionar directamente tus productos en cámara.", efectos:{caja:-2.5, reputacion:si(CONTEXTO.reputacionAlta(s), 4, 2), ebitda:1}, consecuencia:"Conviertes la exposición en algo comercialmente útil, no solo en imagen — aunque se siente menos genuino en pantalla."}
         ]})
     }] },
   { id:'construyeya', emoji:'🏗️', nombre:'Construye YA', rubro:'Constructora e inmobiliaria', categoria:'secundario',

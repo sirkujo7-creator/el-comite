@@ -64,7 +64,7 @@ const GANADERA_CASES = [
 function GANADERA_NOMINA(s,f){ return {tipo:'calendario', titulo:"Pago a vaqueros y personal de ordeño",
   contexto:"Llega el pago quincenal del personal de campo: vaqueros, ordeñadores y el encargado de mantenimiento — trabajo manual diario que no se puede posponer sin arriesgar la operación misma.",
   choices:[
-    {texto:"Pagar todo con la caja disponible.", efectos:si(CONTEXTO.liquidezBaja(s), {caja:-6, moralEquipo:1, razonCorriente:-0.1}, {caja:-6, moralEquipo:1}), consecuencia:"Cumples en tiempo y forma, manteniendo la confianza del personal que sostiene la operación día a día."},
+    {texto:"Pagar todo, incluido el mantenimiento del equipo de ordeño que el encargado viene pidiendo.", capex:true, efectos:si(CONTEXTO.liquidezBaja(s), {caja:-8, moralEquipo:1, razonCorriente:-0.15}, {caja:-8, moralEquipo:1}), consecuencia:"Cumples en tiempo y forma, y el equipo de ordeño queda revisado." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, el pago completo deja tu liquidez en rojo.', '')},
     {texto:"Pagar la mayoría y diferir un pequeño saldo con acuerdo del personal.", efectos:si(CONTEXTO.equipoCansado(s), {caja:-4, moralEquipo:-5}, {caja:-4, moralEquipo:-2}), diferir:{monto:2.2, turnos:1, motivo:"Saldo diferido a personal de campo", tipo:'nomina'},
      consecuencia:"El personal acepta por esta vez, aunque depender de su buena voluntad tiene un límite."},
     {texto:"Tomar un adelanto de caja de corto plazo para cubrir la nómina completa.", efectos:si(CONTEXTO.apalancado(s), {deuda:3, wacc:0.8, caja:-3}, {deuda:3, wacc:0.4, caja:-3}), consecuencia:"Evitas cualquier fricción con el personal, sumando una deuda de corto plazo a tu estructura de capital."},
