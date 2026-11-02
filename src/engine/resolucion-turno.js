@@ -101,13 +101,10 @@ function buildVencimientoCase(due){
     titulo:"Vence una obligación diferida",
     contexto:`Llegó el momento de pagar lo que aplazaste: ${motivos}. ${perfil.sujeto} ${perfil.verbo} ${fmtMoney(total)} y esta vez no acepta más demoras sin consecuencias.`,
     choices:[
-      {texto:`Pagar de contado los ${fmtMoney(total)} completos.`, efectos:{caja:-total},
+      {texto:`Pagar de contado los ${fmtMoney(total)} completos.`, efectos:{caja:-total, razonCorriente:si(CONTEXTO.liquidezBaja(state), -0.12, 0)},
        consecuencia:"Cubres la obligación por completo. Tu caja absorbe el golpe de lleno — exactamente lo que dejaste programado hace unos turnos."},
-      {texto:"Tomar un crédito de emergencia a corto plazo para cubrir el pago.", efectos:{deuda: Math.round(total*1.15*10)/10, wacc:1.5, caja:-1},
+      {texto:"Tomar un crédito de emergencia a corto plazo para cubrir el pago.", efectos:{deuda: Math.round(total*1.15*10)/10, wacc:si(CONTEXTO.apalancado(state), 2, 1.5), caja:-1},
        consecuencia:"Consigues el desembolso por la vía rápida — y cara: la tasa refleja que llegaste a negociar con el agua al cuello."},
-      {texto:`Negociar una extensión adicional con ${perfil.neg}.`, efectos:negEfectos,
-       diferir:{monto: Math.round(total*1.1*10)/10, turnos:2, motivo:`Extensión de: ${motivos}`, tipo},
-       consecuencia:"Te dan un respiro, pero la deuda original creció y queda programada para el siguiente vencimiento, con menos paciencia disponible."},
       {texto:"Ofrecer un activo no estratégico como garantía a cambio de una extensión más barata.", efectos:{razonCorriente:-0.05},
        diferir:{monto: Math.round(total*1.05*10)/10, turnos:3, motivo:`Extensión con garantía de: ${motivos}`, tipo},
        consecuencia:"Consigues una extensión más barata que el crédito de emergencia, aunque ese activo deja de estar libre para otras negociaciones futuras."}

@@ -492,6 +492,15 @@ dentro de ese caso (se quitaron las de solo pérdida —"no hacer nada", "ignora
 Los ecos de decisiones duras o generosas (`evaluarEcoDeDecision`) ya no se repiten en una partida.
 Victoria (20 partidas por sector y perfil, Normal): cuidadoso 33 → 40 % (Vita Fit 45, TechNova 25,
 AgroVerde 65, Ganadería 25, Construye 25, Moda 55), prudente 21 %, agresivo 15 %, azar 12 %.
-Faltan con 4 opciones: elenco (10), elenco-indicadores (5), cadenas profundas (12), cadena de
-reestructuración (8), karma (3), cisne negro (2), carta meta, escándalo diferido, eventos ramificados (2),
-Toño (2), macro y ecos (6, `engine/impacto.js`).
+
+**Todo el contenido con 3 opciones (nov. 2026)** — los ~67 casos compartidos restantes: elenco y sus
+reencuentros (`minigames/oficina-ambiente.js`), cadenas (en cada una queda al menos una opción por rama
+narrativa), karma, cisnes negros, macro (tasas: una opción menos en cada versión), ecos, escándalo,
+auditoría, huelga, Toño, encuesta maquillada, vencimiento de deuda diferida (sin "negociar extensión",
+dominada por "ofrecer garantía") y la junta trimestral. Ya no queda ningún caso con 4 opciones.
+- Junta (`engine/junta-trimestral.js`): con liquidez floja, "conservar la caja y explicar el plan" en
+  lugar de dividendos; con caja sana, sin "acumular sin destino". Prepagar deuda depende del contexto:
+  apalancado → deuda −5, WACC −0,9; deuda moderada → deuda −4,5 (penalidad), WACC −0,35. La junta es muy
+  sensible (4 veces por partida): con WACC −0,6 el cuidadoso ganaba 62 %; con +0,1, 26 %.
+- Victoria (20 partidas por sector y perfil, Normal): cuidadoso 39 % (Vita Fit 40, TechNova 35, AgroVerde
+  45, Ganadería 20, Construye 55, Moda 40), prudente 33 %, agresivo 13 %, azar 7 %.

@@ -47,8 +47,7 @@ const ECOS_DECISION_DURA = [
     choices:[
       {texto:"Reconocer abiertamente que fue una decisión difícil, sin justificarla de más.", efectos:{moralEquipo:6}, consecuencia:"La honestidad, incluso tardía, pesa más de lo que esperabas."},
       {texto:"Defender la decisión con los números que la sustentaron en su momento.", efectos:{reputacion:2, moralEquipo:-3}, consecuencia:"Los números te respaldan, pero el equipo sigue sintiendo que faltó algo más humano en esa conversación."},
-      {texto:"Cambiar de tema y evitar profundizar en la conversación.", efectos:{moralEquipo:-4}, consecuencia:"El comentario queda sin resolver, y una pregunta sin responder suele pesar más que una respuesta incómoda."},
-      {texto:"Compensarlo con un gesto concreto hacia el equipo, sin mencionar la decisión pasada.", efectos:{caja:-2, moralEquipo:5}, consecuencia:"No hablas del tema directamente, pero el gesto se siente como una respuesta de todas formas."}
+      {texto:"Compensarlo con un gesto concreto hacia el equipo, sin mencionar la decisión pasada.", efectos:{caja:-2, moralEquipo:5, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.05, 0)}, consecuencia:"No hablas del tema directamente, pero el gesto se siente como una respuesta de todas formas."}
     ]
   }),
   (s,f)=>({
@@ -56,7 +55,6 @@ const ECOS_DECISION_DURA = [
     contexto:"Te enteras de que la historia de aquella decisión dura que tomaste ya circula entre el equipo — y como toda historia que pasa de boca en boca, llegó un poco más exagerada de lo que realmente fue.",
     choices:[
       {texto:"Aclarar los hechos reales en una reunión abierta con todo el equipo.", efectos:{reputacion:3, moralEquipo:2}, consecuencia:"Aclarar la versión real, aunque incómodo, corta la exageración de raíz."},
-      {texto:"Dejar que la historia siga circulando sin intervenir.", efectos:{moralEquipo:-3}, consecuencia:"Sin una versión oficial, la exagerada termina siendo la que todos recuerdan."},
       {texto:"Hablarlo en privado solo con los líderes de cada área, no con todo el equipo.", efectos:{moralEquipo:1}, consecuencia:"La aclaración llega a menos gente de la que hubieras querido, pero al menos llega a quienes más influencia tienen."},
       {texto:"Usar el momento para explicar el contexto financiero completo detrás de la decisión.", efectos:{reputacion:2, moralEquipo:-1}, consecuencia:"El equipo entiende mejor el porqué, aunque entenderlo no significa que les guste más."}
     ]
@@ -65,9 +63,8 @@ const ECOS_DECISION_DURA = [
     tipo:'karma', titulo:"El favor que ya no te deben",
     contexto:"Necesitas un favor operativo rápido de alguien del equipo — algo que normalmente se resolvía con buena voluntad. Esta vez, la respuesta es fría y estrictamente profesional. La decisión dura de hace unos turnos todavía se siente.",
     choices:[
-      {texto:"Aceptar la respuesta fría y resolverlo por otra vía, sin insistir.", efectos:{ebitda:-1}, consecuencia:"Te toma más esfuerzo del que hubiera tomado antes, pero no fuerzas una relación que ya está tensa."},
       {texto:"Hablar directamente sobre la distancia que sientes desde aquella decisión.", efectos:{moralEquipo:4}, consecuencia:"La conversación incómoda abre una puerta que llevaba tiempo cerrada."},
-      {texto:"Insistir apelando a la jerarquía, sin abrir la conversación de fondo.", efectos:{moralEquipo:-5}, consecuencia:"Consigues lo que necesitabas, pero la distancia entre ustedes se hace todavía más grande."},
+      {texto:"Insistir apelando a la jerarquía, sin abrir la conversación de fondo.", efectos:{moralEquipo:si(CONTEXTO.equipoCansado(s), -8, -5), ebitda:0.3}, consecuencia:"Consigues lo que necesitabas, pero la distancia entre ustedes se hace todavía más grande."},
       {texto:"Ofrecer una compensación económica puntual por el favor.", efectos:{caja:-1.5}, consecuencia:"Resuelves lo inmediato, aunque una relación de confianza rota no se arregla solo con dinero."}
     ]
   })
@@ -80,8 +77,7 @@ const ECOS_DECISION_GENEROSA = [
     choices:[
       {texto:"Aceptar la ayuda con gratitud genuina.", efectos:{moralEquipo:5, ebitda:1}, consecuencia:"La reciprocidad genuina, cuando se acepta bien, fortalece la relación todavía más."},
       {texto:"Agradecer, pero insistir en que no era necesario y rechazar la ayuda.", efectos:{moralEquipo:1}, consecuencia:"Tu gesto de no querer 'cobrar' el favor se aprecia, aunque la ayuda ofrecida se pierde."},
-      {texto:"Aceptar la ayuda y usarla como base para formalizar más ese tipo de colaboración.", efectos:{ebitda:1.5, moralEquipo:3}, consecuencia:"Conviertes un gesto espontáneo en algo más estructurado y sostenible en el tiempo."},
-      {texto:"Aceptar la ayuda sin decir nada especial al respecto, como algo normal entre colegas.", efectos:{ebitda:0.8}, consecuencia:"Resuelve lo práctico, aunque el momento humano de reconocerlo explícitamente se pierde un poco."}
+      {texto:"Aceptar la ayuda y usarla como base para formalizar más ese tipo de colaboración.", efectos:{ebitda:1.5, moralEquipo:3}, consecuencia:"Conviertes un gesto espontáneo en algo más estructurado y sostenible en el tiempo."}
     ]
   }),
   (s,f)=>({
@@ -90,8 +86,7 @@ const ECOS_DECISION_GENEROSA = [
     choices:[
       {texto:"Dejar que el comentario se difunda de forma orgánica, sin promoverlo activamente.", efectos:{reputacion:3}, consecuencia:"La reputación que se construye sin buscarla suele ser la más creíble."},
       {texto:"Aprovechar el momento para pedirle una recomendación formal en redes profesionales.", efectos:{reputacion:4, caja:-0.3}, consecuencia:"Conviertes el comentario espontáneo en algo más permanente y visible."},
-      {texto:"Contactarlo solo para agradecerle el gesto, sin pedir nada más.", efectos:{reputacion:1, moralEquipo:2}, consecuencia:"Un gesto simple que refuerza, puertas afuera y adentro, el tipo de empresa que estás construyendo."},
-      {texto:"No hacer nada al respecto — dejar que las cosas sigan su curso natural.", efectos:{reputacion:1}, consecuencia:"El beneficio ya está hecho de todas formas, aunque no lo capitalizas tanto como pudiste haberlo hecho."}
+      {texto:"Contactarlo solo para agradecerle el gesto, sin pedir nada más.", efectos:{reputacion:1, moralEquipo:2}, consecuencia:"Un gesto simple que refuerza, puertas afuera y adentro, el tipo de empresa que estás construyendo."}
     ]
   }),
   (s,f)=>({
@@ -99,7 +94,6 @@ const ECOS_DECISION_GENEROSA = [
     contexto:"Necesitas ayuda urgente en un tema fuera de lo habitual, y es justamente la persona a la que ayudaste hace unos turnos quien se ofrece de inmediato, sin que tengas que pedirlo dos veces.",
     choices:[
       {texto:"Aceptar la ayuda y confiarle una responsabilidad mayor de la que tenía antes.", efectos:{ebitda:1.5, moralEquipo:4}, consecuencia:"La confianza recíproca, bien correspondida, suele rendir más de lo esperado."},
-      {texto:"Aceptar la ayuda puntual, sin cambiar nada en su rol habitual.", efectos:{ebitda:1}, consecuencia:"Resuelves el problema inmediato, aunque no capitalizas del todo el momento de confianza mutua."},
       {texto:"Agradecer con un reconocimiento público frente al resto del equipo.", efectos:{moralEquipo:5}, consecuencia:"El reconocimiento público de un gesto así inspira a que otros actúen igual la próxima vez."},
       {texto:"Compensarlo económicamente además del agradecimiento verbal.", efectos:{caja:-1, moralEquipo:3}, consecuencia:"El gesto se aprecia, aunque para esta persona probablemente el reconocimiento importaba más que el dinero."}
     ]
