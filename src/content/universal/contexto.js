@@ -22,7 +22,12 @@ const CONTEXTO = {
   // Reputación sólida: abre puertas y mejora términos.
   reputacionAlta: (s)=> s.reputacion >= 65,
   // Equipos sin mantenimiento hace dos turnos o más (Vita Fit, Ganadería).
-  equiposGastados: (s)=> (s.turnosSinCapex || 0) >= 2
+  equiposGastados: (s)=> (s.turnosSinCapex || 0) >= 2,
+  // Inventario que rota lento: 30 % más días que al empezar (cada sector tiene su nivel normal).
+  inventarioPesado: (s)=> s.diasInventario != null &&
+    s.diasInventario >= ((typeof sectorActual !== 'undefined' && sectorActual && sectorActual.kpiInicial.diasInventario) || 50) * 1.3,
+  // Cartera lenta: los clientes tardan en pagar.
+  carteraLenta: (s)=> s.diasCartera != null && s.diasCartera >= 60
 };
 // Elige entre dos versiones según una condición: si(cond, siSe cumple, si no).
 function si(cond, a, b){ return cond ? a : b; }

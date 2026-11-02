@@ -39,10 +39,9 @@ const SECTORS = [
       build:(s,f)=>({tipo:'karma', titulo:"Los recolectores de la finca piden mejores condiciones",
         contexto:"Un grupo de recolectores, cansados de las condiciones actuales, pide una reunión formal — turnos más cortos en las horas de más calor, y almuerzo incluido durante la temporada de cosecha.",
         choices:[
-          {texto:"Aceptar ambas peticiones de inmediato.", efectos:{caja:-3, moralEquipo:15}, consecuencia:"El costo es real, pero la respuesta inmediata a una petición razonable reconstruye confianza rápido."},
-          {texto:"Rechazar las peticiones, argumentando que el margen no lo permite.", efectos:{moralEquipo:-8}, consecuencia:"El rechazo confirma exactamente lo que los recolectores ya sospechaban — la relación se enfría todavía más."},
-          {texto:"Aceptar solo el almuerzo, posponiendo la discusión de turnos.", efectos:{caja:-1, moralEquipo:7}, consecuencia:"Un gesto parcial calma la situación por ahora, aunque el tema de fondo sigue sin resolverse."},
-          {texto:"Proponer turnos más cortos a cambio de una meta de recolección diaria.", efectos:{moralEquipo:8, ebitda:1, caja:-1.5}, consecuencia:"Un acuerdo que beneficia a ambos lados — mejor condición a cambio de un compromiso de productividad claro. Cubrir los turnos más cortos exige contratar un par de recolectores adicionales."}
+          {texto:"Aceptar ambas peticiones de inmediato.", efectos:{caja:-3, moralEquipo:15, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.08, 0)}, consecuencia:"El costo es real, pero la respuesta inmediata a una petición razonable reconstruye confianza rápido." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, cada gasto fijo nuevo pesa.', '')},
+          {texto:"Aceptar solo el almuerzo, posponiendo la discusión de turnos.", efectos:{caja:-1, moralEquipo:si(CONTEXTO.reputacionAlta(s), 9, 6)}, consecuencia:"Un gesto parcial calma la situación por ahora, aunque el tema de fondo sigue sin resolverse." + si(CONTEXTO.reputacionAlta(s), ' Tu palabra pesa: confían en que lo de los turnos llegará.', '')},
+          {texto:"Proponer turnos más cortos a cambio de una meta de recolección diaria.", efectos:{moralEquipo:si(CONTEXTO.juntaDesconfia(s), 5, 8), ebitda:0.6, caja:-2}, consecuencia:"Mejor condición a cambio de un compromiso de productividad claro. Cubrir los turnos más cortos exige contratar recolectores adicionales." + si(CONTEXTO.juntaDesconfia(s), ' Con poca confianza en la gerencia, algunos leen la meta como una trampa.', '')}
         ]})
     }] },
   { id:'ganadera', emoji:'🐄', nombre:'Ganadera Los Llanos', rubro:'Ganadería lechera y cría de bovinos', categoria:'primario',
