@@ -230,6 +230,12 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   anterior (legado), espejo y corbata (perfil), la imagen de la junta. Informe: calendario tachado,
   sala de juntas a puerta cerrada, la curva real de caja de la partida, el veredicto ante la junta.
   Entran con destello, se acercan despacio, viñeta y grano.
+- Regla de victoria (regla 3, nov. 2026, aprobada por Juan; `systems/arquetipos.js`): valor de la empresa =
+  EBITDA × clamp(55 / WACC, 2,5, 6) − deuda + ½ caja (−15 % si la razón corriente < 1), comparado con el
+  valor inicial del sector (`valorEmpresa`, también lo usa el mandato "Crecimiento agresivo"). S/A exigen
+  además empresa sana al cierre (`condicionesFaltantesCierre`): razón corriente ≥ 1,1, WACC ≤ inicial + 2
+  (`puntoInicial.wacc`), deuda ≤ 3 × EBITDA y banco, proveedores, junta y moral ≥ 40. Si el valor crece
+  ×1,3 pero falta salud: B "Crecimiento frágil", con la condición que faltó escrita en el informe.
 - Escala de rangos (nov. 2026, decisión de Juan): S y A = victoria ("MISIÓN CUMPLIDA" y monedas),
   B = resultado regular ("AÑO A MEDIAS", sin fiesta), C y D = desastre ("DESASTRE"; la quiebra sigue
   siendo "MISIÓN FALLIDA"). Nuevo rango D (`cierreAnioFiscal`): la empresa vale menos del 40 % de su
@@ -445,3 +451,25 @@ favorita unánime 54 → 29 %, opciones que nadie elige 52 → 26 %; victoria me
 prudente 100 → 90 %, agresivo 90 → 60 % (quiebra 10 → 40 %), azar 30 → 45 %. Las victorias casi no bajan
 porque el valor inicial de TechNova es muy bajo (EBITDA×4 − deuda = $4 M): lo resuelve la fórmula de
 valoración pendiente, no el contenido. Sigue: AgroVerde.
+
+**Los 6 sectores con 3 opciones y contexto + regla 3 (nov. 2026)** — Juan: "primero termina el ajuste de
+las empresas según sus casos y luego aplica la regla 3". AgroVerde, Moda Urbana, Vita Fit y Construye YA
+siguieron el método de Ganadería y TechNova (casos propios, calendario, eventos propios y karma; los macro
+compartidos no). Predicados nuevos: `inventarioPesado` (relativo al sector, nunca sobre 90 días) y
+`carteraLenta`. Favorita unánime / opciones que nadie elige: AgroVerde 28 → 16 % / 54 → 40 %; Moda Urbana
+31 → 24 % / 52 → 25 %; Vita Fit 7 → 6 % / 53 → 39 %; Construye YA 11 → 16 % / 49 → 35 %.
+Construye YA arranca con 80 días de inventario y la partida se pierde a los 100: dos decisiones que suman
+inventario en el mismo turno lo hunden (el agresivo quiebra 70 %). Pendiente de decisión de Juan.
+Victoria con la regla 3 (20 partidas por sector y perfil, Normal):
+
+| Perfil | Antes (EBITDA×4 − deuda) | Regla 3 |
+|---|---|---|
+| Cuidadoso (metódico) | ~75 % | 29 % (Vita Fit 25, TechNova 30, AgroVerde 50, Ganadería 5, Construye 25, Moda 40) |
+| Prudente | ~70 % | 19 % |
+| Agresivo | ~60 % | 15 % |
+| Azar | ~25 % | 10 % |
+
+El cuidadoso queda bajo la meta (40–45 %) sobre todo por Vita Fit y Ganadería: el mantenimiento (−2 de
+EBITDA cada 3 turnos sin `capex`) casi no se puede evitar porque pocas decisiones lo ofrecen. Probado: sin
+esa mecánica, Vita Fit pasa a 100 % de victorias. Bajar el umbral de A rinde poco (×1,1: cuidadoso 36 %,
+azar 13 %). Pendiente de decisión de Juan: cómo hacer evitable el mantenimiento.

@@ -9,8 +9,9 @@ const MANDATOS_INICIALES = [
   { id:'crecimiento', titulo:'Crecimiento agresivo',
     desc:'La junta espera que multipliques el valor de la empresa por al menos 2 antes de que termine el año fiscal.',
     cumplido:()=>{
-      const val = state.ebitda*4 - state.deuda;
-      const ini = sectorActual.kpiInicial.ebitda*4 - sectorActual.kpiInicial.deuda;
+      // Misma valoración que el rango final (systems/arquetipos.js).
+      const val = valorEmpresa(state);
+      const ini = valorEmpresa(sectorActual.kpiInicial);
       return ini > 0 ? (val/ini) >= 2 : val > 0;
     }},
   { id:'sinSacrificios', titulo:'Cero sacrificios humanos',
