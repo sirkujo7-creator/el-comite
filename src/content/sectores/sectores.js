@@ -69,6 +69,10 @@ const SECTORS = [
     descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo.',
     tieneInventario:true, requiereCapex:false, perecedero:false,
     umbrales:{ diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
+    // Prepagar un crédito constructor cuesta más que en otros negocios: comisión por prepago y
+    // garantías atadas al avance de obra (opción B de Juan, nov. 2026; la usa la junta trimestral).
+    prepagoDeuda:{ normal:{caja:-5, deuda:-3.5, wacc:-0.2}, apalancado:{caja:-5, deuda:-4, wacc:-0.6},
+      texto:"Prepagar un crédito constructor no es como prepagar cualquier deuda: el banco cobra una comisión fuerte por cancelar antes de tiempo y las garantías siguen atadas al avance de la obra. Bajas la deuda, pero menos de lo que pagaste." },
     kpiInicial:{caja:45, capitalTrabajo:32, razonCorriente:1.4, deuda:25, ebitda:10, wacc:14.0, diasInventario:80, diasCartera:60, valorInventario:35, confianzaProveedores:62, confianzaBanco:55, reputacion:60, moralEquipo:55},
     cases:CONSTRUYEYA_CASES, calendario:[CONSTRUYEYA_SUBCONTRATISTAS, CONSTRUYEYA_RENTA], random:CONSTRUYEYA_RANDOM,
     karmaExtra:[{ id:'inspectorObra', trigger:(s)=>s.deuda!=null && s.deuda>=30,

@@ -38,6 +38,8 @@ function buildJuntaTrimestral(){
       ${nuevaMetaHtml}
     </div>
   `;
+  // Algunas empresas tienen su propio costo de prepagar (Construye YA: crédito constructor).
+  const prepagoSector = sectorActual && sectorActual.prepagoDeuda;
   return {
     tipo:'junta',
     titulo:"Cierre trimestral: la junta espera tu decisión",
@@ -48,7 +50,7 @@ function buildJuntaTrimestral(){
     choices: CONTEXTO.liquidezBaja(state) ? [
       {texto:"Reinvertir en CapEx (tecnología o maquinaria).", efectos:{caja:-5, ebitda:1, razonCorriente:-0.12}, capex:true,
        consecuencia:"Consumes caja que hoy escasea, pero reduces costos operativos futuros — el equivalente a comprarle margen a tus próximos trimestres."},
-      {texto:"Prepagar deuda cara.", efectos:{caja:-5, deuda:-5, wacc:-0.6, razonCorriente:-0.08},
+      {texto:"Prepagar deuda cara.", efectos:Object.assign({}, prepagoSector ? prepagoSector[CONTEXTO.apalancado(state) ? 'apalancado' : 'normal'] : {caja:-5, deuda:-5, wacc:-0.6}, {razonCorriente:-0.08}),
        consecuencia:"Matas pasivos que venían encareciendo tu costo de capital, aunque tu colchón de caja queda todavía más delgado."},
       {texto:"Conservar la caja y explicarle a la junta el plan de liquidez.", efectos:{reputacion:-1, confianzaBanco:2, ebitda:-0.3},
        consecuencia:"Con la liquidez tan justa, la junta entiende que no es momento de repartir ni de invertir — aunque esperaba algo más que prudencia."}
@@ -57,8 +59,8 @@ function buildJuntaTrimestral(){
        consecuencia:"El FCF baja de forma notoria este trimestre, pero la junta ve un retorno tangible: tu reputación como gerente que sí entrega resultados sube con fuerza." + si(CONTEXTO.juntaDesconfia(state), ' Una junta que dudaba de ti valora el doble ver el dinero.', '')},
       {texto:"Reinvertir en CapEx (tecnología o maquinaria).", efectos:{caja:-5, ebitda:1}, capex:true,
        consecuencia:"Consumes caja hoy, pero reduces costos operativos futuros — el equivalente a comprarle margen a tus próximos trimestres."},
-      {texto:"Prepagar deuda.", efectos:si(CONTEXTO.apalancado(state), {caja:-5, deuda:-5, wacc:-0.9}, {caja:-5, deuda:-4.5, wacc:-0.35}),
-       consecuencia:si(CONTEXTO.apalancado(state),
+      {texto:"Prepagar deuda.", efectos:prepagoSector ? prepagoSector[CONTEXTO.apalancado(state) ? 'apalancado' : 'normal'] : si(CONTEXTO.apalancado(state), {caja:-5, deuda:-5, wacc:-0.9}, {caja:-5, deuda:-4.5, wacc:-0.35}),
+       consecuencia: prepagoSector ? prepagoSector.texto : si(CONTEXTO.apalancado(state),
          "Estabas muy endeudado: matas pasivos que encarecían tu costo de capital, liberas cupo para una emergencia y el banco lo nota en tu tasa.",
          "Tu deuda era moderada y barata: prepagarla te cuesta una penalidad y el alivio en tu costo de capital es pequeño, porque además pierdes parte del ahorro tributario de los intereses. Menos deuda, sí, pero no siempre es lo más rentable que puedes hacer con esa caja.")}
     ]

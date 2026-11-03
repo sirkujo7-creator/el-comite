@@ -531,3 +531,10 @@ seguir con la dificultad. Tres correcciones, medidas con 20 partidas por sector 
 Victoria: cuidadoso 47 → 43 % (Vita Fit 40, TechNova 25, AgroVerde 35, Ganadería 40, Construye 70,
 Moda 45), prudente 32 %, agresivo 10 %, azar 9 %. Construye YA sigue alto: su cuidadoso prepaga deuda en
 cada junta ($25 M → ~0) con la caja grande con que arranca. Pendiente de decisión de Juan.
+
+**Construye YA: prepago con penalidad (opción B de Juan, nov. 2026)** — `SECTORS[].prepagoDeuda` (lo lee la
+junta en ambas ramas): crédito constructor con comisión por prepago; deuda moderada → caja −5, deuda −3,5,
+WACC −0,2; apalancado → deuda −4, WACC −0,6. Cuidadoso en Construye YA: 70 → 50 % (con deuda −3 / WACC −0,1
+caía a 15 %). Promedio del cuidadoso ≈ 39 %.
+Tecleo de las cinemáticas: vuelve a sonar (Juan: "no se escuchan las teclas"); el silencio de las
+cinemáticas aplica a música, drones y murmullo.

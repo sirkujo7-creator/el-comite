@@ -80,8 +80,8 @@ function detenerDrone(){
   setTimeout(()=>{ try{ oscRef.stop(); }catch(e){} }, 900);
   droneOsc = null; droneGain = null;
 }
-// Silencio absoluto durante las cinemáticas (pedido de Juan, nov. 2026): música, drones y
-// tecleo callan mientras corre la secuencia y vuelven al cerrarla.
+// Silencio durante las cinemáticas (pedido de Juan, nov. 2026): música, drones y murmullo
+// callan mientras corre la secuencia y vuelven al cerrarla. El tecleo sí suena.
 let cinematicaEnCurso = false;
 function silencioCinematica(activo){
   cinematicaEnCurso = !!activo;
@@ -106,9 +106,10 @@ function actualizarVolumenEnVivo(){
   actualizarVolumenMusica();
 }
 
-// 4) Tecla de máquina de escribir — tic breve y agudo, tono ligeramente aleatorio
+// 4) Tecla de máquina de escribir — tic breve y agudo, tono ligeramente aleatorio.
+// Suena también durante las cinemáticas (Juan, nov. 2026: el silencio es para la música y los
+// zumbidos, no para el tecleo de la terminal).
 function sonidoTecla(){
-  if(cinematicaEnCurso) return;
   const ctx = getAudioCtx();
   if(!ctx) return;
   const dur = 0.03;
