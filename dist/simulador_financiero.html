@@ -11351,7 +11351,7 @@ const SECTORS = [
     descripcion:'Sin inventario: tu mayor costo es la nómina técnica. Si recortas beneficios para salvar caja, la moral del equipo cae y el mejor talento se va — con el servicio detrás.',
     tieneInventario:false, requiereCapex:false, perecedero:false,
     umbrales:{ diasCartera:{ sanoMax:60, peligro:90 } },
-    kpiInicial:{caja:35, capitalTrabajo:22, razonCorriente:1.4, deuda:20, ebitda:6, wacc:13.5, diasInventario:null, diasCartera:45, valorInventario:null, confianzaProveedores:65, confianzaBanco:55, reputacion:60, moralEquipo:65},
+    kpiInicial:{caja:35, capitalTrabajo:22, razonCorriente:1.4, deuda:17, ebitda:6, wacc:13.5, diasInventario:null, diasCartera:45, valorInventario:null, confianzaProveedores:65, confianzaBanco:55, reputacion:60, moralEquipo:65},
     cases:TECHNOVA_CASES, calendario:[TECHNOVA_NOMINA, TECHNOVA_RENTA], random:TECHNOVA_RANDOM,
     karmaExtra:[{ id:'fugaCerebros', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=25,
       build:(s,f)=>({tipo:'karma', titulo:"Fuga de cerebros", contexto:"La moral del equipo técnico tocó fondo. Dos desarrolladores senior presentan su renuncia la misma semana, alegando 'falta de reconocimiento y estabilidad'.",

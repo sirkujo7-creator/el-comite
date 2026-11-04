@@ -538,3 +538,10 @@ WACC −0,2; apalancado → deuda −4, WACC −0,6. Cuidadoso en Construye YA: 
 caía a 15 %). Promedio del cuidadoso ≈ 39 %.
 Tecleo de las cinemáticas: vuelve a sonar (Juan: "no se escuchan las teclas"); el silencio de las
 cinemáticas aplica a música, drones y murmullo.
+
+**TechNova arranca sana (nov. 2026)** — deuda inicial 20 → 17 (deuda/EBITDA 3,3 → 2,8): antes empezaba
+"apalancada" (`CONTEXTO.apalancado`, ≥ 3,2) y violando la condición de empresa sana (≤ 3 × EBITDA), así que
+todos sus casos le daban la versión más cara del crédito desde el turno 1. Cuidadoso 25 → 30 %. Lo que la
+sigue frenando es el WACC: el financiamiento típico de una startup (ángeles, capital propio +1 de WACC,
+créditos de nómina) lo sube más de 2 puntos sobre el inicial. Victoria general: cuidadoso 40 % (Vita Fit 40,
+TechNova 30, AgroVerde 35, Ganadería 40, Construye 50, Moda 45), prudente 25 %, agresivo 10 %, azar 8 %.
