@@ -268,6 +268,9 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   Nov. 2026 (opción A de Juan): botón "🔧 Hacer mantenimiento · $3 M" en el aviso de equipos del tablero
   (`hacerMantenimiento`, `COSTO_MANTENIMIENTO`, systems/metas-junta.js). Entre turnos, una vez por turno,
   cuenta como una opción con `capex` del turno recién jugado. El metódico del arnés lo usa con 2 de 3.
+- TechNova es la empresa más difícil a propósito (nov. 2026, opción A de Juan): el cuidadoso gana ~30 %
+  porque el financiamiento de una startup (ángeles, capital de riesgo) sube el WACC más de 2 puntos y la
+  condición de empresa sana lo castiga. Es la lección: crecer con capital caro tiene precio. No compensarlo.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
