@@ -10,7 +10,7 @@ const CONTEXTO = {
   // Holgura real: el costo de oportunidad de quedarse quieto es mayor.
   liquidezHolgada: (s)=> s.razonCorriente >= 1.6 && s.caja >= 30,
   // Deuda alta frente a lo que genera la operación: el crédito sale más caro.
-  apalancado: (s)=> s.deuda >= 32 || s.deuda / Math.max(1, s.ebitda) >= 3.2,
+  apalancado: (s)=> deudaEnVeces(s) > escalaDeuda().sano,
   // El banco confía: mejores condiciones, pero traicionarlo cuesta más.
   bancoAmigo: (s)=> s.confianzaBanco >= 65,
   // Equipo agotado: la ejecución falla justo cuando más depende de la gente.

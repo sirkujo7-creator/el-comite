@@ -48,7 +48,27 @@ function umbralSector(key){
   if(!base && !u) return null;
   return Object.assign({}, base, u, u && u.sanoMin === undefined && base && u.sanoMax !== undefined ? {sanoMin:undefined} : {});
 }
+// Deuda medida en veces el EBITDA (nov. 2026, Juan: "realista y sin incoherencias"): $25 M es poco
+// para una constructora y mucho para una startup. Una sola escala para todo el juego:
+//   sano ≤ 3×  (también la condición de empresa sana del cierre, systems/arquetipos.js)
+//   alto ≥ 4×  (el crédito sale más caro, el banco llama, el motor sube el WACC)
+//   crítico ≥ 5,5× (rojo en el tablero, alarma, segundo castigo del motor)
+//   quiebra ≥ 7× con WACC ≥ 20 (sobreendeudamiento, engine/finales.js)
+// Con EBITDA cero o negativo, cualquier deuda cuenta como altísima.
+const DEUDA_VECES_BASE = { sano:3, alto:4, critico:5.5, quiebra:7 };
+// Cada empresa tolera distinto: una constructora vive de créditos de obra; una tienda, no.
+// SECTORS[].umbrales.deudaVeces sobrescribe la escala base (mismo criterio que inventario y cartera).
+function escalaDeuda(){
+  const u = (typeof sectorActual !== 'undefined' && sectorActual && sectorActual.umbrales && sectorActual.umbrales.deudaVeces) || null;
+  return Object.assign({}, DEUDA_VECES_BASE, u);
+}
+function multiploDeuda(deuda, ebitda){
+  if(deuda == null || deuda <= 0) return 0;
+  return ebitda != null && ebitda > 0.5 ? deuda / ebitda : 99;
+}
+function deudaEnVeces(s){ s = s || (typeof state !== 'undefined' ? state : null); return s ? multiploDeuda(s.deuda, s.ebitda) : 0; }
 function rangoSano(key){
+  if(key === 'deuda' && typeof state !== 'undefined' && state && state.ebitda != null) return {max: escalaDeuda().sano * Math.max(state.ebitda, 0.5)};
   const u = umbralSector(key);
   if(u) return {min:u.sanoMin, max:u.sanoMax};
   return RANGOS_SANOS[key] || {min:-Infinity};
@@ -84,7 +104,7 @@ function colorFor(key, v){
     caja: v<=5?'danger':v<=15?'gold':'teal',
     capitalTrabajo: v<0?'danger':v<10?'gold':'teal',
     razonCorriente: v<1?'danger':v<1.3?'gold':'teal',
-    deuda: v>=45?'danger':v>=25?'gold':'teal',
+    deuda: (()=>{ const m = multiploDeuda(v, (typeof state !== 'undefined' && state) ? state.ebitda : 8); return m>=escalaDeuda().critico?'danger':m>escalaDeuda().sano?'gold':'teal'; })(),
     ebitda: v<=0?'danger':v<8?'gold':'teal',
     wacc: v>=18?'danger':v>=14?'gold':'teal',
     diasInventario: (v>65||v<15)?'danger':(v>55||v<25)?'gold':'teal',

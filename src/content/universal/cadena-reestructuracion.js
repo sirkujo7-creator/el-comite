@@ -61,7 +61,7 @@ const CADENAS_PROFUNDAS = [
       ]
     })
   },
-  { id:'cadena_auditoria', trigger:(s,f)=> s.deuda >= 30 || s.wacc >= 18,
+  { id:'cadena_auditoria', trigger:(s,f)=> deudaEnVeces(s) >= escalaDeuda().alto || s.wacc >= 18,
     build:(s,f)=>({
       tipo:'karma', titulo:"Inicia una revisión fiscal preventiva",
       contexto:"La autoridad tributaria notifica el inicio de una revisión preventiva de tus estados financieros — rutinaria, dicen, aunque el nivel de detalle solicitado no se siente tan rutinario. Tienes que decidir cómo vas a responder desde el primer momento.",
@@ -89,7 +89,7 @@ const CADENAS_PROFUNDAS = [
       ]
     })
   },
-  { id:'cadena_reestructuracion', trigger:(s,f)=> (s.razonCorriente!=null && s.razonCorriente < 1.5) || s.deuda >= 26,
+  { id:'cadena_reestructuracion', trigger:(s,f)=> (s.razonCorriente!=null && s.razonCorriente < 1.5) || deudaEnVeces(s) > escalaDeuda().sano,
     build:(s,f)=>({
       tipo:'karma', titulo:"Una banca de inversión boutique detecta tu estructura financiera",
       contexto:"Una firma pequeña, especializada en reestructuraciones, te contacta directamente — notaron, por tus reportes públicos, que tu estructura de capital está tensa: mucha deuda de corto plazo, poca holgura de liquidez real. Ofrecen diseñar un plan de reestructuración integral, a cambio de un fee por el diagnóstico.",

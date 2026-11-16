@@ -3760,7 +3760,7 @@ function aplicarMotorOperativo(){
     suma('confianzaProveedores', state.caja > 25 ? 0.12 : state.caja < 10 ? -0.3 : 0);
   }
   if(state.confianzaBanco != null && state.deuda != null){
-    suma('confianzaBanco', state.deuda < 20 ? 0.12 : state.deuda > 35 ? -0.3 : 0);
+    suma('confianzaBanco', deudaEnVeces() <= escalaDeuda().sano ? 0.12 : deudaEnVeces() >= escalaDeuda().alto ? -0.3 : 0);
   }
 
   // Reputación deriva hacia el promedio de cómo tratas a tu gente y tus socios — pero cae
@@ -3868,13 +3868,13 @@ function applyEfectos(e, origen, opciones){
     state.wacc = clamp(state.wacc + 2, 5, 35);
     systemicNotes.push("Tu razón corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
   }
-  if(state.deuda >= 40){
+  if(deudaEnVeces() >= escalaDeuda().critico){
     state.wacc = clamp(state.wacc + 0.3, 5, 35);
-    systemicNotes.push("Tu endeudamiento superó los $40M: cualquier acreedor nuevo te percibe como más riesgoso, así que tu WACC sube un poco cada turno mientras te mantengas en ese nivel.");
+    systemicNotes.push(`Tu deuda supera ${String(escalaDeuda().critico).replace(".", ",")} veces tu EBITDA: para tu negocio es endeudamiento crítico. Cualquier acreedor nuevo te percibe como mucho más riesgoso, así que tu WACC sube otro poco cada turno mientras sigas en ese nivel.`);
   }
-  if(state.ebitda > 1 && (state.deuda/state.ebitda) >= 4){
+  if(deudaEnVeces() >= escalaDeuda().alto){
     state.wacc = clamp(state.wacc + 0.3, 5, 35);
-    systemicNotes.push("Tu relación Deuda/EBITDA superó 4x: para cualquier analista de crédito ese es un apalancamiento alto, y el mercado te cobra un WACC más caro por el riesgo adicional.");
+    systemicNotes.push(`Tu deuda superó ${String(escalaDeuda().alto).replace(".", ",")} veces tu EBITDA: para un analista de crédito de tu sector ese es un apalancamiento alto, y el mercado te cobra un WACC más caro por el riesgo adicional.`);
   }
   if(state.confianzaBanco <= 35){
     state.wacc = clamp(state.wacc + 0.2, 5, 35);
@@ -4005,7 +4005,27 @@ function umbralSector(key){
   if(!base && !u) return null;
   return Object.assign({}, base, u, u && u.sanoMin === undefined && base && u.sanoMax !== undefined ? {sanoMin:undefined} : {});
 }
+// Deuda medida en veces el EBITDA (nov. 2026, Juan: "realista y sin incoherencias"): $25 M es poco
+// para una constructora y mucho para una startup. Una sola escala para todo el juego:
+//   sano ≤ 3×  (también la condición de empresa sana del cierre, systems/arquetipos.js)
+//   alto ≥ 4×  (el crédito sale más caro, el banco llama, el motor sube el WACC)
+//   crítico ≥ 5,5× (rojo en el tablero, alarma, segundo castigo del motor)
+//   quiebra ≥ 7× con WACC ≥ 20 (sobreendeudamiento, engine/finales.js)
+// Con EBITDA cero o negativo, cualquier deuda cuenta como altísima.
+const DEUDA_VECES_BASE = { sano:3, alto:4, critico:5.5, quiebra:7 };
+// Cada empresa tolera distinto: una constructora vive de créditos de obra; una tienda, no.
+// SECTORS[].umbrales.deudaVeces sobrescribe la escala base (mismo criterio que inventario y cartera).
+function escalaDeuda(){
+  const u = (typeof sectorActual !== 'undefined' && sectorActual && sectorActual.umbrales && sectorActual.umbrales.deudaVeces) || null;
+  return Object.assign({}, DEUDA_VECES_BASE, u);
+}
+function multiploDeuda(deuda, ebitda){
+  if(deuda == null || deuda <= 0) return 0;
+  return ebitda != null && ebitda > 0.5 ? deuda / ebitda : 99;
+}
+function deudaEnVeces(s){ s = s || (typeof state !== 'undefined' ? state : null); return s ? multiploDeuda(s.deuda, s.ebitda) : 0; }
 function rangoSano(key){
+  if(key === 'deuda' && typeof state !== 'undefined' && state && state.ebitda != null) return {max: escalaDeuda().sano * Math.max(state.ebitda, 0.5)};
   const u = umbralSector(key);
   if(u) return {min:u.sanoMin, max:u.sanoMax};
   return RANGOS_SANOS[key] || {min:-Infinity};
@@ -4041,7 +4061,7 @@ function colorFor(key, v){
     caja: v<=5?'danger':v<=15?'gold':'teal',
     capitalTrabajo: v<0?'danger':v<10?'gold':'teal',
     razonCorriente: v<1?'danger':v<1.3?'gold':'teal',
-    deuda: v>=45?'danger':v>=25?'gold':'teal',
+    deuda: (()=>{ const m = multiploDeuda(v, (typeof state !== 'undefined' && state) ? state.ebitda : 8); return m>=escalaDeuda().critico?'danger':m>escalaDeuda().sano?'gold':'teal'; })(),
     ebitda: v<=0?'danger':v<8?'gold':'teal',
     wacc: v>=18?'danger':v>=14?'gold':'teal',
     diasInventario: (v>65||v<15)?'danger':(v>55||v<25)?'gold':'teal',
@@ -4541,11 +4561,16 @@ function textoRangoSector(key){
   const sano = u.sanoMin != null ? `${u.sanoMin}–${u.sanoMax} días` : `hasta ${u.sanoMax} días`;
   return `en ${sectorActual.nombre}, ${sano}; desde ${u.peligro} días es peligroso` + (u.derrota ? ` y a los ${u.derrota} la empresa colapsa.` : '.');
 }
+// Deuda en veces el EBITDA con la escala de la empresa (ui/formato.js, escalaDeuda).
+function textoRangoDeuda(){
+  const e = escalaDeuda(), f = v=>String(v).replace('.', ',');
+  return `en ${sectorActual.nombre}, una deuda de hasta ${f(e.sano)} veces el EBITDA es sana; desde ${f(e.alto)} veces el crédito se encarece y el banco empieza a preocuparse, y desde ${f(e.critico)} es crítica. Hoy estás en ${f((Math.round(deudaEnVeces()*10)/10))} veces.`;
+}
 function getTooltipHTML(key){
   if(KPI_INFO[key]){
     const info = KPI_INFO[key];
     const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
-    const rango = (u && u.rango) || (u ? textoRangoSector(key) : info.rango);
+    const rango = key === 'deuda' && sectorActual ? textoRangoDeuda() : ((u && u.rango) || (u ? textoRangoSector(key) : info.rango));
     return `<b>${KPI_LABEL[key]||key}</b>${info.def}<div class="rango">Rango saludable: ${rango}</div>`;
   }
   if(key.indexOf('sector:')===0){
@@ -4976,8 +5001,8 @@ function checkForcedEndingInterno(){
     desc:"Tu caja puede estar en verde, pero tomaste decisiones tan despiadadas o tan opacas — recortes sin contemplación, cifras maquilladas, promesas rotas — que la junta directiva decide destituirte por destruir el valor intangible de la marca. Los números no lo son todo."};
   if(sectorActual.tieneInventario && state.diasInventario >= umbralSector('diasInventario').derrota) return {tipoFinal:'derrota', badge:"Insolvencia técnica por inventario obsoleto", color:'neg',
     desc:`Tu inventario tarda ${Math.round(state.diasInventario)} días en convertirse en venta. Tienes activos en bodega, no en caja: en el papel no estás en quiebra, pero no puedes pagar nada con estantería.`};
-  if(state.deuda >= 55 && state.wacc >= 20) return {tipoFinal:'derrota', badge:"Sobreendeudamiento crítico", color:'neg',
-    desc:`Tu endeudamiento llegó a ${fmtMoney(state.deuda)} con un WACC de ${state.wacc.toFixed(1)}%. Cada peso nuevo que consigues cuesta más que el anterior: quedaste atrapado en una espiral de costo de capital creciente.`};
+  if(deudaEnVeces() >= escalaDeuda().quiebra && state.wacc >= 20) return {tipoFinal:'derrota', badge:"Sobreendeudamiento crítico", color:'neg',
+    desc:`Tu deuda llegó a ${fmtMoney(state.deuda)}, ${deudaEnVeces().toFixed(1).replace('.', ',')} veces lo que genera tu operación, con un WACC de ${state.wacc.toFixed(1)}%. Cada peso nuevo que consigues cuesta más que el anterior: quedaste atrapado en una espiral de costo de capital creciente.`};
   return null;
 }
 // El final oculto también se reconoce aunque la empresa quiebre — si el patrón de generosidad
@@ -5057,7 +5082,7 @@ function condicionesFaltantesCierre(waccInicial){
   const faltan = [];
   if(state.razonCorriente < 1.1) faltan.push(`la razón corriente quedó en ${fmtNum(state.razonCorriente, 2)} (mínimo 1,1)`);
   if(state.wacc > waccInicial + 2) faltan.push(`tu WACC subió ${fmtNum(state.wacc - waccInicial, 1)} puntos (máximo 2)`);
-  if(state.deuda > Math.max(3, state.ebitda) * 3) faltan.push(`la deuda es ${state.ebitda > 0 ? fmtNum(state.deuda / state.ebitda, 1) + ' veces' : 'mayor que'} el EBITDA (máximo 3 veces)`);
+  if(deudaEnVeces(state) > escalaDeuda().sano) faltan.push(`la deuda es ${state.ebitda > 0.5 ? fmtNum(deudaEnVeces(state), 1) + ' veces' : 'mayor que'} el EBITDA (máximo ${fmtNum(escalaDeuda().sano, 1)} veces para este negocio)`);
   [['confianzaBanco','la confianza del banco'],['confianzaProveedores','la confianza de los proveedores'],
    ['reputacion','el respaldo de la junta'],['moralEquipo','la moral del equipo']].forEach(([k, n])=>{
     if(state[k] != null && state[k] < 40) faltan.push(`${n} quedó en ${Math.round(state[k])} (mínimo 40)`);
@@ -5304,7 +5329,7 @@ const CONTEXTO = {
   // Holgura real: el costo de oportunidad de quedarse quieto es mayor.
   liquidezHolgada: (s)=> s.razonCorriente >= 1.6 && s.caja >= 30,
   // Deuda alta frente a lo que genera la operación: el crédito sale más caro.
-  apalancado: (s)=> s.deuda >= 32 || s.deuda / Math.max(1, s.ebitda) >= 3.2,
+  apalancado: (s)=> deudaEnVeces(s) > escalaDeuda().sano,
   // El banco confía: mejores condiciones, pero traicionarlo cuesta más.
   bancoAmigo: (s)=> s.confianzaBanco >= 65,
   // Equipo agotado: la ejecución falla justo cuando más depende de la gente.
@@ -8182,7 +8207,7 @@ const CADENAS_PROFUNDAS = [
       ]
     })
   },
-  { id:'cadena_auditoria', trigger:(s,f)=> s.deuda >= 30 || s.wacc >= 18,
+  { id:'cadena_auditoria', trigger:(s,f)=> deudaEnVeces(s) >= escalaDeuda().alto || s.wacc >= 18,
     build:(s,f)=>({
       tipo:'karma', titulo:"Inicia una revisión fiscal preventiva",
       contexto:"La autoridad tributaria notifica el inicio de una revisión preventiva de tus estados financieros — rutinaria, dicen, aunque el nivel de detalle solicitado no se siente tan rutinario. Tienes que decidir cómo vas a responder desde el primer momento.",
@@ -8210,7 +8235,7 @@ const CADENAS_PROFUNDAS = [
       ]
     })
   },
-  { id:'cadena_reestructuracion', trigger:(s,f)=> (s.razonCorriente!=null && s.razonCorriente < 1.5) || s.deuda >= 26,
+  { id:'cadena_reestructuracion', trigger:(s,f)=> (s.razonCorriente!=null && s.razonCorriente < 1.5) || deudaEnVeces(s) > escalaDeuda().sano,
     build:(s,f)=>({
       tipo:'karma', titulo:"Una banca de inversión boutique detecta tu estructura financiera",
       contexto:"Una firma pequeña, especializada en reestructuraciones, te contacta directamente — notaron, por tus reportes públicos, que tu estructura de capital está tensa: mucha deuda de corto plazo, poca holgura de liquidez real. Ofrecen diseñar un plan de reestructuración integral, a cambio de un fee por el diagnóstico.",
@@ -8301,7 +8326,7 @@ const ELENCO_INDICADORES = [
 ];
 
 const KARMA_CASES = [
-  { id:'llamadaBanco', trigger:(s)=>s.deuda>25,
+  { id:'llamadaBanco', trigger:(s)=>deudaEnVeces(s) >= escalaDeuda().alto,
     build:(s,f)=>({
       tipo:'karma', titulo:"Llamada del banco",
       contexto:"Tu oficial de cuenta te llama: tu endeudamiento superó el límite interno que el banco maneja para clientes de tu perfil. Te exige un abono extraordinario a capital o congelará tu cupo de sobregiro.",
@@ -9061,7 +9086,7 @@ function nivelAlarma(){
   if(state.caja <= 5) criticos.push('Caja en zona crítica');
   if(state.razonCorriente < 1) criticos.push('Razón corriente bajo 1');
   if(state.wacc >= 20) criticos.push('WACC sobre el 20 %');
-  if(state.deuda >= 45) criticos.push('Endeudamiento crítico');
+  if(deudaEnVeces() >= escalaDeuda().critico) criticos.push('Endeudamiento crítico');
   if(state.ebitda <= 0) criticos.push('EBITDA negativo');
   [['confianzaBanco','Confianza del banco'],['confianzaProveedores','Confianza de proveedores'],
    ['reputacion','Respaldo de la junta'],['moralEquipo','Moral del equipo']].forEach(([k,n])=>{
@@ -9605,7 +9630,7 @@ function mayorErrorFinanciero(){
    ========================================================= */
 function tituloGerencial(){
   const s = state;
-  if(s.deuda >= 40 && s.caja > 0){
+  if(deudaEnVeces(s) >= escalaDeuda().alto && s.caja > 0){
     return {titulo:"Maestro del Apalancamiento",
       parrafo:"Sobreviviste cargando un nivel de deuda que hubiera hundido a otro. Financiaste el crecimiento a punta de apalancamiento — funcionó, pero tu margen de error fue mínimo en cada turno que quedó por delante."};
   }
@@ -9629,7 +9654,7 @@ function tituloGerencial(){
     return {titulo:"El Diplomático Financiero",
       parrafo:"Construiste confianza en todos los frentes — banco, proveedores, junta — y el mercado te lo devolvió en forma de capital barato. Pocas gestiones se ven tan bien relacionadas al cierre."};
   }
-  if(s.ebitda >= 20 && s.reputacion >= 60 && s.deuda <= 25){
+  if(s.ebitda >= 20 && s.reputacion >= 60 && deudaEnVeces(s) <= escalaDeuda().sano){
     return {titulo:"El Estratega Equilibrado",
       parrafo:"Creciste sin quemar relaciones ni sobreapalancarte. No fue la gestión más audaz de todas, pero probablemente sea la más replicable — y en administración financiera, eso vale más de lo que parece."};
   }
@@ -11364,7 +11389,7 @@ const SECTORS = [
   { id:'agroverde', emoji:'🌱', nombre:'AgroVerde', rubro:'Exportación de café y aguacate', categoria:'primario',
     descripcion:'Expuesto al clima y al precio internacional del commodity — pero al revés que casi todos: un dólar caro es buena noticia para tus exportaciones.',
     tieneInventario:true, requiereCapex:false, perecedero:false,
-    umbrales:{ diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 }, diasCartera:{ sanoMax:60, peligro:90 } },
+    umbrales:{ deudaVeces:{ sano:3.5, alto:4.5, critico:6, quiebra:7.5 }, diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 }, diasCartera:{ sanoMax:60, peligro:90 } },
     kpiInicial:{caja:38, capitalTrabajo:28, razonCorriente:1.5, deuda:16, ebitda:8, wacc:13.0, diasInventario:35, diasCartera:40, valorInventario:12, confianzaProveedores:70, confianzaBanco:58, reputacion:60, moralEquipo:60},
     cases:AGROVERDE_CASES, calendario:[AGROVERDE_COSECHA, AGROVERDE_RENTA], random:AGROVERDE_RANDOM,
     karmaExtra:[{ id:'recolectoresPiden', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=30,
@@ -11382,7 +11407,7 @@ const SECTORS = [
     // La leche fresca no se almacena: pocos días de inventario es lo sano. Lo peligroso es la
     // leche represada (días altos), no quedarse "corto" como en el comercio.
     costoMantenimiento:1.5,
-    umbrales:{ diasInventario:{ sanoMax:15, peligro:25, derrota:40, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." },
+    umbrales:{ deudaVeces:{ sano:3.5, alto:4.5, critico:6, quiebra:7.5 }, diasInventario:{ sanoMax:15, peligro:25, derrota:40, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." },
                diasCartera:{ sanoMax:40, peligro:70 } },
     kpiInicial:{caja:36, capitalTrabajo:26, razonCorriente:1.5, deuda:17, ebitda:7.5, wacc:13.5, diasInventario:6, diasCartera:32, valorInventario:9, confianzaProveedores:66, confianzaBanco:58, reputacion:60, moralEquipo:60},
     cases:GANADERA_CASES, calendario:[GANADERA_NOMINA, GANADERA_RENTA], random:GANADERA_RANDOM,
@@ -11398,14 +11423,14 @@ const SECTORS = [
   { id:'construyeya', emoji:'🏗️', nombre:'Construye YA', rubro:'Constructora e inmobiliaria', categoria:'secundario',
     descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo.',
     tieneInventario:true, requiereCapex:false, perecedero:false,
-    umbrales:{ diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
+    umbrales:{ deudaVeces:{ sano:4, alto:5, critico:6.5, quiebra:8 }, diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
     // Prepagar un crédito constructor cuesta más que en otros negocios: comisión por prepago y
     // garantías atadas al avance de obra (opción B de Juan, nov. 2026; la usa la junta trimestral).
     prepagoDeuda:{ normal:{caja:-5, deuda:-3.5, wacc:-0.2}, apalancado:{caja:-5, deuda:-4, wacc:-0.6},
       texto:"Prepagar un crédito constructor no es como prepagar cualquier deuda: el banco cobra una comisión fuerte por cancelar antes de tiempo y las garantías siguen atadas al avance de la obra. Bajas la deuda, pero menos de lo que pagaste." },
     kpiInicial:{caja:45, capitalTrabajo:32, razonCorriente:1.4, deuda:25, ebitda:10, wacc:14.0, diasInventario:80, diasCartera:60, valorInventario:35, confianzaProveedores:62, confianzaBanco:55, reputacion:60, moralEquipo:55},
     cases:CONSTRUYEYA_CASES, calendario:[CONSTRUYEYA_SUBCONTRATISTAS, CONSTRUYEYA_RENTA], random:CONSTRUYEYA_RANDOM,
-    karmaExtra:[{ id:'inspectorObra', trigger:(s)=>s.deuda!=null && s.deuda>=30,
+    karmaExtra:[{ id:'inspectorObra', trigger:(s)=>s.deuda!=null && deudaEnVeces(s) >= escalaDeuda().alto,
       build:(s,f)=>({tipo:'karma', titulo:"Un inspector de obra encuentra una irregularidad menor",
         contexto:"Durante una visita rutinaria, un inspector municipal encuentra una irregularidad menor en los planos de una de tus obras en curso — nada que ponga en riesgo la estructura, pero sí un papeleo que no coincide del todo.",
         choices:[

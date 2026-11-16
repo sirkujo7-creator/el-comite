@@ -1,5 +1,5 @@
 const KARMA_CASES = [
-  { id:'llamadaBanco', trigger:(s)=>s.deuda>25,
+  { id:'llamadaBanco', trigger:(s)=>deudaEnVeces(s) >= escalaDeuda().alto,
     build:(s,f)=>({
       tipo:'karma', titulo:"Llamada del banco",
       contexto:"Tu oficial de cuenta te llama: tu endeudamiento superó el límite interno que el banco maneja para clientes de tu perfil. Te exige un abono extraordinario a capital o congelará tu cupo de sobregiro.",

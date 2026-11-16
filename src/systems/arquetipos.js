@@ -46,7 +46,7 @@ function condicionesFaltantesCierre(waccInicial){
   const faltan = [];
   if(state.razonCorriente < 1.1) faltan.push(`la razón corriente quedó en ${fmtNum(state.razonCorriente, 2)} (mínimo 1,1)`);
   if(state.wacc > waccInicial + 2) faltan.push(`tu WACC subió ${fmtNum(state.wacc - waccInicial, 1)} puntos (máximo 2)`);
-  if(state.deuda > Math.max(3, state.ebitda) * 3) faltan.push(`la deuda es ${state.ebitda > 0 ? fmtNum(state.deuda / state.ebitda, 1) + ' veces' : 'mayor que'} el EBITDA (máximo 3 veces)`);
+  if(deudaEnVeces(state) > escalaDeuda().sano) faltan.push(`la deuda es ${state.ebitda > 0.5 ? fmtNum(deudaEnVeces(state), 1) + ' veces' : 'mayor que'} el EBITDA (máximo ${fmtNum(escalaDeuda().sano, 1)} veces para este negocio)`);
   [['confianzaBanco','la confianza del banco'],['confianzaProveedores','la confianza de los proveedores'],
    ['reputacion','el respaldo de la junta'],['moralEquipo','la moral del equipo']].forEach(([k, n])=>{
     if(state[k] != null && state[k] < 40) faltan.push(`${n} quedó en ${Math.round(state[k])} (mínimo 40)`);

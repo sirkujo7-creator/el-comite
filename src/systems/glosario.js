@@ -70,11 +70,16 @@ function textoRangoSector(key){
   const sano = u.sanoMin != null ? `${u.sanoMin}–${u.sanoMax} días` : `hasta ${u.sanoMax} días`;
   return `en ${sectorActual.nombre}, ${sano}; desde ${u.peligro} días es peligroso` + (u.derrota ? ` y a los ${u.derrota} la empresa colapsa.` : '.');
 }
+// Deuda en veces el EBITDA con la escala de la empresa (ui/formato.js, escalaDeuda).
+function textoRangoDeuda(){
+  const e = escalaDeuda(), f = v=>String(v).replace('.', ',');
+  return `en ${sectorActual.nombre}, una deuda de hasta ${f(e.sano)} veces el EBITDA es sana; desde ${f(e.alto)} veces el crédito se encarece y el banco empieza a preocuparse, y desde ${f(e.critico)} es crítica. Hoy estás en ${f((Math.round(deudaEnVeces()*10)/10))} veces.`;
+}
 function getTooltipHTML(key){
   if(KPI_INFO[key]){
     const info = KPI_INFO[key];
     const u = sectorActual && sectorActual.umbrales && sectorActual.umbrales[key];
-    const rango = (u && u.rango) || (u ? textoRangoSector(key) : info.rango);
+    const rango = key === 'deuda' && sectorActual ? textoRangoDeuda() : ((u && u.rango) || (u ? textoRangoSector(key) : info.rango));
     return `<b>${KPI_LABEL[key]||key}</b>${info.def}<div class="rango">Rango saludable: ${rango}</div>`;
   }
   if(key.indexOf('sector:')===0){

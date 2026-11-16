@@ -75,7 +75,7 @@ function aplicarMotorOperativo(){
     suma('confianzaProveedores', state.caja > 25 ? 0.12 : state.caja < 10 ? -0.3 : 0);
   }
   if(state.confianzaBanco != null && state.deuda != null){
-    suma('confianzaBanco', state.deuda < 20 ? 0.12 : state.deuda > 35 ? -0.3 : 0);
+    suma('confianzaBanco', deudaEnVeces() <= escalaDeuda().sano ? 0.12 : deudaEnVeces() >= escalaDeuda().alto ? -0.3 : 0);
   }
 
   // Reputación deriva hacia el promedio de cómo tratas a tu gente y tus socios — pero cae
@@ -183,13 +183,13 @@ function applyEfectos(e, origen, opciones){
     state.wacc = clamp(state.wacc + 2, 5, 35);
     systemicNotes.push("Tu razón corriente cayó por debajo de 1.0: el mercado penaliza automáticamente tu costo de capital (<b>WACC +2 puntos</b>) porque tu capacidad de pago inmediata quedó comprometida.");
   }
-  if(state.deuda >= 40){
+  if(deudaEnVeces() >= escalaDeuda().critico){
     state.wacc = clamp(state.wacc + 0.3, 5, 35);
-    systemicNotes.push("Tu endeudamiento superó los $40M: cualquier acreedor nuevo te percibe como más riesgoso, así que tu WACC sube un poco cada turno mientras te mantengas en ese nivel.");
+    systemicNotes.push(`Tu deuda supera ${String(escalaDeuda().critico).replace(".", ",")} veces tu EBITDA: para tu negocio es endeudamiento crítico. Cualquier acreedor nuevo te percibe como mucho más riesgoso, así que tu WACC sube otro poco cada turno mientras sigas en ese nivel.`);
   }
-  if(state.ebitda > 1 && (state.deuda/state.ebitda) >= 4){
+  if(deudaEnVeces() >= escalaDeuda().alto){
     state.wacc = clamp(state.wacc + 0.3, 5, 35);
-    systemicNotes.push("Tu relación Deuda/EBITDA superó 4x: para cualquier analista de crédito ese es un apalancamiento alto, y el mercado te cobra un WACC más caro por el riesgo adicional.");
+    systemicNotes.push(`Tu deuda superó ${String(escalaDeuda().alto).replace(".", ",")} veces tu EBITDA: para un analista de crédito de tu sector ese es un apalancamiento alto, y el mercado te cobra un WACC más caro por el riesgo adicional.`);
   }
   if(state.confianzaBanco <= 35){
     state.wacc = clamp(state.wacc + 0.2, 5, 35);

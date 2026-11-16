@@ -14,7 +14,7 @@ function nivelAlarma(){
   if(state.caja <= 5) criticos.push('Caja en zona crítica');
   if(state.razonCorriente < 1) criticos.push('Razón corriente bajo 1');
   if(state.wacc >= 20) criticos.push('WACC sobre el 20 %');
-  if(state.deuda >= 45) criticos.push('Endeudamiento crítico');
+  if(deudaEnVeces() >= escalaDeuda().critico) criticos.push('Endeudamiento crítico');
   if(state.ebitda <= 0) criticos.push('EBITDA negativo');
   [['confianzaBanco','Confianza del banco'],['confianzaProveedores','Confianza de proveedores'],
    ['reputacion','Respaldo de la junta'],['moralEquipo','Moral del equipo']].forEach(([k,n])=>{

@@ -371,7 +371,14 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
   `CONTEXTO.inventarioPesado/carteraLenta` y la tarjeta del sector. Inventario normal / peligro / derrota:
   Vita Fit y AgroVerde 25–55 / 75 / 110; Ganadería ≤15 / 25 / 40; Construye YA 60–120 / 140 / 180;
   Moda Urbana 35–75 / 90 / 120. Cartera normal / peligro: Vita Fit 45/75, Ganadería 40/70, Construye 90/120,
-  resto 60/90. Pendiente: deuda de Construye YA relativa al EBITDA (segunda ronda).
+  resto 60/90.
+  ✅ Deuda en veces el EBITDA (nov. 2026, Juan: "lo mejor posible, realista y sin incoherencias"): una sola
+  escala, `escalaDeuda()` (ui/formato.js, base sano ≤ 3×, alto ≥ 4×, crítico ≥ 5,5×, quiebra ≥ 7× con WACC
+  ≥ 20; `SECTORS[].umbrales.deudaVeces`: AgroVerde y Ganadería 3,5/4,5/6/7,5, Construye YA 4/5/6,5/8).
+  La usan el color y la alarma del tablero, la priorización de casos, la deriva de confianza del banco,
+  los dos castigos de WACC del motor, la quiebra por sobreendeudamiento, `CONTEXTO.apalancado`, la
+  llamada del banco, las cadenas de auditoría y reestructuración, el inspector de obra, los títulos
+  gerenciales, la condición de empresa sana del cierre y el glosario (con la cifra de la empresa).
 
 ## 8. Historial de cambios de contenido y balance
 
@@ -548,3 +555,13 @@ todos sus casos le daban la versión más cara del crédito desde el turno 1. Cu
 sigue frenando es el WACC: el financiamiento típico de una startup (ángeles, capital propio +1 de WACC,
 créditos de nómina) lo sube más de 2 puntos sobre el inicial. Victoria general: cuidadoso 40 % (Vita Fit 40,
 TechNova 30, AgroVerde 35, Ganadería 40, Construye 50, Moda 45), prudente 25 %, agresivo 10 %, azar 8 %.
+
+**Deuda en veces el EBITDA (nov. 2026)** — antes había ~12 límites en pesos fijos ($20, 25, 26, 30, 35,
+40, 45, 55 M) iguales para todas las empresas: Construye YA arrancaba en ámbar con sus $25 M y le llegaba
+la "Llamada del banco" casi siempre, un evento que su cuidadoso, con caja grande, aprovechaba (abono
+extraordinario): era la mitad de su ventaja. Ahora todo usa una escala relativa por empresa (ver §7).
+Victoria (20 por sector y perfil, Normal): cuidadoso 40 → 33 % (Vita Fit 40, TechNova 30 → 15,
+AgroVerde 35, Ganadería 40, Construye 50 → 30, Moda 45 → 35), prudente 20 %, agresivo 13 %, azar 6 %.
+Probado sin éxito: escala más laxa (3,5×) 34 %; crecimiento exigido ×1,25 / ×1,2: 36 / 37 % (y el azar
+sube a 10 %); EBITDA inicial de TechNova 7: 15 → 20 %. Queda por debajo de la meta 40–45 %: decisión de
+Juan si se compensa y cómo.

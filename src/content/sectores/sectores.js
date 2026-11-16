@@ -34,7 +34,7 @@ const SECTORS = [
   { id:'agroverde', emoji:'🌱', nombre:'AgroVerde', rubro:'Exportación de café y aguacate', categoria:'primario',
     descripcion:'Expuesto al clima y al precio internacional del commodity — pero al revés que casi todos: un dólar caro es buena noticia para tus exportaciones.',
     tieneInventario:true, requiereCapex:false, perecedero:false,
-    umbrales:{ diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 }, diasCartera:{ sanoMax:60, peligro:90 } },
+    umbrales:{ deudaVeces:{ sano:3.5, alto:4.5, critico:6, quiebra:7.5 }, diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 }, diasCartera:{ sanoMax:60, peligro:90 } },
     kpiInicial:{caja:38, capitalTrabajo:28, razonCorriente:1.5, deuda:16, ebitda:8, wacc:13.0, diasInventario:35, diasCartera:40, valorInventario:12, confianzaProveedores:70, confianzaBanco:58, reputacion:60, moralEquipo:60},
     cases:AGROVERDE_CASES, calendario:[AGROVERDE_COSECHA, AGROVERDE_RENTA], random:AGROVERDE_RANDOM,
     karmaExtra:[{ id:'recolectoresPiden', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=30,
@@ -52,7 +52,7 @@ const SECTORS = [
     // La leche fresca no se almacena: pocos días de inventario es lo sano. Lo peligroso es la
     // leche represada (días altos), no quedarse "corto" como en el comercio.
     costoMantenimiento:1.5,
-    umbrales:{ diasInventario:{ sanoMax:15, peligro:25, derrota:40, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." },
+    umbrales:{ deudaVeces:{ sano:3.5, alto:4.5, critico:6, quiebra:7.5 }, diasInventario:{ sanoMax:15, peligro:25, derrota:40, rango:"menos de 15 días: la leche fresca se vende o se procesa en horas; por encima de 25 días hay producción represada que se está perdiendo." },
                diasCartera:{ sanoMax:40, peligro:70 } },
     kpiInicial:{caja:36, capitalTrabajo:26, razonCorriente:1.5, deuda:17, ebitda:7.5, wacc:13.5, diasInventario:6, diasCartera:32, valorInventario:9, confianzaProveedores:66, confianzaBanco:58, reputacion:60, moralEquipo:60},
     cases:GANADERA_CASES, calendario:[GANADERA_NOMINA, GANADERA_RENTA], random:GANADERA_RANDOM,
@@ -68,14 +68,14 @@ const SECTORS = [
   { id:'construyeya', emoji:'🏗️', nombre:'Construye YA', rubro:'Constructora e inmobiliaria', categoria:'secundario',
     descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo.',
     tieneInventario:true, requiereCapex:false, perecedero:false,
-    umbrales:{ diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
+    umbrales:{ deudaVeces:{ sano:4, alto:5, critico:6.5, quiebra:8 }, diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
     // Prepagar un crédito constructor cuesta más que en otros negocios: comisión por prepago y
     // garantías atadas al avance de obra (opción B de Juan, nov. 2026; la usa la junta trimestral).
     prepagoDeuda:{ normal:{caja:-5, deuda:-3.5, wacc:-0.2}, apalancado:{caja:-5, deuda:-4, wacc:-0.6},
       texto:"Prepagar un crédito constructor no es como prepagar cualquier deuda: el banco cobra una comisión fuerte por cancelar antes de tiempo y las garantías siguen atadas al avance de la obra. Bajas la deuda, pero menos de lo que pagaste." },
     kpiInicial:{caja:45, capitalTrabajo:32, razonCorriente:1.4, deuda:25, ebitda:10, wacc:14.0, diasInventario:80, diasCartera:60, valorInventario:35, confianzaProveedores:62, confianzaBanco:55, reputacion:60, moralEquipo:55},
     cases:CONSTRUYEYA_CASES, calendario:[CONSTRUYEYA_SUBCONTRATISTAS, CONSTRUYEYA_RENTA], random:CONSTRUYEYA_RANDOM,
-    karmaExtra:[{ id:'inspectorObra', trigger:(s)=>s.deuda!=null && s.deuda>=30,
+    karmaExtra:[{ id:'inspectorObra', trigger:(s)=>s.deuda!=null && deudaEnVeces(s) >= escalaDeuda().alto,
       build:(s,f)=>({tipo:'karma', titulo:"Un inspector de obra encuentra una irregularidad menor",
         contexto:"Durante una visita rutinaria, un inspector municipal encuentra una irregularidad menor en los planos de una de tus obras en curso — nada que ponga en riesgo la estructura, pero sí un papeleo que no coincide del todo.",
         choices:[

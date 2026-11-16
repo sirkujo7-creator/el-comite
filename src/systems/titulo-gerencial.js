@@ -6,7 +6,7 @@
    ========================================================= */
 function tituloGerencial(){
   const s = state;
-  if(s.deuda >= 40 && s.caja > 0){
+  if(deudaEnVeces(s) >= escalaDeuda().alto && s.caja > 0){
     return {titulo:"Maestro del Apalancamiento",
       parrafo:"Sobreviviste cargando un nivel de deuda que hubiera hundido a otro. Financiaste el crecimiento a punta de apalancamiento — funcionó, pero tu margen de error fue mínimo en cada turno que quedó por delante."};
   }
@@ -30,7 +30,7 @@ function tituloGerencial(){
     return {titulo:"El Diplomático Financiero",
       parrafo:"Construiste confianza en todos los frentes — banco, proveedores, junta — y el mercado te lo devolvió en forma de capital barato. Pocas gestiones se ven tan bien relacionadas al cierre."};
   }
-  if(s.ebitda >= 20 && s.reputacion >= 60 && s.deuda <= 25){
+  if(s.ebitda >= 20 && s.reputacion >= 60 && deudaEnVeces(s) <= escalaDeuda().sano){
     return {titulo:"El Estratega Equilibrado",
       parrafo:"Creciste sin quemar relaciones ni sobreapalancarte. No fue la gestión más audaz de todas, pero probablemente sea la más replicable — y en administración financiera, eso vale más de lo que parece."};
   }
