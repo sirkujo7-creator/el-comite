@@ -3692,6 +3692,11 @@ function intensidadTechoActual(){
    ========================================================================================= */
 const MOTOR_OPERATIVO_TOPE = 1.2; // ningún indicador deriva más que esto en un solo turno,
                                    // sin importar cuántas relaciones lo empujen a la vez.
+// Prima de riesgo que el mercado cobra para siempre tras una sanción fiscal o una reestructuración
+// que nunca se hizo: sube el WACC de equilibrio (el motor lo acerca poco a poco), con techo.
+function primaRiesgoPermanente(){
+  return (flags.auditoriaSancionado ? 0.6 : 0) + (flags.reestructuracionFallida ? 0.6 : 0);
+}
 function aplicarMotorOperativo(){
   if(!state || !sectorActual) return;
   const cambios = {};
@@ -3720,7 +3725,7 @@ function aplicarMotorOperativo(){
   // (empeorar) es más rápido que bajar (mejorar), igual que en la vida real: ganarte la
   // confianza de un banco toma tiempo; perderla es casi inmediato.
   if(state.wacc != null && state.confianzaBanco != null){
-    const objetivo = (state.waccEquilibrioBase != null ? state.waccEquilibrioBase : 20) - (state.confianzaBanco/100)*8;
+    const objetivo = (state.waccEquilibrioBase != null ? state.waccEquilibrioBase : 20) - (state.confianzaBanco/100)*8 + primaRiesgoPermanente();
     const diff = objetivo - state.wacc;
     suma('wacc', clamp(diff * (diff < 0 ? 0.05 : 0.12), -0.35, 0.35));
   }
@@ -3938,20 +3943,20 @@ function applyEfectos(e, origen, opciones){
     origenUltimoCambio.ebitda = 'pasivo';
     systemicNotes.push("La salida de Renata Cifuentes todavía se siente en la operación: el conocimiento que se fue con ella no se ha terminado de reconstruir (<b>EBITDA -0.4</b>).");
   }
-  if(flags.auditoriaSancionado){
-    state.wacc = clamp(state.wacc + 0.4, 5, 35);
-    origenUltimoCambio.wacc = 'pasivo';
-    systemicNotes.push("La sanción fiscal quedó registrada en tu historial de cumplimiento: cualquier acreedor la revisa antes de prestarte, y eso ya está encareciendo tu <b>WACC</b> de forma permanente.");
+  // Sanción fiscal y reestructuración fallida: una prima de riesgo permanente (el WACC de
+  // equilibrio sube, ver primaRiesgoPermanente), no un recargo que crece sin techo cada turno.
+  if(flags.auditoriaSancionado && !flags.avisoPrimaSancion){
+    flags.avisoPrimaSancion = true;
+    systemicNotes.push("La sanción fiscal quedó registrada en tu historial de cumplimiento: cualquier acreedor la revisa antes de prestarte. El mercado te cobra desde ahora una <b>prima de riesgo permanente</b>: tu WACC tiende a un nivel más alto que antes.");
   }
   if(flags.selloRechazado){
     state.reputacion = clamp(Math.min(state.reputacion, 78), 0, 100);
     origenUltimoCambio.reputacion = 'pasivo';
     systemicNotes.push("El rechazo público de la fundación quedó dando vueltas: mientras esa sombra siga presente, tu <b>reputación</b> tiene un techo más bajo del que tendría en otras condiciones.");
   }
-  if(flags.reestructuracionFallida){
-    state.wacc = clamp(state.wacc + 0.3, 5, 35);
-    origenUltimoCambio.wacc = 'pasivo';
-    systemicNotes.push("La estructura financiera que nunca terminaste de corregir sigue pesando: el mercado te reprecia como un riesgo mayor cada vez que necesitas capital, encareciendo tu <b>WACC</b> de forma permanente.");
+  if(flags.reestructuracionFallida && !flags.avisoPrimaReestructuracion){
+    flags.avisoPrimaReestructuracion = true;
+    systemicNotes.push("La estructura financiera que nunca terminaste de corregir sigue pesando: el mercado te reprecia como un riesgo mayor. Desde ahora pagas una <b>prima de riesgo permanente</b>: tu WACC tiende a un nivel más alto que antes.");
   }
 }
 
