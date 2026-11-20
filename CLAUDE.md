@@ -603,3 +603,5 @@ limitación del arnés, no del juego.
 ×1,7 del valor (antes ×1,6; TechNova ×1,9). Nueva meta en Normal: cuidadoso ~35 %, agresivo ~15 %, azar < 5 %.
 Victoria (20 por sector y perfil): cuidadoso 45 → 36 % (Vita Fit 35, TechNova 30, AgroVerde 35, Ganadería 30,
 Construye 50, Moda 35), prudente 26 %, agresivo 16 %, azar 1 %. Quiebras sin cambio.
+Construye YA queda como la empresa más fácil por ahora (decisión de Juan). Opción guardada para después: caja
+realista con el dinero de las preventas en fiducia, que no se puede usar libremente.
