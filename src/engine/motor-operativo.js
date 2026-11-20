@@ -21,8 +21,9 @@ function aplicarMotorOperativo(){
   // ya vas. Un negocio sano mejora solo, pero despacio; uno en problemas empeora solo, y más
   // rápido si no se atiende — así se parece más a cómo funciona un negocio real.
 
-  // Caja: EBITDA sano la genera despacio; EBITDA negativo la drena más rápido.
-  if(state.ebitda != null) suma('caja', state.ebitda > 0 ? clamp(state.ebitda * 0.04, 0, 0.5) : clamp(state.ebitda * (dificultadSeleccionada==='facil'?0.06:0.09), -0.9, 0));
+  // Caja: EBITDA sano la genera despacio; EBITDA negativo la drena más rápido. Tope 1 (antes 0,5:
+  // por encima de EBITDA 12,5 crecer ya no traía más caja, y una empresa en auge podía quedarse sin liquidez).
+  if(state.ebitda != null) suma('caja', state.ebitda > 0 ? clamp(state.ebitda * 0.04, 0, 1) : clamp(state.ebitda * (dificultadSeleccionada==='facil'?0.06:0.09), -0.9, 0));
 
   // Deuda: solo se amortiza sola si tu EBITDA es positivo (hay con qué pagarla). Si tu
   // EBITDA es negativo, la deuda crece sola — más despacio en fácil, para que un camino

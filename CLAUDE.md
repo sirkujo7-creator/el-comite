@@ -605,3 +605,9 @@ Victoria (20 por sector y perfil): cuidadoso 45 → 36 % (Vita Fit 35, TechNova 
 Construye 50, Moda 35), prudente 26 %, agresivo 16 %, azar 1 %. Quiebras sin cambio.
 Construye YA queda como la empresa más fácil por ahora (decisión de Juan). Opción guardada para después: caja
 realista con el dinero de las preventas en fiducia, que no se puede usar libremente.
+
+**Liquidez de Ganadería (nov. 2026)** — el cuidadoso quebraba ~15–20 % por liquidez al final del año. Hoy quiebra
+1 de 40: lo resolvieron el mantenimiento a $1,5 M y la prima de riesgo con techo. El caso que queda mostró una
+incoherencia del motor: la caja que genera el EBITDA tenía tope 0,5 por turno, así que una empresa que duplicaba su
+EBITDA (17,5) no recibía más caja y entraba en crisis de liquidez. Tope 0,5 → 1. Efecto casi nulo en la
+dificultad (cuidadoso 36 → 37 %, quiebra 3 → 2 %).
