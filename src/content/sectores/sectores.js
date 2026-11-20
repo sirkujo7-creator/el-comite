@@ -5,6 +5,8 @@ const SECTORS = [
   { id:'vitafit', emoji:'💪', nombre:'Vita Fit', rubro:'Gimnasio, suplementos y acondicionamiento físico', categoria:'terciario',
     descripcion:'Modelo híbrido: si no inviertes en mantenimiento de equipos pierdes suscripciones, y si el inventario de suplementos no rota a tiempo, caduca y se convierte en pérdida.',
     tieneInventario:true, requiereCapex:true, perecedero:true,
+    // Revisión de máquinas y repuestos: ~$2 M cada 3 turnos, proporcional a la caja que genera el gimnasio.
+    costoMantenimiento:2,
     umbrales:{ diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 }, diasCartera:{ sanoMax:45, peligro:75 } },
     kpiInicial:{caja:40, capitalTrabajo:30, razonCorriente:1.6, deuda:18, ebitda:9, wacc:12.0, diasInventario:42, diasCartera:35, valorInventario:14, confianzaProveedores:68, confianzaBanco:60, reputacion:60, moralEquipo:62},
     cases:VITAFIT_CASES, calendario:[VITAFIT_NOMINA, VITAFIT_RENTA], random:VITAFIT_RANDOM,
@@ -21,6 +23,8 @@ const SECTORS = [
     descripcion:'Sin inventario: tu mayor costo es la nómina técnica. Si recortas beneficios para salvar caja, la moral del equipo cae y el mejor talento se va — con el servicio detrás.',
     tieneInventario:false, requiereCapex:false, perecedero:false,
     umbrales:{ diasCartera:{ sanoMax:60, peligro:90 } },
+    // Los inversionistas de una startup esperan crecer rápido: la junta pide ×1,8 del valor, no ×1,6.
+    crecimientoVictoria:1.8,
     kpiInicial:{caja:35, capitalTrabajo:22, razonCorriente:1.4, deuda:17, ebitda:6, wacc:13.5, diasInventario:null, diasCartera:45, valorInventario:null, confianzaProveedores:65, confianzaBanco:55, reputacion:60, moralEquipo:65},
     cases:TECHNOVA_CASES, calendario:[TECHNOVA_NOMINA, TECHNOVA_RENTA], random:TECHNOVA_RANDOM,
     karmaExtra:[{ id:'fugaCerebros', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=25,

@@ -59,11 +59,11 @@ const TECHNOVA_CASES = [
   contexto:"Una ola de cancelaciones golpea tu segmento de clientes pequeños: representan poco ingreso individual, pero en conjunto pesan en tu EBITDA.",
   choices:[
     {texto:"Recortar el equipo de soporte para bajar costos.",
-     efectos:{ebitda:4, capitalTrabajo:1, moralEquipo:si(CONTEXTO.equipoCansado(s), -16, -12), reputacion:-6},
+     efectos:{ebitda:2, capitalTrabajo:1, moralEquipo:si(CONTEXTO.equipoCansado(s), -16, -12), reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero la experiencia de los clientes que sí se quedan se resiente — y el resto del equipo técnico observa cómo tratas a quien ya no necesitas." + si(CONTEXTO.equipoCansado(s), ' Con la moral ya baja, el recorte suena a desbandada.', '')},
     {texto:"Reducir gastos generales sin tocar el equipo.",
-     efectos:{ebitda:2, capitalTrabajo:1, caja:si(CONTEXTO.liquidezBaja(s), -2.5, -1)},
+     efectos:{ebitda:1.2, capitalTrabajo:1, caja:si(CONTEXTO.liquidezBaja(s), -2.5, -1)},
      consecuencia:"El ajuste es más lento, pero protege la atención al cliente y la moral. Cancelar antes de tiempo contratos de servicios y oficina tiene sus penalidades." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, esas penalidades duelen de verdad.', '')},
     {texto:"Lanzar un plan 'lite' más barato para retener a quienes quieren cancelar.",
      efectos:{ebitda:si(CONTEXTO.reputacionAlta(s), 0.5, -1), caja:1, capitalTrabajo:1, moralEquipo:-1},

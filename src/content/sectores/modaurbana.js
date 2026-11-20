@@ -59,7 +59,7 @@ const MODAURBANA_CASES = [
   contexto:"Un cambio de clima atípico reduce la demanda de la colección de temporada: las ventas caen justo en las semanas de mayor rotación esperada.",
   choices:[
     {texto:"Recortar personal de tienda para bajar costos fijos.",
-     efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes vendedores con relación directa con tus clientes frecuentes." + si(CONTEXTO.equipoCansado(s), ' El equipo ya estaba desgastado: el recorte se siente como abandono.', '')},
     {texto:"Reducir gastos generales y renegociar con maquiladoras antes de tocar personal.",

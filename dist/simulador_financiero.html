@@ -5100,6 +5100,9 @@ function fmtNum(v, dec){ return (Math.round(v * Math.pow(10, dec)) / Math.pow(10
 // Crecimiento que la junta exige para llamar victoria (rango A) a un año fiscal: ×1,6 del valor
 // inicial (nov. 2026; antes ×1,3, cuando un castigo de WACC sin techo hacía el resto de la dificultad).
 const CRECIMIENTO_VICTORIA = 1.6;
+// Cada junta espera un crecimiento distinto: la de una startup (TechNova), financiada con capital de
+// riesgo, exige mucho más que la de un negocio maduro (SECTORS[].crecimientoVictoria).
+function crecimientoVictoria(){ return (sectorActual && sectorActual.crecimientoVictoria) || CRECIMIENTO_VICTORIA; }
 function cierreAnioFiscal(){
   const ini = sectorActual.kpiInicial;
   const val = valorEmpresa(state);
@@ -5112,12 +5115,12 @@ function cierreAnioFiscal(){
   if(ratio>=2.5 && sana && state.wacc<=15 && state.reputacion>=50){
     rango='S'; badge='CFO de Élite'; color='pos';
     desc="Multiplicaste el valor de la empresa manteniendo el riesgo bajo control y la confianza de tus grupos de interés intacta. Es exactamente lo que un comité de alta gerencia espera ver: crecimiento real, no maquillado y no apalancado a cualquier costo.";
-  } else if(ratio>=CRECIMIENTO_VICTORIA && sana){
+  } else if(ratio>=crecimientoVictoria() && sana){
     rango='A'; badge='Crecimiento sólido'; color='pos';
     desc="Cierras el año fiscal con la empresa valiendo notablemente más de lo que valía al empezar, y sana: liquidez, costo de capital, deuda y relaciones en orden. Tu gestión combinó crecimiento con un manejo razonable del riesgo.";
   } else if(ratio>=1.3 && sana){
     rango='B'; badge='Crecimiento moderado'; color='neu';
-    desc=`La empresa vale más que al empezar (×${fmtNum(ratio, 2)}) y la entregas sana, pero la junta esperaba un año más ambicioso: para llamarlo crecimiento sólido pedía al menos ×${fmtNum(CRECIMIENTO_VICTORIA, 1)} del valor inicial. Cuidaste la empresa; te faltó hacerla crecer.`;
+    desc=`La empresa vale más que al empezar (×${fmtNum(ratio, 2)}) y la entregas sana, pero la junta esperaba un año más ambicioso: para llamarlo crecimiento sólido pedía al menos ×${fmtNum(crecimientoVictoria(), 1)} del valor inicial. Cuidaste la empresa; te faltó hacerla crecer.`;
   } else if(ratio>=1.3){
     rango='B'; badge='Crecimiento frágil'; color='neu';
     desc=`La empresa vale más que al empezar, pero la junta no lo considera una victoria: ${faltan.join('; ')}. Crecer dejando la empresa expuesta no es lo mismo que hacerla más valiosa.`;
@@ -9972,7 +9975,7 @@ const VITAFIT_CASES = [
   contexto:"Una desaceleración golpea al sector fitness: tu EBITDA cae por menos inscripciones y menos gasto discrecional en suplementos.",
   choices:[
     {texto:"Recortar personal para bajar costos fijos de inmediato.",
-     efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes entrenadores con relación directa con tus clientes más antiguos." + si(CONTEXTO.equipoCansado(s), ' El equipo ya estaba desgastado: el recorte se siente como abandono.', '')},
     {texto:"Reducir gastos generales y renegociar contratos antes de tocar la nómina.",
@@ -10230,11 +10233,11 @@ const TECHNOVA_CASES = [
   contexto:"Una ola de cancelaciones golpea tu segmento de clientes pequeños: representan poco ingreso individual, pero en conjunto pesan en tu EBITDA.",
   choices:[
     {texto:"Recortar el equipo de soporte para bajar costos.",
-     efectos:{ebitda:4, capitalTrabajo:1, moralEquipo:si(CONTEXTO.equipoCansado(s), -16, -12), reputacion:-6},
+     efectos:{ebitda:2, capitalTrabajo:1, moralEquipo:si(CONTEXTO.equipoCansado(s), -16, -12), reputacion:-6},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero la experiencia de los clientes que sí se quedan se resiente — y el resto del equipo técnico observa cómo tratas a quien ya no necesitas." + si(CONTEXTO.equipoCansado(s), ' Con la moral ya baja, el recorte suena a desbandada.', '')},
     {texto:"Reducir gastos generales sin tocar el equipo.",
-     efectos:{ebitda:2, capitalTrabajo:1, caja:si(CONTEXTO.liquidezBaja(s), -2.5, -1)},
+     efectos:{ebitda:1.2, capitalTrabajo:1, caja:si(CONTEXTO.liquidezBaja(s), -2.5, -1)},
      consecuencia:"El ajuste es más lento, pero protege la atención al cliente y la moral. Cancelar antes de tiempo contratos de servicios y oficina tiene sus penalidades." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, esas penalidades duelen de verdad.', '')},
     {texto:"Lanzar un plan 'lite' más barato para retener a quienes quieren cancelar.",
      efectos:{ebitda:si(CONTEXTO.reputacionAlta(s), 0.5, -1), caja:1, capitalTrabajo:1, moralEquipo:-1},
@@ -10910,11 +10913,11 @@ const CONSTRUYEYA_CASES = [
   contexto:"El Banco de la República sube tasas y el crédito hipotecario se encarece: las ventas de apartamentos caen de forma notoria este trimestre.",
   choices:[
     {texto:"Recortar personal y cuadrillas de obra para bajar costos fijos.",
-     efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes cuadrillas experimentadas que serán difíciles de recontratar." + si(CONTEXTO.equipoCansado(s), ' Con el equipo ya desgastado, el recorte se siente como abandono.', '')},
     {texto:"Pausar el inicio de la siguiente etapa hasta que la demanda se recupere.",
-     efectos:{ebitda:si(CONTEXTO.inventarioPesado(s), 2.5, 1.5), capitalTrabajo:1, reputacion:-2, wacc:-0.1},
+     efectos:{ebitda:si(CONTEXTO.inventarioPesado(s), 1.8, 1), capitalTrabajo:1, reputacion:-2, wacc:-0.1},
      consecuencia:"Evitas comprometer capital en un mercado débil, aunque el proyecto se atrasa y los compradores en preventa no lo reciben bien." + si(CONTEXTO.inventarioPesado(s), ' Con tantos apartamentos sin vender, no construir más era lo sensato.', '')},
     {texto:"Vender un bloque de unidades a descuento a un fondo inmobiliario institucional.",
      efectos:{caja:si(CONTEXTO.liquidezBaja(s), 10, 7), ebitda:-3, diasInventario:-30, valorInventario:-10},
@@ -11172,7 +11175,7 @@ const MODAURBANA_CASES = [
   contexto:"Un cambio de clima atípico reduce la demanda de la colección de temporada: las ventas caen justo en las semanas de mayor rotación esperada.",
   choices:[
     {texto:"Recortar personal de tienda para bajar costos fijos.",
-     efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes vendedores con relación directa con tus clientes frecuentes." + si(CONTEXTO.equipoCansado(s), ' El equipo ya estaba desgastado: el recorte se siente como abandono.', '')},
     {texto:"Reducir gastos generales y renegociar con maquiladoras antes de tocar personal.",
@@ -11373,6 +11376,8 @@ const SECTORS = [
   { id:'vitafit', emoji:'💪', nombre:'Vita Fit', rubro:'Gimnasio, suplementos y acondicionamiento físico', categoria:'terciario',
     descripcion:'Modelo híbrido: si no inviertes en mantenimiento de equipos pierdes suscripciones, y si el inventario de suplementos no rota a tiempo, caduca y se convierte en pérdida.',
     tieneInventario:true, requiereCapex:true, perecedero:true,
+    // Revisión de máquinas y repuestos: ~$2 M cada 3 turnos, proporcional a la caja que genera el gimnasio.
+    costoMantenimiento:2,
     umbrales:{ diasInventario:{ sanoMin:25, sanoMax:55, peligro:75, derrota:110 }, diasCartera:{ sanoMax:45, peligro:75 } },
     kpiInicial:{caja:40, capitalTrabajo:30, razonCorriente:1.6, deuda:18, ebitda:9, wacc:12.0, diasInventario:42, diasCartera:35, valorInventario:14, confianzaProveedores:68, confianzaBanco:60, reputacion:60, moralEquipo:62},
     cases:VITAFIT_CASES, calendario:[VITAFIT_NOMINA, VITAFIT_RENTA], random:VITAFIT_RANDOM,
@@ -11389,6 +11394,8 @@ const SECTORS = [
     descripcion:'Sin inventario: tu mayor costo es la nómina técnica. Si recortas beneficios para salvar caja, la moral del equipo cae y el mejor talento se va — con el servicio detrás.',
     tieneInventario:false, requiereCapex:false, perecedero:false,
     umbrales:{ diasCartera:{ sanoMax:60, peligro:90 } },
+    // Los inversionistas de una startup esperan crecer rápido: la junta pide ×1,8 del valor, no ×1,6.
+    crecimientoVictoria:1.8,
     kpiInicial:{caja:35, capitalTrabajo:22, razonCorriente:1.4, deuda:17, ebitda:6, wacc:13.5, diasInventario:null, diasCartera:45, valorInventario:null, confianzaProveedores:65, confianzaBanco:55, reputacion:60, moralEquipo:65},
     cases:TECHNOVA_CASES, calendario:[TECHNOVA_NOMINA, TECHNOVA_RENTA], random:TECHNOVA_RANDOM,
     karmaExtra:[{ id:'fugaCerebros', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=25,

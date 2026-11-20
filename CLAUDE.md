@@ -270,9 +270,9 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   Nov. 2026 (opción A de Juan): botón "🔧 Hacer mantenimiento · $3 M" en el aviso de equipos del tablero
   (`hacerMantenimiento`, `COSTO_MANTENIMIENTO`, systems/metas-junta.js). Entre turnos, una vez por turno,
   cuenta como una opción con `capex` del turno recién jugado. El metódico del arnés lo usa con 2 de 3.
-- TechNova es la empresa más difícil a propósito (nov. 2026, opción A de Juan): el cuidadoso gana ~30 %
-  porque el financiamiento de una startup (ángeles, capital de riesgo) sube el WACC más de 2 puntos y la
-  condición de empresa sana lo castiga. Es la lección: crecer con capital caro tiene precio. No compensarlo.
+- TechNova es de las empresas más difíciles a propósito (nov. 2026, opción A de Juan): crecer con capital caro
+  tiene precio. Desde que se quitó el castigo de WACC sin techo, su dificultad viene de la junta: una startup
+  financiada con capital de riesgo debe crecer ×1,8 (`SECTORS[].crecimientoVictoria`), no ×1,6. No compensarlo.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
@@ -582,3 +582,19 @@ Victoria (20 por sector y perfil, Normal): cuidadoso 44 % (Vita Fit 20, TechNova
 Construye 75, Moda 40), prudente 39 %, agresivo 20 %, azar 3 %. Quiebra: cuidadoso 4 %, agresivo 33 %, azar 45 %.
 Pendiente: sectores muy desparejos. Construye YA es fácil (su EBITDA crece ~50 % y prepaga deuda con su caja
 grande); Vita Fit, difícil; TechNova ya no es la más difícil.
+
+**Emparejar empresas, ronda 1 (nov. 2026)** — Juan: "hazlo" (empezar por Construye YA y Vita Fit).
+- Crisis de demanda (Vita Fit, Construye YA, Moda Urbana, TechNova; AgroVerde ya estaba): recortar personal
+  daba EBITDA +4 contra una caída de −1,5 a −2,5, así que la crisis dejaba ganancia. Ahora recupera a lo sumo
+  lo perdido: +2,5 (TechNova +2; reducir gastos generales ahí +2 → +1,2). Construye YA, pausar la siguiente
+  etapa: +1,5/+2,5 → +1/+1,8.
+- Vita Fit: mantenimiento $3 M → $2 M (`costoMantenimiento`). Con $3 M cada 3 turnos gastaba más caja de la
+  que genera el gimnasio (el cuidadoso terminaba con caja ~9 desde 40).
+- Meta de crecimiento por empresa (`crecimientoVictoria()`, `SECTORS[].crecimientoVictoria`): TechNova ×1,8.
+Victoria (20 por sector y perfil, Normal): cuidadoso 45 % (Vita Fit 20 → 45, TechNova 50 → 40, AgroVerde 50,
+Ganadería 30, Construye 75 → 65, Moda 40), prudente 34 %, agresivo 18 %, azar 3 %.
+Construye YA sigue siendo la más fácil y es muy sensible a la junta: su cuidadoso prepaga deuda en cada
+cierre; con un prepago apenas menos atractivo (deuda −3, WACC −0,1) deja de hacerlo y cae a 5 %. Ese salto
+depende de la regla fija del jugador simulado; un jugador real elige según el momento. Pendiente de decisión
+de Juan. El prudente (`bueno`) de Vita Fit no usa el botón de mantenimiento y termina con EBITDA ~0: es una
+limitación del arnés, no del juego.

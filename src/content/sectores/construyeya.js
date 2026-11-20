@@ -59,11 +59,11 @@ const CONSTRUYEYA_CASES = [
   contexto:"El Banco de la República sube tasas y el crédito hipotecario se encarece: las ventas de apartamentos caen de forma notoria este trimestre.",
   choices:[
     {texto:"Recortar personal y cuadrillas de obra para bajar costos fijos.",
-     efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes cuadrillas experimentadas que serán difíciles de recontratar." + si(CONTEXTO.equipoCansado(s), ' Con el equipo ya desgastado, el recorte se siente como abandono.', '')},
     {texto:"Pausar el inicio de la siguiente etapa hasta que la demanda se recupere.",
-     efectos:{ebitda:si(CONTEXTO.inventarioPesado(s), 2.5, 1.5), capitalTrabajo:1, reputacion:-2, wacc:-0.1},
+     efectos:{ebitda:si(CONTEXTO.inventarioPesado(s), 1.8, 1), capitalTrabajo:1, reputacion:-2, wacc:-0.1},
      consecuencia:"Evitas comprometer capital en un mercado débil, aunque el proyecto se atrasa y los compradores en preventa no lo reciben bien." + si(CONTEXTO.inventarioPesado(s), ' Con tantos apartamentos sin vender, no construir más era lo sensato.', '')},
     {texto:"Vender un bloque de unidades a descuento a un fondo inmobiliario institucional.",
      efectos:{caja:si(CONTEXTO.liquidezBaja(s), 10, 7), ebitda:-3, diasInventario:-30, valorInventario:-10},

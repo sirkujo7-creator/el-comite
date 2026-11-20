@@ -59,7 +59,7 @@ const VITAFIT_CASES = [
   contexto:"Una desaceleración golpea al sector fitness: tu EBITDA cae por menos inscripciones y menos gasto discrecional en suplementos.",
   choices:[
     {texto:"Recortar personal para bajar costos fijos de inmediato.",
-     efectos:{ebitda:4, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero pierdes entrenadores con relación directa con tus clientes más antiguos." + si(CONTEXTO.equipoCansado(s), ' El equipo ya estaba desgastado: el recorte se siente como abandono.', '')},
     {texto:"Reducir gastos generales y renegociar contratos antes de tocar la nómina.",
