@@ -23,8 +23,8 @@ const SECTORS = [
     descripcion:'Sin inventario: tu mayor costo es la nómina técnica. Si recortas beneficios para salvar caja, la moral del equipo cae y el mejor talento se va — con el servicio detrás.',
     tieneInventario:false, requiereCapex:false, perecedero:false,
     umbrales:{ diasCartera:{ sanoMax:60, peligro:90 } },
-    // Los inversionistas de una startup esperan crecer rápido: la junta pide ×1,8 del valor, no ×1,6.
-    crecimientoVictoria:1.8,
+    // Los inversionistas de una startup esperan crecer rápido: la junta pide ×1,9 del valor, no ×1,7.
+    crecimientoVictoria:1.9,
     kpiInicial:{caja:35, capitalTrabajo:22, razonCorriente:1.4, deuda:17, ebitda:6, wacc:13.5, diasInventario:null, diasCartera:45, valorInventario:null, confianzaProveedores:65, confianzaBanco:55, reputacion:60, moralEquipo:65},
     cases:TECHNOVA_CASES, calendario:[TECHNOVA_NOMINA, TECHNOVA_RENTA], random:TECHNOVA_RANDOM,
     karmaExtra:[{ id:'fugaCerebros', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=25,

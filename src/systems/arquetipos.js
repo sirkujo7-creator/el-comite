@@ -54,9 +54,9 @@ function condicionesFaltantesCierre(waccInicial){
   return faltan;
 }
 function fmtNum(v, dec){ return (Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec)).toString().replace('.', ','); }
-// Crecimiento que la junta exige para llamar victoria (rango A) a un año fiscal: ×1,6 del valor
-// inicial (nov. 2026; antes ×1,3, cuando un castigo de WACC sin techo hacía el resto de la dificultad).
-const CRECIMIENTO_VICTORIA = 1.6;
+// Crecimiento que la junta exige para llamar victoria (rango A) a un año fiscal: ×1,7 del valor
+// inicial (nov. 2026: ×1,6 y luego ×1,7 a pedido de Juan; antes ×1,3, cuando un castigo de WACC sin techo hacía el resto de la dificultad).
+const CRECIMIENTO_VICTORIA = 1.7;
 // Cada junta espera un crecimiento distinto: la de una startup (TechNova), financiada con capital de
 // riesgo, exige mucho más que la de un negocio maduro (SECTORS[].crecimientoVictoria).
 function crecimientoVictoria(){ return (sectorActual && sectorActual.crecimientoVictoria) || CRECIMIENTO_VICTORIA; }

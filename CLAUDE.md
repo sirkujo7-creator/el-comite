@@ -235,8 +235,8 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   valor inicial del sector (`valorEmpresa`, también lo usa el mandato "Crecimiento agresivo"). S/A exigen
   además empresa sana al cierre (`condicionesFaltantesCierre`): razón corriente ≥ 1,1, WACC ≤ inicial + 2
   (`puntoInicial.wacc`), deuda ≤ el nivel sano de la empresa en veces el EBITDA (`escalaDeuda().sano`) y banco,
-  proveedores, junta y moral ≥ 40. Rango A: valor ×1,6 (`CRECIMIENTO_VICTORIA`, antes ×1,3) y empresa sana.
-  Entre ×1,3 y ×1,6 sana: B "Crecimiento moderado". Desde ×1,3 sin salud: B "Crecimiento frágil", con la
+  proveedores, junta y moral ≥ 40. Rango A: valor ×1,7 (`CRECIMIENTO_VICTORIA`; TechNova ×1,9) y empresa sana.
+  Entre ×1,3 y ×1,7 sana: B "Crecimiento moderado". Desde ×1,3 sin salud: B "Crecimiento frágil", con la
   condición que faltó escrita en el informe.
 - Escala de rangos (nov. 2026, decisión de Juan): S y A = victoria ("MISIÓN CUMPLIDA" y monedas),
   B = resultado regular ("AÑO A MEDIAS", sin fiesta), C y D = desastre ("DESASTRE"; la quiebra sigue
@@ -272,7 +272,7 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   cuenta como una opción con `capex` del turno recién jugado. El metódico del arnés lo usa con 2 de 3.
 - TechNova es de las empresas más difíciles a propósito (nov. 2026, opción A de Juan): crecer con capital caro
   tiene precio. Desde que se quitó el castigo de WACC sin techo, su dificultad viene de la junta: una startup
-  financiada con capital de riesgo debe crecer ×1,8 (`SECTORS[].crecimientoVictoria`), no ×1,6. No compensarlo.
+  financiada con capital de riesgo debe crecer ×1,9 (`SECTORS[].crecimientoVictoria`), no ×1,7. No compensarlo.
 - Sparklines fueron retiradas por estética; el estado relacional se muestra con barras de progreso.
 - Retratos: imagen transparente (WebP), grande, flujo de dos pantallas (`renderPersonajeIntro`), nombre debajo de la imagen, mini retrato en la pantalla de decisión. Se rechazó: retrato circular con fondo blanco e ilustración SVG en la portada.
 
@@ -598,3 +598,8 @@ cierre; con un prepago apenas menos atractivo (deuda −3, WACC −0,1) deja de 
 depende de la regla fija del jugador simulado; un jugador real elige según el momento. Pendiente de decisión
 de Juan. El prudente (`bueno`) de Vita Fit no usa el botón de mantenimiento y termina con EBITDA ~0: es una
 limitación del arnés, no del juego.
+
+**Más difícil (nov. 2026)** — Juan: "baja la meta de victorias, lo necesito un poco más difícil". Rango A exige
+×1,7 del valor (antes ×1,6; TechNova ×1,9). Nueva meta en Normal: cuidadoso ~35 %, agresivo ~15 %, azar < 5 %.
+Victoria (20 por sector y perfil): cuidadoso 45 → 36 % (Vita Fit 35, TechNova 30, AgroVerde 35, Ganadería 30,
+Construye 50, Moda 35), prudente 26 %, agresivo 16 %, azar 1 %. Quiebras sin cambio.
