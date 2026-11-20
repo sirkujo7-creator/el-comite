@@ -253,10 +253,12 @@ function applyEfectos(e, origen, opciones){
   /* Consecuencias PERMANENTES de las 4 cadenas profundas: a diferencia de un eco puntual,
      el desenlace negativo de estas historias deja una marca mecánica que se repite cada
      turno por el resto de la partida — el peso real de una cadena completa, no solo texto. */
-  if(flags.renataSeFue){
-    state.ebitda -= 0.4;
+  // Una pérdida de productividad que se registra una vez (antes −0,4 cada turno, sin techo).
+  if(flags.renataSeFue && !flags.avisoSalidaRenata){
+    flags.avisoSalidaRenata = true;
+    state.ebitda -= 1.5;
     origenUltimoCambio.ebitda = 'pasivo';
-    systemicNotes.push("La salida de Renata Cifuentes todavía se siente en la operación: el conocimiento que se fue con ella no se ha terminado de reconstruir (<b>EBITDA -0.4</b>).");
+    systemicNotes.push("La salida de Renata Cifuentes se siente en la operación: el conocimiento que se fue con ella tarda en reconstruirse y la productividad baja a un nivel menor (<b>EBITDA −1,5</b>).");
   }
   // Sanción fiscal y reestructuración fallida: una prima de riesgo permanente (el WACC de
   // equilibrio sube, ver primaRiesgoPermanente), no un recargo que crece sin techo cada turno.

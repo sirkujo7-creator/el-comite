@@ -202,8 +202,8 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   `prefers-reduced-motion`.
 - Alarma, junta y finales (etapa 3, `ui/efectos-finales.js`): en el tablero la viñeta roja de
   pantalla completa se reemplazó por un marco que late y una cinta inferior con los motivos
-  (`nivelAlarma`: caja ≤ 5, razón corriente < 1, WACC ≥ 20, deuda ≥ 45, EBITDA ≤ 0, relación en
-  crítico, inventario ≥ 90 días) más una interferencia breve cada 7 s; tensión (caja ≤ 15 o WACC ≥ 16)
+  (`nivelAlarma`: caja ≤ 5, razón corriente < 1, WACC ≥ 20, deuda ≥ el nivel crítico de la empresa en veces
+  el EBITDA, EBITDA ≤ 0, relación en crítico, inventario ≥ el nivel de peligro de la empresa) más una interferencia breve cada 7 s; tensión (caja ≤ 15 o WACC ≥ 16)
   = marco ámbar suave. La junta pinta la ventana de dorado ("cierre del trimestre n de 4") y su
   evaluación lleva el sello META CUMPLIDA / NO CUMPLIDA. "COMBO ×n" en el resultado tras 2+ sellos
   positivos seguidos. Quiebra: grietas, sacudida y apagón de monitor antes del informe; informe con
@@ -234,8 +234,10 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   EBITDA × clamp(55 / WACC, 2,5, 6) − deuda + ½ caja (−15 % si la razón corriente < 1), comparado con el
   valor inicial del sector (`valorEmpresa`, también lo usa el mandato "Crecimiento agresivo"). S/A exigen
   además empresa sana al cierre (`condicionesFaltantesCierre`): razón corriente ≥ 1,1, WACC ≤ inicial + 2
-  (`puntoInicial.wacc`), deuda ≤ 3 × EBITDA y banco, proveedores, junta y moral ≥ 40. Si el valor crece
-  ×1,3 pero falta salud: B "Crecimiento frágil", con la condición que faltó escrita en el informe.
+  (`puntoInicial.wacc`), deuda ≤ el nivel sano de la empresa en veces el EBITDA (`escalaDeuda().sano`) y banco,
+  proveedores, junta y moral ≥ 40. Rango A: valor ×1,6 (`CRECIMIENTO_VICTORIA`, antes ×1,3) y empresa sana.
+  Entre ×1,3 y ×1,6 sana: B "Crecimiento moderado". Desde ×1,3 sin salud: B "Crecimiento frágil", con la
+  condición que faltó escrita en el informe.
 - Escala de rangos (nov. 2026, decisión de Juan): S y A = victoria ("MISIÓN CUMPLIDA" y monedas),
   B = resultado regular ("AÑO A MEDIAS", sin fiesta), C y D = desastre ("DESASTRE"; la quiebra sigue
   siendo "MISIÓN FALLIDA"). Nuevo rango D (`cierreAnioFiscal`): la empresa vale menos del 40 % de su
@@ -565,3 +567,18 @@ AgroVerde 35, Ganadería 40, Construye 50 → 30, Moda 45 → 35), prudente 20 %
 Probado sin éxito: escala más laxa (3,5×) 34 %; crecimiento exigido ×1,25 / ×1,2: 36 / 37 % (y el azar
 sube a 10 %); EBITDA inicial de TechNova 7: 15 → 20 %. Queda por debajo de la meta 40–45 %: decisión de
 Juan si se compensa y cómo.
+
+**Castigos sin techo y meta de crecimiento (nov. 2026)** — Juan: "hazlo" (revisar sectores fáciles y luego subir
+la exigencia). Diagnóstico: la "reestructuración fallida" sumaba +0,3 de WACC cada turno hasta el final (y la
+sanción fiscal +0,4): hasta +3,6 puntos por una decisión. Era la causa principal de "Crecimiento frágil" y
+sostenía buena parte de la dificultad. Cambios:
+- Reestructuración fallida y sanción fiscal: prima de riesgo permanente (`primaRiesgoPermanente`, +0,6 cada una
+  al WACC de equilibrio; el motor lo acerca poco a poco). Aviso una sola vez. Salida de Renata: EBITDA −1,5 una
+  vez (antes −0,4 cada turno). Solo con esto el cuidadoso ganaba 62 % y el agresivo 33 %; subir la prima a
+  1,2 o 1,8 casi no cambia nada.
+- AgroVerde, "Cae el precio del commodity": recortar personal de campo EBITDA +4 → +2,5 (la crisis daba ganancia).
+- Rango A exige valor ×1,6 (`CRECIMIENTO_VICTORIA`); entre ×1,3 y ×1,6 con empresa sana, B "Crecimiento moderado".
+Victoria (20 por sector y perfil, Normal): cuidadoso 44 % (Vita Fit 20, TechNova 50, AgroVerde 50, Ganadería 30,
+Construye 75, Moda 40), prudente 39 %, agresivo 20 %, azar 3 %. Quiebra: cuidadoso 4 %, agresivo 33 %, azar 45 %.
+Pendiente: sectores muy desparejos. Construye YA es fácil (su EBITDA crece ~50 % y prepaga deuda con su caja
+grande); Vita Fit, difícil; TechNova ya no es la más difícil.

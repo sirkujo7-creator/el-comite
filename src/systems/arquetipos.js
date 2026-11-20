@@ -54,6 +54,9 @@ function condicionesFaltantesCierre(waccInicial){
   return faltan;
 }
 function fmtNum(v, dec){ return (Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec)).toString().replace('.', ','); }
+// Crecimiento que la junta exige para llamar victoria (rango A) a un año fiscal: ×1,6 del valor
+// inicial (nov. 2026; antes ×1,3, cuando un castigo de WACC sin techo hacía el resto de la dificultad).
+const CRECIMIENTO_VICTORIA = 1.6;
 function cierreAnioFiscal(){
   const ini = sectorActual.kpiInicial;
   const val = valorEmpresa(state);
@@ -66,9 +69,12 @@ function cierreAnioFiscal(){
   if(ratio>=2.5 && sana && state.wacc<=15 && state.reputacion>=50){
     rango='S'; badge='CFO de Élite'; color='pos';
     desc="Multiplicaste el valor de la empresa manteniendo el riesgo bajo control y la confianza de tus grupos de interés intacta. Es exactamente lo que un comité de alta gerencia espera ver: crecimiento real, no maquillado y no apalancado a cualquier costo.";
-  } else if(ratio>=1.3 && sana){
+  } else if(ratio>=CRECIMIENTO_VICTORIA && sana){
     rango='A'; badge='Crecimiento sólido'; color='pos';
     desc="Cierras el año fiscal con la empresa valiendo notablemente más de lo que valía al empezar, y sana: liquidez, costo de capital, deuda y relaciones en orden. Tu gestión combinó crecimiento con un manejo razonable del riesgo.";
+  } else if(ratio>=1.3 && sana){
+    rango='B'; badge='Crecimiento moderado'; color='neu';
+    desc=`La empresa vale más que al empezar (×${fmtNum(ratio, 2)}) y la entregas sana, pero la junta esperaba un año más ambicioso: para llamarlo crecimiento sólido pedía al menos ×${fmtNum(CRECIMIENTO_VICTORIA, 1)} del valor inicial. Cuidaste la empresa; te faltó hacerla crecer.`;
   } else if(ratio>=1.3){
     rango='B'; badge='Crecimiento frágil'; color='neu';
     desc=`La empresa vale más que al empezar, pero la junta no lo considera una victoria: ${faltan.join('; ')}. Crecer dejando la empresa expuesta no es lo mismo que hacerla más valiosa.`;

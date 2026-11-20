@@ -59,7 +59,7 @@ const AGROVERDE_CASES = [
   contexto:"El precio internacional cae 20% por sobreoferta global. El ingreso proyectado de la próxima exportación se reduce de forma directa.",
   choices:[
     {texto:"Recortar personal de campo.",
-     efectos:{ebitda:4, capitalTrabajo:1, confianzaProveedores:-8, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
+     efectos:{ebitda:2.5, capitalTrabajo:1, confianzaProveedores:-8, reputacion:-6, moralEquipo:si(CONTEXTO.equipoCansado(s), -12, -6)},
      setFlags:{recorteFuerte:true}, disparar:{turnos:3, evento:eventoHuelgaSindical},
      consecuencia:"Tu punto de equilibrio baja rápido, pero golpeas directamente a las familias recolectoras que dependen de la finca — y esa decisión suele volver." + si(CONTEXTO.equipoCansado(s), ' Con las cuadrillas ya cansadas, el recorte enciende el descontento.', '')},
     {texto:"Reducir gastos generales y renegociar insumos agrícolas.",
