@@ -70,6 +70,12 @@ function initState(){
     });
   }
   state = Object.assign({obligaciones:[], scheduledEvents:[], turnosSinCapex:0, healthHistory:[], deudaLargoPlazo:0}, ajustado);
+  // Construye YA: parte de la caja es dinero de preventas en fiducia. Es de la empresa, pero no se
+  // puede usar: la fiducia lo va liberando a medida que avanza la obra (motor-operativo.js).
+  if(sectorActual.cajaEnFiducia){
+    state.fiduciaPendiente = Math.min(sectorActual.cajaEnFiducia, Math.max(0, state.caja * 0.45));
+    state.caja -= state.fiduciaPendiente;
+  }
   // El WACC arranca en equilibrio con la confianza bancaria inicial: el motor solo lo mueve
   // cuando esa confianza cambia (ver aplicarMotorOperativo).
   if(state.wacc != null && state.confianzaBanco != null) state.waccEquilibrioBase = state.wacc + state.confianzaBanco * 0.08;

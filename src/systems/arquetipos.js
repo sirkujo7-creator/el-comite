@@ -36,7 +36,8 @@ const VEREDICTO_TEXTO = { victoria:'Victoria', regular:'Resultado regular', desa
 // crecer a cualquier costo siempre pagaba.
 function valorEmpresa(k){
   const multiplo = Math.max(2.5, Math.min(6, 55 / Math.max(1, k.wacc)));
-  let v = k.ebitda * multiplo - k.deuda + 0.5 * k.caja;
+  // La caja que sigue en la fiducia de preventas también es de la empresa.
+  let v = k.ebitda * multiplo - k.deuda + 0.5 * (k.caja + (k.fiduciaPendiente || 0));
   if(k.razonCorriente < 1) v *= v > 0 ? 0.85 : 1.15;
   return Math.round(v * 10) / 10;
 }

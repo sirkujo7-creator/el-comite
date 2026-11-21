@@ -3505,6 +3505,12 @@ function initState(){
     });
   }
   state = Object.assign({obligaciones:[], scheduledEvents:[], turnosSinCapex:0, healthHistory:[], deudaLargoPlazo:0}, ajustado);
+  // Construye YA: parte de la caja es dinero de preventas en fiducia. Es de la empresa, pero no se
+  // puede usar: la fiducia lo va liberando a medida que avanza la obra (motor-operativo.js).
+  if(sectorActual.cajaEnFiducia){
+    state.fiduciaPendiente = Math.min(sectorActual.cajaEnFiducia, Math.max(0, state.caja * 0.45));
+    state.caja -= state.fiduciaPendiente;
+  }
   // El WACC arranca en equilibrio con la confianza bancaria inicial: el motor solo lo mueve
   // cuando esa confianza cambia (ver aplicarMotorOperativo).
   if(state.wacc != null && state.confianzaBanco != null) state.waccEquilibrioBase = state.wacc + state.confianzaBanco * 0.08;
@@ -3715,6 +3721,13 @@ function aplicarMotorOperativo(){
   // por encima de EBITDA 12,5 crecer ya no traía más caja, y una empresa en auge podía quedarse sin liquidez).
   if(state.ebitda != null) suma('caja', state.ebitda > 0 ? clamp(state.ebitda * 0.04, 0, 1) : clamp(state.ebitda * (dificultadSeleccionada==='facil'?0.06:0.09), -0.9, 0));
 
+  // Fiducia de preventas (Construye YA): libera la caja retenida a medida que avanza la obra.
+  if(state.fiduciaPendiente > 0){
+    const libera = Math.min(sectorActual.liberacionFiducia || 1, state.fiduciaPendiente);
+    state.fiduciaPendiente = Math.round((state.fiduciaPendiente - libera) * 100) / 100;
+    suma('caja', libera);
+  }
+
   // Deuda: solo se amortiza sola si tu EBITDA es positivo (hay con qué pagarla). Si tu
   // EBITDA es negativo, la deuda crece sola — más despacio en fácil, para que un camino
   // deliberadamente humano ahí todavía te dé margen de sobrevivir hasta el cierre del año.
@@ -3741,7 +3754,9 @@ function aplicarMotorOperativo(){
     // Solo la deuda de corto plazo aprieta la liquidez; de la de largo plazo pesa su cuota cercana (25 %).
     const lp = Math.min(state.deudaLargoPlazo || 0, state.deuda);
     const deudaQueAprieta = state.deuda - lp + lp * 0.25;
-    const empuje = ((state.caja - 22) * 0.006) - ((deudaQueAprieta - 18) * 0.004);
+    // El efectivo en fiducia sigue siendo un activo corriente (efectivo restringido que se libera
+    // este año): cuenta para la liquidez del balance aunque todavía no se pueda gastar.
+    const empuje = ((state.caja + (state.fiduciaPendiente || 0) - 22) * 0.006) - ((deudaQueAprieta - 18) * 0.004);
     suma('razonCorriente', clamp(empuje * (empuje < 0 ? 1.3 : 0.7), -0.06, 0.06));
   }
 
@@ -4378,6 +4393,12 @@ function hacerMantenimiento(){
 function renderEquiposLine(){
   const el = document.getElementById('equiposLine');
   if(!el) return;
+  // Construye YA no tiene mantenimiento: el mismo aviso muestra la caja que sigue en la fiducia.
+  if(state && sectorActual && !sectorActual.requiereCapex && state.fiduciaPendiente > 0){
+    el.className = 'equipos-line show';
+    el.innerHTML = `🏦 Fiducia de preventas: ${fmtMoney(state.fiduciaPendiente)} todavía retenidos. Se liberan ${fmtMoney(Math.min(sectorActual.liberacionFiducia || 1, state.fiduciaPendiente))} por turno, a medida que avanza la obra.`;
+    return;
+  }
   if(!state || !sectorActual || !sectorActual.requiereCapex){ el.className = 'equipos-line'; return; }
   // Cuenta también el turno recién jugado (el motor lo registra al empezar el siguiente).
   const jugadoSinCapex = history.some(h=>h.turno === turnNumber) && !state.capexEsteTurno;
@@ -5085,7 +5106,8 @@ const VEREDICTO_TEXTO = { victoria:'Victoria', regular:'Resultado regular', desa
 // crecer a cualquier costo siempre pagaba.
 function valorEmpresa(k){
   const multiplo = Math.max(2.5, Math.min(6, 55 / Math.max(1, k.wacc)));
-  let v = k.ebitda * multiplo - k.deuda + 0.5 * k.caja;
+  // La caja que sigue en la fiducia de preventas también es de la empresa.
+  let v = k.ebitda * multiplo - k.deuda + 0.5 * (k.caja + (k.fiduciaPendiente || 0));
   if(k.razonCorriente < 1) v *= v > 0 ? 0.85 : 1.15;
   return Math.round(v * 10) / 10;
 }
@@ -11447,7 +11469,9 @@ const SECTORS = [
         ]})
     }] },
   { id:'construyeya', emoji:'🏗️', nombre:'Construye YA', rubro:'Constructora e inmobiliaria', categoria:'secundario',
-    descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo.',
+    descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo. Parte de tu caja es dinero de preventas en fiducia: la fiducia te lo entrega a medida que avanza la obra.',
+    // Preventas en fiducia (Juan, nov. 2026): $M de la caja inicial retenidos; se liberan por turno.
+    cajaEnFiducia:12, liberacionFiducia:1,
     tieneInventario:true, requiereCapex:false, perecedero:false,
     umbrales:{ deudaVeces:{ sano:4, alto:5, critico:6.5, quiebra:8 }, diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
     // Prepagar un crédito constructor cuesta más que en otros negocios: comisión por prepago y

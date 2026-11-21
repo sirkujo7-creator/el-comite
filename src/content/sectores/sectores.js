@@ -70,7 +70,9 @@ const SECTORS = [
         ]})
     }] },
   { id:'construyeya', emoji:'🏗️', nombre:'Construye YA', rubro:'Constructora e inmobiliaria', categoria:'secundario',
-    descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo.',
+    descripcion:'Ciclos largos y doble exposición a la tasa de interés: encarece tu crédito de obra y enfría la demanda hipotecaria de tus compradores al mismo tiempo. Parte de tu caja es dinero de preventas en fiducia: la fiducia te lo entrega a medida que avanza la obra.',
+    // Preventas en fiducia (Juan, nov. 2026): $M de la caja inicial retenidos; se liberan por turno.
+    cajaEnFiducia:12, liberacionFiducia:1,
     tieneInventario:true, requiereCapex:false, perecedero:false,
     umbrales:{ deudaVeces:{ sano:4, alto:5, critico:6.5, quiebra:8 }, diasInventario:{ sanoMin:60, sanoMax:120, peligro:140, derrota:180 }, diasCartera:{ sanoMax:90, peligro:120 } },
     // Prepagar un crédito constructor cuesta más que en otros negocios: comisión por prepago y

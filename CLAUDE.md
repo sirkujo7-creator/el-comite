@@ -615,3 +615,12 @@ realista con el dinero de las preventas en fiducia, que no se puede usar libreme
 incoherencia del motor: la caja que genera el EBITDA tenía tope 0,5 por turno, así que una empresa que duplicaba su
 EBITDA (17,5) no recibía más caja y entraba en crisis de liquidez. Tope 0,5 → 1. Efecto casi nulo en la
 dificultad (cuidadoso 36 → 37 %, quiebra 3 → 2 %).
+
+**Construye YA: preventas en fiducia (nov. 2026, Juan: "ajusta Construye YA")** — `SECTORS[].cajaEnFiducia` 12 y
+`liberacionFiducia` 1: de su caja inicial ($45 M), $12 M son dinero de preventas en fiducia (`state.fiduciaPendiente`);
+no se pueden gastar y se liberan $1 M por turno. El aviso del tablero (`renderEquiposLine`, que Construye no usaba)
+muestra cuánto falta. La fiducia cuenta como activo corriente en la deriva de la razón corriente y como caja en
+`valorEmpresa` (el valor inicial no cambia). Sin eso último, las quiebras por liquidez se disparaban.
+Construye YA, 20 partidas por perfil (Normal): cuidadoso 50 → 35 %, prudente 20 %, agresivo 15 → 0 % (quiebra 40 →
+60 %, por liquidez: crecer sin poder usar la plata de las preventas es la lección), azar 0 %. Probado: $18 M → 25 %
+cuidadoso; $10 M → 45 %.

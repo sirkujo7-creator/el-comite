@@ -25,6 +25,13 @@ function aplicarMotorOperativo(){
   // por encima de EBITDA 12,5 crecer ya no traía más caja, y una empresa en auge podía quedarse sin liquidez).
   if(state.ebitda != null) suma('caja', state.ebitda > 0 ? clamp(state.ebitda * 0.04, 0, 1) : clamp(state.ebitda * (dificultadSeleccionada==='facil'?0.06:0.09), -0.9, 0));
 
+  // Fiducia de preventas (Construye YA): libera la caja retenida a medida que avanza la obra.
+  if(state.fiduciaPendiente > 0){
+    const libera = Math.min(sectorActual.liberacionFiducia || 1, state.fiduciaPendiente);
+    state.fiduciaPendiente = Math.round((state.fiduciaPendiente - libera) * 100) / 100;
+    suma('caja', libera);
+  }
+
   // Deuda: solo se amortiza sola si tu EBITDA es positivo (hay con qué pagarla). Si tu
   // EBITDA es negativo, la deuda crece sola — más despacio en fácil, para que un camino
   // deliberadamente humano ahí todavía te dé margen de sobrevivir hasta el cierre del año.
@@ -51,7 +58,9 @@ function aplicarMotorOperativo(){
     // Solo la deuda de corto plazo aprieta la liquidez; de la de largo plazo pesa su cuota cercana (25 %).
     const lp = Math.min(state.deudaLargoPlazo || 0, state.deuda);
     const deudaQueAprieta = state.deuda - lp + lp * 0.25;
-    const empuje = ((state.caja - 22) * 0.006) - ((deudaQueAprieta - 18) * 0.004);
+    // El efectivo en fiducia sigue siendo un activo corriente (efectivo restringido que se libera
+    // este año): cuenta para la liquidez del balance aunque todavía no se pueda gastar.
+    const empuje = ((state.caja + (state.fiduciaPendiente || 0) - 22) * 0.006) - ((deudaQueAprieta - 18) * 0.004);
     suma('razonCorriente', clamp(empuje * (empuje < 0 ? 1.3 : 0.7), -0.06, 0.06));
   }
 

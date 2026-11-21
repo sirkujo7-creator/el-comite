@@ -83,6 +83,12 @@ function hacerMantenimiento(){
 function renderEquiposLine(){
   const el = document.getElementById('equiposLine');
   if(!el) return;
+  // Construye YA no tiene mantenimiento: el mismo aviso muestra la caja que sigue en la fiducia.
+  if(state && sectorActual && !sectorActual.requiereCapex && state.fiduciaPendiente > 0){
+    el.className = 'equipos-line show';
+    el.innerHTML = `🏦 Fiducia de preventas: ${fmtMoney(state.fiduciaPendiente)} todavía retenidos. Se liberan ${fmtMoney(Math.min(sectorActual.liberacionFiducia || 1, state.fiduciaPendiente))} por turno, a medida que avanza la obra.`;
+    return;
+  }
   if(!state || !sectorActual || !sectorActual.requiereCapex){ el.className = 'equipos-line'; return; }
   // Cuenta también el turno recién jugado (el motor lo registra al empezar el siguiente).
   const jugadoSinCapex = history.some(h=>h.turno === turnNumber) && !state.capexEsteTurno;
