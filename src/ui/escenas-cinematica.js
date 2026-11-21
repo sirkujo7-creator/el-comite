@@ -9,6 +9,7 @@
    asset entre paréntesis, ver build.mjs), p. ej. cuarto → assets/escenas/cuarto.webp.
    ========================================================= */
 const ESCENAS_IMAGENES = {
+  cuarto: '@asset(escenas/cuarto.webp)',
 };
 let escenaActual = null;
 function mostrarEscenaCinematica(nombre){
