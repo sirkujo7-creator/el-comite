@@ -20,6 +20,11 @@ const ESCENAS_IMAGENES = {
   'empresa-technova': '@asset(escenas/empresa-technova.webp)',
   'empresa-agroverde': '@asset(escenas/empresa-agroverde.webp)',
   'empresa-ganadera': '@asset(escenas/empresa-ganadera.webp)',
+  'empresa-construyeya': '@asset(escenas/empresa-construyeya.webp)',
+  'empresa-modaurbana': '@asset(escenas/empresa-modaurbana.webp)',
+  'legado': '@asset(escenas/legado.webp)',
+  'perfil': '@asset(escenas/perfil.webp)',
+  'calendario': '@asset(escenas/calendario.webp)',
 };
 let escenaActual = null;
 function mostrarEscenaCinematica(nombre){

@@ -63,16 +63,19 @@
           mask-image:radial-gradient(ellipse 72% 70% at 50% 50%, #000 58%, transparent 100%);
 }
 #introEscena.visible{ display:block; opacity:1; }
-#introEscena svg, #introEscena img{ width:100%; height:100%; display:block; object-fit:cover; filter:sepia(.18) contrast(1.06) saturate(.9); animation:escenaAcerca 14s ease-out forwards, escenaParpadeo 4.5s steps(1) infinite; }
+#introEscena svg, #introEscena img{ width:100%; height:100%; display:block; object-fit:cover; filter:sepia(.25) contrast(1.12) saturate(.85) blur(.35px); animation:escenaAcerca 14s ease-out forwards, escenaParpadeo 4.5s steps(1) infinite; }
 #introEscena.entra svg, #introEscena.entra img{ animation:escenaDestello .7s ease-out, escenaAcerca 14s ease-out forwards, escenaParpadeo 4.5s steps(1) infinite; }
-/* Las imágenes son 3:2 y la ventana 16:9: se recorta arriba y abajo. La torre conserva su cima. */
-#introEscena img[data-escena="imperio"]{ object-position:center 20%; }
+/* Las imágenes son 3:2 y la ventana 16:9: se recorta arriba y abajo. La torre, la grúa y la cabeza del espejo conservan su parte de arriba. */
+#introEscena img[data-escena="imperio"], #introEscena img[data-escena="perfil"], #introEscena img[data-escena="empresa-construyeya"]{ object-position:center 15%; }
 .escena-grano{
-  position:absolute; inset:0; pointer-events:none; opacity:.12; mix-blend-mode:screen;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23g)'/%3E%3C/svg%3E");
+  /* "Monitor viejo" (opción B de Juan, nov. 2026): grano visible en gris + líneas de televisor (::after). */
+  position:absolute; inset:0; pointer-events:none; opacity:.5; mix-blend-mode:overlay; z-index:2;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23g)'/%3E%3C/svg%3E");
   animation:escenaGrano .5s steps(1) infinite;
 }
-@keyframes escenaDestello{ 0%{ filter:brightness(3) sepia(.18); } 100%{ filter:brightness(1) sepia(.18) contrast(1.06) saturate(.9); } }
+#introEscena::after{ content:''; position:absolute; inset:0; pointer-events:none; z-index:3;
+  background:repeating-linear-gradient(0deg, rgba(0,0,0,.32) 0 1px, transparent 1px 3px); }
+@keyframes escenaDestello{ 0%{ filter:brightness(3) sepia(.25); } 100%{ filter:brightness(1) sepia(.25) contrast(1.12) saturate(.85) blur(.35px); } }
 @keyframes escenaAcerca{ from{ transform:scale(1); } to{ transform:scale(1.08); } }
 @keyframes escenaParpadeo{ 0%,96%{ opacity:1; } 97%{ opacity:.82; } 98.5%{ opacity:.95; } }
 @keyframes escenaGrano{ 25%{ background-position:-40px 20px; } 50%{ background-position:30px -50px; } 75%{ background-position:-70px -20px; } }
