@@ -18,8 +18,9 @@ function guionInicioPartida(sector, perfil){
   const legado = sector ? legadosEmpresariales[sector.id] : null;
   const lineas = [
     { text: "ACCEDIENDO A LA TERMINAL DE EL COMITÉ...", speed: 30, escena:'terminal' },
-    { text: "EMPRESA: " + nombreEmpresaActual().toUpperCase(), speed: 35, escena:'empresa' },
-    { text: "SECTOR: " + rubroTexto.toUpperCase(), speed: 30, escena:'empresa' }
+    // Cada empresa tiene su fachada (empresa-vitafit, empresa-technova…).
+    { text: "EMPRESA: " + nombreEmpresaActual().toUpperCase(), speed: 35, escena: sector ? 'empresa-' + sector.id : 'empresa' },
+    { text: "SECTOR: " + rubroTexto.toUpperCase(), speed: 30, escena: sector ? 'empresa-' + sector.id : 'empresa' }
   ];
   if(legado && !legado.quebrada && legado.generacion>=2){
     lineas.push({ text: "GENERACIÓN " + legado.generacion + " — HEREDAS LA EMPRESA DE LA GESTIÓN ANTERIOR (RANGO " + (legado.ultimoRango||'—') + ")", speed: 28, escena:'legado' });

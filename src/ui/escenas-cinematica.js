@@ -15,6 +15,11 @@ const ESCENAS_IMAGENES = {
   ciudad: '@asset(escenas/ciudad.webp)',
   numeros: '@asset(escenas/numeros.webp)',
   imperio: '@asset(escenas/imperio.webp)',
+  'terminal': '@asset(escenas/terminal.webp)',
+  'empresa-vitafit': '@asset(escenas/empresa-vitafit.webp)',
+  'empresa-technova': '@asset(escenas/empresa-technova.webp)',
+  'empresa-agroverde': '@asset(escenas/empresa-agroverde.webp)',
+  'empresa-ganadera': '@asset(escenas/empresa-ganadera.webp)',
 };
 let escenaActual = null;
 function mostrarEscenaCinematica(nombre){
