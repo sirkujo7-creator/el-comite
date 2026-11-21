@@ -10,6 +10,11 @@
    ========================================================= */
 const ESCENAS_IMAGENES = {
   cuarto: '@asset(escenas/cuarto.webp)',
+  saldo: '@asset(escenas/saldo.webp)',
+  desalojo: '@asset(escenas/desalojo.webp)',
+  ciudad: '@asset(escenas/ciudad.webp)',
+  numeros: '@asset(escenas/numeros.webp)',
+  imperio: '@asset(escenas/imperio.webp)',
 };
 let escenaActual = null;
 function mostrarEscenaCinematica(nombre){
@@ -19,6 +24,6 @@ function mostrarEscenaCinematica(nombre){
   if(!src){ escenaActual = null; cont.classList.remove('visible'); cont.innerHTML = ''; return; }
   if(nombre === escenaActual) return;
   escenaActual = nombre;
-  cont.innerHTML = `<img src="${src}" alt=""><div class="escena-grano"></div>`;
+  cont.innerHTML = `<img src="${src}" alt="" data-escena="${nombre}"><div class="escena-grano"></div>`;
   cont.classList.remove('visible', 'entra'); void cont.offsetWidth; cont.classList.add('visible', 'entra');
 }
