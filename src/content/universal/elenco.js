@@ -18,7 +18,7 @@ function eventoMarcelaReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"Marcela se vuelve más rígida contigo", retrato: RETRATO_MARCELA, presentacion:"Marcela Duarte vuelve a buscarte — su tono ya no es el mismo de antes.",
-      contexto:"Desde que ignoraste sus reparos, Marcela Duarte empezó a exigir el doble de documentación para cualquier trámite que pase por tu escritorio — hasta para lo más simple. No es venganza, dice; es 'debido proceso'.",
+      contexto:"Desde que ignoraste sus reparos, Marcela Duarte empezó a exigir el doble de documentación para cualquier trámite que pase por tu escritorio — hasta para lo más simple. No es venganza, dice; es «debido proceso».",
       choices:[
         {texto:"Hablar con ella directamente y reconstruir la confianza perdida.", efectos:{moralEquipo:si(CONTEXTO.equipoCansado(s), 4, 3), caja:-0.3}, consecuencia:"La conversación incómoda ayuda, aunque Marcela sigue siendo más cautelosa que antes contigo — y el tiempo que le dedicaste a esto no lo dedicaste a otra cosa."},
         {texto:"Pedirle a Recursos Humanos que intervenga en el conflicto.", efectos:{moralEquipo:-2, caja:-0.5, ebitda:0.5}, consecuencia:"La intervención formal resuelve el papeleo, pero la relación se vuelve todavía más fría. Al menos, los trámites vuelven a fluir."},
@@ -31,15 +31,15 @@ function eventoMarcelaReaparece(s,f){
 function eventoRigoReaparece(s,f){
   if(f.rigoRespetado){
     return { tipo:'karma', titulo:"Don Rigo te ofrece algo que no le ofrece a nadie más", retrato: RETRATO_DON_RIGO, presentacion:"Tu proveedor histórico vuelve a buscarte, esta vez con un trato especial.",
-      contexto:"Don Rigo Salazar, el proveedor que lleva años en esto, se aparece personalmente — no manda a nadie más para esto — a ofrecerte condiciones preferenciales que, según él, 'no le da ni a los grandes'. El trato humano, dice, todavía vale algo.",
+      contexto:"Don Rigo Salazar, el proveedor que lleva años en esto, se aparece personalmente — no manda a nadie más para esto — a ofrecerte condiciones preferenciales que, según él, «no le da ni a los grandes». El trato humano, dice, todavía vale algo.",
       choices:[
         {texto:"Aceptar las condiciones preferenciales con gratitud.", efectos:{caja:3, confianzaProveedores:si(CONTEXTO.proveedoresTensos(s), 7, 5), wacc:0.1}, consecuencia:"La relación de años rinde frutos concretos justo cuando más los necesitas, aunque depender tanto de un solo proveedor también es un riesgo que el mercado empieza a notar."},
-        {texto:"Aceptar, pero insistir en formalizarlo por escrito de todas formas.", efectos:{caja:2, confianzaProveedores:2}, consecuencia:"Don Rigo lo firma sin problema, aunque bromea que 'antes la palabra bastaba'."},
+        {texto:"Aceptar, pero insistir en formalizarlo por escrito de todas formas.", efectos:{caja:2, confianzaProveedores:2}, consecuencia:"Don Rigo lo firma sin problema, aunque bromea que «antes la palabra bastaba»."},
         {texto:"Rechazar el trato preferencial por principio, pagando precio de mercado.", efectos:{caja:-1, confianzaProveedores:3, reputacion:1}, consecuencia:"Don Rigo respeta profundamente el gesto — pocos rechazan un favor así por ética."}
       ]};
   } else {
     return { tipo:'karma', titulo:"Don Rigo deja de ser flexible contigo", retrato: RETRATO_DON_RIGO, presentacion:"Don Rigo Salazar vuelve a buscarte — pero la relación ya no se siente igual.",
-      contexto:"Desde que lo trataste como 'un proveedor más', Don Rigo Salazar empezó a exigir condiciones exactas de contrato, sin ninguna de las flexibilidades que solía dar por la relación de años. 'Los negocios son los negocios', te dice, citándote a ti mismo.",
+      contexto:"Desde que lo trataste como «un proveedor más», Don Rigo Salazar empezó a exigir condiciones exactas de contrato, sin ninguna de las flexibilidades que solía dar por la relación de años. «Los negocios son los negocios», te dice, citándote a ti mismo.",
       choices:[
         {texto:"Aceptar las nuevas condiciones más estrictas sin quejarte.", efectos:{caja:si(CONTEXTO.liquidezBaja(s), -3, -2), confianzaProveedores:1}, consecuencia:"Pagas el costo de haber tratado una relación de años como una transacción cualquiera."},
         {texto:"Buscar un proveedor alterno más flexible, aunque menos confiable.", efectos:{caja:1, confianzaProveedores:si(CONTEXTO.proveedoresTensos(s), -6, -4)}, consecuencia:"Ahorras en el papel, pero cambias certeza probada por una relación todavía sin construir."},
@@ -52,7 +52,7 @@ function eventoRigoReaparece(s,f){
 function eventoValentinaReaparece(s,f){
   if(f.valentinaFavorable){
     return { tipo:'karma', titulo:"Valentina publica un perfil favorable sobre tu gestión", retrato: RETRATO_VALENTINA, presentacion:"Valentina Ospina finalmente publica el artículo que prometió.",
-      contexto:"Valentina Ospina publica finalmente su artículo — y es mucho más favorable de lo que esperabas. Te describe como 'una de las gestiones más transparentes del sector este año'. El artículo ya circula y varios colegas te lo han compartido.",
+      contexto:"Valentina Ospina publica finalmente su artículo — y es mucho más favorable de lo que esperabas. Te describe como «una de las gestiones más transparentes del sector este año». El artículo ya circula y varios colegas te lo han compartido.",
       choices:[
         {texto:"Compartir el artículo activamente en tus canales profesionales.", efectos:{reputacion:si(CONTEXTO.reputacionAlta(s), 5, 4)}, consecuencia:"El artículo se amplifica y refuerza tu imagen pública de forma notable."},
         {texto:"Agradecerle en privado, sin promover el artículo activamente.", efectos:{reputacion:2}, consecuencia:"Un gesto más discreto, que Valentina aprecia como genuino en vez de calculado."},
@@ -60,7 +60,7 @@ function eventoValentinaReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"Valentina publica algo mucho más crítico de lo esperado", retrato: RETRATO_VALENTINA, presentacion:"Valentina Ospina finalmente publica el artículo que prometió — y no es lo que esperabas.",
-      contexto:"Valentina Ospina publica su artículo — y es notablemente más duro de lo que anticipabas. Cita 'fuentes cercanas a la operación' y cuestiona directamente varias de tus decisiones recientes. El artículo ya se está compartiendo entre colegas del sector.",
+      contexto:"Valentina Ospina publica su artículo — y es notablemente más duro de lo que anticipabas. Cita «fuentes cercanas a la operación» y cuestiona directamente varias de tus decisiones recientes. El artículo ya se está compartiendo entre colegas del sector.",
       choices:[
         {texto:"Responder públicamente con una aclaración detallada.", efectos:{reputacion:si(CONTEXTO.juntaDesconfia(s), 1.5, 2.5), caja:-1}, consecuencia:"La respuesta calma parte del ruido, aunque no borra la impresión inicial que dejó el artículo."},
         {texto:"Contactarla directamente para entender qué generó ese tono tan duro.", efectos:{reputacion:1, caja:-0.3}, consecuencia:"La conversación no cambia lo ya publicado, pero abre la puerta a una relación menos hostil a futuro."},
@@ -73,7 +73,7 @@ function eventoValentinaReaparece(s,f){
 function eventoTetoReaparece(s,f){
   if(f.tetoRechazado){
     return { tipo:'karma', titulo:"Teto vuelve con una oferta todavía más agresiva", retrato: RETRATO_TETO, presentacion:"Tu excompañero, ahora en un fondo de inversión, no se dio por vencido.",
-      contexto:"Esteban 'Teto' Vargas no se dio por vencido. Vuelve con una oferta de capital notablemente mayor a la anterior — y esta vez con un tono menos casual, más cercano a la presión. 'Esta es literalmente la última vez que te la ofrezco así de buena', te dice.",
+      contexto:"Esteban «Teto» Vargas no se dio por vencido. Vuelve con una oferta de capital notablemente mayor a la anterior — y esta vez con un tono menos casual, más cercano a la presión. «Esta es literalmente la última vez que te la ofrezco así de buena», te dice.",
       choices:[
         {texto:"Aceptar esta vez, ante una oferta objetivamente mejor.", efectos:{caja:9, ebitda:1, wacc:si(CONTEXTO.juntaDesconfia(s), 1.2, 0.8)}, consecuencia:"El capital llega, aunque cediste ante la insistencia más que ante la convicción."},
         {texto:"Rechazar de nuevo, con firmeza, y pedirle que respete tu decisión.", efectos:{reputacion:2}, consecuencia:"Teto se sorprende, pero termina respetando la firmeza — la relación se enfría, aunque no se rompe."},
@@ -81,7 +81,7 @@ function eventoTetoReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"Teto presenta resultados de la inversión que hiciste con él", retrato: RETRATO_TETO, presentacion:"Esteban \"Teto\" Vargas vuelve a buscarte, esta vez con resultados en la mano.",
-      contexto:"Esteban 'Teto' Vargas te invita a almorzar para mostrarte, con genuino entusiasmo, cómo le fue al fondo con la participación que le diste. Los números son buenos — y te propone ampliar la relación.",
+      contexto:"Esteban «Teto» Vargas te invita a almorzar para mostrarte, con genuino entusiasmo, cómo le fue al fondo con la participación que le diste. Los números son buenos — y te propone ampliar la relación.",
       choices:[
         {texto:"Ampliar la relación con una segunda ronda de inversión.", efectos:{caja:6, ebitda:1, wacc:si(CONTEXTO.juntaDesconfia(s), 0.8, 0.5)}, consecuencia:"La relación de confianza construida rinde frutos concretos en una segunda ronda. Esa segunda ronda, eso sí, diluye un poco más tu participación: el capital de Teto espera su retorno."},
         {texto:"Pedirle que te ayude a conectar con otros inversionistas de su red.", efectos:{caja:2, reputacion:2, wacc:0.2}, consecuencia:"Teto abre puertas adicionales, contento de que la relación se sienta genuinamente mutua. Más socios, eso sí, también significa más expectativas de retorno."},
@@ -102,7 +102,7 @@ function eventoElviraReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"El riesgo que la Dra. Bonilla advirtió se materializa", retrato: RETRATO_ELVIRA, presentacion:"La advertencia que la Dra. Elvira Bonilla te dio hace un tiempo ya no es hipotética.",
-      contexto:"La cláusula que la Dra. Elvira Bonilla te recomendó revisar, y que decidiste dejar pasar, ahora te está costando: un cliente la está usando en su favor en una disputa contractual. Ella no dice 'te lo dije', pero tampoco hacía falta.",
+      contexto:"La cláusula que la Dra. Elvira Bonilla te recomendó revisar, y que decidiste dejar pasar, ahora te está costando: un cliente la está usando en su favor en una disputa contractual. Ella no dice «te lo dije», pero tampoco hacía falta.",
       choices:[
         {texto:"Contratarla de urgencia para resolver la disputa ahora mismo.", efectos:{caja:-4, reputacion:1, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.1, 0)}, consecuencia:"El costo de resolverlo ahora es más alto del que hubiera sido prevenirlo, pero al menos se resuelve."},
         {texto:"Intentar resolver la disputa internamente, sin asesoría legal externa.", efectos:{caja:-2, reputacion:si(CONTEXTO.juntaDesconfia(s), -4, -2)}, consecuencia:"Ahorras en honorarios legales, pero el resultado de la disputa es peor de lo que hubiera sido con ayuda experta."},

@@ -18,7 +18,7 @@ const TECHNOVA_CASES = [
      consecuencia:"Cedes menos margen del que pedían y le das algo de valor tangible a cambio, aunque tu equipo tiene que construir esas funcionalidades." + si(CONTEXTO.equipoCansado(s), ' Con el equipo agotado, las funcionalidades llegan tarde y con errores: el cliente reclama.', '')},
     {texto:"Proponer un esquema de precios por consumo, alineando el pago a su crecimiento real.",
      efectos:si(CONTEXTO.liquidezBaja(s), {ebitda:0.2, caja:-2, capitalTrabajo:-2, diasCartera:10, wacc:0.5}, {ebitda:0.5, capitalTrabajo:-2, diasCartera:8, wacc:0.4}),
-     consecuencia:"Cambias la conversación de 'descuento' a 'modelo de pago': si el cliente crece, tú creces con él, pero tu ingreso deja de ser fijo." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, un mes de bajo consumo del cliente te deja sin aire.', ' Tu caja aguanta la variación, aunque facturar por consumo alarga tu cartera.')}
+     consecuencia:"Cambias la conversación de «descuento» a «modelo de pago»: si el cliente crece, tú creces con él, pero tu ingreso deja de ser fijo." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, un mes de bajo consumo del cliente te deja sin aire.', ' Tu caja aguanta la variación, aunque facturar por consumo alarga tu cartera.')}
   ],
   choiceInformado:{texto:"Con el patrón de descuentos repetidos, condicionar cualquier rebaja a un caso de éxito público y referidos verificables.", efectos:{ebitda:-1, caja:-1, reputacion:2},
     consecuencia:"Una tasa de renovación del 92% te dice que el cliente te necesita casi tanto como tú a él: tienes más poder de negociación del que aparentaba."}
@@ -65,7 +65,7 @@ const TECHNOVA_CASES = [
     {texto:"Reducir gastos generales sin tocar el equipo.",
      efectos:{ebitda:1.2, capitalTrabajo:1, caja:si(CONTEXTO.liquidezBaja(s), -2.5, -1)},
      consecuencia:"El ajuste es más lento, pero protege la atención al cliente y la moral. Cancelar antes de tiempo contratos de servicios y oficina tiene sus penalidades." + si(CONTEXTO.liquidezBaja(s), ' Con la caja justa, esas penalidades duelen de verdad.', '')},
-    {texto:"Lanzar un plan 'lite' más barato para retener a quienes quieren cancelar.",
+    {texto:"Lanzar un plan «lite» más barato para retener a quienes quieren cancelar.",
      efectos:{ebitda:si(CONTEXTO.reputacionAlta(s), 0.5, -1), caja:1, capitalTrabajo:1, moralEquipo:-1},
      consecuencia:"Reduces la fuga a cambio de un ingreso promedio más bajo por cuenta, y soporte debe atender un plan más." + si(CONTEXTO.reputacionAlta(s), ' Tu marca es fuerte: muchos que iban a irse se quedan y algunos vuelven.', ' Pocos confían en la marca: el plan retiene menos de lo esperado.')}
   ]

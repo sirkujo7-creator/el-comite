@@ -45,7 +45,7 @@ const ELENCO_INDICADORES = [
     build:(s,f)=>({
       tipo:'karma', titulo:"Sofía Lindo se presenta formalmente", retrato: RETRATO_SOFIA_LINDO,
       presentacion:"La competidora más directa del sector se acerca a ti, cara a cara, por primera vez.",
-      contexto:"Sofía Lindo, la competidora más directa del sector, se acerca en un evento gremial — la primera vez que interactúan cara a cara. 'Te he estado observando', te dice sin rodeos. 'Con esos números, ya no puedo no hacerlo'.",
+      contexto:"Sofía Lindo, la competidora más directa del sector, se acerca en un evento gremial — la primera vez que interactúan cara a cara. «Te he estado observando», te dice sin rodeos. «Con esos números, ya no puedo no hacerlo».",
       choices:[
         {texto:"Responder con respeto genuino, reconociendo su trayectoria también.", efectos:{reputacion:1}, setFlags:{sofiaRespetada:true}, disparar:{turnos:5, evento:eventoSofiaReaparece},
          consecuencia:"El tono de la conversación queda como una rivalidad de respeto, no de hostilidad abierta."},
@@ -59,7 +59,7 @@ const ELENCO_INDICADORES = [
   { id:'elenco_higinio', trigger:(s,f)=> turnNumber >= 9,
     build:(s,f)=>({
       tipo:'karma', titulo:"Un fundador retirado pide verte", retrato: RETRATO_DON_HIGINIO, presentacion:"Una figura respetada y ya retirada del sector pide conocerte, sin agenda clara.",
-      contexto:"Don Higinio Restrepo, una figura respetada del sector que ya no está activo en el día a día de ningún negocio, pide una reunión contigo — sin agenda clara, solo 'quiero conocer a quien está llevando las cosas ahora'. Llega con más curiosidad que consejos, al menos por ahora.",
+      contexto:"Don Higinio Restrepo, una figura respetada del sector que ya no está activo en el día a día de ningún negocio, pide una reunión contigo — sin agenda clara, solo «quiero conocer a quien está llevando las cosas ahora». Llega con más curiosidad que consejos, al menos por ahora.",
       choices:[
         {texto:"Recibirlo con toda la atención, sin apuros, aunque el día esté lleno.", efectos:{reputacion:2}, setFlags:{higinioEscuchado:true}, disparar:{turnos:5, evento:eventoHiginioReaparece},
          consecuencia:"El tiempo que le das, en un mundo de agendas apretadas, es justamente lo que más valora alguien como Don Higinio."},

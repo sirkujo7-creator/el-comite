@@ -9,7 +9,7 @@ function eventoAuditoriaExterna(s, f){
     titulo:"El banco pide una auditoría externa",
     contexto:"Como parte de una revisión rutinaria de tu línea de crédito, el banco exige una auditoría externa de los estados financieros que ajustaste hace unos turnos.",
     choices:[
-      {texto:"Contratar apresuradamente a otro contador para 'corregir' los registros antes de la visita.",
+      {texto:"Contratar apresuradamente a otro contador para «corregir» los registros antes de la visita.",
        efectos: encubrimientoFunciona ? {caja:-6, confianzaBanco:-5, wacc:0.5, reputacion:-2} : {caja:-6, confianzaBanco:-40, wacc:4, reputacion:-15},
        consecuencia: encubrimientoFunciona
          ? "Esta vez la corrección pasa la revisión: el auditor no encuentra nada grave. Pero ahora hay dos personas que saben lo que hiciste, y unos registros que no resistirían una segunda mirada."
@@ -26,7 +26,7 @@ function eventoHuelgaSindical(s,f){
   return {
     tipo:'karma',
     titulo:"El costo humano de los recortes",
-    contexto:"Semanas después del recorte de personal, un grupo de empleados convoca una huelga parcial y un exempleado histórico te escribe una carta abierta que empieza a circular internamente: 'Di quince años de mi vida a esta empresa. Merecía algo mejor que un correo.'",
+    contexto:"Semanas después del recorte de personal, un grupo de empleados convoca una huelga parcial y un exempleado histórico te escribe una carta abierta que empieza a circular internamente: «Di quince años de mi vida a esta empresa. Merecía algo mejor que un correo.»",
     choices:[
       {texto:"Negociar directamente con los líderes de la huelga y ceder en algunos puntos.", efectos:{caja:-4, reputacion:8, ebitda:-1, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.1, 0)},
        consecuencia:"La operación se normaliza y el gesto de sentarte a negociar en persona recompone parte del daño reputacional, a un costo real de caja y productividad."},

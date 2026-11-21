@@ -76,7 +76,7 @@ const ECOS_DECISION_GENEROSA = [
     contexto:"El gesto que tuviste hace unos turnos — cuando priorizaste a tu gente por encima del resultado inmediato — sigue siendo mencionado en el equipo. Hoy, alguien te ofrece ayuda extra en algo que ni siquiera pediste, solo porque quiere devolver el favor.",
     choices:[
       {texto:"Aceptar la ayuda con gratitud genuina.", efectos:{moralEquipo:5, ebitda:1}, consecuencia:"La reciprocidad genuina, cuando se acepta bien, fortalece la relación todavía más."},
-      {texto:"Agradecer, pero insistir en que no era necesario y rechazar la ayuda.", efectos:{moralEquipo:1}, consecuencia:"Tu gesto de no querer 'cobrar' el favor se aprecia, aunque la ayuda ofrecida se pierde."},
+      {texto:"Agradecer, pero insistir en que no era necesario y rechazar la ayuda.", efectos:{moralEquipo:1}, consecuencia:"Tu gesto de no querer «cobrar» el favor se aprecia, aunque la ayuda ofrecida se pierde."},
       {texto:"Aceptar la ayuda y usarla como base para formalizar más ese tipo de colaboración.", efectos:{ebitda:1.5, moralEquipo:3}, consecuencia:"Conviertes un gesto espontáneo en algo más estructurado y sostenible en el tiempo."}
     ]
   }),

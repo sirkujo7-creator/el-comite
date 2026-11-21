@@ -43,7 +43,7 @@ function aplicarYFinalizarEventoOficina(resultElId, efectos, mensaje, stampClass
 /* ---------- 1) La Climatización del Caos (Slider) ---------- */
 const OFICINA_CONTEXTOS = {
   clima_caos: {
-    vitafit: "Los instructores de spinning exigen 26°C para no 'matar' a los que hacen ejercicio; el equipo administrativo pide 18°C para poder concentrarse en la caja.",
+    vitafit: "Los instructores de spinning exigen 26°C para no «matar» a los que hacen ejercicio; el equipo administrativo pide 18°C para poder concentrarse en la caja.",
     technova: "El equipo de desarrollo, encerrado todo el día junto a servidores que calientan la sala, exige 18°C. El equipo comercial, siempre en videollamada, pide 24°C para no sonar como si estuviera temblando.",
     agroverde: "La oficina administrativa, pegada a la planta de empaque, exige 16°C para contrarrestar el calor de las máquinas. El equipo comercial, con clientes internacionales en videollamada, pide 24°C para verse presentables sin sudar.",
     ganadera: "La oficina, pegada al establo de ordeño, exige 16°C para contrarrestar el calor y el olor. El equipo contable, que casi no sale de ahí, pide 23°C porque se está congelando.",
@@ -747,10 +747,10 @@ function resolverEncuestaClima(promedio){
 function eventoClimaDestapado(s,f){
   return {
     tipo:'karma', titulo:"El equipo se entera de la encuesta maquillada",
-    contexto:"Alguien de RRHH comenta, sin mala intención, que tus respuestas a la última encuesta de clima laboral fueron 'las más positivas de toda la gerencia'. El comentario llega al equipo, que sabe perfectamente que la realidad no es esa.",
+    contexto:"Alguien de RRHH comenta, sin mala intención, que tus respuestas a la última encuesta de clima laboral fueron «las más positivas de toda la gerencia». El comentario llega al equipo, que sabe perfectamente que la realidad no es esa.",
     choices:[
       {texto:"Reconocerlo abiertamente en la próxima reunión de equipo, sin excusas.", efectos:{moralEquipo:6, reputacion:-1}, consecuencia:"El gesto de reconocerlo sin rodeos recupera más confianza de la que perdiste al maquillar la encuesta. Eso sí, el episodio trasciende la oficina y algunos clientes se enteran."},
-      {texto:"Minimizarlo, diciendo que la encuesta 'no capturaba bien el contexto completo'.", efectos:{moralEquipo:si(CONTEXTO.equipoCansado(s), -8, -5), reputacion:1}, consecuencia:"La excusa no convence a nadie, y confirma exactamente lo que el equipo ya sospechaba. Hacia afuera, al menos, el tema no trasciende."},
+      {texto:"Minimizarlo, diciendo que la encuesta «no capturaba bien el contexto completo».", efectos:{moralEquipo:si(CONTEXTO.equipoCansado(s), -8, -5), reputacion:1}, consecuencia:"La excusa no convence a nadie, y confirma exactamente lo que el equipo ya sospechaba. Hacia afuera, al menos, el tema no trasciende."},
       {texto:"Compensarlo con una mejora concreta y visible en algo que el equipo sí pidió en la encuesta.", efectos:{caja:-2, moralEquipo:8}, consecuencia:"Una acción concreta pesa más que cualquier explicación — el equipo lo nota y lo agradece."}
     ]
   };

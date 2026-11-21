@@ -24,7 +24,7 @@ const FUGA_CAPITAL_PISTAS = {
     "Una campaña publicitaria se pagó dos veces al mismo proveedor de pauta.",
     "El presupuesto de un evento terminó siendo el triple de lo aprobado, sin explicación.",
     "Se contrató a una agencia externa sin cotizar con nadie más.",
-    "Aparecen gastos de 'relaciones públicas' sin ningún evento o entregable asociado."
+    "Aparecen gastos de «relaciones públicas» sin ningún evento o entregable asociado."
   ],
   rrhh: [
     "Un empleado que ya no trabaja en la empresa sigue apareciendo en la nómina.",

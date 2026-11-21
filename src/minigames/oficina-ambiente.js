@@ -81,7 +81,7 @@ function eventoJairoReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"Jairo Cepeda trae condiciones más duras", retrato: RETRATO_JAIRO, presentacion:"Jairo Cepeda vuelve a llamar — y las condiciones no son las de antes.",
-      contexto:"Jairo Cepeda vuelve a llamar, esta vez con instrucciones claras del comité de crédito: sin señales concretas de mejora, el banco va a endurecer las condiciones de tu línea actual. 'No es personal', te dice, aunque ambos saben que sí lo es un poco.",
+      contexto:"Jairo Cepeda vuelve a llamar, esta vez con instrucciones claras del comité de crédito: sin señales concretas de mejora, el banco va a endurecer las condiciones de tu línea actual. «No es personal», te dice, aunque ambos saben que sí lo es un poco.",
       choices:[
         {texto:"Aceptar las nuevas condiciones más estrictas.", efectos:{wacc:si(CONTEXTO.apalancado(s), 1.3, 1), confianzaBanco:1}, consecuencia:"Aceptas el costo mayor, evitando al menos un conflicto directo con el banco."},
         {texto:"Presentar un plan financiero detallado para intentar revertir la decisión.", efectos:{caja:-1, confianzaBanco:3}, consecuencia:"El esfuerzo de mostrar un plan concreto suaviza parcialmente la posición del banco."},
@@ -94,7 +94,7 @@ function eventoJairoReaparece(s,f){
 function eventoAurelioReaparece(s,f){
   if(f.aurelioAtendido){
     return { tipo:'karma', titulo:"Aurelio confirma que la inversión valió la pena", retrato: RETRATO_AURELIO, presentacion:"El ingeniero de mantenimiento vuelve, esta vez para confirmarte que tenía razón.",
-      contexto:"El ingeniero Aurelio Solano te busca, poco común en él, para reconocer algo: la inversión en mantenimiento que autorizaste hace unos turnos evitó exactamente el tipo de falla que él había anticipado. 'Se lo iba a decir de todas formas', dice, casi sin sonreír.",
+      contexto:"El ingeniero Aurelio Solano te busca, poco común en él, para reconocer algo: la inversión en mantenimiento que autorizaste hace unos turnos evitó exactamente el tipo de falla que él había anticipado. «Se lo iba a decir de todas formas», dice, casi sin sonreír.",
       choices:[
         {texto:"Pedirle que proponga un plan de mantenimiento preventivo permanente.", efectos:{caja:-2, ebitda:1}, consecuencia:"Aurelio arma un plan sólido — prevenir, para él, siempre fue mejor que reparar."},
         {texto:"Reconocer su criterio técnico frente al resto del equipo directivo.", efectos:{moralEquipo:2}, consecuencia:"El reconocimiento público a alguien tan poco dado a pedirlo genera un respeto real en el equipo técnico."},
@@ -102,7 +102,7 @@ function eventoAurelioReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"Aurelio confirma que la falla que anticipó ya ocurrió", retrato: RETRATO_AURELIO, presentacion:"El ingeniero Aurelio Solano vuelve — y esta vez el problema que advirtió ya pasó.",
-      contexto:"El ingeniero Aurelio Solano no dice 'se lo advertí', pero su expresión lo dice todo: el equipo que llevaba meses pidiendo revisión finalmente falló, justo como había anticipado. La reparación de emergencia va a costar bastante más que el mantenimiento preventivo que pidió.",
+      contexto:"El ingeniero Aurelio Solano no dice «se lo advertí», pero su expresión lo dice todo: el equipo que llevaba meses pidiendo revisión finalmente falló, justo como había anticipado. La reparación de emergencia va a costar bastante más que el mantenimiento preventivo que pidió.",
       choices:[
         {texto:"Autorizar la reparación de emergencia completa, sin más demoras.", efectos:{caja:-6, ebitda:1, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.15, 0)}, capex:true, consecuencia:"El costo es alto, pero resuelve el problema de raíz — con meses de retraso."},
         {texto:"Buscar una reparación temporal más barata mientras se evalúa el reemplazo.", efectos:{caja:-2}, consecuencia:"Una solución parche, que Aurelio acepta con resignación profesional, no con convencimiento."},
@@ -116,7 +116,7 @@ function eventoSofiaReaparece(s,f){
   if(f.sofiaRespetada){
     return { tipo:'karma', titulo:"Sofía Lindo propone una tregua competitiva", retrato: RETRATO_SOFIA_LINDO,
       presentacion:"Tu competidora más directa vuelve a cruzarse en tu camino — esta vez no con una amenaza.",
-      contexto:"Sofía Lindo, tu competidora más directa, te contacta con algo inesperado: una propuesta de colaboración puntual en un segmento donde ninguna de las dos compite directamente. 'Prefiero tenerte como aliada ocasional que como enemiga', te dice sin rodeos.",
+      contexto:"Sofía Lindo, tu competidora más directa, te contacta con algo inesperado: una propuesta de colaboración puntual en un segmento donde ninguna de las dos compite directamente. «Prefiero tenerte como aliada ocasional que como enemiga», te dice sin rodeos.",
       choices:[
         {texto:"Aceptar la colaboración puntual propuesta.", efectos:{ebitda:1, reputacion:1, confianzaProveedores:-1}, consecuencia:"La colaboración funciona mejor de lo esperado, aunque alguno de tus proveedores de siempre nota con extrañeza que ahora compartes espacio con la competencia."},
         {texto:"Rechazar cualquier acercamiento, manteniendo la rivalidad pura.", efectos:{reputacion:1}, consecuencia:"Sofía respeta la claridad de la posición, aunque la oportunidad de colaboración queda descartada."},
@@ -138,7 +138,7 @@ function eventoSofiaReaparece(s,f){
 function eventoHiginioReaparece(s,f){
   if(f.higinioEscuchado){
     return { tipo:'karma', titulo:"Don Higinio vuelve con un último consejo", retrato: RETRATO_DON_HIGINIO, presentacion:"El fundador retirado que conociste hace un tiempo vuelve a buscarte.",
-      contexto:"Don Higinio Restrepo, el fundador retirado que te ha visitado un par de veces a lo largo del camino, vuelve una vez más — quizás la última, dice, sin dramatismo. 'Ya casi no tengo consejos nuevos', comenta, 'solo uno que se me quedó guardado hace años'.",
+      contexto:"Don Higinio Restrepo, el fundador retirado que te ha visitado un par de veces a lo largo del camino, vuelve una vez más — quizás la última, dice, sin dramatismo. «Ya casi no tengo consejos nuevos», comenta, «solo uno que se me quedó guardado hace años».",
       choices:[
         {texto:"Escuchar el consejo con toda la atención, sin interrupciones.", efectos:{reputacion:2, moralEquipo:2}, consecuencia:"El tiempo que le das, más que el consejo mismo, es lo que Don Higinio realmente valora a esta altura."},
         {texto:"Agradecerle todo lo aprendido a lo largo del camino, abiertamente.", efectos:{moralEquipo:3}, consecuencia:"El gesto de gratitud genuina cierra, de forma honesta, una relación que empezó como simple curiosidad."},
@@ -146,7 +146,7 @@ function eventoHiginioReaparece(s,f){
       ]};
   } else {
     return { tipo:'karma', titulo:"Don Higinio regresa con una pregunta incómoda", retrato: RETRATO_DON_HIGINIO, presentacion:"Don Higinio Restrepo vuelve — esta vez con algo más directo que decirte.",
-      contexto:"Don Higinio Restrepo vuelve, esta vez con una pregunta directa que no esperabas: '¿Todavía te acuerdas por qué empezaste esto?' No es retórica — genuinamente quiere saber si, en medio de tantas decisiones tácticas, no perdiste de vista el propósito original.",
+      contexto:"Don Higinio Restrepo vuelve, esta vez con una pregunta directa que no esperabas: «¿Todavía te acuerdas por qué empezaste esto?» No es retórica — genuinamente quiere saber si, en medio de tantas decisiones tácticas, no perdiste de vista el propósito original.",
       choices:[
         {texto:"Responder con honestidad, incluso si la respuesta no es la que esperabas dar.", efectos:{moralEquipo:2, reputacion:-0.5}, consecuencia:"La honestidad, incluso incómoda, es exactamente lo que Don Higinio esperaba de la conversación. Fiel a su estilo, luego la comenta con otros del gremio."},
         {texto:"Admitir que, en el día a día, el propósito original se ha ido diluyendo.", efectos:{moralEquipo:-1, reputacion:1}, consecuencia:"El reconocimiento honesto de esa deriva es, paradójicamente, el primer paso para corregirla."},

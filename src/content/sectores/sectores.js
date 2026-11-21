@@ -28,7 +28,7 @@ const SECTORS = [
     kpiInicial:{caja:35, capitalTrabajo:22, razonCorriente:1.4, deuda:17, ebitda:6, wacc:13.5, diasInventario:null, diasCartera:45, valorInventario:null, confianzaProveedores:65, confianzaBanco:55, reputacion:60, moralEquipo:65},
     cases:TECHNOVA_CASES, calendario:[TECHNOVA_NOMINA, TECHNOVA_RENTA], random:TECHNOVA_RANDOM,
     karmaExtra:[{ id:'fugaCerebros', trigger:(s)=>s.moralEquipo!=null && s.moralEquipo<=25,
-      build:(s,f)=>({tipo:'karma', titulo:"Fuga de cerebros", contexto:"La moral del equipo técnico tocó fondo. Dos desarrolladores senior presentan su renuncia la misma semana, alegando 'falta de reconocimiento y estabilidad'.",
+      build:(s,f)=>({tipo:'karma', titulo:"Fuga de cerebros", contexto:"La moral del equipo técnico tocó fondo. Dos desarrolladores senior presentan su renuncia la misma semana, alegando «falta de reconocimiento y estabilidad».",
         choices:[
           {texto:"Contraofertar de inmediato con mejoras salariales y de beneficios para todo el equipo técnico.", efectos:{caja:-7, moralEquipo:20, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.15, 0)}, consecuencia:"Frenas la sangría a un costo alto, pero recuperas parte de la confianza perdida en el equipo que se queda." + si(CONTEXTO.liquidezBaja(s), ' Con la caja así, la nómina nueva deja tu liquidez en rojo.', '')},
           {texto:"Convocar una reunión abierta para escuchar al equipo y ajustar la cultura interna sin subir salarios todavía.", efectos:{moralEquipo:si(CONTEXTO.reputacionAlta(s), 12, 8), ebitda:-1}, consecuencia:"El gesto de escuchar sin prometer dinero calma parcialmente al equipo, aunque no resuelve la causa económica de fondo." + si(CONTEXTO.reputacionAlta(s), ' Tu reputación hace creíble la promesa de cambio.', '')},

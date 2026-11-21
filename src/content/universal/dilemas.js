@@ -28,7 +28,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"Señales de estrés laboral en el equipo",
-    contexto:"Varios líderes de área reportan un aumento notorio en licencias médicas y renuncias silenciosas. Nadie ha dicho la palabra 'burnout' todavía en una reunión formal del comité, pero todos saben de qué se trata.",
+    contexto:"Varios líderes de área reportan un aumento notorio en licencias médicas y renuncias silenciosas. Nadie ha dicho la palabra «burnout» todavía en una reunión formal del comité, pero todos saben de qué se trata.",
     choices:[
       {texto:"Reducir las metas del trimestre y dar dos días de descanso pagado extra al equipo.", efectos:{ebitda:-3, moralEquipo:si(CONTEXTO.equipoCansado(s), 18, 12), reputacion:3},
        consecuencia:"Sacrificas resultado de corto plazo por un equipo que no se está quemando — una apuesta que rara vez se ve en un estado de resultados, pero que sostiene todo lo demás."},
@@ -56,12 +56,12 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"Gasto sospechoso en la tarjeta corporativa",
-    contexto:"El área de tesorería detecta un cargo de $3M en la tarjeta corporativa que nadie reconoce como gasto operativo. El responsable de la tarjeta dice que 'debe ser un error del banco'.",
+    contexto:"El área de tesorería detecta un cargo de $3M en la tarjeta corporativa que nadie reconoce como gasto operativo. El responsable de la tarjeta dice que «debe ser un error del banco».",
     investigacion:{costo:1, boton:"Pedir el extracto detallado y las facturas asociadas al banco ($1M)",
-      reporte:"El extracto muestra que el cargo corresponde a una cena y regalos personales del responsable, disfrazados como 'atención a clientes'."},
+      reporte:"El extracto muestra que el cargo corresponde a una cena y regalos personales del responsable, disfrazados como «atención a clientes»."},
     choices:[
       {texto:"Confrontar al responsable y exigir el reembolso inmediato, sin escándalo público.", efectos:{caja:2, reputacion:2, moralEquipo:-2},
-       consecuencia:"Recuperas el dinero y evitas el drama, aunque el mensaje interno de que 'esto se resuelve en privado' puede envalentonar a otros. Y en el equipo hay quien lo percibe como un trato preferencial."},
+       consecuencia:"Recuperas el dinero y evitas el drama, aunque el mensaje interno de que «esto se resuelve en privado» puede envalentonar a otros. Y en el equipo hay quien lo percibe como un trato preferencial."},
       {texto:"Despedir de inmediato al responsable y comunicarlo como política de tolerancia cero.", efectos:{caja:1, moralEquipo:si(CONTEXTO.equipoCansado(s), -9, -6), reputacion:si(CONTEXTO.juntaDesconfia(s), 7, 5)},
        consecuencia:"El mensaje es contundente y protege tu reputación de control interno, pero el ambiente se tensiona: varios sienten que la reacción fue desproporcionada para un solo cargo."},
       {texto:"Suspender todas las tarjetas corporativas hasta implementar un nuevo protocolo de aprobación.", efectos:{caja:-1, moralEquipo:si(CONTEXTO.equipoCansado(s), -6, -4), confianzaBanco:si(CONTEXTO.bancoAmigo(s), 3, 2)},
@@ -84,7 +84,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"Ataque de ransomware a los sistemas administrativos",
-    contexto:"Llegas una mañana y ningún computador del área administrativa enciende con normalidad: un mensaje en pantalla pide un pago en criptomonedas para 'liberar' tus archivos.",
+    contexto:"Llegas una mañana y ningún computador del área administrativa enciende con normalidad: un mensaje en pantalla pide un pago en criptomonedas para «liberar» tus archivos.",
     choices:[
       {texto:"Pagar el rescate exigido para recuperar los archivos lo antes posible.", efectos:{caja:-7, reputacion:-4, wacc:0.3, razonCorriente:si(CONTEXTO.liquidezBaja(s), -0.12, 0)},
        consecuencia:"Recuperas el acceso, pero acabas de confirmarle a ese grupo criminal (y a otros) que tu empresa paga cuando la presionan."},
@@ -232,7 +232,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"El banco pide refinanciar anticipadamente por un rumor de crisis",
-    contexto:"Corre el rumor de una crisis sectorial y, aunque tú vienes cumpliendo tus pagos al día, tu banco te pide adelantar una revisión de tus condiciones de crédito 'por precaución'.",
+    contexto:"Corre el rumor de una crisis sectorial y, aunque tú vienes cumpliendo tus pagos al día, tu banco te pide adelantar una revisión de tus condiciones de crédito «por precaución».",
     choices:[
       {texto:"Entregar toda la información financiera solicitada de forma transparente y proactiva.", efectos:{confianzaBanco:si(CONTEXTO.bancoAmigo(s), 6, 4), caja:-0.5},
        consecuencia:"La transparencia total ante un banco nervioso rara vez sale mal — y en este caso refuerza la relación en vez de tensionarla. Preparar el paquete completo de información, eso sí, consume horas del equipo financiero."},
@@ -484,7 +484,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"Marcela Duarte cuestiona una de tus decisiones", retrato: RETRATO_MARCELA, presentacion:"La contadora más meticulosa del equipo financiero llega con preguntas incómodas.",
-    contexto:"Marcela Duarte, la contadora más meticulosa del equipo financiero, se presenta en tu oficina con una carpeta bajo el brazo. Quiere que le expliques, con detalle, la lógica detrás de una de tus decisiones recientes — algo que a ella le suena 'demasiado creativo' para su gusto.",
+    contexto:"Marcela Duarte, la contadora más meticulosa del equipo financiero, se presenta en tu oficina con una carpeta bajo el brazo. Quiere que le expliques, con detalle, la lógica detrás de una de tus decisiones recientes — algo que a ella le suena «demasiado creativo» para su gusto.",
     choices:[
       {texto:"Explicarle con calma toda la lógica financiera detrás de la decisión.", efectos:{reputacion:si(CONTEXTO.juntaDesconfia(s), 2, 1), caja:-0.2}, setFlags:{marcelaConfio:true}, disparar:{turnos:4, evento:eventoMarcelaReaparece},
        consecuencia:"Marcela se va conforme, aunque sigue teniendo sus reservas guardadas para la próxima vez — y el tiempo dedicado a la explicación detallada no fue gratis."},
@@ -496,7 +496,7 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"Don Rigo Salazar pide ser tratado como algo más que un proveedor", retrato: RETRATO_DON_RIGO, presentacion:"Tu proveedor de años pide una conversación distinta a las de costumbre.",
-    contexto:"Don Rigo Salazar, que te provee insumos desde antes de que la empresa tuviera el tamaño que tiene hoy, te comenta — sin queja directa, a su estilo — que últimamente todo se siente 'muy de trámite' entre ustedes. Extraña cuando las cosas se resolvían con una llamada y un apretón de manos.",
+    contexto:"Don Rigo Salazar, que te provee insumos desde antes de que la empresa tuviera el tamaño que tiene hoy, te comenta — sin queja directa, a su estilo — que últimamente todo se siente «muy de trámite» entre ustedes. Extraña cuando las cosas se resolvían con una llamada y un apretón de manos.",
     choices:[
       {texto:"Invitarlo a almorzar para retomar la relación personal, no solo comercial.", efectos:{caja:-0.5, confianzaProveedores:si(CONTEXTO.proveedoresTensos(s), 6, 4)}, setFlags:{rigoRespetado:true}, disparar:{turnos:4, evento:eventoRigoReaparece},
        consecuencia:"Don Rigo se nota genuinamente contento — para él, el gesto vale más que cualquier descuento."},
@@ -520,12 +520,12 @@ const ETHICAL_DILEMMA_POOL = [
   }),
   (s,f)=>({
     tipo:'random', titulo:"Esteban \"Teto\" Vargas reaparece con una propuesta de inversión", retrato: RETRATO_TETO, presentacion:"Un viejo conocido, ahora en el mundo de los fondos de inversión, se acerca con una propuesta.",
-    contexto:"Esteban 'Teto' Vargas, un excompañero de universidad que ahora dirige un fondo de inversión pequeño pero activo, te escribe de la nada — como si no hubieran pasado los años — proponiéndote capital a cambio de una participación en la empresa. El tono es casual, casi como en los viejos tiempos.",
+    contexto:"Esteban «Teto» Vargas, un excompañero de universidad que ahora dirige un fondo de inversión pequeño pero activo, te escribe de la nada — como si no hubieran pasado los años — proponiéndote capital a cambio de una participación en la empresa. El tono es casual, casi como en los viejos tiempos.",
     choices:[
       {texto:"Aceptar la propuesta, confiando en la relación de tantos años.", efectos:{caja:6, ebitda:0.5, reputacion:si(CONTEXTO.juntaDesconfia(s), -3, -1), wacc:0.6}, setFlags:{tetoRechazado:false}, disparar:{turnos:5, evento:eventoTetoReaparece},
        consecuencia:"El capital llega rápido, con la informalidad característica de Teto — aunque eso también te preocupa un poco, y alguien de tu junta cuestiona la falta de formalidad del proceso."},
       {texto:"Rechazar la propuesta educadamente, prefiriendo mantener distancia entre lo personal y lo profesional.", efectos:{capitalTrabajo:si(CONTEXTO.liquidezBaja(s), -2, -0.5)}, setFlags:{tetoRechazado:true}, disparar:{turnos:5, evento:eventoTetoReaparece},
-       consecuencia:"Teto lo toma con humor, aunque insiste en que 'la oferta sigue en pie' — mientras tanto, sigues sin ese capital que hubiera acelerado algunos planes."},
+       consecuencia:"Teto lo toma con humor, aunque insiste en que «la oferta sigue en pie» — mientras tanto, sigues sin ese capital que hubiera acelerado algunos planes."},
       {texto:"Pedir toda la documentación formal del fondo antes de considerar algo.", efectos:{caja:-0.5}, setFlags:{tetoRechazado:false}, disparar:{turnos:5, evento:eventoTetoReaparece},
        consecuencia:"Teto se sorprende del formalismo, pero lo respeta y cumple con todo lo pedido."}
     ]

@@ -402,8 +402,8 @@ Criterio de éxito: Juan abre `dist/simulador_financiero.html` y no nota ninguna
   titulares con mayúscula inicial (no estilo inglés), concordancia, preposiciones ("sobrevivir a",
   "enterarse de que"), voseo → tuteo, anglicismos sin glosario (upgrade, pricing, freelance, tech).
   Se conservan los términos financieros que tienen entrada en el glosario (fee, equity, venture
-  debt, warrants, spot). Pendiente opcional: las citas usan comillas simples ('…'); la norma
-  prefiere comillas angulares («…»).
+  debt, warrants, spot). Nov. 2026: las citas pasaron de comillas simples ('…') a angulares
+  («…»), 44 en el texto del juego; las del código (clases, valores) no se tocan.
 - Pruebas nuevas: esquema de casos, cobertura mínima (4 casos por indicador y sector) y ramas
   condicionales (estados extremos).
 - 16 casos nuevos para cobertura: 2 universales (cartera, razón corriente), 4 Vita Fit,
