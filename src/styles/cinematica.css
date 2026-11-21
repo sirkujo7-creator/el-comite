@@ -66,7 +66,7 @@
 #introEscena svg, #introEscena img{ width:100%; height:100%; display:block; object-fit:cover; filter:sepia(.25) contrast(1.12) saturate(.85) blur(.35px); animation:escenaAcerca 14s ease-out forwards, escenaParpadeo 4.5s steps(1) infinite; }
 #introEscena.entra svg, #introEscena.entra img{ animation:escenaDestello .7s ease-out, escenaAcerca 14s ease-out forwards, escenaParpadeo 4.5s steps(1) infinite; }
 /* Las imágenes son 3:2 y la ventana 16:9: se recorta arriba y abajo. La torre, la grúa y la cabeza del espejo conservan su parte de arriba. */
-#introEscena img[data-escena="imperio"], #introEscena img[data-escena="perfil"], #introEscena img[data-escena="empresa-construyeya"]{ object-position:center 15%; }
+#introEscena img[data-escena="imperio"], #introEscena img[data-escena="perfil"], #introEscena img[data-escena="empresa-construyeya"], #introEscena img[data-escena="junta"]{ object-position:center 15%; }
 .escena-grano{
   /* "Monitor viejo" (opción B de Juan, nov. 2026): grano visible en gris + líneas de televisor (::after). */
   position:absolute; inset:0; pointer-events:none; opacity:.5; mix-blend-mode:overlay; z-index:2;

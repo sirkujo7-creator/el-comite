@@ -28,6 +28,7 @@ const ESCENAS_IMAGENES = {
   'puerta': '@asset(escenas/puerta.webp)',
   'gestion': '@asset(escenas/gestion.webp)',
   'veredicto': '@asset(escenas/veredicto.webp)',
+  junta: '@asset(escenas/junta.webp)',
 };
 let escenaActual = null;
 function mostrarEscenaCinematica(nombre){

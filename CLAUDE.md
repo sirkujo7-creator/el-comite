@@ -225,8 +225,8 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
 - Flashbacks en las cinemáticas (nov. 2026, `ui/escenas-cinematica.js`): cada frase puede llevar una `escena`
   con una imagen de Canva (ver "Escenas de las cinemáticas" más abajo; los SVG anteriores se retiraron porque a
   Juan no le gustaron). Intro: cuarto, saldo, desalojo, ciudad, números, imperio, terminal. Inicio de partida:
-  terminal, fachada de cada empresa (`empresa-<sector>`), legado, perfil, junta (pendiente: la imagen de la
-  portada tiene otro estilo y no se usa).
+  terminal, fachada de cada empresa (`empresa-<sector>`), legado, perfil, junta (escena propia; la imagen de
+  la portada tiene otro estilo y no se usa aquí).
   Informe: calendario, puerta, gestión, veredicto. Entran con destello, se acercan despacio y llevan el efecto
   "monitor viejo" (opción B de Juan): grano gris visible que se mueve, líneas de televisor y leve desenfoque.
 - Regla de victoria (regla 3, nov. 2026, aprobada por Juan; `systems/arquetipos.js`): valor de la empresa =
