@@ -1,33 +1,40 @@
 # Escenas de las cinemáticas — textos para Canva
 
-Cómo hacerlas:
+Cómo hacerlas (decisión de Juan, nov. 2026: **el arte no puede variar en absoluto entre escenas**):
 
 1. En Canva, abre la herramienta de imágenes con IA (Magic Media / "Texto a imagen").
-2. Sube como **imágenes de referencia de estilo** un retrato del juego (por ejemplo, Aurelio) y la
-   imagen de la junta (`assets/junta-directiva.jpg`).
-3. Pega el **estilo común** y, a continuación, el texto de la escena.
-4. Formato **16:9** (horizontal). Si Canva deja elegir el tamaño, usa 1600 × 900 o más.
-5. Descarga cada imagen en **PNG** con el **nombre de archivo** indicado y envíamelas.
+2. Sube **siempre la misma imagen de referencia de estilo**: tu imagen original del cuarto (la primera
+   escena, aprobada por Juan). No uses otras referencias: cada referencia nueva cambia el arte.
+3. Usa siempre el mismo estilo de Canva (si pide elegir uno, el mismo en todas) y formato **3:2**
+   (el de la imagen aprobada, 1536 × 1024).
+4. Pega el **estilo fijo** completo, sin cambiarle una palabra, y a continuación el texto de la escena.
+5. Si una imagen sale con otro trazo, otros colores u otro protagonista, se repite: no se corrige después.
+6. Descarga cada imagen con el **nombre de archivo** indicado y envíamela.
 
-Yo las comprimo, las incrusto en el juego y les aplico el efecto de recuerdo (destello, acercamiento
-lento, viñeta y grano). Te muestro el resultado antes de publicarlo.
+Al integrarlas, yo igualo los colores de cada imagen con los de `cuarto.webp` (mismos tonos de ámbar,
+verde y carbón), las comprimo a WebP y les aplico el efecto de recuerdo. Te muestro el resultado
+antes de publicarlo.
 
 ---
 
-## Estilo común (pégalo antes de cada escena)
+## Estilo fijo (pégalo igual antes de cada escena)
 
-> Ilustración de flashback cinematográfico en estilo plano geométrico low-poly, como el juego Reigns:
-> formas angulares simples, sin detalles finos, personajes sin rostro. Paleta oscura en tonos sepia
-> (marrones profundos, ámbar desvaído, negro cálido), con grano de película y viñeta oscura, como un
-> recuerdo antiguo. Iluminación dramática de una sola fuente de luz. El protagonista es siempre la
-> misma silueta sin rostro: persona joven, abrigo largo oscuro, cabello corto. Minimalista,
-> melancólico, composición de cine. Sin texto legible. Formato 16:9.
+> Flat low-poly polygonal illustration, dark retro mood, exactly the same art style, palette and
+> character as the reference image. Faceted angular shapes, visible polygon shading, slightly textured
+> paper grain. Palette only: deep charcoal and warm black, bone white, warm amber #D98847 light, muted
+> olive green accents. One warm light source, deep shadows. Strong black radial vignette (black aura)
+> around the edges. The protagonist is always the same young man: messy short dark hair, light
+> off-white short-sleeve shirt, dark trousers, slim build, face mostly in shadow. No text, no letters,
+> no logos.
+
+El texto de cada escena puede escribirse en español o en inglés; el estilo fijo va siempre en inglés,
+tal como está arriba.
 
 ---
 
 ## Intro del juego
 
-**1. `cuarto.png` — "Lugar: Habitación sin pagar."**
+**1. `cuarto.png` — "Lugar: Habitación sin pagar."** ✅ hecha (es la referencia de estilo)
 > Escena: un cuarto alquilado y casi vacío, de noche. Una bombilla desnuda cuelga del techo y da una
 > luz ámbar débil. Una ventana con persianas a medio cerrar deja entrar rayas de luz fría de la calle.
 > El protagonista está sentado al borde de una cama angosta, con la cabeza agachada y los hombros

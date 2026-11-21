@@ -247,6 +247,11 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
 - Celular (≤720 px, al final de sala-de-mando.css): una columna — indicadores en 2 columnas → botón
   de turno → relaciones y meta → gráficas → bitácora → oficina (`display:contents` en el pie).
   Carteles, sello y veredicto se ajustan al ancho (`clamp` con vw); el informe final empieza arriba.
+- Escenas de las cinemáticas (nov. 2026): imágenes de Canva hechas por Juan (`assets/escenas/*.webp`, 1120 px,
+  `ESCENAS_IMAGENES` en ui/escenas-cinematica.js). Estilo aprobado: plano poligonal low-poly, carbón, hueso,
+  ámbar #D98847 y verde oliva, aura negra; la primera (`cuarto`) es la referencia. **El arte no puede variar en
+  absoluto entre escenas** (Juan): mismo estilo fijo y misma referencia en Canva (`docs/escenas-canva.md`);
+  al integrar, igualar los colores con `cuarto.webp`. Una imagen distinta se repite, no se corrige.
 - Retratos en WebP (calidad 90, alfa intacto): mismo aspecto, 714 KB → 178 KB.
 - Música de fondo (`audio/musica.js` + `audio/piano.js`, generada, no grabada). Menú: el comité en
   penumbra. **Partida (nov. 2026): la "Sonata de la junta"**, piano solo a la manera de la Claro de
