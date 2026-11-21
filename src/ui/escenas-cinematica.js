@@ -25,6 +25,9 @@ const ESCENAS_IMAGENES = {
   'legado': '@asset(escenas/legado.webp)',
   'perfil': '@asset(escenas/perfil.webp)',
   'calendario': '@asset(escenas/calendario.webp)',
+  'puerta': '@asset(escenas/puerta.webp)',
+  'gestion': '@asset(escenas/gestion.webp)',
+  'veredicto': '@asset(escenas/veredicto.webp)',
 };
 let escenaActual = null;
 function mostrarEscenaCinematica(nombre){

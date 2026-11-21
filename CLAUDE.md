@@ -222,14 +222,13 @@ medias no se guarda: así no se puede esquivar un caso saliendo y volviendo).
   teclas físicas en los juegos de memoria (un tono por destello), una pantalla azul de verdad. Al
   resolver se ocultan los controles y el resultado es el de una decisión: sello, consecuencia,
   "antes → después" y `sonidoResultado`. Ignorar el robo de la nevera ya no es gratis (moral −1).
-- Flashbacks en las cinemáticas (nov. 2026, `ui/escenas-cinematica.js`): cada frase puede llevar una
-  `escena` (SVG plano en la paleta de la sala, sin archivos) con la silueta del protagonista
-  (`siluetaProtagonista`: de pie, sentado o de espaldas, con filo de luz). Intro: cuarto sin pagar,
-  saldo $0, carta de desalojo, la ciudad, los números, la torre del imperio, la terminal. Inicio de
-  partida: terminal, fachada de la empresa (color del sector y su nombre), retrato de la gestión
-  anterior (legado), espejo y corbata (perfil), la imagen de la junta. Informe: calendario tachado,
-  sala de juntas a puerta cerrada, la curva real de caja de la partida, el veredicto ante la junta.
-  Entran con destello, se acercan despacio, viñeta y grano.
+- Flashbacks en las cinemáticas (nov. 2026, `ui/escenas-cinematica.js`): cada frase puede llevar una `escena`
+  con una imagen de Canva (ver "Escenas de las cinemáticas" más abajo; los SVG anteriores se retiraron porque a
+  Juan no le gustaron). Intro: cuarto, saldo, desalojo, ciudad, números, imperio, terminal. Inicio de partida:
+  terminal, fachada de cada empresa (`empresa-<sector>`), legado, perfil, junta (pendiente: la imagen de la
+  portada tiene otro estilo y no se usa).
+  Informe: calendario, puerta, gestión, veredicto. Entran con destello, se acercan despacio y llevan el efecto
+  "monitor viejo" (opción B de Juan): grano gris visible que se mueve, líneas de televisor y leve desenfoque.
 - Regla de victoria (regla 3, nov. 2026, aprobada por Juan; `systems/arquetipos.js`): valor de la empresa =
   EBITDA × clamp(55 / WACC, 2,5, 6) − deuda + ½ caja (−15 % si la razón corriente < 1), comparado con el
   valor inicial del sector (`valorEmpresa`, también lo usa el mandato "Crecimiento agresivo"). S/A exigen
